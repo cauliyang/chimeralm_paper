@@ -3,8 +3,8 @@
 \usepackage{xcolor}
 \usepackage{fontawesome5}
 
-
 \usetikzlibrary{shapes.geometric, arrows.meta, positioning, decorations.pathreplacing, shadows, fit, shapes.symbols, calc, backgrounds, decorations.markings}
+\usetikzlibrary{backgrounds}
 
 % Nature Methods publication-quality color palette
 \definecolor{natureblue}{RGB}{0, 114, 178}      % Primary blue
@@ -21,6 +21,9 @@
 \definecolor{lightgray}{RGB}{248, 248, 248}     % Light gray
 
 \begin{document}
+
+\definecolor{textcolor}{RGB}{51, 51, 51}
+
 \begin{tikzpicture}[
 	% Professional node styles with enhanced typography
 	input/.style={
@@ -32,7 +35,8 @@
 			draw=natureblue,
 			line width=2.5pt,
 			font=\LARGE\bfseries,
-			text=darkgray,
+			text=textcolor,
+			drop shadow={shadow xshift=0.2em, shadow yshift=-0.2em, opacity=0.3}
 		},
 	caller/.style={
 			rectangle,
@@ -42,7 +46,7 @@
 			fill=natureblue,
 			draw=natureblue!80!black,
 			line width=2.5pt,
-			text=white,
+			text=textcolor,
 			font=\LARGE\bfseries,
 		},
 	nlts/.style={
@@ -50,31 +54,36 @@
 			rounded corners=15pt,
 			minimum width=4.5cm,
 			minimum height=2.2cm,
-			fill=lightgreen,
-			draw=naturegreen,
+			fill=natureblue,
+			draw=natureblue!80!black,
 			line width=2.5pt,
-			text=naturegreen!80!black,
+			text=textcolor,
+			opacity=0.8,
 			font=\LARGE\bfseries,
+			drop shadow={shadow xshift=0.2em, shadow yshift=-0.2em, opacity=0.3}
 		},
 	outputgroup/.style={
 			rectangle,
 			rounded corners=18pt,
 			minimum width=9cm,
 			minimum height=3cm,
-			fill=lightyellow,
-			draw=natureyellow!80!black,
+			fill=lightblue,
+			draw=natureblue!80!black,
 			line width=2.5pt,
+			drop shadow={shadow xshift=0.2em, shadow yshift=-0.2em, opacity=0.3}
 		},
 	outputbox/.style={
 			rectangle,
 			rounded corners=10pt,
 			minimum width=2.5cm,
 			minimum height=1.5cm,
-			fill=natureyellow,
-			draw=natureyellow!80!black,
+			fill=natureblue,
+			draw=natureblue!80!black,
 			line width=2pt,
 			font=\Large\bfseries,
-			text=darkgray,
+			opacity=0.8,
+			text=textcolor,
+			drop shadow={shadow xshift=0.2em, shadow yshift=-0.2em, opacity=0.3}
 		},
 	tsgformat/.style={
 			rectangle,
@@ -84,8 +93,9 @@
 			fill=naturered,
 			draw=naturered!80!black,
 			line width=3.5pt,
-			text=white,
+			text=textcolor,
 			font=\huge\bfseries,
+			drop shadow={shadow xshift=0.2em, shadow yshift=-0.2em, opacity=0.3}
 		},
 	coreengine/.style={
 			rectangle,
@@ -95,52 +105,57 @@
 			fill=naturegreen,
 			draw=naturegreen!80!black,
 			line width=3.5pt,
-			text=white,
+			text=textcolor,
 			align=center,
 			font=\huge\bfseries,
+			drop shadow={shadow xshift=0.2em, shadow yshift=-0.2em, opacity=0.3}
 		},
 	aurora/.style={
 			rectangle,
 			rounded corners=18pt,
-			minimum width=5cm,
+			minimum width=6cm,
 			minimum height=2.5cm,
 			fill=naturepurple,
 			draw=naturepurple!80!black,
 			line width=3.5pt,
-			text=white,
+			text=textcolor,
+			align=center,
 			font=\huge\bfseries,
+			drop shadow={shadow xshift=0.2em, shadow yshift=-0.2em, opacity=0.3}
 		},
 	pythonbind/.style={
 			rectangle,
 			rounded corners=18pt,
-			minimum width=5cm,
+			minimum width=6cm,
 			minimum height=2.5cm,
-			fill=naturegreen!85!white,
-			draw=naturegreen,
+			fill=natureyellow!85!white,
+			draw=natureyellow,
 			line width=2.5pt,
-			text=white,
+			text=textcolor,
 			font=\LARGE\bfseries,
+			drop shadow={shadow xshift=0.2em, shadow yshift=-0.2em, opacity=0.3}
 		},
 	feature/.style={
 			rectangle,
 			rounded corners=12pt,
 			minimum width=6cm,
 			minimum height=1.5cm,
-			fill=lightred,
-			draw=naturered,
+			fill=lightgreen,
+			draw=naturegreen,
 			line width=2pt,
 			font=\Large\bfseries,
-			text=naturered!80!black,
+			text=textcolor,
+			drop shadow={shadow xshift=0.2em, shadow yshift=-0.2em, opacity=0.3}
 		},
 	arrow/.style={
-	-{Stealth[length=12pt, width=7pt]},
+	->, >=stealth,
 	line width=3.5pt,
 	color=darkgray,
 	shorten >=5pt,
 	shorten <=5pt
 	},
 	dashedarrow/.style={
-	-{Stealth[length=10pt, width=6pt]},
+	->, >=stealth,
 	line width=3pt,
 	color=naturegreen,
 	dashed,
@@ -157,22 +172,28 @@
 			fill opacity=0.1,
 			inner sep=10pt
 		},
-	label/.style={
-			font=\huge\bfseries,
-			color=darkgray,
-			text width=5cm,
-			align=center,
-			fill=white,
-			fill opacity=0.9,
-			rounded corners=8pt,
-			inner sep=8pt
-		}
+	connector/.style={->, >=stealth, draw=darkgray, line width=3.5pt, shorten >=3pt, shorten <=3pt},
+	connector/.append style={opacity=0.6},
+	legend_box/.style={draw=#1, fill=#1, minimum width=0.6cm, minimum height=0.6cm,
+				drop shadow={shadow xshift=0.1em, shadow yshift=-0.1em, opacity=0.2}},
 	]
+
+	\pgfdeclarelayer{middle}
+	\pgfsetlayers{background, middle, main}
+
 
 	% Top workflow row with enhanced spacing
 	\node[input] (input) at (0, 10) {Long Read Data};
-	\node[caller, right=6cm of input] (caller) {NLT Caller};
-	\node[nlts, right=6cm of caller] (nlts) {NLT};
+
+	\begin{scope}[local bounding box=callerbox, shift={(input.east)}]
+		\node[caller, xshift=6.2cm] (caller) {NLT Caller};
+		\begin{pgfonlayer}{middle}
+		\node[caller, xshift=6.4cm, yshift=0.2cm, opacity=0.3] (caller2) {};
+		\node[caller, xshift=6.6cm, yshift=0.4cm, opacity=0.3] (caller3) {};
+		\end{pgfonlayer}
+	\end{scope}
+
+	\node[nlts, right=6cm of callerbox] (nlts) {NLT};
 
 	% Output formats group with better organization
 	\node[outputgroup, right=7cm of nlts] (outputgroup) {};
@@ -181,9 +202,9 @@
 	\node[outputbox] (vcf) at ([xshift=3cm] outputgroup.center) {VCF};
 
 	% TSG Ecosystem core components with improved positioning
-	\node[tsgformat, below=4.6cm of caller] (tsg) {TSG Format};
-	\node[coreengine, right=8.5cm of tsg] (tsgtools) {tsgtools (Rust) \\ Core Engine};
-	\node[aurora, below=4cm of tsg] (aurora) {Aurora};
+	\node[tsgformat, below=4.3cm of caller] (tsg) {TSG Format};
+	\node[coreengine, right=9.5cm of tsg] (tsgtools) {tsgtools (Rust) \\ Core Engine};
+	\node[aurora, below=4cm of tsg] (aurora) {Aurora \\ Web Application};
 	\node[pythonbind, below=4cm of tsgtools] (python) {Python Binding};
 
 	% Feature boxes with enhanced positioning
@@ -193,7 +214,7 @@
 
 	% Main workflow arrows with enhanced styling
 	\draw[arrow] (input) -- (caller);
-	\draw[arrow] (caller) -- (nlts);
+	\draw[arrow, shorten <=15pt] (caller) -- (nlts);
 	\draw[arrow] (nlts) -- (outputgroup);
 
 	% Ecosystem connections with improved flow
@@ -207,21 +228,35 @@
 	 line width=3pt, color=naturegreen] 
 		([yshift=1cm, xshift=-1cm]conv.west) -- ([yshift=-1cm, xshift=-1cm]query.west);
 
-	% Add small connecting lines from bracket to each feature
-	% \draw[line width=1.5pt, color=naturered] 
-	% 	([yshift=-0.3cm]conv.north) -- ++(0,0.3);
-	% \draw[line width=1.5pt, color=naturered] 
-	% 	([yshift=-0.3cm]analysis.north) -- ++(0,0.3);
-	% \draw[line width=1.5pt, color=naturered] 
-	% 	([yshift=-0.3cm]query.north) -- ++(0,0.3);
-
 	% Output connections
-	\draw[arrow] (conv) -- (gtf);
-	\draw[arrow] (conv) -- (fasta);
-	\draw[arrow] (conv) -- (vcf);
+	\draw[arrow] (conv) to[out=120, in=-90] (gtf);
+	\draw[arrow] (conv) to (fasta);
+	\draw[arrow] (conv) to[out=60, in=-90] (vcf);
 
 	% % Ecosystem boundary box with enhanced styling - includes all TSG ecosystem components
 	\node[ecosystembox, fit={(tsg) (python) (tsgtools) (aurora) (conv) (analysis) (query)}] (ecosystem) {};
+
+
+	% Legend - styled with gradient background
+	% \node[font=\bfseries\sffamily] at (-10, 10.5) {Legend};
+
+	\begin{scope}[local bounding box=legendbox]
+	\node[legend_box=naturered] (legend1) at (-1, 5) {};
+	\node[right=0.2cm of legend1, font=\LARGE\sffamily] (legend1_text) {Core Format};
+	\node[legend_box=naturegreen] (legend2) [below=0.8cm of legend1] {};
+	\node[right=0.2cm of legend2, font=\LARGE\sffamily] (legend2_text) {Core Tool};
+	\node[legend_box=natureyellow] (legend3) [below=0.8cm of legend2] {};
+	\node[right=0.2cm of legend3, font=\LARGE\sffamily] (legend3_text) {API/Bindings};
+	\node[legend_box=naturepurple] (legend4) [below=0.8cm of legend3] {};
+	\node[right=0.2cm of legend4, font=\LARGE\sffamily] (legend4_text) {Visualization};
+	\node[font=\huge\bfseries\sffamily, above=0.5cm of legend1_text] (legend_text) {Legend};
+
+	\begin{scope}[on background layer]
+		\node[draw=black!10, fill=black!4, rounded corners, fit= {(legend1) (legend2) (legend3) (legend4) (legend1_text) (legend2_text) (legend3_text) (legend4_text) (legend_text)}] {};
+	\end{scope}
+	\end{scope}
+
+
 
 	% Add subtle professional background
 	\begin{scope}[on background layer]
