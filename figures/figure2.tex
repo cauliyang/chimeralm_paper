@@ -4,7 +4,7 @@
 \usepackage{fontawesome5}
 
 
-\usetikzlibrary{shapes.geometric, arrows.meta, positioning, decorations.pathreplacing, shadows, fit, shapes.symbols, calc, backgrounds}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, decorations.pathreplacing, shadows, fit, shapes.symbols, calc, backgrounds, decorations.markings}
 
 % Nature Methods publication-quality color palette
 \definecolor{natureblue}{RGB}{0, 114, 178}      % Primary blue
@@ -80,7 +80,7 @@
 			rectangle,
 			rounded corners=18pt,
 			minimum width=6.5cm,
-			minimum height=2.8cm,
+			minimum height=4cm,
 			fill=naturered,
 			draw=naturered!80!black,
 			line width=3.5pt,
@@ -90,12 +90,13 @@
 	coreengine/.style={
 			rectangle,
 			rounded corners=18pt,
-			minimum width=7cm,
-			minimum height=2.5cm,
+			minimum width=6.5cm,
+			minimum height=4cm,
 			fill=naturegreen,
 			draw=naturegreen!80!black,
 			line width=3.5pt,
 			text=white,
+			align=center,
 			font=\huge\bfseries,
 		},
 	aurora/.style={
@@ -113,11 +114,11 @@
 			rectangle,
 			rounded corners=18pt,
 			minimum width=5cm,
-			minimum height=2.2cm,
+			minimum height=2.5cm,
 			fill=naturegreen!85!white,
 			draw=naturegreen,
 			line width=2.5pt,
-			text=naturegreen!80!black,
+			text=white,
 			font=\LARGE\bfseries,
 		},
 	feature/.style={
@@ -180,8 +181,8 @@
 	\node[outputbox] (vcf) at ([xshift=3cm] outputgroup.center) {VCF};
 
 	% TSG Ecosystem core components with improved positioning
-	\node[tsgformat, below=4cm of caller] (tsg) {TSG Format};
-	\node[coreengine, right=2.5cm of tsg] (tsgtools) {tsgtools (Rust) \\Core Engine};
+	\node[tsgformat, below=4.6cm of caller] (tsg) {TSG Format};
+	\node[coreengine, right=8.5cm of tsg] (tsgtools) {tsgtools (Rust) \\ Core Engine};
 	\node[aurora, below=4cm of tsg] (aurora) {Aurora};
 	\node[pythonbind, below=4cm of tsgtools] (python) {Python Binding};
 
@@ -200,9 +201,19 @@
 	\draw[arrow] (tsg) -- (tsgtools);
 	\draw[arrow] (tsg) -- (aurora);
 	\draw[arrow] (tsgtools) -- (python);
-	\draw[arrow] (tsgtools) -- (conv);
-	\draw[arrow] (tsgtools) -- (analysis);
-	\draw[arrow] (tsgtools) -- (query);
+
+	% Hierarchical bracket showing tsgtools features
+	\draw[decorate, decoration={brace, amplitude=15pt, mirror},
+	 line width=3pt, color=naturegreen] 
+		([yshift=1cm, xshift=-1cm]conv.west) -- ([yshift=-1cm, xshift=-1cm]query.west);
+
+	% Add small connecting lines from bracket to each feature
+	% \draw[line width=1.5pt, color=naturered] 
+	% 	([yshift=-0.3cm]conv.north) -- ++(0,0.3);
+	% \draw[line width=1.5pt, color=naturered] 
+	% 	([yshift=-0.3cm]analysis.north) -- ++(0,0.3);
+	% \draw[line width=1.5pt, color=naturered] 
+	% 	([yshift=-0.3cm]query.north) -- ++(0,0.3);
 
 	% Output connections
 	\draw[arrow] (conv) -- (gtf);
