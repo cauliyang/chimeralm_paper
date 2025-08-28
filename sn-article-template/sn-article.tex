@@ -1,6 +1,6 @@
 %Version 3.1 December 2024
 % See section 11 of the User Manual for version history
-%
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                                                 %%
 %% Please do not use \input{...} to include other tex files.       %%
@@ -25,7 +25,7 @@
 
 %%\documentclass[sn-basic]{sn-jnl}% Basic Springer Nature Reference Style/Chemistry Reference Style
 
-%%Note: the following reference styles support Namedate and Numbered referencing. By default the style follows the most common style. To switch between the options you can add or remove “Numbered” in the optional parenthesis.
+%%Note: the following reference styles support Namedate and Numbered referencing. By default the style follows the most common style. To switch between the options you can add or remove ï¿½Numberedï¿½ in the optional parenthesis.
 %%The option is available for: sn-basic.bst, sn-chicago.bst%
 
 \documentclass[pdflatex,sn-nature]{sn-jnl}% Style for submissions to Nature Portfolio journals
@@ -58,6 +58,36 @@
 
 \usepackage{standalone}
 \usepackage{tikz}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{geometry}
+
+% Minted package for beautiful syntax highlighting
+\usepackage{minted}
+\usemintedstyle{borland}
+\setminted{
+  fontsize=\small,
+  breaklines=true,
+  autogobble,
+  frame=single,
+  framesep=2mm,
+  linenos
+}
+
+% Use bash lexer for TSG code examples (since it handles # comments well)
+\newminted{bash}{
+  fontsize=\small,
+  breaklines=true,
+  autogobble,
+  frame=single,
+  framesep=2mm,
+  linenos
+}
+
+% Define a standard environment for TSG code (using \newenvironment instead of \renewenvironment)
+\newenvironment{tsgcode}
+  {\VerbatimEnvironment\begin{minted}[fontsize=\small,breaklines=true,autogobble,frame=single,framesep=2mm,linenos]{bash}}
+  {\end{minted}}
+
 \usetikzlibrary{shadows,shapes,arrows,positioning,fit,backgrounds,decorations.pathreplacing,calc}
 
 \graphicspath{{../figures}}
@@ -81,6 +111,9 @@
 \newacronym{drs}{dRNA-seq}{direct RNA sequencing}
 \newacronym{ont}{ONT}{Oxford Nanopore Technologies}
 \newacronym{pb}{PacBio}{Pacific Biosciences}
+
+\newacronym{tsg}{TSG}{Transcriptome Segment Graph}
+\newacronym{nlt}{NLT}{Non-colinear Transcript}
 
 \newacronym{go}{GO}{Gene Ontology}
 \newacronym{pcr}{PCR}{Polymerase Chain Reaction}
@@ -119,7 +152,7 @@
 
 \begin{document}
 
-\title[Article Title]{TSG Ecosystem: A Comprehensive Framework for TSG Data Analysis and Visualization}
+\title[Article Title]{ChimeraLM: A genomic language model to detect chimer artifa}
 
 %%=============================================================%%
 %% GivenName	-> \fnm{Joergen W.}
@@ -142,195 +175,48 @@
 \affil[1]{\orgdiv{Department of Urology}, \orgname{Northwestern University Feinberg School of Medicine}, \orgaddress{\street{303 E Superior St}, \city{Chicago}, \postcode{60611}, \state{IL}, \country{USA}}}
 \affil[2]{\orgdiv{Robert H. Lurie Comprehensive Cancer Center}, \orgname{Northwestern University Feinberg School of Medicine}, \orgaddress{\street{675 N St Clair St}, \city{Chicago}, \postcode{60611}, \state{IL}, \country{USA}}}
 
-%%==================================%%
-%% Sample for unstructured abstract %%
-%%==================================%%
-
-\abstract{The abstract serves both as a general introduction to the topic and as a brief, non-technical summary of the main results and their implications. Authors are advised to check the author instructions for the journal they are submitting to for word limits and if structural elements like subheadings, citations, or equations are permitted.}
-
-%%================================%%
-%% Sample for structured abstract %%
-%%================================%%
-
-% \abstract{\textbf{Purpose:} The abstract serves both as a general introduction to the topic and as a brief, non-technical summary of the main results and their implications. The abstract must not include subheadings (unless expressly permitted in the journal's Instructions to Authors), equations or citations. As a guide the abstract should not exceed 200 words. Most journals do not set a hard limit however authors are advised to check the author instructions for the journal they are submitting to.
-%
-% \textbf{Methods:} The abstract serves both as a general introduction to the topic and as a brief, non-technical summary of the main results and their implications. The abstract must not include subheadings (unless expressly permitted in the journal's Instructions to Authors), equations or citations. As a guide the abstract should not exceed 200 words. Most journals do not set a hard limit however authors are advised to check the author instructions for the journal they are submitting to.
-%
-% \textbf{Results:} The abstract serves both as a general introduction to the topic and as a brief, non-technical summary of the main results and their implications. The abstract must not include subheadings (unless expressly permitted in the journal's Instructions to Authors), equations or citations. As a guide the abstract should not exceed 200 words. Most journals do not set a hard limit however authors are advised to check the author instructions for the journal they are submitting to.
-%
-% \textbf{Conclusion:} The abstract serves both as a general introduction to the topic and as a brief, non-technical summary of the main results and their implications. The abstract must not include subheadings (unless expressly permitted in the journal's Instructions to Authors), equations or citations. As a guide the abstract should not exceed 200 words. Most journals do not set a hard limit however authors are advised to check the author instructions for the journal they are submitting to.}
-
-\keywords{keyword1, Keyword2, Keyword3, Keyword4}
+\abstract{
+	\gls{nlt} arising from structural variations challenge conventional linear analysis approaches in transcriptomics.
+	Here we introduce the concept of \gls{tsg} and present the first comprehensive infrastructure for graph-based transcript analysis.
+	We develop the TSG file format as the first standardized encoding for transcript segment graphs, enabling systematic representation of \gls{nlt}, and complex splicing patterns impossible to capture with linear methods.
+	Our command-line toolkit provides the first comprehensive suite for \gls{tsg} manipulation, analysis, and format conversion, while Aurora offers the first interactive visualization platform for transcript segment graphs.
+	Together with our companion TSG caller scannls, this work establishes the foundational infrastructure for a new paradigm in transcriptomic analysis, providing the essential tools for systematic investigation of \gls{nlt} structures.
+}
+\keywords{Transcriptomics, Graph-based analysis, Non-colinear transcripts, TSG caller, TSG visualization}
 
 %%\pacs[JEL Classification]{D8, H51}
 %%\pacs[MSC Classification]{35A01, 65L10, 65L12, 65L20, 65L70}
 
 \maketitle
 
-\section{Introduction}\label{sec1}
+\section{main}\label{sec1}
 
-The Introduction section, of referenced text \cite{bib1} expands on the background of the work (some overlap with the Abstract is acceptable). The introduction should not include subheadings.
+Transcriptomic structural variations, including gene fusions, circular RNAs, and complex alternative splicing, play critical roles in cancer, development, and disease.
 
-Springer Nature does not impose a strict layout as standard however authors are advised to check the individual requirements for the journal they are planning to submit to as there may be journal-level preferences. When preparing your text please also be aware that some stylistic choices are not supported in full text XML (publication version), including coloured font. These will not be replicated in the typeset article if it is accepted.
-
-\section{Results}\label{sec2}
-
-\begin{figure}
-	\begin{center}
-		\includegraphics[width=0.95\textwidth]{figures/figure1}
-	\end{center}
-	\caption{TSG Ecosystem}\label{fig:figure1}
-\end{figure}
-
-Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text.
-
-\begin{table}[h]
-	\caption{Caption text}\label{tab1}%
-	\begin{tabular}{@{}llll@{}}
-		\toprule
-		Column 1 & Column 2 & Column 3               & Column 4               \\
-		\midrule
-		row 1    & data 1   & data 2                 & data 3                 \\
-		row 2    & data 4   & data 5\footnotemark[1] & data 6                 \\
-		row 3    & data 7   & data 8                 & data 9\footnotemark[2] \\
-		\botrule
-	\end{tabular}
-	\footnotetext{Source: This is an example of table footnote. This is an example of table footnote.}
-	\footnotetext[1]{Example for a first table footnote. This is an example of table footnote.}
-	\footnotetext[2]{Example for a second table footnote. This is an example of table footnote.}
-\end{table}
-
-\section{Figures}\label{sec6}
-
-As per the \LaTeX\ standards you need to use eps images for \LaTeX\ compilation and \verb+pdf/jpg/png+ images for \verb+PDFLaTeX+ compilation. This is one of the major difference between \LaTeX\ and \verb+PDFLaTeX+. Each image should be from a single input .eps/vector image file. Avoid using subfigures. The command for inserting images for \LaTeX\ and \verb+PDFLaTeX+ can be generalized. The package used to insert images in \verb+LaTeX/PDFLaTeX+ is the graphicx package. Figures can be inserted via the normal figure environment as shown in the below example:
-
-In case of double column layout, the above format puts figure captions/images to single column width. To get spanned images, we need to provide \verb+\begin{figure*}+ \verb+...+ \verb+\end{figure*}+.
-
-For sample purpose, we have included the width of images in the optional argument of \verb+\includegraphics+ tag. Please ignore this.
-
-\section{Algorithms, Program codes and Listings}\label{sec7}
-
-Packages \verb+algorithm+, \verb+algorithmicx+ and \verb+algpseudocode+ are used for setting algorithms in \LaTeX\ using the format:
-
-You may refer above listed package documentations for more details before setting \verb+algorithm+ environment. For program codes, the ``verbatim'' package is required and the command to be used is \verb+\begin{verbatim}+ \verb+...+ \verb+\end{verbatim}+.
-
-Similarly, for \verb+listings+, use the \verb+listings+ package. \verb+\begin{lstlisting}+ \verb+...+ \verb+\end{lstlisting}+ is used to set environments similar to \verb+verbatim+ environment. Refer to the \verb+lstlisting+ package documentation for more details.
-
-\section{Cross referencing}\label{sec8}
-
-Environments such as figure, table, equation and align can have a label
-declared via the \verb+\label{#label}+ command. For figures and table
-environments use the \verb+\label{}+ command inside or just
-below the \verb+\caption{}+ command. You can then use the
-\verb+\ref{#label}+ command to cross-reference them. As an example, consider
-the label declared for Figure~\ref{fig1} which is
-\verb+\label{fig1}+. To cross-reference it, use the command
-\verb+Figure \ref{fig1}+, for which it comes up as
-``Figure~\ref{fig1}''.
-
-\subsection{Details on reference citations}\label{subsec7}
-
-Standard \LaTeX\ permits only numerical citations. To support both numerical and author-year citations this template uses \verb+natbib+ \LaTeX\ package. For style guidance please refer to the template user manual.
-
-All cited bib entries are printed at the end of this article: \cite{bib3}, \cite{bib4}, \cite{bib5}, \cite{bib6}, \cite{bib7}, \cite{bib8}, \cite{bib9}, \cite{bib10}, \cite{bib11}, \cite{bib12} and \cite{bib13}.
-
-\section{Examples for theorem like environments}\label{sec10}
-
-For theorem like environments, we require \verb+amsthm+ package. There are three types of predefined theorem styles exists---\verb+thmstyleone+, \verb+thmstyletwo+ and \verb+thmstylethree+
-
-For mathematics journals, theorem styles can be included as shown in the following examples:
-
-\begin{theorem}[Theorem subhead]\label{thm1}
-	Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text.
-	Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text.
-	Example theorem text.
-\end{theorem}
-
-Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text.
-
-\begin{proposition}
-	Example proposition text. Example proposition text. Example proposition text. Example proposition text. Example proposition text.
-	Example proposition text. Example proposition text. Example proposition text. Example proposition text. Example proposition text.
-\end{proposition}
-
-Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text.
-
-\begin{example}
-	Phasellus adipiscing semper elit. Proin fermentum massa
-	ac quam. Sed diam turpis, molestie vitae, placerat a, molestie nec, leo. Maecenas lacinia. Nam ipsum ligula, eleifend
-	at, accumsan nec, suscipit a, ipsum. Morbi blandit ligula feugiat magna. Nunc eleifend consequat lorem.
-\end{example}
-
-Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text.
-
-\begin{remark}
-	Phasellus adipiscing semper elit. Proin fermentum massa
-	ac quam. Sed diam turpis, molestie vitae, placerat a, molestie nec, leo. Maecenas lacinia. Nam ipsum ligula, eleifend
-	at, accumsan nec, suscipit a, ipsum. Morbi blandit ligula feugiat magna. Nunc eleifend consequat lorem.
-\end{remark}
-
-Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text.
-
-\begin{definition}[Definition sub head]
-	Example definition text. Example definition text. Example definition text. Example definition text. Example definition text. Example definition text. Example definition text. Example definition text.
-\end{definition}
-
-Additionally a predefined ``proof'' environment is available: \verb+\begin{proof}+ \verb+...+ \verb+\end{proof}+. This prints a ``Proof'' head in italic font style and the ``body text'' in roman font style with an open square at the end of each proof environment.
-
-\begin{proof}
-	Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text.
-\end{proof}
-
-Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text.
-
-\begin{proof}[Proof of Theorem~{\upshape\ref{thm1}}]
-	Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text.
-\end{proof}
-
-\noindent
-For a quote environment, use \verb+\begin{quote}...\end{quote}+
-\begin{quote}
-	Quoted text example. Aliquam porttitor quam a lacus. Praesent vel arcu ut tortor cursus volutpat. In vitae pede quis diam bibendum placerat. Fusce elementum
-	convallis neque. Sed dolor orci, scelerisque ac, dapibus nec, ultricies ut, mi. Duis nec dui quis leo sagittis commodo.
-\end{quote}
-
-Sample body text. Sample body text. Sample body text. Sample body text. Sample body text (refer Figure~\ref{fig:figure1}). Sample body text. Sample body text. Sample body text.
+% \begin{figure}
+% 	\begin{center}
+% 		\includegraphics[width=0.95\textwidth]{figures/figure1}
+% 	\end{center}
+% 	\caption{TSG Ecosystem}\label{fig:figure1}
+% \end{figure}
 
 \section{Methods}\label{sec11}
 
 Topical subheadings are allowed. Authors must ensure that their Methods section includes adequate experimental and characterization data necessary for others in the field to reproduce their work. Authors are encouraged to include RIIDs where appropriate.
 
-\textbf{Ethical approval declarations} (only required where applicable) Any article reporting experiment/s carried out on (i)~live vertebrate (or higher invertebrates), (ii)~humans or (iii)~human samples must include an unambiguous statement within the methods section that meets the following requirements:
-
-\begin{enumerate}[1.]
-	\item Approval: a statement which confirms that all experimental protocols were approved by a named institutional and/or licensing committee. Please identify the approving body in the methods section
-	      
-	\item Accordance: a statement explicitly saying that the methods were carried out in accordance with the relevant guidelines and regulations
-	      
-	\item Informed consent (for experiments involving humans or human tissue samples): include a statement confirming that informed consent was obtained from all participants and/or their legal guardian/s
-\end{enumerate}
-
 If your manuscript includes potentially identifying patient/participant information, or if it describes human transplantation research, or if it reports results of a clinical trial then  additional information will be required. Please visit (\url{https://www.nature.com/nature-research/editorial-policies}) for Nature Portfolio journals, (\url{https://www.springer.com/gp/authors-editors/journal-author/journal-author-helpdesk/publishing-ethics/14214}) for Springer Nature journals, or (\url{https://www.biomedcentral.com/getpublished/editorial-policies\#ethics+and+consent}) for BMC.
-
-\section{Discussion}\label{sec12}
-
-Discussions should be brief and focused. In some disciplines use of Discussion or `Conclusion' is interchangeable. It is not mandatory to use both. Some journals prefer a section `Results and Discussion' followed by a section `Conclusion'. Please refer to Journal-level guidance for any specific requirements.
-
-\section{Conclusion}\label{sec13}
-
-Conclusions may be used to restate your hypothesis or research question, restate your major findings, explain the relevance and the added value of your work, highlight any limitations of your study, describe future directions for research and recommendations.
-
-In some disciplines use of Discussion or 'Conclusion' is interchangeable. It is not mandatory to use both. Please refer to Journal-level guidance for any specific requirements.
 
 \backmatter
 
 \bmhead{Supplementary information}
 
-If your article has accompanying supplementary file/s please state so here.
+This separation aligns with how many transcript assembly algorithms work:
 
-Authors reporting data from electrophoretic gels and blots should supply the full unprocessed scans for key as part of their Supplementary information. This may be requested by the editorial team/s if it is missing.
-
-Please refer to Journal-level guidance for any specific requirements.
+\begin{enumerate}[leftmargin=*]
+	\item First, chains of exons and splice junctions are identified from the data
+	\item Then, potential transcripts are derived by traversing the graph in different ways
+	\item Finally, relationships between different transcript graphs are established
+\end{enumerate}
 
 \bmhead{Acknowledgements}
 
