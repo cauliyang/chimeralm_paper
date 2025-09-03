@@ -54,7 +54,7 @@
 			top color=natorange!25,
 			bottom color=natorange!8,
 			minimum height=4cm,
-			minimum width=3.5cm,
+			minimum width=4cm,
 			text centered,
 			font=\sffamily\large\bfseries,
 			drop shadow={shadow scale=1.08, shadow xshift=3pt, shadow yshift=-3pt, fill=natorange!40}
@@ -146,11 +146,7 @@
 		}
 }
 
-\begin{tikzpicture}[node distance=2.2cm, every node/.style={transform shape}]
-
-	% Enhanced title with styling
-	\node[titlebox] at (10, 5.5) {ChimeraLM};
-	\node[font=\sffamily\large, text=natgray!70] at (10, 4.8) {Neural Architecture};
+\begin{tikzpicture}[node distance=2.1cm, every node/.style={transform shape}]
 
 	% Main blocks
 	\node[io] (input) at (0,0) {
@@ -187,12 +183,12 @@
 	\node[attention, right=of hidden] (attention) {};
 
 	% Attention internal components with enhanced styling
-	\node[component, fill=natorange!15] at ($(attention.north)-(0,0.4)$) {\small \textbf{Attention Pooling}};
-	\node[component, fill=natorange!10] at ($(attention)+(0,0.6)$) {\small Linear(256→128)};
-	\node[component, fill=natorange!10] at ($(attention)+(0,0.2)$) {\small GELU};
-	\node[component, fill=natorange!10] at ($(attention)+(0,-0.2)$) {\small Linear(128→1)};
-	\node[component, fill=natorange!10] at ($(attention)+(0,-0.6)$) {\small Softmax};
-	\node[component, fill=natorange!15] at ($(attention)+(0,-1.0)$) {\small Weighted Sum};
+	\node[component, fill=natorange!15] at ($(attention.north)-(0,0.4)$) (attentioninside1) {\small \textbf{Attention Pooling}};
+	\node[component, fill=natorange!10] at ($(attentioninside1.south)+(0,-0.4)$) (attentioninside2) {\small Linear(256→128)};
+	\node[component, fill=natorange!10] at ($(attentioninside2.south)+(0,-0.35)$)  (attentioninside3) {\small GELU};
+	\node[component, fill=natorange!10] at ($(attentioninside3.south)+(0,-0.35)$) (attentioninside4) {\small Linear(128→1)};
+	\node[component, fill=natorange!10] at ($(attentioninside4.south)+(0,-0.35)$) (attentioninside5) {\small Softmax};
+	\node[component, fill=natorange!15] at ($(attentioninside5.south)+(0,-0.35)$)  {\small Weighted Sum};
 	% Add attention icon
 	\node[star, star points=5, fill=natorange!40, draw=natorange, inner sep=1pt] at ($(attention.north east)+(-0.4,-0.3)$) {\tiny \textcolor{natorange}{$\boldsymbol{\alpha}$}};
 
@@ -209,12 +205,12 @@
 	\node[classifier, right=of pooled] (classifier) {};
 
 	% Classifier internal components with professional styling
-	\node[component, fill=natblue!15] at ($(classifier.north)-(0,0.4)$) {\small \textbf{Classification}};
-	\node[component, fill=natblue!10] at ($(classifier)+(0,0.7)$) {\small Linear(256→512)};
-	\node[component, fill=natblue!10] at ($(classifier)+(0,0.3)$) {\small GELU + Dropout};
-	\node[component, fill=natblue!10] at ($(classifier)+(0,-0.1)$) {\small Linear(512→512)};
-	\node[component, fill=natblue!10] at ($(classifier)+(0,-0.5)$) {\small GELU + Dropout};
-	\node[component, draw=natblue!60, dashed, line width=1pt, fill=natblue!8] at ($(classifier)+(0,-0.9)$) {\small ResidualBlock};
+	\node[component, fill=natblue!15] at ($(classifier.north)-(0,0.35)$) (classifierinside1) {\small \textbf{Classification}};
+	\node[component, fill=natblue!10] at ($(classifierinside1.south)+(0,-0.4)$) (classifierinside2) {\small Linear(256→512)};
+	\node[component, fill=natblue!10] at ($(classifierinside2.south)+(0,-0.35)$) (classifierinside3) {\small GELU + Dropout};
+	\node[component, fill=natblue!10] at ($(classifierinside3.south)+(0,-0.35)$) (classifierinside4) {\small Linear(512→512)};
+	\node[component, fill=natblue!10] at ($(classifierinside4.south)+(0,-0.35)$) (classifierinside5) {\small GELU + Dropout};
+	\node[component, draw=natblue!60, dashed, line width=1pt, fill=natblue!8] at ($(classifierinside5.south)+(0,-0.35)$) (classifierinside6) {\small ResidualBlock};
 	% Add classification icon
 	\node[regular polygon, regular polygon sides=6, fill=natblue!40, draw=natblue, inner sep=1pt] at ($(classifier.north east)+(-0.4,-0.3)$) {\tiny \textcolor{natblue}{$\boldsymbol{f}$}};
 
@@ -252,36 +248,23 @@
 	\node[dimlabel, above=3pt] at ($(pooled.east)!0.5!(classifier.west)$) {[B, 256]};
 	\node[dimlabel, above=3pt] at ($(classifier.east)!0.5!(output.west)$) {[B, 512]};
 
-
-	% Enhanced parameters box
-	\node[rectangle, draw=natblue!60, line width=1.5pt, rounded corners=8pt,
-		top color=natblue!10, bottom color=white, anchor=north,
-		drop shadow={shadow scale=1.03, shadow xshift=2pt, shadow yshift=-2pt, fill=natblue!20}] at (10, -2.5) {
-		\begin{tabular}{l}
-			\small \textbf{\textcolor{natblue}{Model Parameters:}}             \\[3pt]
-			\small \texttt{input\_dim} = \textcolor{natgreen}{256}             \\[1pt]
-			\small \texttt{hidden\_dim} = \textcolor{natgreen}{512}            \\[1pt]
-			\small \texttt{num\_layers} = \textcolor{natgreen}{2}              \\[1pt]
-			\small \texttt{dropout} = \textcolor{natgreen}{0.1}                \\[1pt]
-			\small \texttt{pooling\_type} = \textcolor{natorange}{"attention"} \\[1pt]
-			\small \texttt{activation} = \textcolor{natorange}{"gelu"}
-		\end{tabular}
-	};
-
 	% Enhanced legend
 	\node[rectangle, draw=natgray!60, line width=1.5pt, rounded corners=8pt,
 		top color=natgray!10, bottom color=white, anchor=south west,
-		drop shadow={shadow scale=1.03, shadow xshift=2pt, shadow yshift=-2pt, fill=natgray!20}] at (0, -2.5) {
+		drop shadow={shadow scale=1.03, shadow xshift=2pt, shadow yshift=-2pt, fill=natgray!20}] at (0, -5.5) {
 		\begin{tabular}{cl}
-			\small \textbf{\textcolor{natgray}{Legend:}} &                           \\[2pt]
-			\small \textcolor{natblue}{\textbf{B}}       & = \small batch\_size      \\[1pt]
-			\small \textcolor{natblue}{\textbf{L}}       & = \small sequence\_length \\[1pt]
+			\small \textbf{\textcolor{natgray}{Legend:}} &                          \\[2pt]
+			\small \textcolor{natblue}{\textbf{B}}       & = \small batch size      \\[1pt]
+			\small \textcolor{natblue}{\textbf{L}}       & = \small sequence length \\[1pt]
 		\end{tabular}
 	};
 
 	% Add subtle background frame
 	\draw[natgray!20, line width=3pt, rounded corners=20pt]
 	($(input.north west)+(-0.5,0.8)$) rectangle ($(output.south east)+(0.5,-0.8)$);
+
+	% Enhanced title with styling
+	\node[titlebox, above =of attention] (title)  {ChimeraLM Architecture};
 
 \end{tikzpicture}
 
