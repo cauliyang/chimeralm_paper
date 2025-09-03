@@ -1,0 +1,10 @@
+# Data for TP retention & decomposition chart
+# Set A TP
+A_TP	7193
+# Set C TP and retention
+C_TP	6269
+Retention_percentage	0.8715
+# Set B TP decomposition
+B_TP_total	6818
+B_intersect_D	5828
+Overkill	990

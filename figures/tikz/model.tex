@@ -1,0 +1,210 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, shadows, patterns, decorations.pathreplacing, calc}
+
+\begin{document}
+
+% Define styles
+\tikzset{
+	% Input/Output blocks
+	io/.style={
+			rectangle,
+			rounded corners=8pt,
+			draw=gray!50,
+			fill=gray!10,
+			minimum height=2.5cm,
+			minimum width=2cm,
+			text centered,
+			font=\sffamily\small,
+			drop shadow
+		},
+	% Backbone block
+	backbone/.style={
+			rectangle,
+			rounded corners=10pt,
+			draw=green!60,
+			fill=green!30,
+			minimum height=3cm,
+			minimum width=3.5cm,
+			text centered,
+			font=\sffamily\bfseries,
+			drop shadow
+		},
+	% Attention block
+	attention/.style={
+			rectangle,
+			rounded corners=10pt,
+			draw=orange!60,
+			fill=orange!30,
+			minimum height=3.5cm,
+			minimum width=3cm,
+			text centered,
+			font=\sffamily\bfseries,
+			drop shadow
+		},
+	% Classifier block
+	classifier/.style={
+			rectangle,
+			rounded corners=10pt,
+			draw=blue!60,
+			fill=blue!30,
+			minimum height=3.5cm,
+			minimum width=3.5cm,
+			text centered,
+			font=\sffamily\bfseries,
+			drop shadow
+		},
+	% Output block
+	output/.style={
+			rectangle,
+			rounded corners=10pt,
+			draw=purple!60,
+			fill=purple!30,
+			minimum height=2.5cm,
+			minimum width=2.5cm,
+			text centered,
+			font=\sffamily\bfseries,
+			drop shadow
+		},
+	% Hidden state block
+	hidden/.style={
+			rectangle,
+			rounded corners=6pt,
+			draw=yellow!70,
+			fill=yellow!20,
+			minimum height=2cm,
+			minimum width=2.5cm,
+			text centered,
+			font=\sffamily\small,
+			drop shadow
+		},
+	% Arrow style
+	arrow/.style={
+			->,
+			>=Stealth,
+			thick,
+			gray!70
+		},
+	% Component box inside blocks
+	component/.style={
+			rectangle,
+			rounded corners=4pt,
+			fill=white,
+			fill opacity=0.7,
+			draw=none,
+			font=\sffamily\footnotesize,
+			inner sep=3pt
+		},
+	% Dimension label
+	dimlabel/.style={
+			font=\footnotesize\ttfamily,
+			text=gray!70
+		}
+}
+
+\begin{tikzpicture}[node distance=1.8cm]
+
+	% Title
+	\node[font=\sffamily\Large\bfseries] at (10, 5) {ChimeraLM};
+
+	% Main blocks
+	\node[io] (input) at (0,0) {
+		\begin{tabular}{c}
+			\textbf{Input} \\[2pt]
+			Tokenized      \\
+			DNA/RNA        \\[2pt]
+			\textcolor{gray}{\footnotesize [B, L]}
+		\end{tabular}
+	};
+
+	\node[backbone, right=of input] (backbone) {
+		\begin{tabular}{c}
+			Hyena Operator \\
+		\end{tabular}
+	};
+
+	\node[hidden, right=of backbone] (hidden) {
+		\begin{tabular}{c}
+			\textbf{Hidden States} \\[2pt]
+			\footnotesize [B, L, 256]
+		\end{tabular}
+	};
+
+	\node[attention, right=of hidden] (attention) {};
+
+	% Attention internal components
+	\node[component] at ($(attention.north)-(0,0.3)$) {\footnotesize \textbf{Attention Pooling}};
+	\node[component] at ($(attention)+(0,0.5)$) {\tiny Linear(256→128)};
+	\node[component] at ($(attention)+(0,0.1)$) {\tiny GELU};
+	\node[component] at ($(attention)+(0,-0.3)$) {\tiny Linear(128→1)};
+	\node[component] at ($(attention)+(0,-0.7)$) {\tiny Softmax};
+	\node[component] at ($(attention)+(0,-1.1)$) {\tiny Weighted Sum};
+
+	\node[hidden, right=of attention] (pooled) {
+		\begin{tabular}{c}
+			\textbf{Pooled} \\
+			\textbf{Output} \\[2pt]
+			\footnotesize [B, 256]
+		\end{tabular}
+	};
+
+	\node[classifier, right=of pooled] (classifier) {};
+
+	% Classifier internal components
+	\node[component] at ($(classifier.north)-(0,0.3)$) {\footnotesize \textbf{Classification}};
+	\node[component] at ($(classifier)+(0,0.6)$) {\tiny Linear(256→512)};
+	\node[component] at ($(classifier)+(0,0.2)$) {\tiny GELU + Dropout};
+	\node[component] at ($(classifier)+(0,-0.2)$) {\tiny Linear(512→512)};
+	\node[component] at ($(classifier)+(0,-0.6)$) {\tiny GELU + Dropout};
+	\node[component, draw=gray!40, dashed] at ($(classifier)+(0,-1.1)$) {\tiny ResidualBlock};
+
+	\node[output, right=of classifier] (output) {
+		\begin{tabular}{c}
+			\textbf{Output}             \\[3pt]
+			\footnotesize Linear(512→2) \\[2pt]
+			\textcolor{gray}{\footnotesize [B, 2]}
+		\end{tabular}
+	};
+
+	% Arrows
+	\draw[arrow] (input) -- (backbone);
+	\draw[arrow] (backbone) -- (hidden);
+	\draw[arrow] (hidden) -- (attention);
+	\draw[arrow] (attention) -- (pooled);
+	\draw[arrow] (pooled) -- (classifier);
+	\draw[arrow] (classifier) -- (output);
+
+	% Dimension labels above arrows
+	\node[dimlabel, above] at ($(input)!0.5!(backbone)$) {[B, L]};
+	\node[dimlabel, above] at ($(backbone)!0.5!(hidden)$) {[B, L, 256]};
+	\node[dimlabel, above] at ($(hidden)!0.5!(attention)$) {[B, L, 256]};
+	\node[dimlabel, above] at ($(attention)!0.5!(pooled)$) {[B, 256]};
+	\node[dimlabel, above] at ($(pooled)!0.5!(classifier)$) {[B, 256]};
+	\node[dimlabel, above] at ($(classifier)!0.5!(output)$) {[B, 512]};
+
+
+	% Parameters box
+	\node[rectangle, draw=gray!40, rounded corners=5pt, fill=gray!5, anchor=north] at (10, -3) {
+		\begin{tabular}{l}
+			\footnotesize \textbf{Model Parameters:}           \\
+			\footnotesize \texttt{input\_dim} = 256            \\
+			\footnotesize \texttt{hidden\_dim} = 512           \\
+			\footnotesize \texttt{num\_layers} = 2             \\
+			\footnotesize \texttt{dropout} = 0.1               \\
+			\footnotesize \texttt{pooling\_type} = "attention" \\
+			\footnotesize \texttt{activation} = "gelu"
+		\end{tabular}
+	};
+
+	% Legend
+	\node[rectangle, draw=gray!40, rounded corners=5pt, fill=gray!5, anchor=south west] at (0, -3) {
+		\begin{tabular}{cl}
+			\footnotesize \textbf{Legend:} &                    \\
+			\footnotesize B                & = batch\_size      \\
+			\footnotesize L                & = sequence\_length \\
+		\end{tabular}
+	};
+
+\end{tikzpicture}
+
+\end{document}

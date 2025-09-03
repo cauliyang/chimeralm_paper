@@ -1,0 +1,5 @@
+# Data for stacked bar chart (TP/FP composition)
+# Format: Set_Name, TP, FP, Total
+Set_A	7193	444197	451390
+Set_B	6818	420891	427709
+Set_C	6269	32163	38432
