@@ -186,7 +186,7 @@
 	\node[font=\sffamily\Large\bfseries, text=natgray!80] at (8.5, 3.2) {Comparison \& Classification};
 
 	% Support classification - better spacing
-	\node[classbox=natred, below=of mdachimeric] (sup0) {
+	\node[classbox=natred, below= 1.5cm of mdachimeric] (sup0) {
 		\begin{tabular}{c}
 			\textbf{Support 0}       \\[2pt]
 			\footnotesize Artificial \\
@@ -223,7 +223,7 @@
 	};
 
 	% Final classification - better spacing
-	\node[classbox=natpurple, below = of sup0] (artificial)  {
+	\node[classbox=natpurple, below = 1.5cm of sup0] (artificial)  {
 		\begin{tabular}{c}
 			\textbf{Artificial}   \\[2pt]
 			\footnotesize Class 0 \\[2pt]
@@ -231,7 +231,7 @@
 		\end{tabular}
 	};
 
-	\node[classbox=natblue, below = of sup2] (biological)  {
+	\node[classbox=natblue, below = 1.5cm of sup2] (biological)  {
 		\begin{tabular}{c}
 			\textbf{Biological}   \\[2pt]
 			\footnotesize Class 1 \\[2pt]
@@ -271,14 +271,6 @@
 	\draw[arrow] (bulkchimeric2.south) to[out=270,in=140] (biological.north);
 	\draw[arrow] (bulkchimeric3.south) to[out=240,in=120] (biological.north east);
 
-	% Add comparison indication with visual grouping
-	\node[font=\sffamily\small\bfseries, text=natorange,
-		anchor=south] at ($(mdachimeric.north)!0.5!(bulkchimeric2.north)+(0,0.8)$) {
-		\begin{tabular}{c}
-			Compare MDA reads \\
-			with ALL 3 Bulk references
-		\end{tabular}
-	};
 
 	% Comparison process explanation
 	% \node[rectangle, draw=natorange!60, line width=1.5pt, rounded corners=8pt,
