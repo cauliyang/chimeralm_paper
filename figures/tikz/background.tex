@@ -1,0 +1,266 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, shadows, patterns, decorations.pathreplacing, calc, fadings, matrix}
+
+% Define professional color palette
+\definecolor{natblue}{RGB}{41,128,185}
+\definecolor{natgreen}{RGB}{39,174,96}
+\definecolor{natorange}{RGB}{230,126,34}
+\definecolor{natpurple}{RGB}{142,68,173}
+\definecolor{natred}{RGB}{231,76,60}
+\definecolor{natgray}{RGB}{52,73,94}
+\definecolor{lightgray}{RGB}{236,240,241}
+\definecolor{mdacolor}{RGB}{255,87,87}  % MDA specific color
+\definecolor{benefitcolor}{RGB}{46,204,113} % Benefits
+\definecolor{challengecolor}{RGB}{231,76,60} % Challenges
+
+\begin{document}
+
+% Define styles
+\tikzset{
+	% Main process blocks
+	processblock/.style={
+			rectangle,
+			rounded corners=15pt,
+			draw=#1,
+			line width=2pt,
+			top color=#1!20,
+			bottom color=#1!5,
+			minimum height=3.5cm,
+			minimum width=4cm,
+			text centered,
+			font=\sffamily\large\bfseries,
+			drop shadow={shadow scale=1.08, shadow xshift=3pt, shadow yshift=-3pt, fill=#1!40}
+		},
+	% Feature boxes
+	featurebox/.style={
+			rectangle,
+			rounded corners=10pt,
+			draw=#1,
+			line width=1.5pt,
+			fill=#1!15,
+			minimum height=2.5cm,
+			minimum width=3.2cm,
+			text centered,
+			font=\sffamily\normalsize,
+			drop shadow={shadow scale=1.05, shadow xshift=2pt, shadow yshift=-2pt, fill=#1!25}
+		},
+	% Impact boxes
+	impactbox/.style={
+			rectangle,
+			rounded corners=12pt,
+			draw=#1,
+			line width=2pt,
+			top color=#1!25,
+			bottom color=#1!8,
+			minimum height=3cm,
+			minimum width=3.5cm,
+			text centered,
+			font=\sffamily\large\bfseries,
+			drop shadow={shadow scale=1.06, shadow xshift=2pt, shadow yshift=-2pt, fill=#1!30}
+		},
+	% Solution box
+	solutionbox/.style={
+			rectangle,
+			rounded corners=15pt,
+			draw=natpurple,
+			line width=3pt,
+			top color=natpurple!20,
+			bottom color=natpurple!5,
+			minimum height=4cm,
+			minimum width=5cm,
+			text centered,
+			font=\sffamily\Large\bfseries,
+			drop shadow={shadow scale=1.1, shadow xshift=4pt, shadow yshift=-4pt, fill=natpurple!40}
+		},
+	% Arrow style
+	arrow/.style={
+			->,
+			>=stealth,
+			line width=2.5pt,
+			#1,
+			shorten >=3pt,
+			shorten <=3pt
+		},
+	% Title style
+	titlebox/.style={
+			rectangle,
+			rounded corners=12pt,
+			draw=natblue,
+			line width=2.5pt,
+			top color=natblue!15,
+			bottom color=white,
+			font=\sffamily\Huge\bfseries,
+			text=natblue!90,
+			inner sep=12pt,
+			drop shadow={shadow scale=1.08, shadow xshift=4pt, shadow yshift=-4pt, fill=natblue!30}
+		},
+	% Warning style
+	warningbox/.style={
+			rectangle,
+			rounded corners=8pt,
+			draw=challengecolor,
+			line width=2pt,
+			fill=challengecolor!10,
+			font=\sffamily\small\bfseries,
+			text=challengecolor!80,
+			inner sep=6pt,
+			drop shadow={shadow scale=1.03, shadow xshift=2pt, shadow yshift=-2pt, fill=challengecolor!20}
+		}
+}
+
+\begin{tikzpicture}[node distance=2cm, every node/.style={transform shape}]
+
+	% Title
+	\node[titlebox] at (8, 11) {ChimeraLM: Background \& Motivation};
+
+	% MDA Process
+	\node[processblock=mdacolor] (mda) at (3, 8.5) {
+		\begin{tabular}{c}
+			\textbf{Multiple}      \\[2pt]
+			\textbf{Displacement}  \\[2pt]
+			\textbf{Amplification} \\[2pt]
+			\textbf{(MDA)}         \\[4pt]
+			\normalsize Nanopore   \\
+			\normalsize Sequencing
+		\end{tabular}
+	};
+
+	% MDA Benefits
+	\node[featurebox=benefitcolor] (benefit1) at (0.5, 6) {
+		\begin{tabular}{c}
+			\textbf{High Coverage}    \\[3pt]
+			\footnotesize Amplifies   \\
+			\footnotesize limited DNA \\[2pt]
+			\textcolor{benefitcolor!80}{\tiny \checkmark Advantage}
+		\end{tabular}
+	};
+
+	\node[featurebox=benefitcolor] (benefit2) at (5.5, 6) {
+		\begin{tabular}{c}
+			\textbf{Long Reads}      \\[3pt]
+			\footnotesize Nanopore   \\
+			\footnotesize sequencing \\[2pt]
+			\textcolor{benefitcolor!80}{\tiny \checkmark Advantage}
+		\end{tabular}
+	};
+
+	% MDA Challenge
+	\node[featurebox=challengecolor] (challenge) at (3, 6) {
+		\begin{tabular}{c}
+			\textbf{Chimera}             \\[1pt]
+			\textbf{Artifacts}           \\[3pt]
+			\footnotesize Artificial     \\
+			\footnotesize chimeric reads \\[2pt]
+			\textcolor{challengecolor!80}{\tiny $\times$ Challenge}
+		\end{tabular}
+	};
+
+	% Downstream Analysis
+	\node[impactbox=natblue] (downstream) at (8, 6) {
+		\begin{tabular}{c}
+			\textbf{Downstream}    \\[2pt]
+			\textbf{Analysis}      \\[4pt]
+			\normalsize Structural \\
+			\normalsize Variation  \\
+			\normalsize Detection
+		\end{tabular}
+	};
+
+	% Negative Impact
+	\node[impactbox=challengecolor] (negativeimpact) at (13, 6) {
+		\begin{tabular}{c}
+			\textbf{False}           \\[1pt]
+			\textbf{Discoveries}     \\[4pt]
+			\footnotesize Artificial \\
+			\footnotesize SV events  \\[2pt]
+			\textcolor{challengecolor!80}{\tiny Incorrect results}
+		\end{tabular}
+	};
+
+	% Solution
+	\node[solutionbox] (solution) at (8, 2.5) {
+		\begin{tabular}{c}
+			\textbf{\Huge ChimeraLM}           \\[6pt]
+			\textbf{AI-powered}                \\[2pt]
+			\textbf{Chimera Detection}         \\[4pt]
+			\normalsize Distinguish artificial \\
+			\normalsize from biological        \\
+			\normalsize chimeric reads
+		\end{tabular}
+	};
+
+	% Arrows showing flow
+	\draw[arrow=natgray!80] (mda.south west) -- (benefit1.north);
+	\draw[arrow=natgray!80] (mda.south) -- (challenge.north);
+	\draw[arrow=natgray!80] (mda.south east) -- (benefit2.north);
+
+	\draw[arrow=benefitcolor] (benefit1.east) to[out=0,in=180,looseness=0.6] (downstream.west);
+	\draw[arrow=benefitcolor] (benefit2.west) to[out=180,in=180,looseness=0.8] (downstream.west);
+	\draw[arrow=challengecolor] (challenge.east) -- (downstream.west);
+
+	\draw[arrow=natblue] (downstream.east) -- (negativeimpact.west);
+
+	% Solution arrows
+	\draw[arrow=natpurple] (downstream.south) to[out=270,in=90,looseness=0.8] (solution.north);
+	\draw[arrow=natpurple] (negativeimpact.south) to[out=270,in=45,looseness=1.0] (solution.north east);
+
+	% Warning callout
+	\node[warningbox] at (3, 4) {
+		\begin{tabular}{c}
+			\textbf{Problem:} Chimera artifacts contaminate \\
+			real biological signals, leading to false SV calls
+		\end{tabular}
+	};
+
+	% Process explanation boxes
+	\node[rectangle, draw=natgray!40, line width=1pt, rounded corners=6pt,
+		fill=lightgray!30, anchor=north west] at (0, 0.5) {
+		\begin{tabular}{l}
+			\textbf{\textcolor{natgray}{MDA Process Issues:}}           \\[2pt]
+			\footnotesize • Non-uniform amplification creates artifacts \\[1pt]
+			\footnotesize • Template switching during amplification     \\[1pt]
+			\footnotesize • Chimeric reads appear biologically real     \\[1pt]
+			\footnotesize • Standard tools cannot distinguish them
+		\end{tabular}
+	};
+
+	\node[rectangle, draw=natpurple!40, line width=1pt, rounded corners=6pt,
+		fill=natpurple!10, anchor=north east] at (16, 0.5) {
+		\begin{tabular}{l}
+			\textbf{\textcolor{natpurple}{ChimeraLM Solution:}} \\[2pt]
+			\footnotesize • Deep learning-based classification  \\[1pt]
+			\footnotesize • Trained on MDA vs Bulk comparison   \\[1pt]
+			\footnotesize • High accuracy artifact detection    \\[1pt]
+			\footnotesize • Improves downstream SV analysis
+		\end{tabular}
+	};
+
+	% Add icons and visual elements
+	\node[circle, fill=mdacolor!30, draw=mdacolor, inner sep=3pt] at ($(mda.north east)+(-0.4,-0.4)$) {
+		\textcolor{mdacolor}{\textbf{MDA}}
+	};
+
+	\node[regular polygon, regular polygon sides=6, fill=benefitcolor!40, draw=benefitcolor, inner sep=2pt] at ($(benefit1.north east)+(-0.3,-0.3)$) {
+		\tiny \textcolor{benefitcolor}{\textbf{+}}
+	};
+
+	\node[regular polygon, regular polygon sides=6, fill=benefitcolor!40, draw=benefitcolor, inner sep=2pt] at ($(benefit2.north east)+(-0.3,-0.3)$) {
+		\tiny \textcolor{benefitcolor}{\textbf{+}}
+	};
+
+	\node[regular polygon, regular polygon sides=3, fill=challengecolor!40, draw=challengecolor, inner sep=2pt] at ($(challenge.north east)+(-0.3,-0.3)$) {
+		\tiny \textcolor{challengecolor}{\textbf{!}}
+	};
+
+	\node[star, star points=5, fill=natpurple!40, draw=natpurple, inner sep=2pt] at ($(solution.north east)+(-0.5,-0.5)$) {
+		\tiny \textcolor{natpurple}{\textbf{AI}}
+	};
+
+\end{tikzpicture}
+
+\end{document}
