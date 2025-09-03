@@ -66,8 +66,8 @@
 			>=Stealth,
 			line width=2pt,
 			natgray!80,
-			shorten >=2pt,
-			shorten <=2pt
+			shorten >=3pt,
+			shorten <=3pt
 		},
 	% Comparison arrow
 	comparrow/.style={
@@ -182,48 +182,48 @@
 		\end{tabular}
 	};
 
-	% Comparison process
-	\node[font=\sffamily\Large\bfseries, text=natgray!80] at (8, 3.8) {Comparison \& Classification};
+	% Comparison process - moved up to avoid overlap
+	\node[font=\sffamily\Large\bfseries, text=natgray!80] at (8.5, 3.2) {Comparison \& Classification};
 
-	% Support classification
-	\node[classbox=natred] (sup0) at (4, 2) {
+	% Support classification - better spacing
+	\node[classbox=natred, below=of mdachimeric] (sup0) {
 		\begin{tabular}{c}
 			\textbf{Support 0}       \\[2pt]
 			\footnotesize Artificial \\
 			\footnotesize Chimeric   \\[2pt]
-			\textcolor{natred!80}{\tiny MDA Artifact}
+			\textcolor{natred!80}{\tiny 0/3 Bulk Match}
 		\end{tabular}
 	};
 
-	\node[classbox=natgreen] (sup1) at (7, 2) {
+	\node[classbox=natgreen, right = 2cm of sup0] (sup1)  {
 		\begin{tabular}{c}
 			\textbf{Support 1}       \\[2pt]
 			\footnotesize Biological \\
 			\footnotesize Chimeric   \\[2pt]
-			\textcolor{natgreen!80}{\tiny True Positive}
+			\textcolor{natgreen!80}{\tiny 1/3 Bulk Match}
 		\end{tabular}
 	};
 
-	\node[classbox=natgreen] (sup2) at (10, 2) {
+	\node[classbox=natgreen, right = of sup1] (sup2) {
 		\begin{tabular}{c}
 			\textbf{Support 2}       \\[2pt]
 			\footnotesize Biological \\
 			\footnotesize Chimeric   \\[2pt]
-			\textcolor{natgreen!80}{\tiny True Positive}
+			\textcolor{natgreen!80}{\tiny 2/3 Bulk Match}
 		\end{tabular}
 	};
 
-	\node[classbox=natgreen] (sup3) at (13, 2) {
+	\node[classbox=natgreen, right = of sup2] (sup3)  {
 		\begin{tabular}{c}
 			\textbf{Support 3}       \\[2pt]
 			\footnotesize Biological \\
 			\footnotesize Chimeric   \\[2pt]
-			\textcolor{natgreen!80}{\tiny True Positive}
+			\textcolor{natgreen!80}{\tiny 3/3 Bulk Match}
 		\end{tabular}
 	};
 
-	% Final classification
-	\node[classbox=natpurple] (artificial) at (4, -1) {
+	% Final classification - better spacing
+	\node[classbox=natpurple, below = of sup0] (artificial)  {
 		\begin{tabular}{c}
 			\textbf{Artificial}   \\[2pt]
 			\footnotesize Class 0 \\[2pt]
@@ -231,7 +231,7 @@
 		\end{tabular}
 	};
 
-	\node[classbox=natblue] (biological) at (10, -1) {
+	\node[classbox=natblue, below = of sup2] (biological)  {
 		\begin{tabular}{c}
 			\textbf{Biological}   \\[2pt]
 			\footnotesize Class 1 \\[2pt]
@@ -245,23 +245,50 @@
 	\draw[arrow] (bulk2.south) -- (bulkchimeric2.north);
 	\draw[arrow] (bulk3.south) -- (bulkchimeric3.north);
 
-	% Comparison arrows
-	\draw[comparrow=natorange] (mdachimeric.south) -- (sup0.north);
-	\draw[comparrow=natorange] (mdachimeric.south) -- (sup1.north);
-	\draw[comparrow=natorange] (mdachimeric.south) -- (sup2.north);
-	\draw[comparrow=natorange] (mdachimeric.south) -- (sup3.north);
+	% Comparison visualization - dashed box grouping
+	\draw[dashed, natorange!60, line width=2pt, rounded corners=10pt]
+	($(mdachimeric.north west)+(-0.3,0.3)$) rectangle ($(bulkchimeric3.south east)+(0.3,-0.3)$);
 
-	% Classification arrows
+	% Add comparison symbol in the center
+	\node[circle, fill=natorange!20, draw=natorange, line width=2pt,
+		minimum size=1cm] at ($(mdachimeric.east)!0.5!(bulkchimeric1.west)$) {
+		\Large\textcolor{natorange}{\textbf{VS}}
+	};
+
+	% Classification arrows from MDA to support groups - simplified
+	\draw[arrow] (mdachimeric.south) to (sup0.north);
+	\draw[arrow] (mdachimeric.south) to (sup1.north);
+	\draw[arrow] (mdachimeric.south) to (sup2.north);
+	\draw[arrow] (mdachimeric.south) to (sup3.north);
+
+	% Classification arrows - clean non-intersecting paths
 	\draw[arrow] (sup0.south) -- (artificial.north);
-	\draw[arrow] (sup1.south) -- (biological.north);
-	\draw[arrow] (sup2.south) -- (biological.north);
-	\draw[arrow] (sup3.south) -- (biological.north);
-	\draw[arrow] (bulkchimeric1.south) -- (biological.north);
-	\draw[arrow] (bulkchimeric2.south) -- (biological.north);
-	\draw[arrow] (bulkchimeric3.south) -- (biological.north);
+	\draw[arrow] (sup1.south) to[out=270,in=135] (biological.north west);
+	\draw[arrow] (sup2.south) to[out=270,in=110] (biological.north);
+	\draw[arrow] (sup3.south) to[out=270,in=45] (biological.north east);
+	% Bulk data direct to biological class
+	\draw[arrow] (bulkchimeric1.south) to[out=300,in=160] (biological.north west);
+	\draw[arrow] (bulkchimeric2.south) to[out=270,in=140] (biological.north);
+	\draw[arrow] (bulkchimeric3.south) to[out=240,in=120] (biological.north east);
 
-	% Add comparison indication
-	\node[font=\sffamily\small\bfseries, text=natorange] at (6, 4.2) {Compare each MDA read with 3 Bulk references};
+	% Add comparison indication with visual grouping
+	\node[font=\sffamily\small\bfseries, text=natorange,
+		anchor=south] at ($(mdachimeric.north)!0.5!(bulkchimeric2.north)+(0,0.8)$) {
+		\begin{tabular}{c}
+			Compare MDA reads \\
+			with ALL 3 Bulk references
+		\end{tabular}
+	};
+
+	% Comparison process explanation
+	% \node[rectangle, draw=natorange!60, line width=1.5pt, rounded corners=8pt,
+	% 	fill=natorange!10, anchor=center] at (8.5, 3.2) {
+	% 	\begin{tabular}{c}
+	% 		\small \textbf{\textcolor{natorange}{Classification Logic}}     \\[2pt]
+	% 		\footnotesize Support = \# of bulk datasets with matching reads \\[1pt]
+	% 		\footnotesize Range: 0 (artificial) to 3 (highly biological)
+	% 	\end{tabular}
+	% };
 
 	% Legend
 	\node[legendbox, anchor=south east] at (16, 11) (legend) {
