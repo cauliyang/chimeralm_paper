@@ -2,6 +2,7 @@
 \usepackage{tikz}
 \usepackage{xcolor}
 \usepackage{amsmath}
+\usetikzlibrary{arrows.meta}
 \usetikzlibrary{shapes.geometric, arrows.meta, positioning, shadows, patterns, decorations.pathreplacing, calc, fadings, matrix}
 
 % Define professional color palette
@@ -63,7 +64,7 @@
 	% Arrow style
 	arrow/.style={
 			->,
-			>=Stealth,
+			>=stealth,
 			line width=2pt,
 			natgray!80,
 			shorten >=3pt,
@@ -108,7 +109,7 @@
 \begin{tikzpicture}[node distance=1cm, every node/.style={transform shape}]
 
 	% Title
-	\node[titlebox] at (8, 15) {Dataset Construction Workflow};
+	\node[titlebox] at (8, 12) {Dataset Construction Workflow};
 
 	% Data sources
 	\node[datasource=mdacolor] (mda) at (2, 8) {
@@ -183,7 +184,7 @@
 	};
 
 	% Support classification - better spacing
-	\node[classbox=natred, below= 2cm of mdachimeric] (sup0) {
+	\node[classbox=natred, below= 7cm of mdachimeric] (sup0) {
 		\begin{tabular}{c}
 			\textbf{Support 0}       \\[2pt]
 			\footnotesize Artificial \\
@@ -242,56 +243,39 @@
 	\draw[arrow] (bulk2.south) -- (bulkchimeric2.north);
 	\draw[arrow] (bulk3.south) -- (bulkchimeric3.north);
 
-	% Comparison visualization - dashed box grouping
-	\draw[dashed, natorange!60, line width=2pt, rounded corners=10pt]
-	($(mdachimeric.north west)+(-0.3,0.3)$) rectangle ($(bulkchimeric3.south east)+(0.3,-0.3)$);
-
-	% Add comparison symbol in the center
-	\node[circle, fill=natorange!20, draw=natorange, line width=2pt,
-		minimum size=1cm] at ($(mdachimeric.east)!0.5!(bulkchimeric1.west)$) {
-		\Large\textcolor{natorange}{\textbf{VS}}
+	% Central Comparison Process Engine
+	\node[rectangle, below= 1.5cm of mdachimeric, xshift=7cm, draw=natorange, line width=2.5pt, rounded corners=15pt,
+		top color=natorange!25, bottom color=natorange!5,
+		minimum height=3.5cm, minimum width=8cm,
+		text centered, font=\sffamily\large\bfseries,
+		drop shadow={shadow scale=1.08, shadow xshift=3pt, shadow yshift=-3pt, fill=natorange!40}] (compengine) {
+		\begin{tabular}{c}
+			\textbf{\Large Comparison}                          \\[2pt]
+			\textbf{\Large Engine}                              \\[6pt]
+			\normalsize Match Counting                          \\[2pt]
+			\normalsize Algorithm                               \\[4pt]
+			\textcolor{natorange!80}{\small For each MDA read:} \\[1pt]
+			\textcolor{natorange!80}{\small Count bulk matches}
+		\end{tabular}
 	};
 
-	% Classification arrows from MDA to support groups - natural curves
-	\draw[arrow] (mdachimeric.south) to[out=200,in=110,looseness=0.5] (sup0.north);
-	\draw[arrow] (mdachimeric.south) to[out=240,in=110,looseness=0.5] (sup1.north);
-	\draw[arrow] (mdachimeric.south) to[out=320,in=110,looseness=0.5] (sup2.north);
-	\draw[arrow] (mdachimeric.south) to[out=340,in=110,looseness=0.5] (sup3.north);
+	% Arrows from data sources to comparison engine
+	\draw[arrow] (mdachimeric.east) to[out=0,in=180,looseness=0.8] (compengine.west);
+	\draw[arrow] (bulkchimeric1.south) to[out=270,in=70,looseness=1.0] (compengine.north west);
+	\draw[arrow] (bulkchimeric2.south) to[out=270,in=60,looseness=0.8] (compengine.north);
+	\draw[arrow] (bulkchimeric3.south) to[out=270,in=60,looseness=1.0] (compengine.north east);
+
+	% Classification arrows from comparison engine to support groups
+	\draw[arrow] (compengine.south) to[out=200,in=90,looseness=0.8] (sup0.north);
+	\draw[arrow] (compengine.south) to[out=240,in=90,looseness=0.6] (sup1.north);
+	\draw[arrow] (compengine.south) to[out=300,in=90,looseness=0.6] (sup2.north);
+	\draw[arrow] (compengine.south) to[out=340,in=90,looseness=0.8] (sup3.north);
 
 	% Classification arrows - smooth and well-spaced
 	\draw[arrow] (sup0.south) -- (artificial.north);
 	\draw[arrow] (sup1.south) to[out=270,in=120,looseness=0.8] (biological.north west);
 	\draw[arrow] (sup2.south) to[out=270,in=90,looseness=0.6] (biological.north);
 	\draw[arrow] (sup3.south) to[out=270,in=60,looseness=0.8] (biological.north east);
-
-	% Bulk data to biological class - smooth curves avoiding overlaps
-	% \draw[arrow] (bulkchimeric1.south) to[out=280,in=170,looseness=1.2] (biological.west);
-	% \draw[arrow] (bulkchimeric2.south) to[out=270,in=150,looseness=1.0] (biological.north west);
-	% \draw[arrow] (bulkchimeric3.south) to[out=260,in=130,looseness=1.2] (biological.north);
-
-	% Legend
-	\node[legendbox, anchor=south east] at (16, 11) (legend) {
-		\begin{tabular}{ll}
-			\textbf{Classification:}               &                        \\[2pt]
-			\textcolor{natred}{\rule{8pt}{8pt}}    & Artificial (Sup 0)     \\[1pt]
-			\textcolor{natgreen}{\rule{8pt}{8pt}}  & Biological (Sup 1,2,3) \\[1pt]
-			\textcolor{bulkcolor}{\rule{8pt}{8pt}} & Bulk References        \\[1pt]
-			\textcolor{mdacolor}{\rule{8pt}{8pt}}  & MDA Data
-		\end{tabular}
-	};
-
-	% Add process explanation
-	\node[rectangle, draw=natgray!40, line width=1pt, rounded corners=6pt,
-		fill=lightgray!30, anchor=south west, left=of legend] {
-		\begin{tabular}{l}
-			\textbf{\textcolor{natgray}{Process:}}                           \\[2pt]
-			\footnotesize 1. Extract chimeric reads from MDA \& Bulk data    \\[1pt]
-			\footnotesize 2. Compare MDA reads with 3 Bulk references        \\[1pt]
-			\footnotesize 3. Classify based on support count (0-3)           \\[1pt]
-			\footnotesize 4. Binary classification: Artificial vs Biological \\[1pt]
-			\footnotesize 5. Training data for sequence classification
-		\end{tabular}
-	};
 
 \end{tikzpicture}
 
