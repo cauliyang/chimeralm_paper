@@ -1,0 +1,292 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, shadows, patterns, decorations.pathreplacing, calc, fadings, matrix}
+
+% Define professional color palette
+\definecolor{natblue}{RGB}{41,128,185}
+\definecolor{natgreen}{RGB}{39,174,96}
+\definecolor{natorange}{RGB}{230,126,34}
+\definecolor{natpurple}{RGB}{142,68,173}
+\definecolor{natred}{RGB}{231,76,60}
+\definecolor{natgray}{RGB}{52,73,94}
+\definecolor{lightgray}{RGB}{236,240,241}
+\definecolor{mdacolor}{RGB}{255,87,87}  % MDA specific color
+\definecolor{bulkcolor}{RGB}{70,130,180} % Bulk specific color
+
+\begin{document}
+
+% Define styles
+\tikzset{
+	% Data source blocks
+	datasource/.style={
+			rectangle,
+			rounded corners=12pt,
+			draw=natgray,
+			line width=1.5pt,
+			top color=#1!20,
+			bottom color=#1!5,
+			minimum height=3cm,
+			minimum width=3.5cm,
+			text centered,
+			font=\sffamily\large\bfseries,
+			drop shadow={shadow scale=1.05, shadow xshift=2pt, shadow yshift=-2pt, fill=#1!30}
+		},
+	% Chimeric read representation
+	chimeric/.style={
+			rectangle,
+			rounded corners=8pt,
+			draw=#1,
+			line width=1.2pt,
+			fill=#1!15,
+			minimum height=1.5cm,
+			minimum width=2.5cm,
+			text centered,
+			font=\sffamily\normalsize,
+			drop shadow={shadow scale=1.03, shadow xshift=1pt, shadow yshift=-1pt, fill=#1!20}
+		},
+	% Classification box
+	classbox/.style={
+			rectangle,
+			rounded corners=10pt,
+			draw=#1,
+			line width=1.8pt,
+			top color=#1!25,
+			bottom color=#1!8,
+			minimum height=2.5cm,
+			minimum width=2.8cm,
+			text centered,
+			font=\sffamily\large\bfseries,
+			drop shadow={shadow scale=1.06, shadow xshift=2pt, shadow yshift=-2pt, fill=#1!35}
+		},
+	% Arrow style
+	arrow/.style={
+			->,
+			>=Stealth,
+			line width=2pt,
+			natgray!80,
+			shorten >=2pt,
+			shorten <=2pt
+		},
+	% Comparison arrow
+	comparrow/.style={
+			<->,
+			>=Stealth,
+			line width=1.5pt,
+			#1,
+			shorten >=2pt,
+			shorten <=2pt
+		},
+	% Title style
+	titlebox/.style={
+			rectangle,
+			rounded corners=10pt,
+			draw=natblue,
+			line width=2pt,
+			top color=natblue!15,
+			bottom color=white,
+			font=\sffamily\Huge\bfseries,
+			text=natblue!90,
+			inner sep=10pt,
+			drop shadow={shadow scale=1.05, shadow xshift=3pt, shadow yshift=-3pt, fill=natblue!30}
+		},
+	% Legend style
+	legendbox/.style={
+			rectangle,
+			draw=natgray!60,
+			line width=1.2pt,
+			rounded corners=6pt,
+			top color=natgray!8,
+			bottom color=white,
+			font=\sffamily\small,
+			inner sep=8pt,
+			drop shadow={shadow scale=1.02, shadow xshift=1pt, shadow yshift=-1pt, fill=natgray!15}
+		}
+}
+
+\begin{tikzpicture}[node distance=1cm, every node/.style={transform shape}]
+
+	% Title
+	\node[titlebox] at (8, 15) {Dataset Construction Workflow};
+
+	% Data sources
+	\node[datasource=mdacolor] (mda) at (2, 8) {
+		\begin{tabular}{c}
+			\textbf{MDA Data}     \\[3pt]
+			\normalsize Contains  \\
+			\normalsize Chimeric  \\
+			\normalsize Artifacts \\[2pt]
+			\textcolor{mdacolor!80}{\footnotesize Nanopore}
+		\end{tabular}
+	};
+
+	\node[datasource=bulkcolor, right = of mda] (bulk1) {
+		\begin{tabular}{c}
+			\textbf{Bulk Data 1}    \\[3pt]
+			\normalsize No Chimeric \\
+			\normalsize Artifacts   \\[2pt]
+			\textcolor{bulkcolor!80}{\footnotesize Reference}
+		\end{tabular}
+	};
+
+	\node[datasource=bulkcolor, right = 10pt of bulk1] (bulk2) {
+		\begin{tabular}{c}
+			\textbf{Bulk Data 2}    \\[3pt]
+			\normalsize No Chimeric \\
+			\normalsize Artifacts   \\[2pt]
+			\textcolor{bulkcolor!80}{\footnotesize Reference}
+		\end{tabular}
+	};
+
+	\node[datasource=bulkcolor, right= 10pt of bulk2] (bulk3) {
+		\begin{tabular}{c}
+			\textbf{Bulk Data 3}    \\[3pt]
+			\normalsize No Chimeric \\
+			\normalsize Artifacts   \\[2pt]
+			\textcolor{bulkcolor!80}{\footnotesize Reference}
+		\end{tabular}
+	};
+
+	% Chimeric reads from MDA
+	\node[chimeric=mdacolor, below= of mda] (mdachimeric) {
+		\begin{tabular}{c}
+			\textbf{MDA}      \\
+			\textbf{Chimeric} \\
+			\textbf{Reads}
+		\end{tabular}
+	};
+
+	% Chimeric reads from Bulk data
+	\node[chimeric=bulkcolor, below = of bulk1] (bulkchimeric1)  {
+		\begin{tabular}{c}
+			\textbf{Bulk 1}   \\
+			\textbf{Chimeric} \\
+			\textbf{Reads}
+		\end{tabular}
+	};
+
+	\node[chimeric=bulkcolor, below = of bulk2] (bulkchimeric2) {
+		\begin{tabular}{c}
+			\textbf{Bulk 2}   \\
+			\textbf{Chimeric} \\
+			\textbf{Reads}
+		\end{tabular}
+	};
+
+	\node[chimeric=bulkcolor, below = of bulk3] (bulkchimeric3) {
+		\begin{tabular}{c}
+			\textbf{Bulk 3}   \\
+			\textbf{Chimeric} \\
+			\textbf{Reads}
+		\end{tabular}
+	};
+
+	% Comparison process
+	\node[font=\sffamily\Large\bfseries, text=natgray!80] at (8, 3.8) {Comparison \& Classification};
+
+	% Support classification
+	\node[classbox=natred] (sup0) at (4, 2) {
+		\begin{tabular}{c}
+			\textbf{Support 0}       \\[2pt]
+			\footnotesize Artificial \\
+			\footnotesize Chimeric   \\[2pt]
+			\textcolor{natred!80}{\tiny MDA Artifact}
+		\end{tabular}
+	};
+
+	\node[classbox=natgreen] (sup1) at (7, 2) {
+		\begin{tabular}{c}
+			\textbf{Support 1}       \\[2pt]
+			\footnotesize Biological \\
+			\footnotesize Chimeric   \\[2pt]
+			\textcolor{natgreen!80}{\tiny True Positive}
+		\end{tabular}
+	};
+
+	\node[classbox=natgreen] (sup2) at (10, 2) {
+		\begin{tabular}{c}
+			\textbf{Support 2}       \\[2pt]
+			\footnotesize Biological \\
+			\footnotesize Chimeric   \\[2pt]
+			\textcolor{natgreen!80}{\tiny True Positive}
+		\end{tabular}
+	};
+
+	\node[classbox=natgreen] (sup3) at (13, 2) {
+		\begin{tabular}{c}
+			\textbf{Support 3}       \\[2pt]
+			\footnotesize Biological \\
+			\footnotesize Chimeric   \\[2pt]
+			\textcolor{natgreen!80}{\tiny True Positive}
+		\end{tabular}
+	};
+
+	% Final classification
+	\node[classbox=natpurple] (artificial) at (4, -1) {
+		\begin{tabular}{c}
+			\textbf{Artificial}   \\[2pt]
+			\footnotesize Class 0 \\[2pt]
+			\textcolor{natpurple!80}{\tiny Sup 0}
+		\end{tabular}
+	};
+
+	\node[classbox=natblue] (biological) at (10, -1) {
+		\begin{tabular}{c}
+			\textbf{Biological}   \\[2pt]
+			\footnotesize Class 1 \\[2pt]
+			\textcolor{natblue!80}{\tiny Sup 1,2,3 + Bulk}
+		\end{tabular}
+	};
+
+	% Arrows
+	\draw[arrow] (mda.south) -- (mdachimeric.north);
+	\draw[arrow] (bulk1.south) -- (bulkchimeric1.north);
+	\draw[arrow] (bulk2.south) -- (bulkchimeric2.north);
+	\draw[arrow] (bulk3.south) -- (bulkchimeric3.north);
+
+	% Comparison arrows
+	\draw[comparrow=natorange] (mdachimeric.south) -- (sup0.north);
+	\draw[comparrow=natorange] (mdachimeric.south) -- (sup1.north);
+	\draw[comparrow=natorange] (mdachimeric.south) -- (sup2.north);
+	\draw[comparrow=natorange] (mdachimeric.south) -- (sup3.north);
+
+	% Classification arrows
+	\draw[arrow] (sup0.south) -- (artificial.north);
+	\draw[arrow] (sup1.south) -- (biological.north);
+	\draw[arrow] (sup2.south) -- (biological.north);
+	\draw[arrow] (sup3.south) -- (biological.north);
+	\draw[arrow] (bulkchimeric1.south) -- (biological.north);
+	\draw[arrow] (bulkchimeric2.south) -- (biological.north);
+	\draw[arrow] (bulkchimeric3.south) -- (biological.north);
+
+	% Add comparison indication
+	\node[font=\sffamily\small\bfseries, text=natorange] at (6, 4.2) {Compare each MDA read with 3 Bulk references};
+
+	% Legend
+	\node[legendbox, anchor=south east] at (16, 11) (legend) {
+		\begin{tabular}{ll}
+			\textbf{Classification:}               &                        \\[2pt]
+			\textcolor{natred}{\rule{8pt}{8pt}}    & Artificial (Sup 0)     \\[1pt]
+			\textcolor{natgreen}{\rule{8pt}{8pt}}  & Biological (Sup 1,2,3) \\[1pt]
+			\textcolor{bulkcolor}{\rule{8pt}{8pt}} & Bulk References        \\[1pt]
+			\textcolor{mdacolor}{\rule{8pt}{8pt}}  & MDA Data
+		\end{tabular}
+	};
+
+	% Add process explanation
+	\node[rectangle, draw=natgray!40, line width=1pt, rounded corners=6pt,
+		fill=lightgray!30, anchor=south west, left=of legend] {
+		\begin{tabular}{l}
+			\textbf{\textcolor{natgray}{Process:}}                           \\[2pt]
+			\footnotesize 1. Extract chimeric reads from MDA \& Bulk data    \\[1pt]
+			\footnotesize 2. Compare MDA reads with 3 Bulk references        \\[1pt]
+			\footnotesize 3. Classify based on support count (0-3)           \\[1pt]
+			\footnotesize 4. Binary classification: Artificial vs Biological \\[1pt]
+			\footnotesize 5. Training data for sequence classification
+		\end{tabular}
+	};
+
+\end{tikzpicture}
+
+\end{document}
