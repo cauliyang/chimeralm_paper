@@ -182,11 +182,8 @@
 		\end{tabular}
 	};
 
-	% Comparison process - moved up to avoid overlap
-	\node[font=\sffamily\Large\bfseries, text=natgray!80] at (8.5, 3.2) {Comparison \& Classification};
-
 	% Support classification - better spacing
-	\node[classbox=natred, below= 1.5cm of mdachimeric] (sup0) {
+	\node[classbox=natred, below= 2cm of mdachimeric] (sup0) {
 		\begin{tabular}{c}
 			\textbf{Support 0}       \\[2pt]
 			\footnotesize Artificial \\
@@ -255,32 +252,22 @@
 		\Large\textcolor{natorange}{\textbf{VS}}
 	};
 
-	% Classification arrows from MDA to support groups - simplified
-	\draw[arrow] (mdachimeric.south) to (sup0.north);
-	\draw[arrow] (mdachimeric.south) to (sup1.north);
-	\draw[arrow] (mdachimeric.south) to (sup2.north);
-	\draw[arrow] (mdachimeric.south) to (sup3.north);
+	% Classification arrows from MDA to support groups - natural curves
+	\draw[arrow] (mdachimeric.south) to[out=200,in=110,looseness=0.5] (sup0.north);
+	\draw[arrow] (mdachimeric.south) to[out=240,in=110,looseness=0.5] (sup1.north);
+	\draw[arrow] (mdachimeric.south) to[out=320,in=110,looseness=0.5] (sup2.north);
+	\draw[arrow] (mdachimeric.south) to[out=340,in=110,looseness=0.5] (sup3.north);
 
-	% Classification arrows - clean non-intersecting paths
+	% Classification arrows - smooth and well-spaced
 	\draw[arrow] (sup0.south) -- (artificial.north);
-	\draw[arrow] (sup1.south) to[out=270,in=135] (biological.north west);
-	\draw[arrow] (sup2.south) to[out=270,in=110] (biological.north);
-	\draw[arrow] (sup3.south) to[out=270,in=45] (biological.north east);
-	% Bulk data direct to biological class
-	\draw[arrow] (bulkchimeric1.south) to[out=300,in=160] (biological.north west);
-	\draw[arrow] (bulkchimeric2.south) to[out=270,in=140] (biological.north);
-	\draw[arrow] (bulkchimeric3.south) to[out=240,in=120] (biological.north east);
+	\draw[arrow] (sup1.south) to[out=270,in=120,looseness=0.8] (biological.north west);
+	\draw[arrow] (sup2.south) to[out=270,in=90,looseness=0.6] (biological.north);
+	\draw[arrow] (sup3.south) to[out=270,in=60,looseness=0.8] (biological.north east);
 
-
-	% Comparison process explanation
-	% \node[rectangle, draw=natorange!60, line width=1.5pt, rounded corners=8pt,
-	% 	fill=natorange!10, anchor=center] at (8.5, 3.2) {
-	% 	\begin{tabular}{c}
-	% 		\small \textbf{\textcolor{natorange}{Classification Logic}}     \\[2pt]
-	% 		\footnotesize Support = \# of bulk datasets with matching reads \\[1pt]
-	% 		\footnotesize Range: 0 (artificial) to 3 (highly biological)
-	% 	\end{tabular}
-	% };
+	% Bulk data to biological class - smooth curves avoiding overlaps
+	% \draw[arrow] (bulkchimeric1.south) to[out=280,in=170,looseness=1.2] (biological.west);
+	% \draw[arrow] (bulkchimeric2.south) to[out=270,in=150,looseness=1.0] (biological.north west);
+	% \draw[arrow] (bulkchimeric3.south) to[out=260,in=130,looseness=1.2] (biological.north);
 
 	% Legend
 	\node[legendbox, anchor=south east] at (16, 11) (legend) {
