@@ -113,13 +113,13 @@
 		}
 }
 
-\begin{tikzpicture}[node distance=2cm, every node/.style={transform shape}]
+\begin{tikzpicture}[node distance=2.5cm, every node/.style={transform shape}]
 
 	% Title
-	\node[titlebox] (title) at (8, 11) {ChimeraLM: Background \& Motivation};
+	\node[titlebox] (title) {ChimeraLM: Background \& Motivation};
 
-	% MDA Process
-	\node[processblock=mdacolor, below=3cm of title] (mda) {
+	% MDA Process - centered top
+	\node[processblock=mdacolor, below=of title] (mda) {
 		\begin{tabular}{c}
 			\textbf{Multiple}      \\[2pt]
 			\textbf{Displacement}  \\[2pt]
@@ -130,8 +130,8 @@
 		\end{tabular}
 	};
 
-	% MDA Benefits
-	\node[featurebox=benefitcolor, below left=2cm and 2cm of mda] (benefit1) {
+	% Benefits Row - left side
+	\node[featurebox=benefitcolor, below left=of mda, xshift=-1cm] (benefit1) {
 		\begin{tabular}{c}
 			\textbf{High Coverage}    \\[3pt]
 			\footnotesize Amplifies   \\
@@ -140,7 +140,7 @@
 		\end{tabular}
 	};
 
-	\node[featurebox=benefitcolor, below right=2cm and 2cm of mda] (benefit2) {
+	\node[featurebox=benefitcolor, right=of benefit1] (benefit2) {
 		\begin{tabular}{c}
 			\textbf{Long Reads}      \\[3pt]
 			\footnotesize Nanopore   \\
@@ -149,8 +149,8 @@
 		\end{tabular}
 	};
 
-	% MDA Challenge
-	\node[featurebox=challengecolor, below=2cm of mda] (challenge) {
+	% Challenge - right side, same level as benefits
+	\node[featurebox=challengecolor, below right=of mda, xshift=1cm] (challenge) {
 		\begin{tabular}{c}
 			\textbf{Chimera}             \\[1pt]
 			\textbf{Artifacts}           \\[3pt]
@@ -160,8 +160,8 @@
 		\end{tabular}
 	};
 
-	% Downstream Analysis
-	\node[impactbox=natblue, right=4cm of challenge] (downstream) {
+	% Downstream Analysis - center, next level
+	\node[impactbox=natblue, below=7cm of mda] (downstream) {
 		\begin{tabular}{c}
 			\textbf{Downstream}    \\[2pt]
 			\textbf{Analysis}      \\[4pt]
@@ -171,8 +171,8 @@
 		\end{tabular}
 	};
 
-	% Negative Impact
-	\node[impactbox=challengecolor, right=2.5cm of downstream] (negativeimpact) {
+	% Problem Impact - below downstream
+	\node[impactbox=challengecolor, below left=of downstream, xshift=-1cm] (negativeimpact) {
 		\begin{tabular}{c}
 			\textbf{False}           \\[1pt]
 			\textbf{Discoveries}     \\[4pt]
@@ -182,63 +182,65 @@
 		\end{tabular}
 	};
 
-	% Solution
-	\node[solutionbox, below=3.5cm of downstream] (solution) {
+	% Solution - bottom center
+	\node[solutionbox, below right=of downstream, xshift=1cm] (solution) {
 		\begin{tabular}{c}
-			\textbf{\Huge ChimeraLM}           \\[6pt]
-			\textbf{AI-powered}                \\[2pt]
-			\textbf{Chimera Detection}         \\[4pt]
-			\normalsize Distinguish artificial \\
-			\normalsize from biological        \\
+			\textbf{\Huge ChimeraLM}             \\[6pt]
+			\textbf{AI-powered}                  \\[2pt]
+			\textbf{Chimera Artifacts Detection} \\[4pt]
+			\normalsize Distinguish artificial   \\
+			\normalsize from biological          \\
 			\normalsize chimeric reads
 		\end{tabular}
 	};
 
-	% Arrows showing flow
+	% Clear flow arrows - MDA to features
 	\draw[arrow=natgray!80] (mda.south west) to[out=225,in=90] (benefit1.north);
-	\draw[arrow=natgray!80] (mda.south) -- (challenge.north);
-	\draw[arrow=natgray!80] (mda.south east) to[out=315,in=90] (benefit2.north);
+	\draw[arrow=natgray!80] (mda.south west) to[out=225,in=135] (benefit2.north west);
+	\draw[arrow=natgray!80] (mda.south east) to[out=315,in=90] (challenge.north);
 
-	\draw[arrow=benefitcolor] (benefit1.east) to[out=0,in=180,looseness=0.6] (downstream.west);
-	\draw[arrow=benefitcolor] (benefit2.west) to[out=180,in=180,looseness=0.8] (downstream.west);
-	\draw[arrow=challengecolor] (challenge.east) -- (downstream.west);
+	% Features to downstream analysis
+	\draw[arrow=benefitcolor] (benefit1.south) to[out=270,in=135] (downstream.north west);
+	\draw[arrow=benefitcolor] (benefit2.south) to[out=270,in=110] (downstream.north);
+	\draw[arrow=challengecolor] (challenge.south) to[out=270,in=45] (downstream.north east);
 
-	\draw[arrow=natblue] (downstream.east) -- (negativeimpact.west);
+	% Problem flow
+	\draw[arrow=natblue] (downstream.south west) to[out=225,in=90] (negativeimpact.north);
 
 	% Solution arrows
-	\draw[arrow=natpurple] (downstream.south) to[out=270,in=90,looseness=0.8] (solution.north);
-	\draw[arrow=natpurple] (negativeimpact.south) to[out=270,in=45,looseness=1.0] (solution.north east);
+	\draw[arrow=natpurple] (negativeimpact.east) to[out=0,in=180] (solution.west);
+	\draw[arrow=natpurple] (downstream.south east) to[out=315,in=135] (solution.north west);
 
-	% Warning callout
-	\node[warningbox, below=1.5cm of challenge] (warning) {
-		\begin{tabular}{c}
-			\textbf{Problem:} Chimera artifacts contaminate \\
-			real biological signals, leading to false SV calls
-		\end{tabular}
-	};
+	% Central problem statement
+	% \node[warningbox, below=0.5cm of downstream] (warning) {
+	% 	\begin{tabular}{c}
+	% 		\textbf{Core Problem:} Chimera artifacts contaminate \\
+	% 		real biological signals, leading to false discoveries
+	% 	\end{tabular}
+	% };
 
-	% Process explanation boxes
-	\node[rectangle, draw=natgray!40, line width=1pt, rounded corners=6pt,
-		fill=lightgray!30, anchor=north west, below=1.5cm of warning] (mdaissues) {
-		\begin{tabular}{l}
-			\textbf{\textcolor{natgray}{MDA Process Issues:}}           \\[2pt]
-			\footnotesize • Non-uniform amplification creates artifacts \\[1pt]
-			\footnotesize • Template switching during amplification     \\[1pt]
-			\footnotesize • Chimeric reads appear biologically real     \\[1pt]
-			\footnotesize • Standard tools cannot distinguish them
-		\end{tabular}
-	};
+	% Bottom explanation boxes - better positioned
+	% \node[rectangle, draw=natgray!40, line width=1pt, rounded corners=6pt,
+	% 	fill=lightgray!30, below=2cm of negativeimpact] (mdaissues) {
+	% 	\begin{tabular}{l}
+	% 		\textbf{\textcolor{natgray}{MDA Challenges:}}               \\[2pt]
+	% 		\footnotesize • Non-uniform amplification creates artifacts \\[1pt]
+	% 		\footnotesize • Template switching during amplification     \\[1pt]
+	% 		\footnotesize • Chimeric reads appear biologically real     \\[1pt]
+	% 		\footnotesize • Standard tools cannot distinguish them
+	% 	\end{tabular}
+	% };
 
-	\node[rectangle, draw=natpurple!40, line width=1pt, rounded corners=6pt,
-		fill=natpurple!10, anchor=north west, right=2cm of mdaissues] (chimerasolution) {
-		\begin{tabular}{l}
-			\textbf{\textcolor{natpurple}{ChimeraLM Solution:}} \\[2pt]
-			\footnotesize • Deep learning-based classification  \\[1pt]
-			\footnotesize • Trained on MDA vs Bulk comparison   \\[1pt]
-			\footnotesize • High accuracy artifact detection    \\[1pt]
-			\footnotesize • Improves downstream SV analysis
-		\end{tabular}
-	};
+	% \node[rectangle, draw=natpurple!40, line width=1pt, rounded corners=6pt,
+	% 	fill=natpurple!10, below=2cm of solution] (chimerasolution) {
+	% 	\begin{tabular}{l}
+	% 		\textbf{\textcolor{natpurple}{ChimeraLM Solution:}} \\[2pt]
+	% 		\footnotesize • Deep learning-based classification  \\[1pt]
+	% 		\footnotesize • Trained on MDA vs Bulk comparison   \\[1pt]
+	% 		\footnotesize • High accuracy artifact detection    \\[1pt]
+	% 		\footnotesize • Improves downstream SV analysis
+	% 	\end{tabular}
+	% };
 
 	% Add icons and visual elements
 	\node[circle, fill=mdacolor!30, draw=mdacolor, inner sep=3pt] at ($(mda.north east)+(-0.4,-0.4)$) {
