@@ -116,10 +116,10 @@
 \begin{tikzpicture}[node distance=2cm, every node/.style={transform shape}]
 
 	% Title
-	\node[titlebox] at (8, 11) {ChimeraLM: Background \& Motivation};
+	\node[titlebox] (title) at (8, 11) {ChimeraLM: Background \& Motivation};
 
 	% MDA Process
-	\node[processblock=mdacolor] (mda) at (0, 0) {
+	\node[processblock=mdacolor, below=3cm of title] (mda) {
 		\begin{tabular}{c}
 			\textbf{Multiple}      \\[2pt]
 			\textbf{Displacement}  \\[2pt]
@@ -131,7 +131,7 @@
 	};
 
 	% MDA Benefits
-	\node[featurebox=benefitcolor, right = of mda] (benefit1) {
+	\node[featurebox=benefitcolor, below left=2cm and 2cm of mda] (benefit1) {
 		\begin{tabular}{c}
 			\textbf{High Coverage}    \\[3pt]
 			\footnotesize Amplifies   \\
@@ -140,7 +140,7 @@
 		\end{tabular}
 	};
 
-	\node[featurebox=benefitcolor, below = of benefit1] (benefit2) {
+	\node[featurebox=benefitcolor, below right=2cm and 2cm of mda] (benefit2) {
 		\begin{tabular}{c}
 			\textbf{Long Reads}      \\[3pt]
 			\footnotesize Nanopore   \\
@@ -150,7 +150,7 @@
 	};
 
 	% MDA Challenge
-	\node[featurebox=challengecolor] (challenge) at (3, 6) {
+	\node[featurebox=challengecolor, below=2cm of mda] (challenge) {
 		\begin{tabular}{c}
 			\textbf{Chimera}             \\[1pt]
 			\textbf{Artifacts}           \\[3pt]
@@ -161,7 +161,7 @@
 	};
 
 	% Downstream Analysis
-	\node[impactbox=natblue] (downstream) at (8, 6) {
+	\node[impactbox=natblue, right=4cm of challenge] (downstream) {
 		\begin{tabular}{c}
 			\textbf{Downstream}    \\[2pt]
 			\textbf{Analysis}      \\[4pt]
@@ -172,7 +172,7 @@
 	};
 
 	% Negative Impact
-	\node[impactbox=challengecolor] (negativeimpact) at (13, 6) {
+	\node[impactbox=challengecolor, right=2.5cm of downstream] (negativeimpact) {
 		\begin{tabular}{c}
 			\textbf{False}           \\[1pt]
 			\textbf{Discoveries}     \\[4pt]
@@ -183,7 +183,7 @@
 	};
 
 	% Solution
-	\node[solutionbox] (solution) at (8, 2.5) {
+	\node[solutionbox, below=3.5cm of downstream] (solution) {
 		\begin{tabular}{c}
 			\textbf{\Huge ChimeraLM}           \\[6pt]
 			\textbf{AI-powered}                \\[2pt]
@@ -195,9 +195,9 @@
 	};
 
 	% Arrows showing flow
-	\draw[arrow=natgray!80] (mda.south west) -- (benefit1.north);
+	\draw[arrow=natgray!80] (mda.south west) to[out=225,in=90] (benefit1.north);
 	\draw[arrow=natgray!80] (mda.south) -- (challenge.north);
-	\draw[arrow=natgray!80] (mda.south east) -- (benefit2.north);
+	\draw[arrow=natgray!80] (mda.south east) to[out=315,in=90] (benefit2.north);
 
 	\draw[arrow=benefitcolor] (benefit1.east) to[out=0,in=180,looseness=0.6] (downstream.west);
 	\draw[arrow=benefitcolor] (benefit2.west) to[out=180,in=180,looseness=0.8] (downstream.west);
@@ -210,7 +210,7 @@
 	\draw[arrow=natpurple] (negativeimpact.south) to[out=270,in=45,looseness=1.0] (solution.north east);
 
 	% Warning callout
-	\node[warningbox, below=1cm of challenge] (warning) {
+	\node[warningbox, below=1.5cm of challenge] (warning) {
 		\begin{tabular}{c}
 			\textbf{Problem:} Chimera artifacts contaminate \\
 			real biological signals, leading to false SV calls
@@ -219,7 +219,7 @@
 
 	% Process explanation boxes
 	\node[rectangle, draw=natgray!40, line width=1pt, rounded corners=6pt,
-		fill=lightgray!30, anchor=north west, below=1cm of warning] (mdaissues) {
+		fill=lightgray!30, anchor=north west, below=1.5cm of warning] (mdaissues) {
 		\begin{tabular}{l}
 			\textbf{\textcolor{natgray}{MDA Process Issues:}}           \\[2pt]
 			\footnotesize • Non-uniform amplification creates artifacts \\[1pt]
@@ -229,9 +229,8 @@
 		\end{tabular}
 	};
 
-
 	\node[rectangle, draw=natpurple!40, line width=1pt, rounded corners=6pt,
-		fill=natpurple!10, anchor=north west, right=1cm of mdaissues] (chimerasolution) {
+		fill=natpurple!10, anchor=north west, right=2cm of mdaissues] (chimerasolution) {
 		\begin{tabular}{l}
 			\textbf{\textcolor{natpurple}{ChimeraLM Solution:}} \\[2pt]
 			\footnotesize • Deep learning-based classification  \\[1pt]
