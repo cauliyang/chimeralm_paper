@@ -139,12 +139,21 @@
 	};
 
 	% ChimeraLM filter - center position
-	\node[solutionbox, below=7cm of mda] (chimeralm) {
+	\node[solutionbox, below=7cm of mda, xshift=-3cm] (chimeralm) {
 		\begin{tabular}{c}
 			\textbf{ChimeraLM}        \\[4pt]
 			\textbf{AI Filter}        \\[3pt]
 			\normalsize Identifies \& \\
 			\normalsize Removes       \\
+			\normalsize Chimera Artifacts
+		\end{tabular}
+	};
+
+
+	% ChimeraLM filter - center position
+	\node[featurebox=challengecolor, right= 2cm of chimeralm] (currentpipeline) {
+		\begin{tabular}{c}
+			\textbf{Current Pipeline} \\[4pt]
 			\normalsize Chimera Artifacts
 		\end{tabular}
 	};
@@ -159,7 +168,7 @@
 	};
 
 	% Contaminated analysis (parallel path)
-	\node[analysisbox=challengecolor, right=4cm of chimeralm] (contaminatedanalysis) {
+	\node[analysisbox=challengecolor, right=2cm of cleananalysis] (contaminatedanalysis) {
 		\begin{tabular}{c}
 			\textbf{Contaminated Analysis}     \\[4pt]
 			\normalsize With chimera artifacts \\[2pt]
@@ -176,22 +185,31 @@
 		\end{tabular}
 	};
 
+	% Contaminated analysis (parallel path)
+	\node[analysisbox=challengecolor, below= of contaminatedanalysis] (unreliableresults) {
+		\begin{tabular}{c}
+			\textbf{Reliable Results} \\[4pt]
+			\textcolor{challengecolor!80}{\footnotesize False discoveries}
+		\end{tabular}
+	};
+
 	% Arrows - Main filtering path
 	\draw[arrow=natgray!80] (mda.south west) to[out=225,in=90] (biologicalreads.north);
 	\draw[arrow=natgray!80] (mda.south east) to[out=315,in=90] (chimeraartifacts.north);
 
 	% Both types go to ChimeraLM
-	\draw[arrow=benefitcolor] (biologicalreads.south) to[out=270,in=135] (chimeralm.north west);
-	\draw[arrow=challengecolor] (chimeraartifacts.south) to[out=270,in=45] (chimeralm.north east);
+	% \draw[arrow=benefitcolor] (biologicalreads.south) to[out=270,in=135] (chimeralm.north west);
+	% \draw[arrow=challengecolor] (chimeraartifacts.south) to[out=270,in=45] (chimeralm.north east);
 
 	% ChimeraLM sends clean data downstream
 	\draw[arrow=natpurple, line width=3pt] (chimeralm.south) -- (cleananalysis.north);
 
 	% Clean analysis leads to reliable results  
 	\draw[arrow=natblue] (cleananalysis.south) -- (reliableresults.north);
+	\draw[arrow=challengecolor] (contaminatedanalysis.south) -- (unreliableresults.north);
 
 	% Alternative contaminated path (without ChimeraLM)
-	\draw[arrow=challengecolor, dashed, line width=2pt] (chimeraartifacts.east) to[out=0,in=180] (contaminatedanalysis.west);
+	% \draw[arrow=challengecolor, dashed, line width=2pt] (chimeraartifacts.east) to[out=0,in=180] (contaminatedanalysis.west);
 
 \end{tikzpicture}
 
