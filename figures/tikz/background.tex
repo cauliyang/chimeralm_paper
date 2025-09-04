@@ -200,9 +200,9 @@
 		\end{tabular}
 	};
 
-	% Highlighted SV analysis as our example
-	\node[rectangle, draw=natred, line width=2pt, rounded corners=6pt,
-		fill=natred!20, minimum height=1.2cm, minimum width=2cm,
+	% SV analysis - now same as others (all affected equally)
+	\node[rectangle, draw=natblue!80, line width=1.5pt, rounded corners=6pt,
+		fill=natblue!25, minimum height=1.2cm, minimum width=2cm,
 		font=\sffamily\small\bfseries] at ($(downstream.center)+(2.5,0.3)$) (sv) {
 		\begin{tabular}{c}
 			\textbf{SV} \\[1pt]
@@ -216,24 +216,44 @@
 		\textcolor{natblue!80}{\footnotesize ...}
 	};
 
-	% Problem Impact - below downstream
-	\node[impactbox=challengecolor, below =of downstream, xshift=-1cm] (negativeimpact) {
+	% Problem Impact - below downstream (affects all analyses)
+	\node[impactbox=challengecolor, below =of downstream] (negativeimpact) {
 		\begin{tabular}{c}
-			\textbf{False}       \\[1pt]
-			\textbf{Discoveries} \\[4pt]
+			\textbf{False}               \\[1pt]
+			\textbf{Discoveries}         \\[4pt]
+			\footnotesize Across all     \\[1pt]
+			\footnotesize analysis types \\[2pt]
 			\textcolor{challengecolor!80}{\tiny Incorrect results}
 		\end{tabular}
 	};
 
-	% Solution - bottom center
-	\node[solutionbox, below right=of downstream, xshift=1cm] (solution) {
+	% Improved results after ChimeraLM intervention
+	\node[impactbox=benefitcolor, right=3cm of negativeimpact] (improvedresults) {
 		\begin{tabular}{c}
-			\textbf{\Huge ChimeraLM}             \\[6pt]
-			\textbf{AI-powered}                  \\[2pt]
-			\textbf{Chimera Artifacts Detection} \\[4pt]
-			\normalsize Distinguish artificial   \\
-			\normalsize from biological          \\
-			\normalsize chimeric reads
+			\textbf{Accurate}               \\[1pt]
+			\textbf{Results}                \\[4pt]
+			\footnotesize Clean analyses    \\[1pt]
+			\footnotesize without artifacts \\[2pt]
+			\textcolor{benefitcolor!80}{\tiny Reliable discoveries}
+		\end{tabular}
+	};
+
+	% Arrow showing transformation from false to accurate
+	\draw[arrow=natpurple, line width=3pt] (negativeimpact.east) -- (improvedresults.west);
+	\node[font=\sffamily\small\bfseries, text=natpurple] at ($(negativeimpact.east)!0.5!(improvedresults.west)+(0,0.3)$) {
+		\textbf{ChimeraLM}
+	};
+
+	% Solution - bottom center
+	\node[solutionbox, below=2cm of negativeimpact] (solution) {
+		\begin{tabular}{c}
+			\textbf{\Huge ChimeraLM}                 \\[6pt]
+			\textbf{AI-powered}                      \\[2pt]
+			\textbf{Chimera Artifacts Detection}     \\[4pt]
+			\normalsize \textbf{Identify \& Remove}  \\
+			\normalsize \textbf{artificial chimeras} \\[2pt]
+			\normalsize \textbf{→ Reduces false}     \\
+			\normalsize \textbf{discoveries}
 		\end{tabular}
 	};
 
@@ -249,77 +269,24 @@
 	\draw[arrow=benefitcolor] (morebenefits.south) to[out=270,in=90] (downstream.north);
 	\draw[arrow=challengecolor] (challenge.south) to[out=270,in=45] (downstream.north east);
 
-	% Problem flow - from SV analysis specifically
-	% \draw[arrow=natred] (sv.south) to[out=270,in=90] (negativeimpact.north);
+	% Chimera artifacts contaminate ALL analysis types
+	\draw[arrow=challengecolor, line width=2pt, dashed] (challenge.south) to[out=250,in=90] (snp.north);
+	\draw[arrow=challengecolor, line width=2pt, dashed] (challenge.south) to[out=270,in=90] (cnv.north);
+	\draw[arrow=challengecolor, line width=2pt, dashed] (challenge.south) to[out=290,in=90] (sv.north);
 
-	% Solution arrows
-	\draw[arrow=natpurple] (negativeimpact.east) to[out=0,in=180] (solution.west);
-	% \draw[arrow=natpurple] (sv.south east) to[out=315,in=135] (solution.north west);
+	% Problem flow - from ALL analysis types to false discoveries
+	\draw[arrow=challengecolor] (snp.south) to[out=270,in=135] (negativeimpact.north west);
+	\draw[arrow=challengecolor] (cnv.south) to[out=270,in=90] (negativeimpact.north);
+	\draw[arrow=challengecolor] (sv.south) to[out=270,in=45] (negativeimpact.north east);
 
-	% Central problem statement
-	% \node[warningbox, below=0.5cm of downstream] (warning) {
-	% 	\begin{tabular}{c}
-	% 		\textbf{Core Problem:} Chimera artifacts contaminate \\
-	% 		real biological signals, leading to false discoveries
-	% 	\end{tabular}
-	% };
+	% Solution arrows - ChimeraLM removes artifacts and reduces false discoveries
+	\draw[arrow=natpurple] (negativeimpact.south) -- (solution.north);
 
-	% Bottom explanation boxes - better positioned
-	% \node[rectangle, draw=natgray!40, line width=1pt, rounded corners=6pt,
-	% 	fill=lightgray!30, below=2cm of negativeimpact] (mdaissues) {
-	% 	\begin{tabular}{l}
-	% 		\textbf{\textcolor{natgray}{MDA Challenges:}}               \\[2pt]
-	% 		\footnotesize • Non-uniform amplification creates artifacts \\[1pt]
-	% 		\footnotesize • Template switching during amplification     \\[1pt]
-	% 		\footnotesize • Chimeric reads appear biologically real     \\[1pt]
-	% 		\footnotesize • Standard tools cannot distinguish them
-	% 	\end{tabular}
-	% };
-
-	% \node[rectangle, draw=natpurple!40, line width=1pt, rounded corners=6pt,
-	% 	fill=natpurple!10, below=2cm of solution] (chimerasolution) {
-	% 	\begin{tabular}{l}
-	% 		\textbf{\textcolor{natpurple}{ChimeraLM Solution:}} \\[2pt]
-	% 		\footnotesize • Deep learning-based classification  \\[1pt]
-	% 		\footnotesize • Trained on MDA vs Bulk comparison   \\[1pt]
-	% 		\footnotesize • High accuracy artifact detection    \\[1pt]
-	% 		\footnotesize • Improves downstream SV analysis
-	% 	\end{tabular}
-	% };
-
-	% Add icons and visual elements
-	\node[circle, fill=mdacolor!30, draw=mdacolor, inner sep=3pt] at ($(mda.north east)+(-0.4,-0.4)$) {
-		\textcolor{mdacolor}{\textbf{MDA}}
-	};
-
-	\node[regular polygon, regular polygon sides=6, fill=benefitcolor!40, draw=benefitcolor, inner sep=2pt] at ($(benefit1.north east)+(-0.3,-0.3)$) {
-		\tiny \textcolor{benefitcolor}{\textbf{+}}
-	};
-
-	\node[regular polygon, regular polygon sides=6, fill=benefitcolor!40, draw=benefitcolor, inner sep=2pt] at ($(benefit2.north east)+(-0.3,-0.3)$) {
-		\tiny \textcolor{benefitcolor}{\textbf{+}}
-	};
-
-	\node[star, star points=3, fill=benefitcolor!40, draw=benefitcolor, inner sep=1pt] at ($(morebenefits.north east)+(-0.2,-0.2)$) {
-		\tiny \textcolor{benefitcolor}{\textbf{+}}
-	};
-
-	% Add analysis diversity icon
-	\node[diamond, fill=natblue!40, draw=natblue, inner sep=1pt] at ($(downstream.north east)+(-0.5,-0.5)$) {
-		\tiny \textcolor{natblue}{\textbf{\&}}
-	};
-
-	% Add highlighting indicator for SV
-	\node[star, star points=5, fill=natred!40, draw=natred, inner sep=1pt] at ($(sv.north east)+(-0.2,-0.2)$) {
-		\tiny \textcolor{natred}{\textbf{!}}
-	};
-
-	\node[regular polygon, regular polygon sides=3, fill=challengecolor!40, draw=challengecolor, inner sep=2pt] at ($(challenge.north east)+(-0.3,-0.3)$) {
-		\tiny \textcolor{challengecolor}{\textbf{!}}
-	};
-
-	\node[star, star points=5, fill=natpurple!40, draw=natpurple, inner sep=2pt] at ($(solution.north east)+(-0.5,-0.5)$) {
-		\tiny \textcolor{natpurple}{\textbf{AI}}
+	% Add "cleaning" indication - ChimeraLM removes artifacts
+	\node[rectangle, draw=natpurple, line width=2pt, rounded corners=6pt,
+		fill=natpurple!15, minimum width=3cm, minimum height=0.8cm,
+		font=\sffamily\small\bfseries] at ($(solution.north)+(0,1.5)$) (cleaning) {
+		\textcolor{natpurple}{\textbf{Artifact Removal}}
 	};
 
 \end{tikzpicture}

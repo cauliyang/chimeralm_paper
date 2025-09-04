@@ -1,0 +1,198 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, shadows, patterns, decorations.pathreplacing, calc, fadings, matrix}
+
+% Define professional color palette
+\definecolor{natblue}{RGB}{41,128,185}
+\definecolor{natgreen}{RGB}{39,174,96}
+\definecolor{natorange}{RGB}{230,126,34}
+\definecolor{natpurple}{RGB}{142,68,173}
+\definecolor{natred}{RGB}{231,76,60}
+\definecolor{natgray}{RGB}{52,73,94}
+\definecolor{lightgray}{RGB}{236,240,241}
+\definecolor{mdacolor}{RGB}{255,87,87}  % MDA specific color
+\definecolor{benefitcolor}{RGB}{46,204,113} % Benefits
+\definecolor{challengecolor}{RGB}{231,76,60} % Challenges
+
+\begin{document}
+
+% Define styles
+\tikzset{
+	% Main process blocks
+	processblock/.style={
+			rectangle,
+			rounded corners=15pt,
+			draw=#1,
+			line width=2pt,
+			top color=#1!20,
+			bottom color=#1!5,
+			minimum height=3.5cm,
+			minimum width=4cm,
+			text centered,
+			font=\sffamily\large\bfseries,
+			drop shadow={shadow scale=1.08, shadow xshift=3pt, shadow yshift=-3pt, fill=#1!40}
+		},
+	% Feature boxes
+	featurebox/.style={
+			rectangle,
+			rounded corners=10pt,
+			draw=#1,
+			line width=1.5pt,
+			fill=#1!15,
+			minimum height=2.5cm,
+			minimum width=3.2cm,
+			text centered,
+			font=\sffamily\normalsize,
+			drop shadow={shadow scale=1.05, shadow xshift=2pt, shadow yshift=-2pt, fill=#1!25}
+		},
+	% Solution box
+	solutionbox/.style={
+			rectangle,
+			rounded corners=15pt,
+			draw=natpurple,
+			line width=3pt,
+			top color=natpurple!20,
+			bottom color=natpurple!5,
+			minimum height=3cm,
+			minimum width=4cm,
+			text centered,
+			font=\sffamily\Large\bfseries,
+			drop shadow={shadow scale=1.1, shadow xshift=4pt, shadow yshift=-4pt, fill=natpurple!40}
+		},
+	% Analysis box
+	analysisbox/.style={
+			rectangle,
+			rounded corners=12pt,
+			draw=#1,
+			line width=2pt,
+			top color=#1!25,
+			bottom color=#1!8,
+			minimum height=3cm,
+			minimum width=5cm,
+			text centered,
+			font=\sffamily\large\bfseries,
+			drop shadow={shadow scale=1.06, shadow xshift=2pt, shadow yshift=-2pt, fill=#1!30}
+		},
+	% Arrow style
+	arrow/.style={
+			->,
+			>=stealth,
+			line width=2.5pt,
+			#1,
+			shorten >=3pt,
+			shorten <=3pt
+		},
+	% Title style
+	titlebox/.style={
+			rectangle,
+			rounded corners=12pt,
+			draw=natblue,
+			line width=2.5pt,
+			top color=natblue!15,
+			bottom color=white,
+			font=\sffamily\Huge\bfseries,
+			text=natblue!90,
+			inner sep=12pt,
+			drop shadow={shadow scale=1.05, shadow xshift=3pt, shadow yshift=-3pt, fill=natblue!30}
+		}
+}
+
+\begin{tikzpicture}[node distance=2.5cm, every node/.style={transform shape}]
+
+	% Title
+	\node[titlebox] (title) {ChimeraLM: Background \& Motivation};
+
+	% MDA Process - top center
+	\node[processblock=mdacolor, below=of title] (mda) {
+		\begin{tabular}{c}
+			\textbf{MDA Process}      \\[4pt]
+			\normalsize Multiple      \\
+			\normalsize Displacement  \\
+			\normalsize Amplification \\[3pt]
+			\textcolor{mdacolor!80}{\footnotesize Nanopore Sequencing}
+		\end{tabular}
+	};
+
+	% MDA outputs two types of reads
+	\node[featurebox=benefitcolor, below left=of mda] (biologicalreads) {
+		\begin{tabular}{c}
+			\textbf{Biological}        \\[2pt]
+			\textbf{True Reads}        \\[4pt]
+			\footnotesize Genuine      \\
+			\footnotesize genomic data \\[2pt]
+			\textcolor{benefitcolor!80}{\tiny $\checkmark$ Clean}
+		\end{tabular}
+	};
+
+	\node[featurebox=challengecolor, below right=of mda] (chimeraartifacts) {
+		\begin{tabular}{c}
+			\textbf{Chimera}             \\[2pt]
+			\textbf{Artifacts}           \\[4pt]
+			\footnotesize Artificial     \\
+			\footnotesize MDA byproducts \\[2pt]
+			\textcolor{challengecolor!80}{\tiny $\times$ Contaminant}
+		\end{tabular}
+	};
+
+	% ChimeraLM filter - center position
+	\node[solutionbox, below=7cm of mda] (chimeralm) {
+		\begin{tabular}{c}
+			\textbf{ChimeraLM}        \\[4pt]
+			\textbf{AI Filter}        \\[3pt]
+			\normalsize Identifies \& \\
+			\normalsize Removes       \\
+			\normalsize Chimera Artifacts
+		\end{tabular}
+	};
+
+	% Clean downstream analysis
+	\node[analysisbox=natblue, below=of chimeralm] (cleananalysis) {
+		\begin{tabular}{c}
+			\textbf{Clean Downstream Analysis} \\[4pt]
+			\normalsize SNPs, CNVs, SVs, ...   \\[2pt]
+			\textcolor{natblue!80}{\footnotesize Without artifact contamination}
+		\end{tabular}
+	};
+
+	% Contaminated analysis (parallel path)
+	\node[analysisbox=challengecolor, right=4cm of chimeralm] (contaminatedanalysis) {
+		\begin{tabular}{c}
+			\textbf{Contaminated Analysis}     \\[4pt]
+			\normalsize With chimera artifacts \\[2pt]
+			\textcolor{challengecolor!80}{\footnotesize False discoveries}
+		\end{tabular}
+	};
+
+	% Final results
+	\node[analysisbox=benefitcolor, below=of cleananalysis] (reliableresults) {
+		\begin{tabular}{c}
+			\textbf{Reliable Results}        \\[4pt]
+			\normalsize Accurate discoveries \\[2pt]
+			\textcolor{benefitcolor!80}{\footnotesize Trustworthy genomics}
+		\end{tabular}
+	};
+
+	% Arrows - Main filtering path
+	\draw[arrow=natgray!80] (mda.south west) to[out=225,in=90] (biologicalreads.north);
+	\draw[arrow=natgray!80] (mda.south east) to[out=315,in=90] (chimeraartifacts.north);
+
+	% Both types go to ChimeraLM
+	\draw[arrow=benefitcolor] (biologicalreads.south) to[out=270,in=135] (chimeralm.north west);
+	\draw[arrow=challengecolor] (chimeraartifacts.south) to[out=270,in=45] (chimeralm.north east);
+
+	% ChimeraLM sends clean data downstream
+	\draw[arrow=natpurple, line width=3pt] (chimeralm.south) -- (cleananalysis.north);
+
+	% Clean analysis leads to reliable results  
+	\draw[arrow=natblue] (cleananalysis.south) -- (reliableresults.north);
+
+	% Alternative contaminated path (without ChimeraLM)
+	\draw[arrow=challengecolor, dashed, line width=2pt] (chimeraartifacts.east) to[out=0,in=180] (contaminatedanalysis.west);
+
+\end{tikzpicture}
+
+\end{document}
