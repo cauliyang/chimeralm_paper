@@ -97,7 +97,7 @@
 			font=\sffamily\Huge\bfseries,
 			text=natblue!90,
 			inner sep=12pt,
-			drop shadow={shadow scale=1.08, shadow xshift=4pt, shadow yshift=-4pt, fill=natblue!30}
+			drop shadow={shadow scale=1.05, shadow xshift=3pt, shadow yshift=-3pt, fill=natblue!30}
 		},
 	% Warning style
 	warningbox/.style={
@@ -130,7 +130,7 @@
 		\end{tabular}
 	};
 
-	% Benefits Row - left side
+	% Benefits Row - left side (showing multiple advantages)
 	\node[featurebox=benefitcolor, below left=of mda, xshift=-1cm] (benefit1) {
 		\begin{tabular}{c}
 			\textbf{High Coverage}    \\[3pt]
@@ -149,6 +149,16 @@
 		\end{tabular}
 	};
 
+	% More advantages indicator
+	\node[circle, fill=benefitcolor!20, draw=benefitcolor, line width=1pt,
+		minimum size=1.5cm, right=0.5cm of benefit2] (morebenefits) {
+		\begin{tabular}{c}
+			\textcolor{benefitcolor!80}{\footnotesize ...and}        \\[1pt]
+			\textcolor{benefitcolor!80}{\footnotesize \textbf{more}} \\[1pt]
+			\textcolor{benefitcolor!80}{\footnotesize benefits}
+		\end{tabular}
+	};
+
 	% Challenge - right side, same level as benefits
 	\node[featurebox=challengecolor, below right=of mda, xshift=1cm] (challenge) {
 		\begin{tabular}{c}
@@ -160,24 +170,57 @@
 		\end{tabular}
 	};
 
-	% Downstream Analysis - center, next level
-	\node[impactbox=natblue, below=7cm of mda] (downstream) {
+	% Downstream Analysis container - larger rectangle with internal analysis types
+	\node[rectangle, draw=natblue, line width=2.5pt, rounded corners=15pt,
+		top color=natblue!15, bottom color=natblue!5,
+		minimum height=5cm, minimum width=8cm, below=7cm of mda,
+		drop shadow={shadow scale=1.08, shadow xshift=3pt, shadow yshift=-3pt, fill=natblue!30}] (downstream) {};
+
+	% Title for downstream analysis container
+	\node[font=\sffamily\Large\bfseries, text=natblue!90] at ($(downstream.north)+(0,-0.4)$) {
+		\textbf{Downstream Analysis}
+	};
+
+	% Internal analysis types as squares
+	\node[rectangle, draw=natblue!80, line width=1.5pt, rounded corners=6pt,
+		fill=natblue!25, minimum height=1.2cm, minimum width=2cm,
+		font=\sffamily\small\bfseries] at ($(downstream.center)+(-2.5,0.3)$) (snp) {
 		\begin{tabular}{c}
-			\textbf{Downstream}    \\[2pt]
-			\textbf{Analysis}      \\[4pt]
-			\normalsize Structural \\
-			\normalsize Variation  \\
-			\normalsize Detection
+			\textbf{SNP} \\[1pt]
+			\textbf{Calling}
 		\end{tabular}
 	};
 
-	% Problem Impact - below downstream
-	\node[impactbox=challengecolor, below left=of downstream, xshift=-1cm] (negativeimpact) {
+	\node[rectangle, draw=natblue!80, line width=1.5pt, rounded corners=6pt,
+		fill=natblue!25, minimum height=1.2cm, minimum width=2cm,
+		font=\sffamily\small\bfseries] at ($(downstream.center)+(0,0.3)$) (cnv) {
 		\begin{tabular}{c}
-			\textbf{False}           \\[1pt]
-			\textbf{Discoveries}     \\[4pt]
-			\footnotesize Artificial \\
-			\footnotesize SV events  \\[2pt]
+			\textbf{CNV} \\[1pt]
+			\textbf{Detection}
+		\end{tabular}
+	};
+
+	% Highlighted SV analysis as our example
+	\node[rectangle, draw=natred, line width=2pt, rounded corners=6pt,
+		fill=natred!20, minimum height=1.2cm, minimum width=2cm,
+		font=\sffamily\small\bfseries] at ($(downstream.center)+(2.5,0.3)$) (sv) {
+		\begin{tabular}{c}
+			\textbf{SV} \\[1pt]
+			\textbf{Detection}
+		\end{tabular}
+	};
+
+	% More analysis types indicator
+	\node[circle, draw=natblue!60, line width=1pt, fill=natblue!15,
+		minimum size=0.8cm] at ($(downstream.center)+(0,-1)$) {
+		\textcolor{natblue!80}{\footnotesize ...}
+	};
+
+	% Problem Impact - below downstream
+	\node[impactbox=challengecolor, below =of downstream, xshift=-1cm] (negativeimpact) {
+		\begin{tabular}{c}
+			\textbf{False}       \\[1pt]
+			\textbf{Discoveries} \\[4pt]
 			\textcolor{challengecolor!80}{\tiny Incorrect results}
 		\end{tabular}
 	};
@@ -197,19 +240,21 @@
 	% Clear flow arrows - MDA to features
 	\draw[arrow=natgray!80] (mda.south west) to[out=225,in=90] (benefit1.north);
 	\draw[arrow=natgray!80] (mda.south west) to[out=225,in=135] (benefit2.north west);
+	\draw[arrow=natgray!80] (mda.south west) to[out=235,in=135] (morebenefits.north west);
 	\draw[arrow=natgray!80] (mda.south east) to[out=315,in=90] (challenge.north);
 
 	% Features to downstream analysis
-	\draw[arrow=benefitcolor] (benefit1.south) to[out=270,in=135] (downstream.north west);
-	\draw[arrow=benefitcolor] (benefit2.south) to[out=270,in=110] (downstream.north);
+	\draw[arrow=benefitcolor] (benefit1.south) to[out=270,in=150] (downstream.north west);
+	\draw[arrow=benefitcolor] (benefit2.south) to[out=270,in=125] (downstream.north west);
+	\draw[arrow=benefitcolor] (morebenefits.south) to[out=270,in=90] (downstream.north);
 	\draw[arrow=challengecolor] (challenge.south) to[out=270,in=45] (downstream.north east);
 
-	% Problem flow
-	\draw[arrow=natblue] (downstream.south west) to[out=225,in=90] (negativeimpact.north);
+	% Problem flow - from SV analysis specifically
+	% \draw[arrow=natred] (sv.south) to[out=270,in=90] (negativeimpact.north);
 
 	% Solution arrows
 	\draw[arrow=natpurple] (negativeimpact.east) to[out=0,in=180] (solution.west);
-	\draw[arrow=natpurple] (downstream.south east) to[out=315,in=135] (solution.north west);
+	% \draw[arrow=natpurple] (sv.south east) to[out=315,in=135] (solution.north west);
 
 	% Central problem statement
 	% \node[warningbox, below=0.5cm of downstream] (warning) {
@@ -253,6 +298,20 @@
 
 	\node[regular polygon, regular polygon sides=6, fill=benefitcolor!40, draw=benefitcolor, inner sep=2pt] at ($(benefit2.north east)+(-0.3,-0.3)$) {
 		\tiny \textcolor{benefitcolor}{\textbf{+}}
+	};
+
+	\node[star, star points=3, fill=benefitcolor!40, draw=benefitcolor, inner sep=1pt] at ($(morebenefits.north east)+(-0.2,-0.2)$) {
+		\tiny \textcolor{benefitcolor}{\textbf{+}}
+	};
+
+	% Add analysis diversity icon
+	\node[diamond, fill=natblue!40, draw=natblue, inner sep=1pt] at ($(downstream.north east)+(-0.5,-0.5)$) {
+		\tiny \textcolor{natblue}{\textbf{\&}}
+	};
+
+	% Add highlighting indicator for SV
+	\node[star, star points=5, fill=natred!40, draw=natred, inner sep=1pt] at ($(sv.north east)+(-0.2,-0.2)$) {
+		\tiny \textcolor{natred}{\textbf{!}}
 	};
 
 	\node[regular polygon, regular polygon sides=3, fill=challengecolor!40, draw=challengecolor, inner sep=2pt] at ($(challenge.north east)+(-0.3,-0.3)$) {
