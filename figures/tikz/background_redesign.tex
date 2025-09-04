@@ -63,6 +63,19 @@
 			font=\sffamily\Large\bfseries,
 			drop shadow={shadow scale=1.1, shadow xshift=4pt, shadow yshift=-4pt, fill=natpurple!40}
 		},
+	currentpipelinebox/.style={
+			rectangle,
+			rounded corners=15pt,
+			draw=challengecolor,
+			line width=3pt,
+			top color=challengecolor!20,
+			bottom color=challengecolor!5,
+			minimum height=3cm,
+			minimum width=4cm,
+			text centered,
+			font=\sffamily\Large\bfseries,
+			drop shadow={shadow scale=1.1, shadow xshift=4pt, shadow yshift=-4pt, fill=challengecolor!40}
+		},
 	% Analysis box
 	analysisbox/.style={
 			rectangle,
@@ -106,40 +119,41 @@
 	% Title
 	\node[titlebox] (title) {ChimeraLM: Background \& Motivation};
 
-	% MDA Process - top center
+	% MDA Process - top center with enhanced description
 	\node[processblock=mdacolor, below=of title] (mda) {
 		\begin{tabular}{c}
-			\textbf{MDA Process}      \\[4pt]
-			\normalsize Multiple      \\
-			\normalsize Displacement  \\
-			\normalsize Amplification \\[3pt]
-			\textcolor{mdacolor!80}{\footnotesize Nanopore Sequencing}
+			\textbf{\Large MDA Process}                                \\[4pt]
+			\normalsize Multiple                                       \\
+			\normalsize Displacement                                   \\
+			\normalsize Amplification                                  \\[3pt]
+			\textcolor{mdacolor!80}{\footnotesize Nanopore Sequencing} \\[2pt]
+			\textcolor{mdacolor!70}{\tiny Produces dual output}
 		\end{tabular}
 	};
 
 	% MDA outputs two types of reads
 	\node[featurebox=benefitcolor, below left=of mda] (biologicalreads) {
 		\begin{tabular}{c}
-			\textbf{Biological}        \\[2pt]
-			\textbf{True Reads}        \\[4pt]
+			\textbf{\large Biological} \\[2pt]
+			\textbf{\large True Reads} \\[4pt]
 			\footnotesize Genuine      \\
 			\footnotesize genomic data \\[2pt]
-			\textcolor{benefitcolor!80}{\tiny $\checkmark$ Clean}
+			\textcolor{benefitcolor!80}{\tiny $\checkmark$ Authentic Signal}
 		\end{tabular}
 	};
 
 	\node[featurebox=challengecolor, below right=of mda] (chimeraartifacts) {
 		\begin{tabular}{c}
-			\textbf{Chimera}             \\[2pt]
-			\textbf{Artifacts}           \\[4pt]
+			\textbf{\large Chimera}      \\[2pt]
+			\textbf{\large Artifacts}    \\[4pt]
 			\footnotesize Artificial     \\
 			\footnotesize MDA byproducts \\[2pt]
-			\textcolor{challengecolor!80}{\tiny $\times$ Contaminant}
+			\textcolor{challengecolor!80}{\tiny $\times$ False Signal}
 		\end{tabular}
 	};
 
-	% ChimeraLM filter - center position
-	\node[solutionbox, below=7cm of mda, xshift=-3cm] (chimeralm) {
+	% ChimeraLM filter - left side
+	\node[solutionbox, below=4cm of biologicalreads] (chimeralm) {
 		\begin{tabular}{c}
 			\textbf{ChimeraLM}        \\[4pt]
 			\textbf{AI Filter}        \\[3pt]
@@ -149,67 +163,95 @@
 		\end{tabular}
 	};
 
-
-	% ChimeraLM filter - center position
-	\node[featurebox=challengecolor, right= 2cm of chimeralm] (currentpipeline) {
+	% Current pipeline (without ChimeraLM) - right side
+	\node[currentpipelinebox, below=4cm of chimeraartifacts] (currentpipeline) {
 		\begin{tabular}{c}
-			\textbf{Current Pipeline} \\[4pt]
-			\normalsize Chimera Artifacts
+			\textbf{Current}           \\[2pt]
+			\textbf{Pipeline}          \\[4pt]
+			\footnotesize No filtering \\
+			\footnotesize of artifacts \\[2pt]
+			\textcolor{challengecolor!80}{\tiny $\times$ Contaminated}
 		\end{tabular}
 	};
 
 	% Clean downstream analysis
 	\node[analysisbox=natblue, below=of chimeralm] (cleananalysis) {
 		\begin{tabular}{c}
-			\textbf{Clean Downstream Analysis} \\[4pt]
-			\normalsize SNPs, CNVs, SVs, ...   \\[2pt]
-			\textcolor{natblue!80}{\footnotesize Without artifact contamination}
+			\textbf{\large Clean Analysis} \\[4pt]
+			\normalsize SNPs, CNVs, SVs    \\[2pt]
+			\textcolor{natblue!80}{\footnotesize High-quality results}
 		\end{tabular}
 	};
 
 	% Contaminated analysis (parallel path)
-	\node[analysisbox=challengecolor, right=2cm of cleananalysis] (contaminatedanalysis) {
+	\node[analysisbox=challengecolor, below=of currentpipeline] (contaminatedanalysis) {
 		\begin{tabular}{c}
-			\textbf{Contaminated Analysis}     \\[4pt]
-			\normalsize With chimera artifacts \\[2pt]
-			\textcolor{challengecolor!80}{\footnotesize False discoveries}
+			\textbf{\large Contaminated Analysis} \\[4pt]
+			\normalsize With artifacts            \\[2pt]
+			\textcolor{challengecolor!80}{\footnotesize Noisy results}
 		\end{tabular}
 	};
 
-	% Final results
+	% Final results - reliable
 	\node[analysisbox=benefitcolor, below=of cleananalysis] (reliableresults) {
 		\begin{tabular}{c}
-			\textbf{Reliable Results}        \\[4pt]
-			\normalsize Accurate discoveries \\[2pt]
-			\textcolor{benefitcolor!80}{\footnotesize Trustworthy genomics}
+			\textbf{Reliable Results}    \\[4pt]
+			\normalsize True discoveries \\[2pt]
+			\textcolor{benefitcolor!80}{\footnotesize High confidence}
 		\end{tabular}
 	};
 
-	% Contaminated analysis (parallel path)
-	\node[analysisbox=challengecolor, below= of contaminatedanalysis] (unreliableresults) {
+	% Final results - unreliable
+	\node[analysisbox=challengecolor, below=of contaminatedanalysis] (unreliableresults) {
 		\begin{tabular}{c}
-			\textbf{Reliable Results} \\[4pt]
-			\textcolor{challengecolor!80}{\footnotesize False discoveries}
+			\textbf{Mixed Results}      \\[4pt]
+			\normalsize False positives \\[2pt]
+			\textcolor{challengecolor!80}{\footnotesize Low confidence}
 		\end{tabular}
 	};
 
-	% Arrows - Main filtering path
-	\draw[arrow=natgray!80] (mda.south west) to[out=225,in=90] (biologicalreads.north);
-	\draw[arrow=natgray!80] (mda.south east) to[out=315,in=90] (chimeraartifacts.north);
+	% MDA produces both types of reads - improved angles and flow
+	\draw[arrow=natgray!80, line width=2pt] (mda.south west) to[out=235,in=90] (biologicalreads.north);
+	\draw[arrow=natgray!80, line width=2pt] (mda.south east) to[out=305,in=90] (chimeraartifacts.north);
 
-	% Both types go to ChimeraLM
-	% \draw[arrow=benefitcolor] (biologicalreads.south) to[out=270,in=135] (chimeralm.north west);
-	% \draw[arrow=challengecolor] (chimeraartifacts.south) to[out=270,in=45] (chimeralm.north east);
+	% ChimeraLM path - processes both types, filters artifacts
+	\draw[arrow=benefitcolor, line width=2pt] (biologicalreads.south) to (chimeralm.north);
+	\draw[arrow=challengecolor, line width=2pt] (chimeraartifacts.south) to[out=225,in=45] (chimeralm.north east);
+
+	% Current pipeline path - no filtering
+	\draw[arrow=benefitcolor, dashed, line width=2pt] (biologicalreads.south) to[out=315,in=135] (currentpipeline.north west);
+	\draw[arrow=challengecolor, line width=2pt] (chimeraartifacts.south) to[out=270,in=90] (currentpipeline.north);
 
 	% ChimeraLM sends clean data downstream
 	\draw[arrow=natpurple, line width=3pt] (chimeralm.south) -- (cleananalysis.north);
 
-	% Clean analysis leads to reliable results  
-	\draw[arrow=natblue] (cleananalysis.south) -- (reliableresults.north);
-	\draw[arrow=challengecolor] (contaminatedanalysis.south) -- (unreliableresults.north);
+	% Current pipeline sends mixed data downstream
+	\draw[arrow=challengecolor, line width=2pt] (currentpipeline.south) -- (contaminatedanalysis.north);
 
-	% Alternative contaminated path (without ChimeraLM)
-	% \draw[arrow=challengecolor, dashed, line width=2pt] (chimeraartifacts.east) to[out=0,in=180] (contaminatedanalysis.west);
+	% Final results - enhanced arrows
+	\draw[arrow=natblue, line width=2.5pt] (cleananalysis.south) -- (reliableresults.north);
+	\draw[arrow=challengecolor, line width=2.5pt] (contaminatedanalysis.south) -- (unreliableresults.north);
+
+	% Enhanced pathway labels with better positioning and styling
+	\node[rectangle, rounded corners=8pt, fill=natpurple!15, draw=natpurple, line width=2pt,
+		font=\sffamily\normalsize\bfseries, text=natpurple, inner sep=8pt,
+		drop shadow={shadow scale=1.03, shadow xshift=2pt, shadow yshift=-2pt, fill=natpurple!20}]
+	at ($(chimeralm.west)+(-1.5,0)$) {
+		\begin{tabular}{c}
+			\textcolor{natpurple}{\textbf{WITH}} \\
+			\textcolor{natpurple}{\textbf{ChimeraLM}}
+		\end{tabular}
+	};
+
+	\node[rectangle, rounded corners=8pt, fill=challengecolor!15, draw=challengecolor, line width=2pt,
+		font=\sffamily\normalsize\bfseries, text=challengecolor, inner sep=8pt,
+		drop shadow={shadow scale=1.03, shadow xshift=2pt, shadow yshift=-2pt, fill=challengecolor!20}]
+	at ($(currentpipeline.east)+(1.5,0)$) {
+		\begin{tabular}{c}
+			\textcolor{challengecolor}{\textbf{WITHOUT}} \\
+			\textcolor{challengecolor}{\textbf{ChimeraLM}}
+		\end{tabular}
+	};
 
 \end{tikzpicture}
 
