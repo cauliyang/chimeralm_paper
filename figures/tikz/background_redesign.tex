@@ -32,7 +32,7 @@
 			top color=#1!20,
 			bottom color=#1!5,
 			minimum height=3.5cm,
-			minimum width=4cm,
+			minimum width=6cm,
 			text centered,
 			font=\sffamily\large\bfseries,
 			drop shadow={shadow scale=1.08, shadow xshift=3pt, shadow yshift=-3pt, fill=#1!40}
@@ -115,7 +115,7 @@
 		}
 }
 
-\begin{tikzpicture}[node distance=2.5cm, every node/.style={transform shape}]
+\begin{tikzpicture}[node distance=2cm, every node/.style={transform shape}]
 
 	% Title
 	\node[titlebox] (title) {ChimeraLM: Background \& Motivation};
@@ -133,7 +133,7 @@
 
 	% Mixed reads pool as a rectangle with two integrated parts
 	\node[rectangle, draw=natgray, line width=2.5pt, rounded corners=15pt,
-		minimum height=4cm, minimum width=10cm, below=of mda,
+		minimum height=4.5cm, minimum width=10cm, below=of mda,
 		drop shadow={shadow scale=1.08, shadow xshift=3pt, shadow yshift=-3pt, fill=natgray!30}] (mixedreads) {};
 
 	% Title for the mixed pool
@@ -143,8 +143,8 @@
 
 	% Left part - Biological reads (but mixed/indistinguishable)
 	\node[rectangle, draw=benefitcolor!60, line width=1.5pt, rounded corners=8pt,
-		fill=benefitcolor!20, minimum height=2.8cm, minimum width=3cm,
-		font=\sffamily\normalsize\bfseries] at ($(mixedreads.center)+(-1.7,0)$) (biopart) {
+		fill=benefitcolor!20, minimum height=2.8cm, minimum width=3.5cm,
+		font=\sffamily\normalsize\bfseries] at ($(mixedreads.center)+(-2.5,0)$) (biopart) {
 		\begin{tabular}{c}
 			\textcolor{benefitcolor!80}{\textbf{Biological}} \\
 			\textcolor{benefitcolor!80}{\textbf{True Reads}} \\[3pt]
@@ -156,8 +156,8 @@
 
 	% Right part - Chimera artifacts (but mixed/indistinguishable) 
 	\node[rectangle, draw=challengecolor!60, line width=1.5pt, rounded corners=8pt,
-		fill=challengecolor!20, minimum height=2.8cm, minimum width=3cm,
-		font=\sffamily\normalsize\bfseries] at ($(mixedreads.center)+(1.7,0)$) (chipart) {
+		fill=challengecolor!20, minimum height=2.8cm, minimum width=3.5cm,
+		font=\sffamily\normalsize\bfseries] at ($(mixedreads.center)+(2.5,0)$) (chipart) {
 		\begin{tabular}{c}
 			\textcolor{challengecolor!80}{\textbf{Chimera}}   \\
 			\textcolor{challengecolor!80}{\textbf{Artifacts}} \\[3pt]
@@ -254,17 +254,17 @@
 	\draw[arrow=natpurple, line width=3pt] (chimeralm.south) -- (cleananalysis.north);
 
 	% Current pipeline sends mixed data downstream
-	\draw[arrow=challengecolor, line width=2pt] (currentpipeline.south) -- (contaminatedanalysis.north);
+	\draw[arrow=challengecolor, line width=3pt] (currentpipeline.south) -- (contaminatedanalysis.north);
 
 	% Final results - enhanced arrows
-	\draw[arrow=natblue, line width=2.5pt] (cleananalysis.south) -- (reliableresults.north);
-	\draw[arrow=challengecolor, line width=2.5pt] (contaminatedanalysis.south) -- (unreliableresults.north);
+	\draw[arrow=natblue, line width=3pt] (cleananalysis.south) -- (reliableresults.north);
+	\draw[arrow=challengecolor, line width=3pt] (contaminatedanalysis.south) -- (unreliableresults.north);
 
 	% Enhanced pathway labels with better positioning and styling
 	\node[rectangle, rounded corners=8pt, fill=natpurple!15, draw=natpurple, line width=2pt,
 		font=\sffamily\normalsize\bfseries, text=natpurple, inner sep=8pt,
 		drop shadow={shadow scale=1.03, shadow xshift=2pt, shadow yshift=-2pt, fill=natpurple!20}]
-	at ($(chimeralm.west)+(-1.5,0)$) {
+	at ($(chimeralm.north)+(1.9,1.5)$) {
 		\begin{tabular}{c}
 			\textcolor{natpurple}{\textbf{WITH}} \\
 			\textcolor{natpurple}{\textbf{ChimeraLM}}
@@ -274,7 +274,7 @@
 	\node[rectangle, rounded corners=8pt, fill=challengecolor!15, draw=challengecolor, line width=2pt,
 		font=\sffamily\normalsize\bfseries, text=challengecolor, inner sep=8pt,
 		drop shadow={shadow scale=1.03, shadow xshift=2pt, shadow yshift=-2pt, fill=challengecolor!20}]
-	at ($(currentpipeline.east)+(1.5,0)$) {
+	at ($(currentpipeline.north)+(-1.9,1.5)$) {
 		\begin{tabular}{c}
 			\textcolor{challengecolor}{\textbf{WITHOUT}} \\
 			\textcolor{challengecolor}{\textbf{ChimeraLM}}
