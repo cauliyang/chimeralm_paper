@@ -127,27 +127,36 @@
 			\normalsize Displacement                                   \\
 			\normalsize Amplification                                  \\[3pt]
 			\textcolor{mdacolor!80}{\footnotesize Nanopore Sequencing} \\[2pt]
-			\textcolor{mdacolor!70}{\tiny Produces dual output}
 		\end{tabular}
 	};
 
-	% MDA outputs two types of reads
-	\node[featurebox=benefitcolor, below left=of mda] (biologicalreads) {
+	% MDA outputs mixed reads pool
+	\node[featurebox=natgray, below=of mda] (mixedreads) {
 		\begin{tabular}{c}
-			\textbf{\large Biological} \\[2pt]
-			\textbf{\large True Reads} \\[4pt]
-			\footnotesize Genuine      \\
-			\footnotesize genomic data \\[2pt]
-			\textcolor{benefitcolor!80}{\tiny $\checkmark$ Authentic Signal}
+			\textbf{\large Mixed Reads Pool} \\[4pt]
+			\footnotesize Biological True + Chimera Artifacts \\
+			\footnotesize \textcolor{benefitcolor!80}{$\checkmark$ Genuine} + \textcolor{challengecolor!80}{$\times$ Artifacts} \\[3pt]
+			\textcolor{natgray!80}{\tiny Indistinguishable without analysis}
 		\end{tabular}
 	};
 
-	\node[featurebox=challengecolor, below right=of mda] (chimeraartifacts) {
+	% Show what's inside the mixed pool - conceptual breakdown
+	\node[featurebox=benefitcolor, below left=1.5cm and 1cm of mixedreads, xshift=-0.5cm] (biologicalreads) {
 		\begin{tabular}{c}
-			\textbf{\large Chimera}      \\[2pt]
-			\textbf{\large Artifacts}    \\[4pt]
-			\footnotesize Artificial     \\
-			\footnotesize MDA byproducts \\[2pt]
+			\textbf{Biological} \\[2pt]
+			\textbf{True Reads} \\[3pt]
+			\footnotesize Hidden within \\
+			\footnotesize mixed pool \\[2pt]
+			\textcolor{benefitcolor!80}{\tiny $\checkmark$ Authentic}
+		\end{tabular}
+	};
+
+	\node[featurebox=challengecolor, below right=1.5cm and 1cm of mixedreads, xshift=0.5cm] (chimeraartifacts) {
+		\begin{tabular}{c}
+			\textbf{Chimera} \\[2pt]
+			\textbf{Artifacts} \\[3pt]
+			\footnotesize Hidden within \\
+			\footnotesize mixed pool \\[2pt]
 			\textcolor{challengecolor!80}{\tiny $\times$ False Signal}
 		\end{tabular}
 	};
@@ -210,17 +219,26 @@
 		\end{tabular}
 	};
 
-	% MDA produces both types of reads - improved angles and flow
-	\draw[arrow=natgray!80, line width=2pt] (mda.south west) to[out=235,in=90] (biologicalreads.north);
-	\draw[arrow=natgray!80, line width=2pt] (mda.south east) to[out=305,in=90] (chimeraartifacts.north);
+	% MDA produces mixed reads pool
+	\draw[arrow=natgray!80, line width=3pt] (mda.south) -- (mixedreads.north);
+	
+	% Show conceptual breakdown of mixed pool
+	\draw[arrow=natgray!60, dashed, line width=1.5pt] (mixedreads.south west) to[out=225,in=90] (biologicalreads.north);
+	\draw[arrow=natgray!60, dashed, line width=1.5pt] (mixedreads.south east) to[out=315,in=90] (chimeraartifacts.north);
+	
+	% Add "contains" labels
+	\node[font=\sffamily\tiny\bfseries, text=natgray!70] at ($(mixedreads.south west)!0.5!(biologicalreads.north)$) {
+		\textcolor{natgray!70}{contains}
+	};
+	\node[font=\sffamily\tiny\bfseries, text=natgray!70] at ($(mixedreads.south east)!0.5!(chimeraartifacts.north)$) {
+		\textcolor{natgray!70}{contains}
+	};
 
-	% ChimeraLM path - processes both types, filters artifacts
-	\draw[arrow=benefitcolor, line width=2pt] (biologicalreads.south) to (chimeralm.north);
-	\draw[arrow=challengecolor, line width=2pt] (chimeraartifacts.south) to[out=225,in=45] (chimeralm.north east);
+	% ChimeraLM path - processes mixed pool, filters artifacts
+	\draw[arrow=natgray, line width=2.5pt] (mixedreads.south) to[out=235,in=120] (chimeralm.north west);
 
-	% Current pipeline path - no filtering
-	\draw[arrow=benefitcolor, dashed, line width=2pt] (biologicalreads.south) to[out=315,in=135] (currentpipeline.north west);
-	\draw[arrow=challengecolor, line width=2pt] (chimeraartifacts.south) to[out=270,in=90] (currentpipeline.north);
+	% Current pipeline path - no filtering of mixed pool
+	\draw[arrow=natgray, line width=2.5pt] (mixedreads.south) to[out=305,in=60] (currentpipeline.north east);
 
 	% ChimeraLM sends clean data downstream
 	\draw[arrow=natpurple, line width=3pt] (chimeralm.south) -- (cleananalysis.north);
