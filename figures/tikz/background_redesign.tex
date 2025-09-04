@@ -3,6 +3,7 @@
 \usepackage{xcolor}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usetikzlibrary{decorations.pathmorphing}
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{shapes.geometric, arrows.meta, positioning, shadows, patterns, decorations.pathreplacing, calc, fadings, matrix}
 
@@ -130,39 +131,54 @@
 		\end{tabular}
 	};
 
-	% MDA outputs mixed reads pool
-	\node[featurebox=natgray, below=of mda] (mixedreads) {
+	% Mixed reads pool as a rectangle with two integrated parts
+	\node[rectangle, draw=natgray, line width=2.5pt, rounded corners=15pt,
+		minimum height=4cm, minimum width=10cm, below=of mda,
+		drop shadow={shadow scale=1.08, shadow xshift=3pt, shadow yshift=-3pt, fill=natgray!30}] (mixedreads) {};
+
+	% Title for the mixed pool
+	\node[font=\sffamily\Large\bfseries, text=natgray!90] at ($(mixedreads.north)+(0,-0.4)$) {
+		\textbf{Mixed Reads Pool}
+	};
+
+	% Left part - Biological reads (but mixed/indistinguishable)
+	\node[rectangle, draw=benefitcolor!60, line width=1.5pt, rounded corners=8pt,
+		fill=benefitcolor!20, minimum height=2.8cm, minimum width=3cm,
+		font=\sffamily\normalsize\bfseries] at ($(mixedreads.center)+(-1.7,0)$) (biopart) {
 		\begin{tabular}{c}
-			\textbf{\large Mixed Reads Pool} \\[4pt]
-			\footnotesize Biological True + Chimera Artifacts \\
-			\footnotesize \textcolor{benefitcolor!80}{$\checkmark$ Genuine} + \textcolor{challengecolor!80}{$\times$ Artifacts} \\[3pt]
-			\textcolor{natgray!80}{\tiny Indistinguishable without analysis}
+			\textcolor{benefitcolor!80}{\textbf{Biological}} \\
+			\textcolor{benefitcolor!80}{\textbf{True Reads}} \\[3pt]
+			\footnotesize Genuine genomic                    \\
+			\footnotesize data mixed in                      \\[2pt]
+			\textcolor{benefitcolor!70}{\tiny $\checkmark$ Authentic}
 		\end{tabular}
 	};
 
-	% Show what's inside the mixed pool - conceptual breakdown
-	\node[featurebox=benefitcolor, below left=1.5cm and 1cm of mixedreads, xshift=-0.5cm] (biologicalreads) {
+	% Right part - Chimera artifacts (but mixed/indistinguishable) 
+	\node[rectangle, draw=challengecolor!60, line width=1.5pt, rounded corners=8pt,
+		fill=challengecolor!20, minimum height=2.8cm, minimum width=3cm,
+		font=\sffamily\normalsize\bfseries] at ($(mixedreads.center)+(1.7,0)$) (chipart) {
 		\begin{tabular}{c}
-			\textbf{Biological} \\[2pt]
-			\textbf{True Reads} \\[3pt]
-			\footnotesize Hidden within \\
-			\footnotesize mixed pool \\[2pt]
-			\textcolor{benefitcolor!80}{\tiny $\checkmark$ Authentic}
+			\textcolor{challengecolor!80}{\textbf{Chimera}}   \\
+			\textcolor{challengecolor!80}{\textbf{Artifacts}} \\[3pt]
+			\footnotesize Artificial MDA                      \\
+			\footnotesize byproducts mixed in                 \\[2pt]
+			\textcolor{challengecolor!70}{\tiny $\times$ False Signal}
 		\end{tabular}
 	};
 
-	\node[featurebox=challengecolor, below right=1.5cm and 1cm of mixedreads, xshift=0.5cm] (chimeraartifacts) {
-		\begin{tabular}{c}
-			\textbf{Chimera} \\[2pt]
-			\textbf{Artifacts} \\[3pt]
-			\footnotesize Hidden within \\
-			\footnotesize mixed pool \\[2pt]
-			\textcolor{challengecolor!80}{\tiny $\times$ False Signal}
-		\end{tabular}
+	% Mixing indication - show they're intertwined
+	\node[circle, fill=natgray!30, draw=natgray, line width=1pt, minimum size=0.8cm] at ($(biopart.east)!0.5!(chipart.west)$) {
+		\textcolor{natgray!80}{\footnotesize \textbf{?}}
+	};
+
+	% "Cannot distinguish" label
+	\node[font=\sffamily\small\bfseries, text=natgray!80] at ($(mixedreads.south)+(0,0.3)$) {
+		\textcolor{natgray!80}{\textbf{Cannot distinguish without analysis}}
 	};
 
 	% ChimeraLM filter - left side
-	\node[solutionbox, below=4cm of biologicalreads] (chimeralm) {
+	\node[solutionbox, below =4cm of mixedreads, xshift=-4cm] (chimeralm) {
 		\begin{tabular}{c}
 			\textbf{ChimeraLM}        \\[4pt]
 			\textbf{AI Filter}        \\[3pt]
@@ -173,7 +189,7 @@
 	};
 
 	% Current pipeline (without ChimeraLM) - right side
-	\node[currentpipelinebox, below=4cm of chimeraartifacts] (currentpipeline) {
+	\node[currentpipelinebox, below =4cm of mixedreads, xshift=4cm] (currentpipeline) {
 		\begin{tabular}{c}
 			\textbf{Current}           \\[2pt]
 			\textbf{Pipeline}          \\[4pt]
@@ -221,18 +237,12 @@
 
 	% MDA produces mixed reads pool
 	\draw[arrow=natgray!80, line width=3pt] (mda.south) -- (mixedreads.north);
-	
-	% Show conceptual breakdown of mixed pool
-	\draw[arrow=natgray!60, dashed, line width=1.5pt] (mixedreads.south west) to[out=225,in=90] (biologicalreads.north);
-	\draw[arrow=natgray!60, dashed, line width=1.5pt] (mixedreads.south east) to[out=315,in=90] (chimeraartifacts.north);
-	
-	% Add "contains" labels
-	\node[font=\sffamily\tiny\bfseries, text=natgray!70] at ($(mixedreads.south west)!0.5!(biologicalreads.north)$) {
-		\textcolor{natgray!70}{contains}
-	};
-	\node[font=\sffamily\tiny\bfseries, text=natgray!70] at ($(mixedreads.south east)!0.5!(chimeraartifacts.north)$) {
-		\textcolor{natgray!70}{contains}
-	};
+
+	% Add visual mixing effects - wavy lines between the parts
+	\draw[natgray!50, line width=1pt, decorate, decoration={snake, amplitude=2pt, segment length=8pt}]
+	($(biopart.east)+(0,0.8)$) -- ($(chipart.west)+(0,0.8)$);
+	\draw[natgray!50, line width=1pt, decorate, decoration={snake, amplitude=2pt, segment length=8pt}]
+	($(biopart.east)+(0,-0.8)$) -- ($(chipart.west)+(0,-0.8)$);
 
 	% ChimeraLM path - processes mixed pool, filters artifacts
 	\draw[arrow=natgray, line width=2.5pt] (mixedreads.south) to[out=235,in=120] (chimeralm.north west);
