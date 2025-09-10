@@ -1,4 +1,10 @@
+%! TeX program = lualatex
+
 \documentclass[tikz,border=10pt]{standalone}
+
+\usepackage{fontspec}
+\setmainfont{Arial}
+
 \usepackage{tikz}
 \usepackage{xcolor}
 \usepackage{amsmath}
@@ -221,17 +227,15 @@
 	};
 
 	% Final classification - better spacing
-	\node[classbox=natpurple, below = 1.5cm of sup0] (artificial)  {
+	\node[classbox=natred, minimum height=2cm, below = 1.5cm of sup0] (artificial)  {
 		\begin{tabular}{c}
-			\textbf{Artificial}   \\[2pt]
-			\footnotesize Class 0 \\[2pt]
+			\textbf{Artificial} \\[2pt]
 		\end{tabular}
 	};
 
-	\node[classbox=natblue, below = 1.5cm of sup2] (biological)  {
+	\node[classbox=natblue, minimum height=2cm, below = 1.5cm of sup2] (biological)  {
 		\begin{tabular}{c}
-			\textbf{Biological}   \\[2pt]
-			\footnotesize Class 1 \\[2pt]
+			\textbf{Biological} \\[2pt]
 		\end{tabular}
 	};
 
@@ -246,28 +250,27 @@
 		top color=natorange!25, bottom color=natorange!5,
 		minimum height=3.5cm, minimum width=8cm,
 		text centered, font=\sffamily\large\bfseries,
-		drop shadow={shadow scale=1.08, shadow xshift=3pt, shadow yshift=-3pt, fill=natorange!40}] (compengine) {
+		drop shadow={shadow scale=1.03, shadow xshift=3pt, shadow yshift=-3pt, fill=natorange!40}] (compengine) {
 		\begin{tabular}{c}
-			\textbf{\Large Comparison}                          \\[2pt]
-			\textbf{\Large Engine}                              \\[6pt]
-			\normalsize Match Counting                          \\[2pt]
-			\normalsize Algorithm                               \\[4pt]
+			\textbf{\Large Comparison Engine}                   \\[2pt]
+			\normalsize Match Counting Algorithm                \\[2pt]
 			\textcolor{natorange!80}{\small For each MDA read:} \\[1pt]
 			\textcolor{natorange!80}{\small Count bulk matches}
 		\end{tabular}
 	};
 
 	% Arrows from data sources to comparison engine - pure vertical straight connections
-	\draw[arrow] (mdachimeric.east) to[out=10,in=170,looseness=0.6] (compengine.west);
+	% \draw[arrow] (mdachimeric.east) to[out=10,in=170,looseness=0.6] (compengine.west);
+	\draw[arrow] (mdachimeric.south) |- (compengine.west);
 	\draw[arrow] (bulkchimeric1.south) -- (bulkchimeric1.south |- compengine.north);
 	\draw[arrow] (bulkchimeric2.south) -- (bulkchimeric2.south |- compengine.north);
 	\draw[arrow] (bulkchimeric3.south) to[out=240,in=40,looseness=0.8] (compengine.north east);
 
 	% Classification arrows from comparison engine to support groups - distributed starting points
-	\draw[arrow] (compengine.south west) to[out=200,in=90,looseness=0.8] (sup0.north);
+	\draw[arrow] (compengine.south west) to[out=180,in=90,looseness=1.2] (sup0.north);
 	\draw[arrow] (compengine.south) to[out=240,in=90,looseness=0.6] (sup1.north);
 	\draw[arrow] (compengine.south) to[out=300,in=90,looseness=0.6] (sup2.north);
-	\draw[arrow] (compengine.south east) to[out=340,in=90,looseness=0.8] (sup3.north);
+	\draw[arrow] (compengine.south east) to[out=360,in=90,looseness=1.2] (sup3.north);
 
 	% Classification arrows - smooth and well-spaced
 	\draw[arrow] (sup0.south) -- (artificial.north);

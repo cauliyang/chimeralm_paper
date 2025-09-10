@@ -1,6 +1,9 @@
 %!TeX program = lualatex
-
 \documentclass[tikz,border=10pt]{standalone}
+
+\usepackage{fontspec}
+\setmainfont{Arial}
+
 \usepackage{tikz}
 \usepackage{xcolor}
 \usepackage{amsmath}
@@ -248,7 +251,6 @@
 
 	% ChimeraLM path - processes mixed pool, filters artifacts
 	\draw[arrow=natgray, line width=2.5pt] (mixedreads.south) to[out=235,in=120] (chimeralm.north west);
-
 	% Current pipeline path - no filtering of mixed pool
 	\draw[arrow=natgray, line width=2.5pt] (mixedreads.south) to[out=305,in=60] (currentpipeline.north east);
 
