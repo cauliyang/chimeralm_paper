@@ -1,0 +1,197 @@
+ARTIFACT READS SUPPORTING SV TYPES ANALYSIS
+==================================================
+
+Dataset: cnn_p2_765108_bulk_model_on_mk1c_dataset_setA
+----------------------------------------
+1. Basic Statistics:
+   Total artifact reads: 1176422
+   Supporting SV reads: 284637 (24.2%)
+   Non-supporting reads: 891785 (75.8%)
+
+2. SV Type Support Statistics (based on support instances):
+   INV: 282811 times (91.4%)
+   DEL: 11365 times (3.7%)
+   DUP: 7256 times (2.3%)
+   INS: 4302 times (1.4%)
+   TRA: 0 times (0.0%)
+   Total support instances: 309274
+
+3. Support Pattern Statistics:
+   Single-support reads: 274856 (96.6%)
+   Multi-support reads: 9781 (3.4%)
+
+4. Common Multi-Support Combinations:
+   INV: 10648 times
+   DEL+INV: 5063 times
+   DUP+INV: 2745 times
+   INS+INV: 1397 times
+   BND: 1114 times
+   DEL: 310 times
+   BND+INV: 155 times
+   DEL+INS: 132 times
+   INS: 108 times
+   DUP: 90 times
+   DEL+DUP+INV: 55 times
+   DEL+INS+INV: 54 times
+   DEL+DUP: 45 times
+   BND+DEL: 38 times
+   DUP+INS: 35 times
+   DUP+INS+INV: 25 times
+   BND+INS: 19 times
+   BND+DEL+INV: 7 times
+   DEL+DUP+INS+INV: 3 times
+   BND+DEL+INS: 3 times
+   BND+DUP+INV: 2 times
+   DEL+DUP+INS: 2 times
+   BND+INS+INV: 1 times
+
+==================================================
+
+Dataset: hyena_p2_765108_bulk_model_on_P2_dataset_setA
+----------------------------------------
+1. Basic Statistics:
+   Total artifact reads: 12193833
+   Supporting SV reads: 4300568 (35.3%)
+   Non-supporting reads: 7893265 (64.7%)
+
+2. SV Type Support Statistics (based on support instances):
+   INV: 4348379 times (87.1%)
+   DEL: 251965 times (5.0%)
+   DUP: 169126 times (3.4%)
+   INS: 147988 times (3.0%)
+   TRA: 0 times (0.0%)
+   Total support instances: 4990614
+
+3. Support Pattern Statistics:
+   Single-support reads: 4045642 (94.1%)
+   Multi-support reads: 254926 (5.9%)
+
+4. Common Multi-Support Combinations:
+   INV: 304472 times
+   DEL+INV: 105507 times
+   DUP+INV: 74989 times
+   INS+INV: 49301 times
+   BND: 26252 times
+   INS: 6645 times
+   DEL: 6530 times
+   BND+INV: 5747 times
+   DEL+INS: 5386 times
+   DEL+DUP: 2716 times
+   DEL+INS+INV: 2671 times
+   DUP+INS: 2337 times
+   DEL+DUP+INV: 2229 times
+   DUP+INS+INV: 1595 times
+   BND+DEL: 1034 times
+   DUP: 910 times
+   BND+INS: 510 times
+   BND+DEL+INV: 263 times
+   DEL+DUP+INS: 234 times
+   BND+INS+INV: 116 times
+   BND+DUP: 107 times
+   DEL+DUP+INS+INV: 104 times
+   BND+DEL+INS: 35 times
+   BND+DUP+INV: 31 times
+   BND+DEL+INS+INV: 10 times
+   BND+DUP+INS: 2 times
+   BND+DUP+INS+INV: 2 times
+
+==================================================
+
+Dataset: cnn_p2_765108_bulk_model_on_P2_dataset_setA
+----------------------------------------
+1. Basic Statistics:
+   Total artifact reads: 11124859
+   Supporting SV reads: 3803799 (34.2%)
+   Non-supporting reads: 7321060 (65.8%)
+
+2. SV Type Support Statistics (based on support instances):
+   INV: 3826776 times (87.0%)
+   DEL: 223846 times (5.1%)
+   DUP: 149790 times (3.4%)
+   INS: 132579 times (3.0%)
+   TRA: 0 times (0.0%)
+   Total support instances: 4398607
+
+3. Support Pattern Statistics:
+   Single-support reads: 3580296 (94.1%)
+   Multi-support reads: 223503 (5.9%)
+
+4. Common Multi-Support Combinations:
+   INV: 259505 times
+   DEL+INV: 92197 times
+   DUP+INV: 65422 times
+   INS+INV: 43017 times
+   BND: 23630 times
+   DEL: 5889 times
+   INS: 5455 times
+   DEL+INS: 5188 times
+   BND+INV: 4871 times
+   DEL+DUP: 2554 times
+   DEL+INS+INV: 2426 times
+   DUP+INS: 2275 times
+   DEL+DUP+INV: 1937 times
+   DUP+INS+INV: 1368 times
+   BND+DEL: 940 times
+   DUP: 808 times
+   BND+INS: 489 times
+   DEL+DUP+INS: 242 times
+   BND+DEL+INV: 222 times
+   BND+INS+INV: 101 times
+   DEL+DUP+INS+INV: 100 times
+   BND+DUP: 72 times
+   BND+DEL+INS: 37 times
+   BND+DUP+INV: 31 times
+   BND+DEL+INS+INV: 10 times
+   BND+DUP+INS+INV: 2 times
+   BND+DUP+INS: 1 times
+   BND+DEL+DUP+INV: 1 times
+
+==================================================
+
+Dataset: hyena_p2_765108_bulk_model_on_mk1c_dataset_setA
+----------------------------------------
+1. Basic Statistics:
+   Total artifact reads: 1571412
+   Supporting SV reads: 406283 (25.9%)
+   Non-supporting reads: 1165129 (74.1%)
+
+2. SV Type Support Statistics (based on support instances):
+   INV: 404309 times (91.4%)
+   DEL: 16787 times (3.8%)
+   DUP: 10515 times (2.4%)
+   INS: 5986 times (1.4%)
+   TRA: 0 times (0.0%)
+   Total support instances: 442191
+
+3. Support Pattern Statistics:
+   Single-support reads: 391630 (96.4%)
+   Multi-support reads: 14653 (3.6%)
+
+4. Common Multi-Support Combinations:
+   INV: 15211 times
+   DEL+INV: 7649 times
+   DUP+INV: 4110 times
+   INS+INV: 2081 times
+   BND: 1445 times
+   DEL: 428 times
+   BND+INV: 216 times
+   DEL+INS: 171 times
+   INS: 138 times
+   DUP: 110 times
+   DEL+DUP+INV: 84 times
+   DEL+INS+INV: 83 times
+   DEL+DUP: 73 times
+   DUP+INS: 49 times
+   BND+DEL: 48 times
+   DUP+INS+INV: 41 times
+   BND+INS: 22 times
+   BND+DEL+INV: 17 times
+   DEL+DUP+INS+INV: 2 times
+   BND+DUP+INV: 2 times
+   BND+INS+INV: 2 times
+   DEL+DUP+INS: 1 times
+   BND+DEL+INS+INV: 1 times
+   BND+DEL+INS: 1 times
+
+==================================================
+

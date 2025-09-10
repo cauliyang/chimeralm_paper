@@ -1,0 +1,647 @@
+%!TeX program = lualatex
+%!TeX TXS-program:compile = txs:///lualatex/[--shell-escape]
+
+\documentclass[tikz,border=10pt]{standalone}
+
+\usepackage{fontspec}
+\setmainfont{Arial}
+
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, shadows, patterns, decorations.pathreplacing, calc, fadings, matrix, fit, quotes, graphs, intersections, backgrounds}
+\usepackage{listofitems} % for \readlist to create arrays
+\usepackage{svg}
+
+
+% Define professional color palette
+\definecolor{natblue}{RGB}{41,128,185}
+\definecolor{natgreen}{RGB}{39,174,96}
+\definecolor{natorange}{RGB}{230,126,34}
+\definecolor{natpurple}{RGB}{142,68,173}
+\definecolor{natred}{RGB}{231,76,60}
+\definecolor{natgray}{RGB}{52,73,94}
+\definecolor{lightgray}{RGB}{236,240,241}
+
+
+\definecolor{q1}{RGB}{247,252,253}
+\definecolor{q2}{RGB}{229,245,249}
+\definecolor{q3}{RGB}{204,236,230}
+\definecolor{q4}{RGB}{153,216,201}
+\definecolor{q5}{RGB}{102,194,164}
+\definecolor{q6}{RGB}{65,174,118}
+\definecolor{q7}{RGB}{35,139,69}
+\definecolor{q8}{RGB}{0,109,44}
+\definecolor{q9}{RGB}{0,68,27}
+
+%  label colors
+\definecolor{t1}{RGB}{254,235,226}
+\definecolor{t2}{RGB}{252,197,192}
+\definecolor{t3}{RGB}{250,159,181}
+\definecolor{t4}{RGB}{247,104,161}
+\definecolor{t5}{RGB}{197,27,138}
+\definecolor{t6}{RGB}{122,1,119}
+
+% token colors
+\definecolor{c1}{RGB}{239,243,255}
+\definecolor{c2}{RGB}{198,219,239}
+\definecolor{c3}{RGB}{158,202,225}
+\definecolor{c4}{RGB}{107,174,214}
+\definecolor{c5}{RGB}{66,146,198}
+\definecolor{c6}{RGB}{33,113,181}
+\definecolor{c7}{RGB}{8,69,148}
+
+\definecolor{l1}{RGB}{42,240,247}
+\definecolor{l2}{RGB}{218,218,235}
+\definecolor{l3}{RGB}{188,189,220}
+\definecolor{l4}{RGB}{158,154,200}
+\definecolor{l5}{RGB}{128,125,186}
+\definecolor{l6}{RGB}{106,81,163}
+\definecolor{l7}{RGB}{74,20,134}
+
+
+\definecolor{qb1}{RGB}{242,240,247}
+\definecolor{qb2}{RGB}{218,218,235}
+\definecolor{qb3}{RGB}{188,189,220}
+\definecolor{qb4}{RGB}{158,154,200}
+\definecolor{qb5}{RGB}{117,107,177}
+\definecolor{qb6}{RGB}{84,39,143}
+
+\definecolor{b1}{HTML}{F2F2F2}
+
+\colorlet{myred}{red!80!black}
+\colorlet{myblue}{blue!80!black}
+\colorlet{mygreen}{green!60!black}
+
+\colorlet{myorange}{orange!70!red!60!black}
+\colorlet{mydarkred}{red!30!black}
+\colorlet{mydarkblue}{blue!40!black}
+\colorlet{mydarkgreen}{green!30!black}
+
+
+\begin{document}
+
+\pgfdeclarelayer{middle}
+\pgfdeclarelayer{middle2}
+
+\pgfsetlayers{background,middle2,  middle,  main}
+
+% Define styles
+\tikzset{
+	block/.style = {rectangle, draw, text centered, rounded corners, minimum height=4em, minimum width=4em},
+	token node/.style={draw=black, line width=0.5pt, minimum size=1.6em},
+	predict node/.style={line width=2pt, minimum height=1.5cm, minimum width=3cm, rounded corners=15pt, text centered, font=\sffamily\large\bfseries},
+	weightsum/.style={circle, draw=c7, line width=1pt, inner sep=0.1, minimum height=2em},
+	residual/.style={
+			rectangle,
+			rounded corners=15pt,
+			draw=natblue,
+			line width=2pt,
+			top color=natblue!25,
+			bottom color=natblue!8,
+			minimum height=3cm,
+			minimum width=1.5cm,
+			text centered,
+			font=\sffamily\large\bfseries,
+			drop shadow={shadow scale=1.03, shadow xshift=3pt, shadow yshift=-3pt, fill=natblue!40}
+		},
+	softmax/.style={
+			rectangle,
+			rounded corners=15pt,
+			draw=natorange,
+			line width=2pt,
+			top color=natorange!25,
+			bottom color=natorange!8,
+			minimum height=3cm,
+			minimum width=1.5cm,
+			text centered,
+			font=\sffamily\large\bfseries,
+			drop shadow={shadow scale=1.03, shadow xshift=3pt, shadow yshift=-3pt, fill=natorange!40}
+		},
+	% Input/Output blocks with gradient
+	io/.style={
+			rectangle,
+			rounded corners=12pt,
+			draw=natgray,
+			line width=1.5pt,
+			top color=lightgray,
+			bottom color=white,
+			minimum height=3cm,
+			minimum width=2.5cm,
+			text centered,
+			font=\sffamily\normalsize,
+			drop shadow={shadow scale=1.03, shadow xshift=2pt, shadow yshift=-2pt, fill=black!20}
+		},
+	% Backbone block with sophisticated styling
+	backbone/.style={
+			rectangle,
+			rounded corners=15pt,
+			draw=natgreen,
+			line width=2pt,
+			top color=natgreen!20,
+			bottom color=natgreen!5,
+			minimum height=3.5cm,
+			minimum width=4cm,
+			text centered,
+			font=\sffamily\large\bfseries,
+			% drop shadow={shadow scale=1.08, shadow xshift=3pt, shadow yshift=-3pt, fill=natgreen!40}
+		},
+	% Classifier block with gradient styling
+	classifier/.style={
+			rectangle,
+			rounded corners=15pt,
+			draw=natblue,
+			line width=2pt,
+			top color=natblue!25,
+			bottom color=natblue!8,
+			minimum height=4cm,
+			minimum width=4cm,
+			text centered,
+			font=\sffamily\large\bfseries,
+			drop shadow={shadow scale=1.08, shadow xshift=3pt, shadow yshift=-3pt, fill=natblue!40}
+		},
+	% Output block with elegant styling
+	output/.style={
+			rectangle,
+			rounded corners=15pt,
+			draw=natpurple,
+			line width=2pt,
+			top color=natpurple!25,
+			bottom color=natpurple!8,
+			minimum height=3cm,
+			minimum width=3cm,
+			text centered,
+			font=\sffamily\large\bfseries,
+			drop shadow={shadow scale=1.08, shadow xshift=3pt, shadow yshift=-3pt, fill=natpurple!40}
+		},
+	% Hidden state block with refined styling
+	hidden/.style={
+			rectangle,
+			rounded corners=12pt,
+			draw=natgray!80,
+			line width=1.5pt,
+			top color=lightgray!60,
+			bottom color=white,
+			minimum height=2.5cm,
+			minimum width=3cm,
+			text centered,
+			font=\sffamily\normalsize,
+			drop shadow={shadow scale=1.05, shadow xshift=2pt, shadow yshift=-2pt, fill=black!15}
+		},
+	% Professional arrow style
+	arrow/.style={
+			->,
+			>=stealth,
+			line width=2.5pt,
+			natgray!80,
+			shorten >=2pt,
+			shorten <=2pt
+		},
+	% Component box with professional styling
+	component/.style={
+			rectangle,
+			rounded corners=6pt,
+			fill=white,
+			fill opacity=0.9,
+			draw=natgray!30,
+			line width=0.8pt,
+			font=\sffamily\small,
+			inner sep=4pt,
+			drop shadow={shadow scale=1.02, shadow xshift=1pt, shadow yshift=-1pt, fill=black!10}
+		},
+	% Dimension label with professional styling
+	dimlabel/.style={
+			font=\small\sffamily\bfseries,
+			text=natgray!90,
+			fill=white,
+			fill opacity=0.8,
+			rounded corners=3pt,
+			inner sep=2pt
+		},
+	% Title style
+	titlebox/.style={
+			rectangle,
+			rounded corners=10pt,
+			draw=natblue,
+			line width=2pt,
+			top color=natblue!15,
+			bottom color=white,
+			font=\sffamily\Huge\bfseries,
+			text=natblue!90,
+			inner sep=10pt,
+			drop shadow={shadow scale=1.05, shadow xshift=3pt, shadow yshift=-3pt, fill=natblue!30}
+		}
+}
+
+\begin{tikzpicture}[node distance=2.1cm, every node/.style={transform shape}]
+	\def\boxdist{1cm}
+
+	\begin{scope}[local bounding box=nanoporebox]
+		\node (nanoporenode) [block,  minimum size=10em] {Nanopore};
+	\end{scope}
+
+	% input
+	\begin{scope}[shift={(nanoporebox.east)}, xshift=\boxdist * 1.5, local bounding box=inputbox]
+		\node (rnaseqnode)[rotate=270] {\tikz \matrix (rnaseq) [matrix of nodes, nodes in empty cells,
+				column sep=-\pgflinewidth, row sep=2pt,
+				nodes={thin, inner sep=0pt,  minimum size=1em, anchor=center},
+				column 1/.style={nodes={anchor=east}},
+				row 1 column 2/.style={nodes={fill=q4}},
+				row 1 column 3/.style={nodes={fill=q4}},
+				row 1 column 4/.style={nodes={fill=q4}},
+				row 1 column 5/.style={nodes={fill=q4}},
+				row 1 column 6/.style={nodes={fill=q4}},
+				row 1 column 7/.style={nodes={fill=q4}},
+				row 1 column 8/.style={nodes={fill=q4}},
+				row 1 column 9/.style={nodes={fill=q4}},
+				row 1 column 10/.style={nodes={fill=q4}},
+				row 1 column 11/.style={nodes={fill=q4}},
+				row 1 column 12/.style={nodes={fill=q4}},
+				row 1 column 13/.style={nodes={fill=q4}},
+				row 1 column 14/.style={nodes={fill=q4}},
+				row 1 column 15/.style={nodes={fill=q4}},
+				row 1 column 16/.style={nodes={fill=q4}},
+			] {
+				Seq & [6pt] T & T & $\cdots$ & C & A & G & A & $\cdots$ & T & G & T & C & $\cdots$ & G & A \\
+			};
+		};
+	\end{scope}
+
+	% token
+	\begin{scope}[shift={(inputbox.east)}, xshift=\boxdist * 2, local bounding box=tokenbox]
+		\node (tokensnode) [rotate=270] {\tikz	\matrix (tokens)   [
+				matrix of nodes,
+				nodes in empty cells,
+				nodes={token node, fill=c2},
+				column sep=-\pgflinewidth, row sep=-\pgflinewidth,
+				column 1/.style={nodes={fill=c1}},
+				column 2/.style={nodes={fill=c2}},
+				column 3/.style={nodes={fill=c3}},
+				column 4/.style={nodes={fill=c4}},
+				column 5/.style={nodes={fill=c5}},
+				column 6/.style={nodes={fill=c6}},
+				column 7/.style={nodes={fill=c7}},
+			]
+			{
+				 &  &  &  &  &  & \\
+			};
+		};
+	\end{scope}
+
+
+	\begin{scope}[shift={(tokenbox.east)},
+		xshift=\boxdist * 1.5,
+		yshift=-5pt,
+		edge1/.style={black, line width=1pt, -{Stealth[length=3pt, width=3pt]}, shorten >=0.5pt, shorten <=0.5pt},
+		local bounding box=backbone, scale=1, transform shape]
+		\graph [
+			grow right = 0.8cm,
+			edges = {edge1},
+			skip loop/.style={to path={ -- ++(1cm, 0) -| (\tikztotarget) \tikztonodes}},
+			hyena/.style ={rectangle, draw=c7, fill=c7!20, thick, rotate=270,  minimum height=2em, minimum width=5em, font=\large},
+			residual/.style={circle, draw=c7, line width=1pt, inner sep=0.1, as=+},
+			block1/.style={rectangle, draw=c5, fill=c5!70, thick,   minimum height=3em, minimum width=1em, as=},
+			block2/.style={rectangle, draw=c6, fill=c6!70, thick,  minimum height=4em, minimum width=1em, as=},
+		] {
+			input [inner sep=0, as=] -> hyena [hyena] -> r1 [residual] -> b1 [block1] -> b2 [block2] -> r2 [residual] -> b3 [block1];
+		};
+
+		\draw[edge1]  ($(input) !.2! (hyena)$) |- ++(0,1) -| (r1);
+		\draw[edge1] ($(b1) !.4! (b2) $) |- ++(0,1) -| (r2);
+
+		\begin{pgfonlayer}{middle}
+			\node (lcgmlboxoutline) [backbone, fit=(backbone)] {};
+		\end{pgfonlayer}
+
+		\begin{pgfonlayer}{middle2}
+			% Calculate the position and size of the second rectangle
+			\coordinate (lcgmlboxoutline_center) at (lcgmlboxoutline.center);
+			\path let \p1 = (lcgmlboxoutline.south west), \p2 = (lcgmlboxoutline.north east) in
+			node (lcgmlboxoutline2) [backbone, minimum width=\x2-\x1, minimum height=\y2-\y1]
+			at ([shift={(0.2, 0.2)}]lcgmlboxoutline_center) {};
+		\end{pgfonlayer}
+	\end{scope}
+
+	% features
+	\begin{scope}[shift={(backbone.east)}, xshift=\boxdist * 2.5, yshift=3pt, local bounding box=hidden]
+		\begin{scope}[opacity=0.7]
+			\matrix (tokens1)   [
+				matrix of nodes,
+				nodes in empty cells,
+				nodes={token node, fill=c2},
+				column sep=-\pgflinewidth, row sep=-\pgflinewidth,
+				row 1/.style={nodes={fill=c1}},
+				row 2/.style={nodes={fill=c2}},
+				row 3/.style={nodes={fill=c3}},
+				row 4/.style={nodes={fill=c4}},
+				row 5/.style={nodes={fill=c5}},
+				row 6/.style={nodes={fill=c6}},
+				row 7/.style={nodes={fill=c7}},
+			]
+			{
+				\\
+				\\
+				\\
+				\\
+				\\
+				\\
+			};
+		\end{scope}
+
+		\begin{scope}[shift={(-0.1, -0.1)}, opacity=0.8]
+			\matrix (tokens2)   [
+				matrix of nodes,
+				nodes in empty cells,
+				nodes={token node, fill=c2},
+				column sep=-\pgflinewidth, row sep=-\pgflinewidth,
+				row 1/.style={nodes={fill=c1}},
+				row 2/.style={nodes={fill=c2}},
+				row 3/.style={nodes={fill=c3}},
+				row 4/.style={nodes={fill=c4}},
+				row 5/.style={nodes={fill=c5}},
+				row 6/.style={nodes={fill=c6}},
+				row 7/.style={nodes={fill=c7}},
+			]
+			{
+				\\
+				\\
+				\\
+				\\
+				\\
+				\\
+			};
+		\end{scope}
+
+		\begin{scope}[shift={(-0.2, -0.2)}, opacity=1]
+			\matrix (tokens3)   [
+				matrix of nodes,
+				nodes in empty cells,
+				nodes={token node, fill=c2},
+				column sep=-\pgflinewidth, row sep=-\pgflinewidth,
+				row 1/.style={nodes={fill=c1}},
+				row 2/.style={nodes={fill=c2}},
+				row 3/.style={nodes={fill=c3}},
+				row 4/.style={nodes={fill=c4}},
+				row 5/.style={nodes={fill=c5}},
+				row 6/.style={nodes={fill=c6}},
+				row 7/.style={nodes={fill=c7}},
+			]
+			{
+				\\
+				\\
+				\\
+				\\
+				\\
+				\\
+			};
+		\end{scope}
+	\end{scope}
+
+
+	\begin{scope}[shift={(hidden.east)},
+		xshift=4pt,
+		yshift=15pt,
+		>=latex, % for default LaTeX arrow head
+		node/.style={thick,circle,draw=myblue,minimum size=22,inner sep=0.5,outer sep=0.6},
+		node in/.style={node,green!20!black,draw=mygreen!30!black,fill=mygreen!25},
+		node hidden/.style={node,blue!20!black,draw=myblue!30!black,fill=myblue!20},
+		node convol/.style={node,orange!20!black,draw=myorange!30!black,fill=myorange!20},
+		node out/.style={node,red!20!black,draw=myred!30!black,fill=myred!20},
+		connect/.style={thick,mydarkblue}, %,line cap=round
+		connect arrow/.style={-{Latex[length=5,width=2.5]}, line width=1.2pt, mydarkblue, shorten <=0.5,shorten >=1},
+		node 1/.style={node hidden},
+		node 2/.style={node hidden},
+		node 3/.style={node out},
+		scale=0.6,
+		x=2.0cm,
+		y=1.8cm,
+		transform shape,
+		local bounding box=attention]
+		\def\nstyle{int(\lay<\Nnodlen?min(2,\lay):3)} % map layer number onto 1, 2, or 3
+
+		\readlist\Nnod{4,2,1} % number of nodes per layer
+
+		\message{^^J  Layer}
+		\foreachitem \N \in \Nnod{ % loop over layers
+			\edef\lay{\Ncnt} % alias of index of current layer
+			\message{\lay,}
+			\pgfmathsetmacro\prev{int(\Ncnt-1)} % number of previous layer
+			\foreach \i [evaluate={\y=\N/2-\i; \x=\lay; \n=\nstyle;}] in {1,...,\N}{ % loop over nodes
+					% NODES
+					\node[node \n] (N\lay-\i) at (\x,\y) {};
+					%\node[circle,inner sep=2] (N\lay-\i') at (\x-0.15,\y) {}; % shifted node
+					%\draw[node] (N\lay-\i) circle (\R);
+
+					% CONNECTIONS
+					\ifnum\lay>1 % connect to previous layer
+						\foreach \j in {1,...,\Nnod[\prev]}{ % loop over nodes in previous layer
+								\draw[connect arrow] (N\prev-\j) -- (N\lay-\i); % connect arrows directly
+								%\draw[connect arrow] (N\prev-\j) -- (N\lay-\i'); % connect arrows to shifted node
+							}
+					\fi % else: nothing to connect first layer
+				}
+		}
+	\end{scope}
+
+
+	\node[softmax, right= \boxdist * 1.5 of attention] (softmax) {
+		\begin{tabular}{c}
+			\textbf{\large Softmax} \\[3pt]
+			\textcolor{natpurple!70}{\small $\mathrm{dim}=1$}
+		\end{tabular}
+	};
+
+
+	\begin{scope}[shift={(softmax.east)}, xshift=\boxdist * 2.5, opacity=1, local bounding box=pooled]
+		\matrix (tokens5)   [
+			matrix of nodes,
+			nodes in empty cells,
+			nodes={token node, fill=c2},
+			column sep=-\pgflinewidth, row sep=-\pgflinewidth,
+			row 1/.style={nodes={fill=c1}},
+			row 2/.style={nodes={fill=c2}},
+			row 3/.style={nodes={fill=c3}},
+			row 4/.style={nodes={fill=c4}},
+			row 5/.style={nodes={fill=c5}},
+			row 6/.style={nodes={fill=c6}},
+			row 7/.style={nodes={fill=c7}},
+		]
+		{
+			\\
+			\\
+			\\
+			\\
+			\\
+			\\
+		};
+	\end{scope}
+
+	\node[weightsum, right=\boxdist of pooled] (weightsum) {\Large  $\times$};
+
+	\begin{scope}[shift={(weightsum.east)},
+		xshift=10pt,
+		yshift=15pt,
+		>=latex, % for default LaTeX arrow head
+		node/.style={thick,circle,draw=myblue,minimum size=22,inner sep=0.5,outer sep=0.6},
+		node in/.style={node,green!20!black,draw=mygreen!30!black,fill=mygreen!25},
+		node hidden/.style={node,blue!20!black,draw=myblue!30!black,fill=myblue!20},
+		node convol/.style={node,orange!20!black,draw=myorange!30!black,fill=myorange!20},
+		node out/.style={node,red!20!black,draw=myred!30!black,fill=myred!20},
+		connect/.style={thick,mydarkblue}, %,line cap=round
+		connect arrow/.style={-{Latex[length=5,width=2.5]}, line width=1.2pt, mydarkblue, shorten <=0.5,shorten >=1},
+		node 1/.style={node hidden},
+		node 2/.style={node hidden},
+		node 3/.style={node out},
+		scale=0.6,
+		x=2.0cm,
+		y=1.8cm,
+		transform shape,
+		local bounding box=classifier]
+		\def\nstyle{int(\lay<\Nnodlen?min(2,\lay):3)} % map layer number onto 1, 2, or 3
+
+		\readlist\Nnod{2,4,4} % number of nodes per layer
+
+		\message{^^J  Layer}
+		\foreachitem \N \in \Nnod{ % loop over layers
+			\edef\lay{\Ncnt} % alias of index of current layer
+			\message{\lay,}
+			\pgfmathsetmacro\prev{int(\Ncnt-1)} % number of previous layer
+			\foreach \i [evaluate={\y=\N/2-\i; \x=\lay; \n=\nstyle;}] in {1,...,\N}{ % loop over nodes
+					% NODES
+					\node[node \n] (N\lay-\i) at (\x,\y) {};
+					%\node[circle,inner sep=2] (N\lay-\i') at (\x-0.15,\y) {}; % shifted node
+					%\draw[node] (N\lay-\i) circle (\R);
+
+					% CONNECTIONS
+					\ifnum\lay>1 % connect to previous layer
+						\foreach \j in {1,...,\Nnod[\prev]}{ % loop over nodes in previous layer
+								\draw[connect arrow] (N\prev-\j) -- (N\lay-\i); % connect arrows directly
+								%\draw[connect arrow] (N\prev-\j) -- (N\lay-\i'); % connect arrows to shifted node
+							}
+					\fi % else: nothing to connect first layer
+				}
+		}
+	\end{scope}
+
+	\node[residual, right=\boxdist of classifier] (residual) {
+		\begin{tabular}{c}
+			\textbf{\large Residual Layer} \\[3pt]
+			\textcolor{natpurple!70}{\small [B, 512]}
+		\end{tabular}
+	};
+
+	\begin{scope}[shift={(residual.east)},
+		xshift=-4pt,
+		yshift=15pt,
+		>=latex, % for default LaTeX arrow head
+		node/.style={thick,circle,draw=myblue,minimum size=22,inner sep=0.5,outer sep=0.6},
+		node in/.style={node,green!20!black,draw=mygreen!30!black,fill=mygreen!25},
+		node hidden/.style={node,blue!20!black,draw=myblue!30!black,fill=myblue!20},
+		node convol/.style={node,orange!20!black,draw=myorange!30!black,fill=myorange!20},
+		node out/.style={node,red!20!black,draw=myred!30!black,fill=myred!20},
+		connect/.style={thick,mydarkblue}, %,line cap=round
+		connect arrow/.style={-{Latex[length=5,width=2.5]}, line width=1.2pt, mydarkblue, shorten <=0.5,shorten >=1},
+		node 1/.style={node hidden},
+		node 2/.style={node hidden},
+		node 3/.style={node out},
+		scale=0.6,
+		x=2.0cm,
+		y=1.8cm,
+		transform shape,
+		local bounding box=output]
+		\def\nstyle{int(\lay<\Nnodlen?min(2,\lay):3)} % map layer number onto 1, 2, or 3
+
+		\readlist\Nnod{4,2} % number of nodes per layer
+
+		\message{^^J  Layer}
+		\foreachitem \N \in \Nnod{ % loop over layers
+			\edef\lay{\Ncnt} % alias of index of current layer
+			\message{\lay,}
+			\pgfmathsetmacro\prev{int(\Ncnt-1)} % number of previous layer
+			\foreach \i [evaluate={\y=\N/2-\i; \x=\lay; \n=\nstyle;}] in {1,...,\N}{ % loop over nodes
+					% NODES
+					\node[node \n] (N\lay-\i) at (\x,\y) {};
+					%\node[circle,inner sep=2] (N\lay-\i') at (\x-0.15,\y) {}; % shifted node
+					%\draw[node] (N\lay-\i) circle (\R);
+
+					% CONNECTIONS
+					\ifnum\lay>1 % connect to previous layer
+						\foreach \j in {1,...,\Nnod[\prev]}{ % loop over nodes in previous layer
+								\draw[connect arrow] (N\prev-\j) -- (N\lay-\i); % connect arrows directly
+								%\draw[connect arrow] (N\prev-\j) -- (N\lay-\i'); % connect arrows to shifted node
+							}
+					\fi % else: nothing to connect first layer
+				}
+		}
+	\end{scope}
+
+
+	\begin{scope}[shift={(output.east)}, xshift=\boxdist * 3, opacity=1, local bounding box=predict]
+		\matrix (tokens6)   [
+			matrix of nodes,
+			nodes in empty cells,
+			nodes={predict node},
+			% column sep=-\pgflinewidth, 
+			row sep=1cm,
+			row 1/.style={nodes={draw=natgreen, top color=natgreen!25, bottom color=natgreen!8, drop shadow={shadow scale=1.03, shadow xshift=3pt, shadow yshift=-3pt, fill=natgreen!40}}},
+			row 2/.style={nodes={draw=natred, top color=natred!25, bottom color=natred!8, drop shadow={shadow scale=1.03, shadow xshift=3pt, shadow yshift=-3pt, fill=natred!40}}},
+		]
+		{
+			\large Biological \\
+			\large Artificial \\
+		};
+	\end{scope}
+
+
+	% Professional arrows with enhanced styling
+	\draw[arrow] (inputbox.east) -- (tokenbox.west);
+	\draw[arrow] (tokenbox.east) --  (backbone.west) node[dimlabel, midway, above=3pt] {[B, L]};
+	\draw[arrow] (backbone.east) -- (hidden.west) node[dimlabel, midway, above=3pt] {[B, L, 256]};
+	\draw[arrow] (hidden.east) -- (attention.west) ;
+	\draw[arrow] (attention.east) -- (softmax.west) node[dimlabel, midway, above=3pt] {[B, L, 1]};
+	\draw[arrow] (softmax.east) -- (pooled.west)  node[dimlabel, midway, above=3pt] {[B, L, 1]};
+	\draw[arrow] (pooled.east) -- (weightsum.west);
+
+	\draw[arrow, natblue]  (hidden.north)  |- ++(0,1)  -|  (weightsum);
+	\node[above=3cm] at ($(hidden)!0.5!(weightsum)$) (softmaxlabel) {$\sum_{i=1}^{m} (A \odot B)_{i,j}$};
+
+	\draw[arrow] (weightsum.east) -- (classifier.west) node[dimlabel, midway, above=3pt] {[B, 256]};
+	\draw[arrow] (classifier.east) -- (residual.west);
+	\draw[arrow] (residual.east) -- (output.west);
+	\draw[arrow] (output.east) -- (predict.west);
+
+	% Enhanced legend
+	\node[rectangle, draw=natgray!60, line width=1.5pt, rounded corners=8pt,
+		top color=natgray!10, bottom color=white, anchor=south west,
+		drop shadow={shadow scale=1.03, shadow xshift=2pt, shadow yshift=-2pt, fill=natgray!20}] at (-1.5, 5) {
+		\begin{tabular}{cl}
+			\small \textbf{\textcolor{natgray}{Legend:}} &                          \\[2pt]
+			\small \textcolor{natblue}{\textbf{B}}       & = \small batch size      \\[1pt]
+			\small \textcolor{natblue}{\textbf{L}}       & = \small sequence length \\[1pt]
+		\end{tabular}
+	};
+
+
+	\begin{scope}[on background layer]
+		\node (intputoutline) [fit=(inputbox)(nanoporebox), fill=natgray!5, draw=natgray!20, line width=3pt, rounded corners=20pt,  minimum height=8cm, inner sep=8pt] {};
+		\node (modeloutline) [fit=(tokenbox)(backbone)(hidden)(output), fill=natgray!5, draw=natgray!20, line width=3pt, rounded corners=20pt,  minimum height=8cm, inner sep=8pt] {};
+		\node (predictoutline) [fit=(predict), fill=natgray!5, draw=natgray!20, line width=3pt, rounded corners=20pt,  minimum height=8cm, inner sep=8pt] {};
+		\node (attentionpooloutline) [fit=(attention)(softmax)(hidden)(pooled)(weightsum)(softmaxlabel), draw=natgray!20, line width=2pt, rounded corners=20pt, inner sep=3pt] {};
+
+
+		\node (hyenalabel) [below=1cm of backbone] {\textbf{\large Hyena Operator}};
+		\node (attentionpooloutlinelabel) at (hyenalabel-|attentionpooloutline) {\textbf{\large Attention Pooling}};
+		\node(mlplabel) at (attentionpooloutlinelabel-|classifier)  {\textbf{\large MLP}};
+		\node(outputlabel) at (attentionpooloutlinelabel-|output)  {\textbf{\large MLP}};
+
+		\node[anchor=north west, inner sep=8pt] at (modeloutline.north west) {\textbf{\large Model}};
+		\node[anchor=north west, inner sep=8pt] at (intputoutline.north west) {\textbf{\large Input}};
+		\node[anchor=north west, inner sep=8pt] at (predictoutline.north west) {\textbf{\large Predict}};
+	\end{scope}
+
+	% Enhanced title with styling
+	\node[titlebox, above =\boxdist * 3 of attention] (title)  {ChimeraLM Architecture};
+
+\end{tikzpicture}
+
+\end{document}

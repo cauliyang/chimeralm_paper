@@ -1,0 +1,16 @@
+# Artifacts Supporting SV Types
+
+## Purpose
+Analyze which SV types are supported by model-identified artifact reads in original data (Set A).
+
+## Analysis
+- Model predictions: CNN/Hyena on mk1c/P2 datasets  
+- Match artifact reads to SVs in VCF files
+- Count SV type distribution and multi-support patterns
+
+## Files
+- `analyze_artifacts_sv_support.py`: Analysis script
+- `artifacts_sv_analysis_results.txt`: Results
+- 4 subdirectories: Model predictions + VCF files
+
+Expected: Artifacts mainly support inversions (consistent with MDA literature).
