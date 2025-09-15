@@ -101,5 +101,10 @@ def bam(file: Path, min_mapq: int = 10):
     )
 
 
+@app.command()
+def anno(prediction_file: Path, bam_file: Path):
+    pass
+
+
 if __name__ == "__main__":
     app()
