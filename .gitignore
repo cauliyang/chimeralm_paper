@@ -518,4 +518,4 @@ pyrightconfig.json
 ./figures/data/
 figures/data/prediction_and_chimeric/
 # End of https://www.toptal.com/developers/gitignore/api/latex,python,macos
-
+paper/
