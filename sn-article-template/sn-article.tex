@@ -82,11 +82,6 @@
   linenos
 }
 
-% Define a standard environment for TSG code (using \newenvironment instead of \renewenvironment)
-\newenvironment{tsgcode}
-  {\VerbatimEnvironment\begin{minted}[fontsize=\small,breaklines=true,autogobble,frame=single,framesep=2mm,linenos]{bash}}
-  {\end{minted}}
-
 \usetikzlibrary{shadows,shapes,arrows,positioning,fit,backgrounds,decorations.pathreplacing,calc}
 
 \graphicspath{{../figures}}
@@ -96,8 +91,12 @@
 % define glossaries
 \makeglossaries
 
+\newacronym{wga}{WGA}{Whole Genome Amplification}
+\newacronym{mda}{MDA}{Multiple Displacement Amplification}
+\newacronym{malbac}{MALBAC}{Multiple Annealing and Looping-based Amplification Cycles}
 \newacronym{gpu}{GPU}{Graphics Processing Unit}
 \newacronym{hpc}{HPC}{High Performance Computing}
+\newacronym{sv}{SV}{Structural Variation}
 
 \newacronym{ide}{IDE}{Integrated Development Environment}
 \newacronym{cd}{CD}{Continuous Development}
@@ -107,7 +106,6 @@
 \newacronym{snp}{SNP}{Single Nucleotide Polymorphism}
 
 \newacronym{mlp}{MLP}{multilayer perceptron}
-\newacronym{drs}{dRNA-seq}{direct RNA sequencing}
 \newacronym{ont}{ONT}{Oxford Nanopore Technologies}
 \newacronym{pb}{PacBio}{Pacific Biosciences}
 
@@ -151,7 +149,7 @@
 
 \begin{document}
 
-\title[Article Title]{ChimeraLM: A genomic language model to detect chimer artifa}
+\title[Article Title]{ChimeraLM: A genomic language model for detecting whole genome amplification artifacts in single-cell sequencing}
 
 %%=============================================================%%
 %% GivenName	-> \fnm{Joergen W.}
@@ -178,22 +176,40 @@
 \affil[2]{\orgdiv{Robert H. Lurie Comprehensive Cancer Center}, \orgname{Northwestern University Feinberg School of Medicine}, \orgaddress{\street{675 N St Clair St}, \city{Chicago}, \postcode{60611}, \state{IL}, \country{USA}}}
 
 \abstract{
-	\gls{nlt} arising from structural variations challenge conventional linear analysis approaches in transcriptomics.
-	Here we introduce the concept of \gls{tsg} and present the first comprehensive infrastructure for graph-based transcript analysis.
-	We develop the TSG file format as the first standardized encoding for transcript segment graphs, enabling systematic representation of \gls{nlt}, and complex splicing patterns impossible to capture with linear methods.
-	Our command-line toolkit provides the first comprehensive suite for \gls{tsg} manipulation, analysis, and format conversion, while Aurora offers the first interactive visualization platform for transcript segment graphs.
-	Together with our companion TSG caller scannls, this work establishes the foundational infrastructure for a new paradigm in transcriptomic analysis, providing the essential tools for systematic investigation of \gls{nlt} structures.
+	this is a abtract
 }
-\keywords{Transcriptomics, Graph-based analysis, Non-colinear transcripts}
+\keywords{Whole Genomics Amplification, Genomic Language Model}
 
 %%\pacs[JEL Classification]{D8, H51}
 %%\pacs[MSC Classification]{35A01, 65L10, 65L12, 65L20, 65L70}
 
 \maketitle
 
-\section{main}\label{sec1}
+\section{Main}\label{sec:main}
 
-Transcriptomic structural variations, including gene fusions, circular RNAs, and complex alternative splicing, play critical roles in cancer, development, and disease.
+Single-cell genomics has revolutionized our understanding of cellular heterogeneity and development by enabling the characterization of individual cells rather than bulk populations~\cite{kalef2024single, sun2024mapping}.
+This approach has proven instrumental in uncovering rare cell types, tracking developmental trajectories, and identifying somatic mutations that drive disease progression.
+However, the limited amount of DNA present in a single cell, typically only a few picograms, poses significant technical challenges for comprehensive genomic analysis~\cite{leung2016highly, gawad2016single}.
+
+To overcome this fundamental limitation, \gls{wga} has become an essential preprocessing step in single-cell genomic studies~\cite{zong2012genome, huang2015single}.
+Various \gls{wga} techniques, including \gls{mda}, \gls{malbac}, and other emerging methods, can amplify the entire genome from a single cell by several orders of magnitude, generating sufficient DNA material for high-coverage sequencing~\cite{de2014quantitative, biezuner2021comparison,fu2015uniform}.
+This amplification enables researchers to achieve the depth and breadth of coverage necessary for reliable variant calling, copy number analysis, and structural variation detection.
+
+Despite its critical role in single-cell genomics, \gls{wga} introduces systematic artifacts that can significantly impact downstream analyses~\cite{lu2023chimera, lu2023exploration}.
+Among the most problematic are chimeric sequences\textemdash artificial DNA constructs formed when DNA fragments from different genomic loci are erroneously joined during the amplification process~\cite{lu2023chimera, lu2023exploration}.
+These chimeric artifacts can manifest as false-positive structural variations that do not exist in the original cell~\cite{lu2023chimera}.
+The presence of such artifacts poses a substantial challenge for accurate \gls{sv} detection, potentially leading to misinterpretation of genomic rearrangements and their biological significance.
+
+Current computational approaches for identifying \gls{wga}-induced artifacts rely primarily on coverage-based metrics and read-pair orientation patterns~\cite{kiguchi2021long, lu2023exploration}.
+However, these methods often fail to distinguish between genuine structural variations and amplification artifacts, particularly when chimeric sequences exhibit complex rearrangement patterns or occur in repetitive genomic regions~\cite{kosugi2019comprehensive, mahmoud2019structural}.
+The lack of robust artifact detection methods has limited the reliability of structural variant analysis in single-cell studies and hindered the full realization of single-cell genomics' potential.
+
+To address these challenges, we developed ChimeraLM, a genomic language model specifically designed to detect chimeric artifacts introduced by whole genome amplification.
+By leveraging deep learning approaches to capture sequence patterns and contextual information in genomic reads~\cite{dalla2025nucleotide, zhou2023dnabert, nguyen2023hyenadna}, ChimeraLM can effectively distinguish between genuine biological sequences and \gls{wga}-induced chimeric artifacts.
+This approach represents a significant advancement in single-cell genomic analysis, offering improved accuracy in artifact detection and enabling more reliable structural variant analysis in single-cell studies.
+This methodology represents a significant advancement in single-cell genomic analysis, offering a principled approach to improve the reliability of structural variant detection and enable more precise characterization of genomic alterations in individual cells.
+
+In this study, we present ChimeraLM, demonstrate its superior performance compared to existing methods, and illustrate its practical applications in genomic studies.
 
 \begin{figure}
 	\begin{center}
@@ -202,12 +218,10 @@ Transcriptomic structural variations, including gene fusions, circular RNAs, and
 	\caption{Problem and Model}\label{fig:figure1}
 \end{figure}
 
-\section{Methods}\label{sec11}
+
+\section{Results}\label{sec11}
 
 Topical subheadings are allowed. Authors must ensure that their Methods section includes adequate experimental and characterization data necessary for others in the field to reproduce their work. Authors are encouraged to include RIIDs where appropriate.
-
-If your manuscript includes potentially identifying patient/participant information, or if it describes human transplantation research, or if it reports results of a clinical trial then  additional information will be required. Please visit (\url{https://www.nature.com/nature-research/editorial-policies}) for Nature Portfolio journals, (\url{https://www.springer.com/gp/authors-editors/journal-author/journal-author-helpdesk/publishing-ethics/14214}) for Springer Nature journals, or (\url{https://www.biomedcentral.com/getpublished/editorial-policies\#ethics+and+consent}) for BMC.
-
 
 \begin{figure}
 	\begin{center}
@@ -223,6 +237,8 @@ If your manuscript includes potentially identifying patient/participant informat
 	\end{center}
 	\caption{Problem and Model}\label{fig:figure3}
 \end{figure}
+
+\section{Methods}\label{sec12}
 
 
 
@@ -246,11 +262,6 @@ If your manuscript includes potentially identifying patient/participant informat
 	\end{center}
 	\caption{Problem and Model}\label{fig:sf2}
 \end{figure}
-
-
-
-
-
 
 This separation aligns with how many transcript assembly algorithms work:
 
