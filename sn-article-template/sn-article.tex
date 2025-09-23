@@ -177,9 +177,13 @@
 \affil[1]{\orgdiv{Department of Urology}, \orgname{Northwestern University Feinberg School of Medicine}, \orgaddress{\street{303 E Superior St}, \city{Chicago}, \postcode{60611}, \state{IL}, \country{USA}}}
 \affil[2]{\orgdiv{Robert H. Lurie Comprehensive Cancer Center}, \orgname{Northwestern University Feinberg School of Medicine}, \orgaddress{\street{675 N St Clair St}, \city{Chicago}, \postcode{60611}, \state{IL}, \country{USA}}}
 
-\abstract{
-	this is a abtract
-}
+\abstract{Single-cell genomic analysis requires \gls{wga} to generate sufficient DNA for sequencing, but this process introduces chimeric artifacts that manifest as false-positive structural variants and compromise downstream analyses.
+	Here, we developed ChimeraLM, a \gls{glm} that accurately detects and removes \gls{wga}-induced chimeric artifacts.
+	The model architecture incorporates Hyena operators and attention mechanisms optimized for variable-length genomic sequences.
+	ChimeraLM achieved high performance in chimeric detection (F1 score: 0.805, recall: 0.946, precision: 0.700) and dramatically outperformed existing methods, reducing chimeric contamination by $\thicksim 95$\% compared to 0\% for established tools.
+	When applied to \gls{sv} analysis, ChimeraLM improved the validation rate of detected events by 12-16 fold while preserving $>87$\% of genuine structural variants across multiple Nanopore sequencing platforms.
+	ChimeraLM processing normalized \gls{sv} type distributions toward bulk sequencing profiles, eliminating the overwhelming bias toward false-positive \gls{inv} characteristic of unprocessed \gls{wga} data.
+	This approach addresses a fundamental bottleneck in single-cell genomics and enables more reliable genomic analysis of individual cells for applications spanning basic research, clinical diagnostics, and therapeutic development.}
 \keywords{Whole Genomics Amplification, Genomic Language Model, Structural Variation}
 
 \maketitle
@@ -293,7 +297,6 @@ We evaluated ChimeraLM's performance on held-out test data to assess its ability
 ChimeraLM demonstrated robust performance across key classification metrics, achieving an F1 score of 0.805, which balances precision and recall for the binary classification task.
 The model exhibited high recall of 0.946, indicating that it successfully identified 94.6\% of true chimeric artifacts in the test dataset, minimizing the risk of retaining false-positive structural variants in downstream analyses.
 The precision of 0.700 demonstrates that 70.0\% of reads classified as chimeric were indeed artifacts, representing an effective trade-off that prioritizes comprehensive artifact removal while maintaining reasonable specificity.
-
 
 \subsection*{ChimeraLM reduces chimeric artifact burden across sequencing platforms}
 
@@ -477,7 +480,7 @@ As single-cell approaches become increasingly central to modern biology and medi
 	\end{center}
 	\caption{{\bf Distribution of chimeric alignments per chimeric read stratified by ChimeraLM prediction.}
 		(a) PromethION P2 platform chimeric alignment analysis. Bar chart showing the distribution of chimeric reads based on the number of chimeric alignments per read (x-axis: 2, 3, 4+ alignments) and total read count (y-axis, log scale). Bars are colored by ChimeraLM's binary classification: biological (dark teal) and artificial (coral). Analysis includes only reads identified as chimeric (minimum 2 alignments per read).
-		(b) MinION Mk1c platform chimeric alignment analysis. Bar chart showing the distribution of chimeric reads based on the number of chimeric alignments per read (x-axis: 2, 3, 4, 5+ alignments) and total read count (y-axis, log scale). Bars are colored by ChimeraLM's binary classification: biological (dark teal) and artificial (coral). Analysis includes only reads identified as chimeric (minimum 2 alignments per read). }\label{fig:sf2}
+		(b) MinION Mk1c platform chimeric alignment analysis. Bar chart showing the distribution of chimeric reads based on the number of chimeric alignments per read (x-axis: 2, 3, 4+ alignments) and total read count (y-axis, log scale). Bars are colored by ChimeraLM's binary classification: biological (dark teal) and artificial (coral). Analysis includes only reads identified as chimeric (minimum 2 alignments per read). }\label{fig:sf2}
 \end{figure}
 
 
