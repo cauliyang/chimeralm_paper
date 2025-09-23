@@ -98,6 +98,12 @@
 \newacronym{hpc}{HPC}{High Performance Computing}
 \newacronym{sv}{SV}{Structural Variation}
 
+\newacronym{del}{DEL}{deletion}
+\newacronym{dup}{DUP}{duplication}
+\newacronym{ins}{INS}{insertion}
+\newacronym{inv}{INV}{inversion}
+\newacronym{tra}{TRA}{translocation}
+
 \newacronym{ide}{IDE}{Integrated Development Environment}
 \newacronym{cd}{CD}{Continuous Development}
 \newacronym{ucsc}{UCSC}{UCSC Genome Browser}
@@ -109,10 +115,6 @@
 \newacronym{ont}{ONT}{Oxford Nanopore Technologies}
 \newacronym{pb}{PacBio}{Pacific Biosciences}
 
-\newacronym{tsg}{TSG}{Transcriptome Segment Graph}
-\newacronym{nlt}{NLT}{Non-colinear Transcript}
-
-\newacronym{go}{GO}{Gene Ontology}
 \newacronym{pcr}{PCR}{Polymerase Chain Reaction}
 \newacronym{mrna}{mRNA}{messenger RNA}
 
@@ -178,7 +180,7 @@
 \abstract{
 	this is a abtract
 }
-\keywords{Whole Genomics Amplification, Genomic Language Model}
+\keywords{Whole Genomics Amplification, Genomic Language Model, Structural Variation}
 
 \maketitle
 
@@ -208,7 +210,7 @@ This methodology represents a significant advancement in single-cell genomic ana
 
 In this study, we present ChimeraLM, demonstrate its superior performance compared to existing methods, and illustrate its practical applications in genomic studies.
 
-\begin{figure}
+\begin{figure}[!ht]
 	\begin{center}
 		\includegraphics[width=\textwidth]{final_figures/figure1}
 	\end{center}
@@ -222,31 +224,31 @@ In this study, we present ChimeraLM, demonstrate its superior performance compar
 
 \subsection*{ChimeraLM integrates seamlessly into single-cell genomic workflows}
 
-To systematically address \gls{wga}-induced chimeric artifacts, we developed ChimeraLM as an integrated component of single-cell genomic analysis pipelines (Figure~\ref{fig:figure1}a).
+To systematically address \gls{wga}-induced chimeric artifacts, we developed ChimeraLM as an integrated component of single-cell genomic analysis pipelines (Fig.~\ref{fig:figure1}a).
 Our approach leverages the standard single-cell workflow, beginning with cellular isolation through FACS or microfluidics-based sorting, followed by DNA extraction and whole genome amplification using established protocols.
 Amplified genomic material is then processed through long-read sequencing platforms such as Nanopore technology to generate comprehensive genomic coverage.
 
-ChimeraLM operates at a critical juncture in the analysis pipeline, positioned between initial read processing and downstream analysis, for example, structural variants detection (Figure~\ref{fig:figure1}a).
+ChimeraLM operates at a critical juncture in the analysis pipeline, positioned between initial read processing and downstream analysis, for example, structural variants detection (Fig.~\ref{fig:figure1}a).
 Following standard quality filtering and read cleaning procedures, ChimeraLM evaluates each sequencing read to classify it as either biological or chimeric artifacts.
 This binary classification enables the selective retention of authentic genomic sequences while filtering out amplification artifacts before they can impact downstream analyses.
 
 The filtered, high-quality biological reads are subsequently processed through conventional structural variant detection algorithms, enabling the identification of genuine genomic alterations such as deletions, duplications, and other rearrangements.
-By removing chimeric sequences upstream of variant calling, ChimeraLM ensures that detected structural variants represent true biological events rather than technical artifacts introduced during amplification (Figure~\ref{fig:figure1}a).
+By removing chimeric sequences upstream of variant calling, ChimeraLM ensures that detected structural variants represent true biological events rather than technical artifacts introduced during amplification (Fig.~\ref{fig:figure1}a).
 
 This workflow design allows ChimeraLM to integrate with existing single-cell genomic pipelines without requiring substantial modifications to established protocols.
 The method provides a versatile solution for improving the accuracy of single-cell genomic studies across diverse research applications.
 
 \subsection*{Training dataset construction enables supervised learning of chimeric patterns}
 
-To train ChimeraLM for accurate chimeric artifact detection, we developed a novel dataset construction strategy that leverages paired \gls{wga} and bulk sequencing data from the same biological samples (Figure~\ref{fig:figure1}b).
-This approach exploits the fundamental difference between WGA and bulk sequencing: while \gls{wga} data contains both biological reads and chimeric artifacts introduced during amplification, bulk sequencing data from the same sample contains only genuine biological sequences.
+To train ChimeraLM for accurate chimeric artifact detection, we developed a novel dataset construction strategy that leverages paired \gls{wga} and bulk sequencing data from the same biological samples (Fig.~\ref{fig:figure1}b).
+This approach exploits the fundamental difference between \gls{wga} and bulk sequencing: while \gls{wga} data contains both biological reads and chimeric artifacts introduced during amplification, bulk sequencing data from the same sample contains only genuine biological sequences.
 
-Our ground truth labeling strategy compares each chimeric read of \gls{wga} data against the corresponding one of bulk sequencing dataset (Figure~\ref{fig:figure1}b).
+Our ground truth labeling strategy compares each chimeric read of \gls{wga} data against the corresponding one of bulk sequencing dataset (Fig.~\ref{fig:figure1}b).
 Chimeric reads that successfully matched to bulk data with high confidence are classified as ``biological'' indicating they represent authentic genomic sequences present in the original sample.
-Conversely, reads that fail to match bulk sequences are labeled as ``artificial chimeric'' artifacts, as they represent artificial constructs generated during the \gls{wga} process rather than genuine genomic content (Figure~\ref{fig:figure1}b).
+Conversely, reads that fail to match bulk sequences are labeled as ``artificial chimeric'' artifacts, as they represent artificial constructs generated during the \gls{wga} process rather than genuine genomic content (Fig.~\ref{fig:figure1}b).
 
 This comparative approach generates a comprehensive labeled dataset where each chimeric read of \gls{wga} receives a binary classification based on its presence or absence in the matched bulk control.
-The resulting dataset captures the full spectrum of chimeric artifacts naturally occurring during \gls{wga}  while providing reliable ground truth labels for model training (Figure~\ref{fig:figure1}b).
+The resulting dataset captures the full spectrum of chimeric artifacts naturally occurring during \gls{wga}  while providing reliable ground truth labels for model training (Fig.~\ref{fig:figure1}b).
 
 Following dataset construction, we partitioned the labeled reads into training, validation, and test sets to ensure robust model development and unbiased performance evaluation.
 The training set was used for model parameter optimization, the validation set for hyperparameter tuning and model selection, and the test set was reserved for final performance assessment.
@@ -254,7 +256,7 @@ This rigorous data splitting strategy ensures that ChimeraLM's reported performa
 
 \subsection*{ChimeraLM architecture leverages modern genomic language modeling advances}
 
-ChimeraLM employs a sophisticated neural architecture specifically designed for genomic sequence analysis and chimeric artifact detection (Figure~\ref{fig:figure1} c).
+ChimeraLM employs a sophisticated neural architecture specifically designed for genomic sequence analysis and chimeric artifact detection (Fig.~\ref{fig:figure1}c).
 The model enables single-base pair resolution and accepts DNA sequences as input, which are first tokenized and encoded into numerical representations suitable for deep learning processing.
 This encoding preserves the sequential nature of genomic information while enabling efficient computation on modern hardware.
 
@@ -273,22 +275,21 @@ The residual connections help prevent vanishing gradients and improve model conv
 The final output layer produces a binary classification predicting whether each input sequence represents a biological read or an artificial chimeric artifact.
 This end-to-end architecture enables ChimeraLM to learn directly from raw sequence data without requiring manual feature engineering, allowing the model to discover complex patterns that may not be apparent through traditional bioinformatics approaches.
 
-\begin{figure}
+\begin{figure}[!ht]
 	\begin{center}
 		\includegraphics[width=0.95\textwidth]{final_figures/figure2}
 	\end{center}
 	\caption{{\bf ChimeraLM performance evaluation and benchmarking against existing methods.}
-        (a) ChimeraLM performance metrics on test dataset. Bar chart showing F1 score (0.805), precision (0.700), and recall (0.946) achieved by ChimeraLM on held-out test data for binary classification of biological versus chimera artifact.
-        (b) Chimeric read reduction across sequencing platforms. Stacked bar charts comparing chimeric read proportions (dark teal) versus non-chimeric reads (light teal) across bulk sequencing, WGA, and ChimeraLM-processed samples for PC3 cell line data. Left side shows PromethION P2 platform data with chimeric rates of 2.3\% (bulk), 46.0\% (WGA), and 4.9\% (ChimeraLM). Right side shows MinION Mk1c platform data with chimeric rates of 2.5\% (bulk), 23.0\% (WGA), and 1.5\% (ChimeraLM).
-        (c) Benchmarking on P2 platform data. Percentage reduction in chimeric reads achieved by ChimeraLM (~90\%) compared to existing computational methods SACRA and 3rd-ChimeraMiner (both 0\% reduction).
-        (d) Benchmarking on Mk1c platform data. Percentage reduction in chimeric reads achieved by ChimeraLM (~90\%) compared to SACRA and 3rd-ChimeraMiner (both 0\% reduction) using MinION Mk1c sequencing data.
-    }\label{fig:figure2}
+		(a) ChimeraLM performance metrics on test dataset. Bar chart showing F1 score (0.805), precision (0.700), and recall (0.946) achieved by ChimeraLM on held-out test data for binary classification of biological versus chimera artifact.
+		(b) Chimeric read reduction across sequencing platforms. Stacked bar charts comparing chimeric read proportions (dark teal) versus non-chimeric reads (light teal) across bulk sequencing, WGA, and ChimeraLM-processed samples for PC3 cell line data. Left side shows PromethION P2 platform data with chimeric rates of 2.3\% (bulk), 46.0\% (WGA), and 4.9\% (ChimeraLM). Right side shows MinION Mk1c platform data with chimeric rates of 2.5\% (bulk), 23.0\% (WGA), and 1.5\% (ChimeraLM).
+		(c) Benchmarking on P2 platform data. Percentage reduction in chimeric reads achieved by ChimeraLM (~90\%) compared to existing computational methods SACRA and 3rd-ChimeraMiner (both 0\% reduction).
+		(d) Benchmarking on Mk1c platform data. Percentage reduction in chimeric reads achieved by ChimeraLM (~90\%) compared to SACRA and 3rd-ChimeraMiner (both 0\% reduction) using MinION Mk1c sequencing data.
+	}\label{fig:figure2}
 \end{figure}
-
 
 \subsection*{ChimeraLM achieves high performance in chimeric artifact detection}
 
-We evaluated ChimeraLM's performance on held-out test data to assess its ability to accurately classify biological and chimeric reads (Figure~\ref{fig:figure2}a).
+We evaluated ChimeraLM's performance on held-out test data to assess its ability to accurately classify biological and chimeric reads (Fig.~\ref{fig:figure2}a).
 ChimeraLM demonstrated robust performance across key classification metrics, achieving an F1 score of 0.805, which balances precision and recall for the binary classification task.
 The model exhibited high recall of 0.946, indicating that it successfully identified 94.6\% of true chimeric artifacts in the test dataset, minimizing the risk of retaining false-positive structural variants in downstream analyses.
 The precision of 0.700 demonstrates that 70.0\% of reads classified as chimeric were indeed artifacts, representing an effective trade-off that prioritizes comprehensive artifact removal while maintaining reasonable specificity.
@@ -296,43 +297,147 @@ The precision of 0.700 demonstrates that 70.0\% of reads classified as chimeric 
 
 \subsection*{ChimeraLM reduces chimeric artifact burden across sequencing platforms}
 
-To evaluate ChimeraLM's practical impact, we applied the trained model to PC3 cell line data generated on two Nanopore long-read sequencing platforms: PromethION P2 and MinION Mk1c (Figure~\ref{fig:figure2}b).
+To evaluate ChimeraLM's practical impact, we applied the trained model to PC3 cell line data generated on two Nanopore long-read sequencing platforms: PromethION P2 and MinION Mk1c (Fig.~\ref{fig:figure2}b).
 The analysis revealed substantial differences in chimeric read proportions between bulk sequencing, \gls{wga} samples, and ChimeraLM-processed data.
 
-For P2 platform data, bulk sequencing exhibited a low baseline chimeric rate of 2.3\% among 10065403 total reads, consistent with the expected minimal artifact rate in non-amplified samples.
-In contrast, \gls{wga} amplification dramatically increased the chimeric burden to 46.0\% of reads in a dataset containing 28027667 total sequences.
-ChimeraLM processing effectively reduced this chimeric proportion to 4.9\% while retaining 15833834 high-quality biological reads, representing a 10-fold reduction in artifact contamination compared to unprocessed \gls{wga} data.
+For P2 platform data, bulk sequencing exhibited a low baseline chimeric rate of 2.3\% among 10,065,403 total reads, consistent with the expected minimal artifact rate in non-amplified samples.
+In contrast, \gls{wga} amplification dramatically increased the chimeric burden to 46.0\% of reads in a dataset containing 28,027,667 total sequences.
+ChimeraLM processing effectively reduced this chimeric proportion to 4.9\% while retaining 15,833,834 high-quality biological reads, representing a 10-fold reduction in artifact contamination compared to unprocessed \gls{wga} data.
 
-Similar results were observed for Mk1c platform data, where bulk sequencing contained 2.5\% chimeric reads among 1140363 total sequences.
-\gls{wga} amplification increased chimeric contamination to 23.0\% of 7193945 total reads.
-ChimeraLM processing reduced the chimeric fraction to just 1.5\% while preserving 5610252 biological reads, achieving nearly complete artifact removal that approached the quality of bulk sequencing data.
+Similar results were observed for Mk1c platform data, where bulk sequencing contained 2.5\% chimeric reads among 1,140,363 total sequences.
+\gls{wga} amplification increased chimeric contamination to 23.0\% of 7,193,945 total reads.
+ChimeraLM processing reduced the chimeric fraction to just 1.5\% while preserving 5,610,252 biological reads, achieving nearly complete artifact removal that approached the quality of bulk sequencing data.
 
 These results demonstrate ChimeraLM's effectiveness across different Nanopore sequencing platforms and highlight the substantial chimeric artifact burden introduced by \gls{wga}, which varies between platforms but is consistently and dramatically reduced by ChimeraLM processing.
 
 
 \subsection*{ChimeraLM outperforms existing chimera artifact detection tools}
 
-We benchmarked ChimeraLM against established computational methods for chimeric sequence detection, including SACRA~\cite{kiguchi2021long} and 3rd-ChimeraMiner~\cite{lu2023exploration}, using both P2 and Mk1c datasets (Figure~\ref{fig:figure2}c and Figure~\ref{fig:figure2}d).
+We benchmarked ChimeraLM against established computational methods for chimeric sequence detection, including SACRA~\cite{kiguchi2021long} and 3rd-ChimeraMiner~\cite{lu2023exploration}, using both P2 and Mk1c datasets (Fig.~\ref{fig:figure2}c and Fig.~\ref{fig:figure2}d).
 ChimeraLM achieved superior performance compared to existing approaches across both sequencing platforms.
 
-For P2 data, ChimeraLM reduced chimeric read contamination by approximately 92\%, demonstrating substantial improvement in data quality (Figure~\ref{fig:figure2}c).
+For P2 data, ChimeraLM reduced chimeric read contamination by approximately 92\%, demonstrating substantial improvement in data quality (Fig.~\ref{fig:figure2}c).
 In contrast, both SACRA and 3rd-ChimeraMiner failed to achieve meaningful chimeric read reduction, showing 0\% improvement over unprocessed \gls{wga} data.
 This stark difference highlights the limitations of existing rule-based and alignment-based approaches for detecting complex chimeric artifacts in long-read sequencing data.
 
-Similar performance advantages were observed for Mk1c data, where ChimeraLM again achieved approximately 91\% reduction in chimeric reads while SACRA and 3rd-ChimeraMiner provided no detectable improvement (Figure\ref{fig:figure2}d).
+Similar performance advantages were observed for Mk1c data, where ChimeraLM again achieved approximately 91\% reduction in chimeric reads while SACRA and 3rd-ChimeraMiner provided no detectable improvement (Fig.~\ref{fig:figure2}d).
 These results demonstrate that ChimeraLM's deep learning approach captures complex sequence patterns that are not effectively identified by traditional computational methods.
 
 The consistent superior performance across different sequencing platforms establishes ChimeraLM as a significant advance over existing tools, providing researchers with a reliable method for improving single-cell genomic data quality regardless of the specific long-read sequencing technology employed.
 
 
-\begin{figure}
+\begin{figure}[!ht]
 	\begin{center}
 		\includegraphics[width=0.95\textwidth]{final_figures/figure3}
 	\end{center}
-	\caption{Problem and Model}\label{fig:figure3}
+	\caption{{\bf Structural variant detection accuracy and type distribution analysis.}
+		(a,b) Structural variant validation using bulk sequencing gold standard. Stacked bar charts showing total \gls{sv} calls (log scale) classified as supported (dark teal) or unsupported (light teal) events when compared against bulk sequencing reference data. Panel (a) shows PromethION P2 results; panel (b) shows MinION Mk1c results. Numbers above bars indicate absolute counts of supported/unsupported events.
+		(c,d) \gls{sv} type distributions across sample processing methods. Bar charts displaying the number of detected structural variants by type: \gls{del} (green), \gls{dup} (orange), \gls{ins} (blue), \gls{inv} (pink), and \gls{tra} (light green). Panel (c) shows P2 platform data; panel (d) shows Mk1c platform data. Data compared across bulk sequencing, ChimeraLM-filtered, and unfiltered \gls{wga} samples.
+		(e,f) Composition of chimeric artifact-supported \gls{sv}. Pie charts showing the proportion of different \gls{sv} types among events supported specifically by reads classified as chimeric artifacts by ChimeraLM in unfiltered \gls{wga} data. Panel (e) shows P2 data; panel (f) shows Mk1c data. Percentages indicate relative frequency of each \gls{sv} class within the chimeric artifact-supported subset.
+	}\label{fig:figure3}
 \end{figure}
 
-\section*{Methods}\label{sec12}
+
+\subsection*{ChimeraLM improves structural variant calling accuracy by reducing false positives}
+
+To evaluate ChimeraLM's impact on downstream structural variant analysis, we constructed a gold-standard dataset using bulk sequencing data and assessed \gls{sv} detection performance on both P2 and Mk1c platforms with and without applying ChimeraLM (Fig.~\ref{fig:figure3}a and Fig.~\ref{fig:figure3}b).
+This analysis directly measures ChimeraLM's ability to improve the biological relevance of structural variant calls by comparing detected events against high-confidence reference data.
+
+For P2 platform data, unprocessed \gls{wga} samples yielded 3,609,914 total structural variant calls, of which only 8,815 (0.24\%) were supported by the bulk sequencing gold standard (Fig.~\ref{fig:figure3}a).
+The remaining 3,601,099 calls represented unsupported events likely arising from chimeric artifacts and other amplification biases.
+ChimeraLM processing dramatically improved this ratio, reducing total SV calls to 305,570 while maintaining 8,067 supported events (2.64\% of total calls).
+This represents a 12-fold reduction in the number of structural variants while preserving 91.5\% of true positive events supported by the golden standard, compared with \gls{wga} data.
+
+Similar improvements were observed for Mk1c data, where raw \gls{wga} processing identified 451,390 total \glspl{sv} with 7,193 supported events (1.59\%) (Fig.~\ref{fig:figure3}b).
+ChimeraLM filtering reduced the total to 38,432 calls while retaining 6,269 supported events, achieving a 16.3\% validation rate and preserving 87.2\% of true positive structural variants compared with \gls{wga} data.
+The consistent performance across platforms demonstrates ChimeraLM's robust ability to eliminate false-positive \glspl{sv} while maintaining detection sensitivity for genuine genomic alterations.
+
+\subsection*{ChimeraLM normalizes structural variant type distributions toward bulk sequencing profiles}
+
+We analyzed the distribution of \gls{sv} types to assess whether ChimeraLM processing restores \gls{sv} profiles characteristic of high-quality bulk sequencing data (Fig.~\ref{fig:figure3}c and Fig.~\ref{fig:figure3}d).
+This analysis tests the hypothesis that \gls{wga} introduces systematic biases in the apparent frequency of different \gls{sv} classes, which should be corrected by effective chimeric artifact removal.
+
+In both P2 and Mk1c datasets, bulk sequencing exhibited balanced distributions across \gls{del}, \gls{dup}, \gls{ins}, \gls{inv}, and \gls{tra} events, with relatively modest numbers reflecting the stringent quality filtering applied to establish ground truth (Fig.~\ref{fig:figure3}c and Fig.~\ref{fig:figure3}d).
+Unprocessed \gls{wga} data showed dramatically skewed distributions dominated by spurious \gls{inv} events, consistent with literature reports that \gls{inv} are frequently artifactual in amplified samples due to template switching during \gls{wga}~\cite{lu2023exploration, lu2023chimera}.
+
+ChimeraLM processing substantially normalized these distributions, reducing the overwhelming preponderance of false-positive \gls{inv} while maintaining more balanced representation of other \gls{sv} types.
+The filtered data profiles more closely resembled bulk sequencing distributions, indicating that ChimeraLM successfully identifies and removes the systematic biases introduced by \gls{wga} without eliminating legitimate \gls{sv} of other classes.
+
+
+\subsection*{Characterization of chimeric artifact-supported false-positive structural variants}
+
+To understand the specific types of false-positive \glspl{sv} that would be retained without ChimeraLM filtering, we analyzed the \gls{sv} events in unfiltered \gls{wga} data that were specifically supported by reads classified as chimeric artifacts by ChimeraLM (Fig.~\ref{fig:figure3}e and Fig.~\ref{fig:figure3}f).
+This analysis profiles the ``false-positive landscape'' that researchers would encounter without effective chimeric artifact removal.
+
+For P2 data, chimeric artifact-supported \glspl{sv} were overwhelmingly dominated by \gls{inv} (88.4\% of events), with smaller contributions from \gls{del} (5.1\%), \gls{dup} (3.4\%), and \gls{ins} (3.0\%) (Fig.~\ref{fig:figure3}e).
+This extreme bias toward inversions confirms that template switching during \gls{wga} predominantly manifests as apparent \gls{inv} events in downstream \gls{sv} calling pipelines.
+
+Mk1c data showed a similar but even more pronounced pattern, with \gls{inv} comprising 92.4\% of chimeric artifact-supported events, followed by \gls{del} (3.8\%), \gls{dup} (2.4\%), and \gls{ins} (1.4\%) (Fig.~\ref{fig:figure3}f).
+The consistency of this pattern across platforms indicates that inversion artifacts represent the primary mode of false-positive \gls{sv} generation in \gls{wga} workflows.
+
+These results demonstrate that without ChimeraLM, genomic studies would be severely compromised by false-positive \gls{inv} calls, potentially leading to misinterpretation of chromosomal instability, copy number profiles, and other key genomic features.
+ChimeraLM's ability to identify and remove these specific artifacts represents a critical advancement for accurate \gls{sv} analysis.
+
+\subsection*{ChimeraLM predictions correlate with chimeric alignment complexity}
+
+To validate ChimeraLM's classification accuracy, we analyzed the distribution of chimeric alignments per chimeric read, comparing how ChimeraLM classified these known chimeric sequences as biological versus artificial (Extended Data Fig.~\ref{fig:sf2}a and Extended Data Fig.~\ref{fig:sf2}b).
+This provides independent validation by examining whether ChimeraLM correctly identifies the most structurally complex chimeric artifacts.
+
+Among chimeric reads, those classified as ``artificial'' by ChimeraLM predominantly exhibited 2 chimeric alignments per read ($\thicksim 1.0 \times 10^7$ and $\thicksim 1.4 \times 10^6$ reads in panels a and b, respectively), representing simple two-part chimeric structures.
+Smaller fractions showed $3+$ alignments ($\thicksim 2.1 \times 10^6$ and $\thicksim 0.2 \times 10^6$ reads in panels a and b, respectively), indicating more complex multi-fragment chimeras from sequential template switching events.
+
+Importantly, chimeric reads classified as ``biological'' by ChimeraLM showed minimal representation across all alignment complexity categories, suggesting these may represent genuine structural variants or less disruptive chimeric events that preserve biological relevance.
+
+This pattern demonstrates that ChimeraLM successfully prioritizes the most structurally complex and potentially problematic chimeric artifacts for removal, while preserving chimeric reads that may still retain biological information.
+The consistency across both datasets validates ChimeraLM's ability to distinguish between different classes of chimeric complexity.
+
+\section*{Discussion}
+
+The development of ChimeraLM addresses a fundamental bottleneck that has limited the widespread adoption and reliability of single-cell genomic approaches.
+While \gls{wga} has enabled genomic analysis of individual cells, the systematic introduction of chimeric artifacts has remained an unsolved challenge that compromises downstream interpretations and limits the biological insights.
+
+Traditional approaches to managing \gls{wga} artifacts have focused on post-hoc filtering of structural variant calls or coverage-based correction methods (cite).
+ChimeraLM represents a paradigm shift toward proactive identification of problematic sequences before they impact downstream analyses.
+This upstream intervention strategy is conceptually superior because it addresses the root cause of analytical errors rather than attempting to correct their consequences after variant calling.
+
+The success of this approach demonstrates the power of modern genomic language models to capture complex sequence patterns that are not readily apparent through traditional bioinformatics methods.
+Unlike rule-based approaches that rely on predefined criteria, ChimeraLM learns directly from data, enabling discovery of subtle features that distinguish authentic biological sequences from amplification artifacts~\cite{lu2023exploration, agyabeng2025evaluating, nguyen2023hyenadna}.
+This data-driven approach is particularly valuable for complex genomic phenomena where explicit rules may be insufficient or unknown.
+
+The demonstrated effectiveness of ChimeraLM has broader implications for single-cell genomics methodology.
+The ability to substantially improve data quality through computational approaches reduces the experimental burden of optimizing amplification protocols and may enable researchers to focus on biological questions rather than technical optimization.
+This could accelerate the adoption of single-cell genomic approaches in laboratories with limited specialized expertise in amplification chemistry.
+
+Furthermore, the improved reliability of \gls{sv} detection opens new avenues for applications that have been previously constrained by high false-positive rates.
+Studies of chromosomal instability, copy number evolution, and \gls{sv} burden in individual cells become more feasible when researchers can have confidence in the authenticity of detected events.
+
+ChimeraLM's success exemplifies the transformative potential of language model approaches in genomics.
+The recent emergence of foundation models for biological sequences has demonstrated remarkable capabilities across diverse tasks, but most applications have focused on prediction of molecular phenotypes or functional annotations.
+ChimeraLM represents one of the first applications of \gls{glm} to quality control and data preprocessing, suggesting that these approaches may have broader utility for improving experimental data quality than previously recognized.
+
+The architectural innovations incorporated in ChimeraLM, particularly the use of Hyena operators for efficient long-range modeling, may have applications beyond chimeric detection.
+Similar approaches could potentially address other quality control challenges in genomics, such as contamination detection, adapter artifact identification, or systematic error correction in diverse sequencing technologies.
+
+While ChimeraLM represents a significant advance, several limitations merit consideration.
+The requirement for paired bulk sequencing data for training constrains the initial application scope, though this limitation may be addressable through transfer learning approaches as the method matures.
+The current focus on Nanopore platforms, while representing the most common long-read technology for single-cell applications, leaves questions about broader platform compatibility.
+
+Perhaps more fundamentally, the binary classification approach assumes a clear distinction between biological and artificial sequences.
+In reality, some chimeric events may represent genuine biological phenomena, such as chromothripsis or complex structural rearrangements.
+Future developments may need to incorporate more nuanced classification schemes that can distinguish between different types of chimeric events based on their likely biological relevance.
+
+The success of ChimeraLM suggests several promising directions for future development.
+Integration with real-time sequencing platforms could enable immediate quality assessment and adaptive sampling strategies.
+Extension to other single-cell genomic applications, such as chromatin accessibility or methylation analysis, could address analogous quality control challenges in emerging single-cell methods.
+
+The interpretability features of modern language models could be leveraged to provide insights into the sequence features that distinguish chimeric artifacts, potentially informing the development of improved amplification protocols.
+This feedback loop between computational analysis and experimental optimization could drive continuous improvement in single-cell genomic methods.
+
+ChimeraLM demonstrates that sophisticated computational approaches can effectively address fundamental technical challenges that have limited single-cell genomics.
+By providing a robust solution to chimeric artifact detection, this work removes a significant barrier to reliable single-cell genomic analysis and opens new possibilities for biological discovery and clinical application.
+As single-cell approaches become increasingly central to modern biology and medicine, computational tools like ChimeraLM will be essential for realizing their full potential.
+
+\section*{Methods}\label{sec:methods}
 
 \subsection*{MDA sequencing}
 
@@ -342,13 +447,23 @@ The consistent superior performance across different sequencing platforms establ
 
 \subsection*{Model training}
 
-\section*{SV evaluation}
+\subsection*{SV evaluation}
 
 \backmatter
 
 \bmhead{Supplementary information}
 
-\begin{figure}
+\makeatletter
+\renewcommand{\theHfigure}{extended.\thefigure}
+\renewcommand{\theHtable}{extended.\thetable}
+\makeatother
+
+\renewcommand{\figurename}{Extended Data Fig.}
+\renewcommand{\tablename}{Extended Data Table}
+\setcounter{figure}{0}
+\setcounter{table}{0}
+
+\begin{figure}[!ht]
 	\begin{center}
 		\includegraphics[width=0.8\textwidth]{final_figures/sf1}
 	\end{center}
@@ -356,69 +471,62 @@ The consistent superior performance across different sequencing platforms establ
 \end{figure}
 
 
-\begin{figure}
+\begin{figure}[!ht]
 	\begin{center}
 		\includegraphics[width=\textwidth]{final_figures/sf2}
 	\end{center}
-	\caption{Problem and Model}\label{fig:sf2}
+	\caption{{\bf Distribution of chimeric alignments per chimeric read stratified by ChimeraLM prediction.}
+		(a) PromethION P2 platform chimeric alignment analysis. Bar chart showing the distribution of chimeric reads based on the number of chimeric alignments per read (x-axis: 2, 3, 4+ alignments) and total read count (y-axis, log scale). Bars are colored by ChimeraLM's binary classification: biological (dark teal) and artificial (coral). Analysis includes only reads identified as chimeric (minimum 2 alignments per read).
+		(b) MinION Mk1c platform chimeric alignment analysis. Bar chart showing the distribution of chimeric reads based on the number of chimeric alignments per read (x-axis: 2, 3, 4, 5+ alignments) and total read count (y-axis, log scale). Bars are colored by ChimeraLM's binary classification: biological (dark teal) and artificial (coral). Analysis includes only reads identified as chimeric (minimum 2 alignments per read). }\label{fig:sf2}
 \end{figure}
 
-This separation aligns with how many transcript assembly algorithms work:
-
-\begin{enumerate}[leftmargin=*]
-	\item First, chains of exons and splice junctions are identified from the data
-	\item Then, potential transcripts are derived by traversing the graph in different ways
-	\item Finally, relationships between different transcript graphs are established
-\end{enumerate}
 
 \bmhead{Acknowledgements}
 
-Acknowledgements are not compulsory. Where included they should be brief. Grant or contribution numbers may be acknowledged.
-
-Please refer to Journal-level guidance for any specific requirements.
+This project was supported in part by NIH grants R35GM142441 and R01CA259388 awarded to RY, and NIH grants R01CA256741, R01CA278832, and R01CA285684 awarded to QC.
 
 \section*{Declarations}
 
-Some journals require declarations to be submitted in a standardised format. Please check the Instructions for Authors of the journal to which you are submitting to see if you need to complete this section. If yes, your manuscript must contain the following sections under the heading `Declarations':
+\bmhead{Author Contributions}
 
-\begin{itemize}
-	\item Funding
-	\item Conflict of interest/Competing interests (check journal-specific guidelines for which heading to use)
-	\item Ethics approval and consent to participate
-	\item Consent for publication
-	\item Data availability
-	\item Materials availability
-	\item Code availability
-	\item Author contribution
-\end{itemize}
+\bmhead{Data Availability}
 
-\noindent
-If any of the sections are not relevant to your manuscript, please include the heading and write `Not applicable' for that section.
+\bmhead{Code Availability}
 
-\begin{flushleft}%
-	Editorial Policies for:
+\bmhead{Conflict of interest}
 
-	\bigskip\noindent
-	Springer journals and proceedings: \url{https://www.springer.com/gp/editorial-policies}
+RY has served as an advisor/consultant for Tempus AI, Inc. This relationship is unrelated to and did not influence the research presented in this study.
 
-	\bigskip\noindent
-	Nature Portfolio journals: \url{https://www.nature.com/nature-research/editorial-policies}
 
-	\bigskip\noindent
-	\textit{Scientific Reports}: \url{https://www.nature.com/srep/journal-policies/editorial-policies}
 
-	\bigskip\noindent
-	BMC journals: \url{https://www.biomedcentral.com/getpublished/editorial-policies}
-\end{flushleft}
+% Some journals require declarations to be submitted in a standardised format. Please check the Instructions for Authors of the journal to which you are submitting to see if you need to complete this section. If yes, your manuscript must contain the following sections under the heading `Declarations':
+
+% \begin{itemize}
+% 	\item Funding
+% 	\item Conflict of interest/Competing interests (check journal-specific guidelines for which heading to use)
+% 	\item Ethics approval and consent to participate
+% 	\item Consent for publication
+% 	\item Data availability
+% 	\item Materials availability
+% 	\item Code availability
+% 	\item Author contribution
+% \end{itemize}
+%
+% \noindent
+% If any of the sections are not relevant to your manuscript, please include the heading and write `Not applicable' for that section.
+
+
+
 
 \begin{appendices}
 
 	\printglossaries
 
-	\section{Section title of first appendix}\label{secA1}
-
-	An appendix contains supplementary information that is not an essential part of the text itself but which may be helpful in providing a more comprehensive understanding of the research problem or it is information that is too cumbersome to be included in the body of the paper.
-
+	%
+	% \section{Section title of first appendix}\label{secA1}
+	%
+	% An appendix contains supplementary information that is not an essential part of the text itself but which may be helpful in providing a more comprehensive understanding of the research problem or it is information that is too cumbersome to be included in the body of the paper.
+	%
 	%%=============================================%%
 	%% For submissions to Nature Portfolio Journals %%
 	%% please use the heading ``Extended Data''.   %%
