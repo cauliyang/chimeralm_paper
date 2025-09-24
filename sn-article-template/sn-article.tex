@@ -440,7 +440,31 @@ As single-cell approaches become increasingly central to modern biology and medi
 
 \subsection*{MDA sequencing}
 
-\subsection*{Train data construction}
+\subsection*{Training data construction}
+
+\paragraph{Paired sequencing dataset generation}
+Training data for ChimeraLM was constructed using a novel comparative approach that leverages paired \gls{wga} and bulk sequencing datasets from identical biological samples (PC3 cell line).
+This methodology exploits the fundamental difference between amplified and non-amplified samples to establish reliable ground truth labels for supervised learning.
+Bulk sequencing data serves as a reference standard containing only genuine biological sequences, while \gls{wga} data contains both authentic genomic content and amplification-induced chimeric artifacts.
+Sample preparation involved processing PC3 cell line generate matched \gls{wga} and bulk sequencing datasets.
+
+\paragraph{Ground truth labeling methodology}
+The core innovation of our training data construction lies in the comparative labeling strategy that automatically generates binary classification labels.
+Each chimeric read from the \gls{wga} dataset was systematically compared against the corresponding bulk sequencing data through sequence alignment analysis to determine its biological authenticity.
+
+Chimeric reads from \gls{wga} data were compared against the bulk sequencing dataset to identify chimera present in both datasets.
+\gls{wga} reads that successfully aligned to bulk sequences were classified as biological, indicating they represent authentic genomic content preserved through the amplification process.
+Conversely, \gls{wga} reads that failed to align to any chimeric sequences in the bulk dataset were labeled as artificial chimeric artifacts, representing spurious sequences generated during the amplification process.
+The comparison-based classification approach ensures that training labels reflect objective evidence of sequence authenticity.
+This methodology captures the full spectrum of naturally occurring chimeric artifacts while providing reliable positive examples of biological sequences that successfully traverse the amplification process.
+
+\paragraph{Dataset partitioning and stratification}
+The complete labeled dataset was partitioned into training, validation, and test sets using stratified sampling to maintain balanced representation of biological and artificial sequences across all data splits.
+The training set comprised 70\% of the total data and was used for model parameter optimization during supervised learning.
+The validation set contained 20\% of the data and served for hyperparameter tuning, model selection, and monitoring training progress.
+The remaining 10\% was reserved as a held-out test set for final performance evaluation and remained completely isolated from the training process.
+
+Stratification ensured that each data partition maintained similar proportions of biological and artificial sequences, preventing training bias that could arise from imbalanced class distributions. Random sampling within strata was employed to minimize systematic biases while maintaining statistical representativeness of the overall dataset characteristics.
 
 \subsection*{Model architecture}
 
@@ -476,7 +500,7 @@ This approach ensures that input sequences are processed using the same tokeniza
 \paragraph{Training configuration and hyperparameters}
 
 Model training was conducted using PyTorch Lightning framework with mixed-precision training enabled through bf16-mixed precision to accelerate computation while maintaining numerical stability.
-The training process was configured with a minimum of 10 epochs and maximum of 100 epochs to allow sufficient model convergence while preventing excessive computational cost.
+The training process was configured with 100 epochs to allow sufficient model convergence while preventing excessive computational cost.
 
 Early stopping was implemented with a patience of 10 epochs to prevent overfitting and automatically terminate training when validation performance ceased to improve.
 This approach ensures optimal model generalization by identifying the point of best validation performance rather than training to completion.
@@ -605,6 +629,16 @@ RY has served as an advisor/consultant for Tempus AI, Inc. This relationship is 
 %%\input sn-article.bbl
 
 \end{document}
+
+
+
+
+
+
+
+
+
+
 
 
 
