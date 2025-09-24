@@ -59,7 +59,7 @@
 \usepackage{tikz}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{geometry}
-
+\usepackage{textcomp} % using \textquotesingle
 % Minted package for beautiful syntax highlighting
 \usepackage{minted}
 \usemintedstyle{borland}
@@ -180,7 +180,7 @@
 \abstract{Single-cell genomic analysis requires \gls{wga} to generate sufficient DNA for sequencing, but this process introduces chimeric artifacts that manifest as false-positive structural variants and compromise downstream analyses.
 	Here, we developed ChimeraLM, a \gls{glm} that accurately detects and removes \gls{wga}-induced chimeric artifacts.
 	The model architecture incorporates Hyena operators and attention mechanisms optimized for variable-length genomic sequences.
-	ChimeraLM achieved high performance in chimeric detection (F1 score: 0.81, recall: 0.95, precision: 0.70) and dramatically outperformed existing methods, reducing chimeric contamination by $\thicksim 95$\% compared to 0\% for established tools.
+	ChimeraLM achieved high performance in chimeric detection (F1 score: 0.81) and dramatically outperformed existing methods, reducing chimeric contamination by $\thicksim 95$\% compared to 0\% for established tools.
 	When applied to \gls{sv} analysis, ChimeraLM improved the validation rate of detected events by 12-16 fold while preserving $>87$\% of genuine structural variants across multiple Nanopore sequencing platforms.
 	ChimeraLM processing normalized \gls{sv} type distributions toward bulk sequencing profiles, eliminating the overwhelming bias toward false-positive \gls{inv} characteristic of unprocessed \gls{wga} data.
 	This approach addresses a fundamental bottleneck in single-cell genomics and enables more reliable genomic analysis of individual cells for applications spanning basic research, clinical diagnostics, and therapeutic development.}
@@ -256,7 +256,7 @@ The resulting dataset captures the full spectrum of chimeric artifacts naturally
 
 Following dataset construction, we partitioned the labeled reads into training, validation, and test sets to ensure robust model development and unbiased performance evaluation.
 The training set was used for model parameter optimization, the validation set for hyperparameter tuning and model selection, and the test set was reserved for final performance assessment.
-This rigorous data splitting strategy ensures that ChimeraLM's reported performance metrics reflect its ability to generalize to previously unseen \gls{wga} data.
+This rigorous data splitting strategy ensures that ChimeraLM\textquotesingle s reported performance metrics reflect its ability to generalize to previously unseen \gls{wga} data.
 
 \subsection*{ChimeraLM architecture leverages modern genomic language modeling advances}
 
@@ -264,7 +264,7 @@ ChimeraLM employs a sophisticated neural architecture specifically designed for 
 The model enables single-base pair resolution and accepts DNA sequences as input, which are first tokenized and encoded into numerical representations suitable for deep learning processing.
 This encoding preserves the sequential nature of genomic information while enabling efficient computation on modern hardware.
 
-The core of ChimeraLM's architecture consists of Hyena operators, a recent advancement in sequence modeling that provides computational advantages over traditional transformer attention mechanisms while maintaining the ability to capture long-range dependencies in genomic sequences.
+The core of ChimeraLM\textquotesingle s architecture consists of Hyena operators, a recent advancement in sequence modeling that provides computational advantages over traditional transformer attention mechanisms while maintaining the ability to capture long-range dependencies in genomic sequences.
 Hyena operators enable ChimeraLM to process variable-length sequencing reads efficiently while learning complex patterns that distinguish biological sequences from chimeric artifacts.
 Moreover, the hyena operators are initialized with HyenaDNA~\cite{nguyen2023hyenadna}, a pre-trained long-context genomic language model, which provides a strong foundation for learning genomic sequence features relevant to chimeric detection.
 
@@ -293,14 +293,14 @@ This end-to-end architecture enables ChimeraLM to learn directly from raw sequen
 
 \subsection*{ChimeraLM achieves high performance in chimeric artifact detection}
 
-We evaluated ChimeraLM's performance on held-out test data to assess its ability to accurately classify biological and chimeric reads (Fig.~\ref{fig:figure2}a).
+We evaluated ChimeraLM\textquotesingle s performance on held-out test data to assess its ability to accurately classify biological and chimeric reads (Fig.~\ref{fig:figure2}a).
 ChimeraLM demonstrated robust performance across key classification metrics, achieving an F1 score of 0.805, which balances precision and recall for the binary classification task.
 The model exhibited high recall of 0.946, indicating that it successfully identified 94.6\% of true chimeric artifacts in the test dataset, minimizing the risk of retaining false-positive structural variants in downstream analyses.
 The precision of 0.700 demonstrates that 70.0\% of reads classified as chimeric were indeed artifacts, representing an effective trade-off that prioritizes comprehensive artifact removal while maintaining reasonable specificity.
 
 \subsection*{ChimeraLM reduces chimeric artifact burden across sequencing platforms}
 
-To evaluate ChimeraLM's practical impact, we applied the trained model to PC3 cell line data generated on two Nanopore long-read sequencing platforms: PromethION P2 and MinION Mk1c (Fig.~\ref{fig:figure2}b).
+To evaluate ChimeraLM\textquotesingle s practical impact, we applied the trained model to PC3 cell line data generated on two Nanopore long-read sequencing platforms: PromethION P2 and MinION Mk1c (Fig.~\ref{fig:figure2}b).
 The analysis revealed substantial differences in chimeric read proportions between bulk sequencing, \gls{wga} samples, and ChimeraLM-processed data.
 
 For P2 platform data, bulk sequencing exhibited a low baseline chimeric rate of 2.3\% among 10,065,403 total reads, consistent with the expected minimal artifact rate in non-amplified samples.
@@ -311,7 +311,7 @@ Similar results were observed for Mk1c platform data, where bulk sequencing cont
 \gls{wga} amplification increased chimeric contamination to 23.0\% of 7,193,945 total reads.
 ChimeraLM processing reduced the chimeric fraction to just 1.5\% while preserving 5,610,252 biological reads, achieving nearly complete artifact removal that approached the quality of bulk sequencing data.
 
-These results demonstrate ChimeraLM's effectiveness across different Nanopore sequencing platforms and highlight the substantial chimeric artifact burden introduced by \gls{wga}, which varies between platforms but is consistently and dramatically reduced by ChimeraLM processing.
+These results demonstrate ChimeraLM\textquotesingle s effectiveness across different Nanopore sequencing platforms and highlight the substantial chimeric artifact burden introduced by \gls{wga}, which varies between platforms but is consistently and dramatically reduced by ChimeraLM processing.
 
 
 \subsection*{ChimeraLM outperforms existing chimera artifact detection tools}
@@ -324,7 +324,7 @@ In contrast, both SACRA and 3rd-ChimeraMiner failed to achieve meaningful chimer
 This stark difference highlights the limitations of existing rule-based and alignment-based approaches for detecting complex chimeric artifacts in long-read sequencing data.
 
 Similar performance advantages were observed for Mk1c data, where ChimeraLM again achieved approximately 91\% reduction in chimeric reads while SACRA and 3rd-ChimeraMiner provided no detectable improvement (Fig.~\ref{fig:figure2}d).
-These results demonstrate that ChimeraLM's deep learning approach captures complex sequence patterns that are not effectively identified by traditional computational methods.
+These results demonstrate that ChimeraLM\textquotesingle s deep learning approach captures complex sequence patterns that are not effectively identified by traditional computational methods.
 
 The consistent superior performance across different sequencing platforms establishes ChimeraLM as a significant advance over existing tools, providing researchers with a reliable method for improving single-cell genomic data quality regardless of the specific long-read sequencing technology employed.
 
@@ -341,8 +341,8 @@ The consistent superior performance across different sequencing platforms establ
 
 \subsection*{ChimeraLM improves structural variant calling accuracy by reducing false positives}
 
-To evaluate ChimeraLM's impact on downstream structural variant analysis, we constructed a gold-standard dataset using bulk sequencing data and assessed \gls{sv} detection performance on both P2 and Mk1c platforms with and without applying ChimeraLM (Fig.~\ref{fig:figure3}a and Fig.~\ref{fig:figure3}b).
-This analysis directly measures ChimeraLM's ability to improve the biological relevance of \gls{sv} calls by comparing detected events against high-confidence reference data.
+To evaluate ChimeraLM\textquotesingle s impact on downstream structural variant analysis, we constructed a gold-standard dataset using bulk sequencing data and assessed \gls{sv} detection performance on both P2 and Mk1c platforms with and without applying ChimeraLM (Fig.~\ref{fig:figure3}a and Fig.~\ref{fig:figure3}b).
+This analysis directly measures ChimeraLM\textquotesingle s ability to improve the biological relevance of \gls{sv} calls by comparing detected events against high-confidence reference data.
 
 For P2 platform data, unprocessed \gls{wga} samples yielded 3,609,914 total structural variant calls, of which only 8,815 (0.24\%) were supported by the bulk sequencing gold standard (Fig.~\ref{fig:figure3}a).
 The remaining 3,601,099 calls represented unsupported events likely arising from chimeric artifacts and other amplification biases.
@@ -351,7 +351,7 @@ This represents a 12-fold reduction in the number of \glspl{sv} while preserving
 
 Similar improvements were observed for Mk1c data, where raw \gls{wga} processing identified 451,390 total \glspl{sv} with 7,193 supported events (1.59\%) (Fig.~\ref{fig:figure3}b).
 ChimeraLM filtering reduced the total to 38,432 calls while retaining 6,269 supported events, achieving a 16.3\% validation rate and preserving 87.2\% of true positive \glspl{sv} compared with \gls{wga} data.
-The consistent performance across platforms demonstrates ChimeraLM's robust ability to eliminate false-positive \glspl{sv} while maintaining detection sensitivity for genuine genomic alterations.
+The consistent performance across platforms demonstrates ChimeraLM\textquotesingle s robust ability to eliminate false-positive \glspl{sv} while maintaining detection sensitivity for genuine genomic alterations.
 
 \subsection*{ChimeraLM normalizes structural variant type distributions toward bulk sequencing profiles}
 
@@ -376,11 +376,11 @@ Mk1c data showed a similar but even more pronounced pattern, with \gls{inv} comp
 The consistency of this pattern across platforms indicates that inversion artifacts represent the primary mode of false-positive \glspl{sv} generation in \gls{wga} workflows.
 
 These results demonstrate that without ChimeraLM, genomic studies would be severely compromised by false-positive \glspl{inv} calls, potentially leading to misinterpretation of chromosomal instability, copy number profiles, and other key genomic features.
-ChimeraLM's ability to identify and remove these specific artifacts represents a critical advancement for accurate \gls{sv} analysis.
+ChimeraLM\textquotesingle s ability to identify and remove these specific artifacts represents a critical advancement for accurate \gls{sv} analysis.
 
 \subsection*{ChimeraLM predictions correlate with chimeric alignment complexity}
 
-To validate ChimeraLM's classification accuracy, we analyzed the distribution of chimeric alignments per chimeric read, comparing how ChimeraLM classified these known chimeric sequences as biological versus artificial (Extended Data Fig.~\ref{fig:sf2}a and Extended Data Fig.~\ref{fig:sf2}b).
+To validate ChimeraLM\textquotesingle s classification accuracy, we analyzed the distribution of chimeric alignments per chimeric read, comparing how ChimeraLM classified these known chimeric sequences as biological versus artificial (Extended Data Fig.~\ref{fig:sf2}a and Extended Data Fig.~\ref{fig:sf2}b).
 This provides independent validation by examining whether ChimeraLM correctly identifies the most structurally complex chimeric artifacts.
 
 Among chimeric reads, those classified as ``artificial'' by ChimeraLM predominantly exhibited 2 chimeric alignments per read ($\thicksim 1.0 \times 10^7$ and $\thicksim 1.4 \times 10^6$ reads in panels a and b, respectively), representing simple two-part chimeric structures.
@@ -389,7 +389,7 @@ Smaller fractions showed $3+$ alignments ($\thicksim 2.1 \times 10^6$ and $\thic
 Importantly, chimeric reads classified as ``biological'' by ChimeraLM showed minimal representation across all alignment complexity categories, suggesting these may represent genuine structural variants or less disruptive chimeric events that preserve biological relevance.
 
 This pattern demonstrates that ChimeraLM successfully prioritizes the most structurally complex and potentially problematic chimeric artifacts for removal, while preserving chimeric reads that may still retain biological information.
-The consistency across both datasets validates ChimeraLM's ability to distinguish between different classes of chimeric complexity.
+The consistency across both datasets validates ChimeraLM\textquotesingle s ability to distinguish between different classes of chimeric complexity.
 
 \section*{Discussion}
 
@@ -411,7 +411,7 @@ This could accelerate the adoption of single-cell genomic approaches in laborato
 Furthermore, the improved reliability of \gls{sv} detection opens new avenues for applications that have been previously constrained by high false-positive rates.
 Studies of chromosomal instability, copy number evolution, and \gls{sv} burden in individual cells become more feasible when researchers can have confidence in the authenticity of detected events.
 
-ChimeraLM's success exemplifies the transformative potential of language model approaches in genomics.
+ChimeraLM\textquotesingle s success exemplifies the transformative potential of language model approaches in genomics.
 The recent emergence of foundation models for biological sequences has demonstrated remarkable capabilities across diverse tasks, but most applications have focused on prediction of molecular phenotypes or functional annotations.
 ChimeraLM represents one of the first applications of \gls{glm} to quality control and data preprocessing, suggesting that these approaches may have broader utility for improving experimental data quality than previously recognized.
 
@@ -470,16 +470,14 @@ As single-cell approaches become increasingly central to modern biology and medi
 	\caption{Problem and Model}\label{fig:sf1}
 \end{figure}
 
-
 \begin{figure}[!ht]
 	\begin{center}
 		\includegraphics[width=\textwidth]{final_figures/sf2}
 	\end{center}
 	\caption{{\bf Distribution of chimeric alignments per chimeric read stratified by ChimeraLM prediction.}
-		(a) PromethION P2 platform chimeric alignment analysis. Bar chart showing the distribution of chimeric reads based on the number of chimeric alignments per read (x-axis: 2, 3, 4+ alignments) and total read count (y-axis, log scale). Bars are colored by ChimeraLM's binary classification: biological (dark teal) and artificial (coral). Analysis includes only reads identified as chimeric (minimum 2 alignments per read).
-		(b) MinION Mk1c platform chimeric alignment analysis. Bar chart showing the distribution of chimeric reads based on the number of chimeric alignments per read (x-axis: 2, 3, 4+ alignments) and total read count (y-axis, log scale). Bars are colored by ChimeraLM's binary classification: biological (dark teal) and artificial (coral). Analysis includes only reads identified as chimeric (minimum 2 alignments per read). }\label{fig:sf2}
+		(a) PromethION P2 platform chimeric alignment analysis. Bar chart showing the distribution of chimeric reads based on the number of chimeric alignments per read (x-axis: 2, 3, 4+ alignments) and total read count (y-axis, log scale). Bars are colored by ChimeraLM\textquotesingle s binary classification: biological (dark teal) and artificial (coral). Analysis includes only reads identified as chimeric (minimum 2 alignments per read).
+		(b) MinION Mk1c platform chimeric alignment analysis. Bar chart showing the distribution of chimeric reads based on the number of chimeric alignments per read (x-axis: 2, 3, 4+ alignments) and total read count (y-axis, log scale). Bars are colored by ChimeraLM\textquotesingle s binary classification: biological (dark teal) and artificial (coral). Analysis includes only reads identified as chimeric (minimum 2 alignments per read). }\label{fig:sf2}
 \end{figure}
-
 
 \bmhead{Acknowledgements}
 
@@ -497,7 +495,6 @@ This project was supported in part by NIH grants R35GM142441 and R01CA259388 awa
 
 RY has served as an advisor/consultant for Tempus AI, Inc. This relationship is unrelated to and did not influence the research presented in this study.
 
-
 % Some journals require declarations to be submitted in a standardised format. Please check the Instructions for Authors of the journal to which you are submitting to see if you need to complete this section. If yes, your manuscript must contain the following sections under the heading `Declarations':
 
 % \begin{itemize}
@@ -513,8 +510,6 @@ RY has served as an advisor/consultant for Tempus AI, Inc. This relationship is 
 %
 % \noindent
 % If any of the sections are not relevant to your manuscript, please include the heading and write `Not applicable' for that section.
-
-
 
 \begin{appendices}
 
@@ -537,7 +532,6 @@ RY has served as an advisor/consultant for Tempus AI, Inc. This relationship is 
 	%% Appendices may be used for helpful, supporting or essential material that would otherwise
 	%% clutter, break up or be distracting to the text. Appendices can consist of sections, figures,
 	%% tables and equations etc.
-
 \end{appendices}
 
 %%===========================================================================================%%
@@ -552,6 +546,11 @@ RY has served as an advisor/consultant for Tempus AI, Inc. This relationship is 
 %%\input sn-article.bbl
 
 \end{document}
+
+
+
+
+
 
 
 

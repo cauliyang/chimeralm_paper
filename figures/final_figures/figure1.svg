@@ -24,15 +24,15 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="3.6475347"
-     inkscape:cx="586.42348"
-     inkscape:cy="380.94223"
+     inkscape:zoom="2.4137909"
+     inkscape:cx="447.22184"
+     inkscape:cy="380.10749"
      inkscape:window-width="3824"
      inkscape:window-height="2082"
      inkscape:window-x="3848"
      inkscape:window-y="40"
      inkscape:window-maximized="0"
-     inkscape:current-layer="g48"
+     inkscape:current-layer="layer1"
      showgrid="true"
      showguides="false">
     <inkscape:grid
@@ -52,6 +52,18 @@
   </sodipodi:namedview>
   <defs
      id="defs1">
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect54"
+       is_visible="true"
+       lpeversion="1.3"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false"
+       uniform="false" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient14"
@@ -37474,20 +37486,20 @@
          x="274.71384"
          y="164.5555" />
       <rect
-         style="font-variation-settings:normal;vector-effect:none;fill:#f5f6f7;fill-opacity:1;stroke:#d6dbdf;stroke-width:0.593848;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;stop-color:#000000"
+         style="font-variation-settings:normal;vector-effect:none;fill:#f5f6f7;fill-opacity:1;stroke:#d6dbdf;stroke-width:0.642193;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;stop-color:#000000"
          id="rect32-2"
-         width="212.98958"
-         height="41.275005"
-         x="2.6521382"
-         y="89.216545"
-         rx="8.0881977" />
+         width="212.98137"
+         height="48.270805"
+         x="2.6562393"
+         y="89.22065"
+         rx="8.0878859" />
       <rect
-         style="font-variation-settings:normal;vector-effect:none;fill:#f5f6f7;fill-opacity:1;stroke:#d6dbdf;stroke-width:0.593848;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;stop-color:#000000"
+         style="font-variation-settings:normal;vector-effect:none;fill:#f5f6f7;fill-opacity:1;stroke:#d6dbdf;stroke-width:0.642205;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;stop-color:#000000"
          id="rect32-2-5"
          width="212.98958"
-         height="41.275005"
+         height="48.270676"
          x="2.4521596"
-         y="33.454002"
+         y="26.458103"
          rx="8.0881977" />
       <rect
          style="font-variation-settings:normal;vector-effect:none;fill:#f5f6f7;fill-opacity:1;stroke:#d6dbdf;stroke-width:0.644008;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;stop-color:#000000"
@@ -37533,7 +37545,7 @@
          y="146.11119">c</tspan></text>
     <g
        id="g16"
-       transform="matrix(1.1172738,0,0,1.1172738,-9.0758676,-4.0487962)">
+       transform="matrix(1.1172738,0,0,1.1172738,-9.0758676,0.18453731)">
       <g
          id="g59"
          transform="matrix(0.26458333,0,0,0.26458333,262.6465,-28.718563)">
@@ -37596,7 +37608,7 @@
     </g>
     <g
        id="g4791"
-       transform="matrix(0.15031846,0,0,0.15031846,1.9035438,34.833579)">
+       transform="matrix(0.15756232,0,0,0.15756232,1.7088289,28.747643)">
       <g
          id="g3-8"
          clip-path="url(#clipPath4)">
@@ -37741,7 +37753,7 @@
     </g>
     <g
        id="g4793"
-       transform="matrix(0.29561202,0,0,0.29561202,-43.320595,26.128601)">
+       transform="matrix(0.31937086,0,0,0.31937086,-55.621972,19.050266)">
       <g
          id="g108"
          clip-path="url(#clipPath109)">
@@ -37797,197 +37809,201 @@
            id="image116" />
       </g>
     </g>
-    <path
-       id="path4790"
-       style="fill:none;stroke:#ff9955;stroke-width:0.430153;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
-       d="m 160.16265,55.560109 c 2.83968,0.08282 5.48968,0.45232 7.39508,1.947207 2.55664,2.005836 3.77261,6.037691 6.69651,8.013423 2.92392,1.975728 7.55558,1.895267 12.18733,1.814803" />
-    <path
-       id="path4792"
-       style="fill:none;stroke:#aaaaff;stroke-width:0.430153;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
-       d="m 157.20653,55.542165 c 0.99276,-0.0052 1.98553,-0.01037 2.95612,0.01794" />
-    <ellipse
-       style="fill:#3737c8;stroke:none;stroke-width:0.0589379;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
-       id="path4788"
-       cx="187.25607"
-       cy="67.24575"
-       rx="0.61045271"
-       ry="0.61051095" />
     <g
-       id="g4"
-       transform="matrix(0.29336584,0.03637246,-0.03637246,0.29336584,79.97496,-42.172091)">
-      <ellipse
-         style="fill:#3737c8;stroke:none;stroke-width:0.199376;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
-         id="path4788-0"
-         cx="454.46362"
-         cy="-32.688885"
-         rx="2.065047"
-         ry="2.0652437"
-         transform="rotate(45.000001)" />
-      <g
-         id="g10"
-         transform="translate(-12.232104,-0.04423199)"
-         style="stroke-width:1.05827;stroke-dasharray:none">
-        <path
-           style="fill:#000000;stroke:#37c871;stroke-width:1.05827;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
-           d="m 354.2122,294.82452 c 4.1858,2.95308 8.3716,5.90617 12.5574,8.85925"
-           id="path4789"
-           transform="rotate(9.9788491,327.01637,321.69876)" />
-        <path
-           style="fill:#000000;stroke:#aaaaff;stroke-width:1.05827;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
-           d="m 354.2122,294.82452 c 2.53929,1.92053 5.07859,3.84106 7.61788,5.76159"
-           id="path4789-2"
-           transform="rotate(7.8974291,242.36179,415.87966)"
-           sodipodi:nodetypes="cc" />
-      </g>
-    </g>
-    <path
-       id="path4790-8"
-       style="fill:none;stroke:#ff9955;stroke-width:0.430153;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
-       d="m 173.80706,55.279591 c 2.83969,0.08282 5.48968,0.452316 7.39507,1.947202 2.55665,2.005838 3.77261,6.037693 6.69652,8.013425 2.9239,1.97573 7.55558,1.895267 12.18733,1.814802" />
-    <path
-       id="path4792-3"
-       style="fill:none;stroke:#aaaaff;stroke-width:0.430153;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
-       d="m 170.85093,55.261642 c 0.99277,-0.0052 1.98552,-0.01037 2.95613,0.01794" />
-    <ellipse
-       style="fill:#3737c8;stroke:none;stroke-width:0.0589379;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
-       id="path4788-9"
-       cx="200.90048"
-       cy="66.965218"
-       rx="0.61045271"
-       ry="0.61051095" />
-    <g
-       id="g4-0"
-       transform="matrix(0.29336584,0.03637246,-0.03637246,0.29336584,93.619365,-42.452614)">
-      <ellipse
-         style="fill:#3737c8;stroke:none;stroke-width:0.199376;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
-         id="path4788-0-5"
-         cx="454.46362"
-         cy="-32.688885"
-         rx="2.065047"
-         ry="2.0652437"
-         transform="rotate(45.000001)" />
-      <g
-         id="g10-2"
-         transform="translate(-12.232104,-0.04423199)"
-         style="stroke-width:1.05827;stroke-dasharray:none">
-        <path
-           style="fill:#000000;stroke:#37c871;stroke-width:1.05827;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
-           d="m 354.2122,294.82452 c 4.1858,2.95308 8.3716,5.90617 12.5574,8.85925"
-           id="path4789-27"
-           transform="rotate(9.9788491,327.01637,321.69876)" />
-        <path
-           style="fill:#000000;stroke:#aaaaff;stroke-width:1.05827;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
-           d="m 354.2122,294.82452 c 2.53929,1.92053 5.07859,3.84106 7.61788,5.76159"
-           id="path4789-2-3"
-           transform="rotate(7.8974291,242.36179,415.87966)"
-           sodipodi:nodetypes="cc" />
-      </g>
-    </g>
-    <g
-       id="g4794"
-       transform="matrix(0.29561202,0,0,0.29561202,375.76214,-45.008972)">
-      <ellipse
-         style="fill:#3737c8;stroke:none;stroke-width:0.199376;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
-         id="path4788-2"
-         cx="-681.56921"
-         cy="380.27155"
-         rx="2.065047"
-         ry="2.0652437" />
+       id="g44"
+       transform="translate(0,-3.7041668)">
       <path
-         id="path4791"
-         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#aaaaff;stroke-width:1.45512;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
-         d="m -729.11402,380.35093 h -10" />
+         id="path4790"
+         style="fill:none;stroke:#ff9955;stroke-width:0.430153;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
+         d="m 160.16265,55.560109 c 2.83968,0.08282 5.48968,0.45232 7.39508,1.947207 2.55664,2.005836 3.77261,6.037691 6.69651,8.013423 2.92392,1.975728 7.55558,1.895267 12.18733,1.814803" />
       <path
-         id="path4794"
-         style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#ff9955;stroke-width:1.45512;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
-         d="m -684.33257,380.35093 h -45" />
-    </g>
-    <path
-       style="font-variation-settings:normal;fill:none;fill-opacity:1;stroke:#37c871;stroke-width:1.45512;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
-       d="m -741.66338,383.2326 c 51.66667,0 103.33334,0 155,0"
-       id="path3-0"
-       inkscape:path-effect="#path-effect3"
-       inkscape:original-d="m -741.66338,383.2326 c 51.66667,0 103.33334,0 155,0"
-       transform="matrix(0.29561202,0,0,0.29561202,375.76214,-44.811307)" />
-    <g
-       id="g32"
-       transform="matrix(1.4008372,0,0,1.4008372,-76.033353,-26.256807)">
+         id="path4792"
+         style="fill:none;stroke:#aaaaff;stroke-width:0.430153;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+         d="m 157.20653,55.542165 c 0.99276,-0.0052 1.98553,-0.01037 2.95612,0.01794" />
+      <ellipse
+         style="fill:#3737c8;stroke:none;stroke-width:0.0589379;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
+         id="path4788"
+         cx="187.25607"
+         cy="67.24575"
+         rx="0.61045271"
+         ry="0.61051095" />
       <g
-         id="g6-3"
-         transform="matrix(0.29561202,0,0,0.29561202,319.49801,24.411996)">
+         id="g4"
+         transform="matrix(0.29336584,0.03637246,-0.03637246,0.29336584,79.97496,-42.172091)">
+        <ellipse
+           style="fill:#3737c8;stroke:none;stroke-width:0.199376;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
+           id="path4788-0"
+           cx="454.46362"
+           cy="-32.688885"
+           rx="2.065047"
+           ry="2.0652437"
+           transform="rotate(45.000001)" />
         <g
-           id="g3-3"
-           transform="matrix(0.50866562,0,0,0.50866562,-276.91081,55.750815)">
-          <ellipse
-             style="fill:#3737c8;stroke:none;stroke-width:0.199376;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
-             id="path4788-9-0"
-             cx="-316.28671"
-             cy="94.870476"
-             rx="2.065047"
-             ry="2.0652437"
-             inkscape:transform-center-x="-0.96828734"
-             inkscape:transform-center-y="3.7763206" />
+           id="g10"
+           transform="translate(-12.232104,-0.04423199)"
+           style="stroke-width:1.05827;stroke-dasharray:none">
           <path
-             style="font-variation-settings:normal;fill:none;fill-opacity:1;stroke:#aaaaff;stroke-width:0.775522;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
-             d="m -586.66338,303.2326 c 3.33334,0 6.66667,0 10,0"
-             id="path2-8"
-             inkscape:path-effect="#path-effect2"
-             inkscape:original-d="m -586.66338,303.2326 c 3.33334,0 6.66667,0 10,0"
-             transform="matrix(1.6546537,0,0,3.2523197,646.16492,-909.06939)" />
+             style="fill:#000000;stroke:#37c871;stroke-width:1.05827;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
+             d="m 354.2122,294.82452 c 4.1858,2.95308 8.3716,5.90617 12.5574,8.85925"
+             id="path4789"
+             transform="rotate(9.9788491,327.01637,321.69876)" />
           <path
-             style="font-variation-settings:normal;fill:none;fill-opacity:1;stroke:#37c871;stroke-width:0.775522;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
-             d="m -586.66338,303.2326 c 3.33334,0 6.66667,0 10,0"
-             id="path2-3"
-             inkscape:path-effect="#path-effect2-3"
-             inkscape:original-d="m -586.66338,303.2326 c 3.33334,0 6.66667,0 10,0"
-             transform="matrix(1.6546537,0,0,3.2523197,646.16492,-873.60841)" />
+             style="fill:#000000;stroke:#aaaaff;stroke-width:1.05827;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
+             d="m 354.2122,294.82452 c 2.53929,1.92053 5.07859,3.84106 7.61788,5.76159"
+             id="path4789-2"
+             transform="rotate(7.8974291,242.36179,415.87966)"
+             sodipodi:nodetypes="cc" />
         </g>
-        <text
-           xml:space="preserve"
-           style="font-size:10.6667px;line-height:0;font-family:Arial;-inkscape-font-specification:Arial;font-variation-settings:normal;text-align:center;text-decoration-color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.13386;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
-           x="-257.23676"
-           y="80.000008"
-           id="text2"
-           transform="matrix(0.50866562,0,0,0.50866562,-276.91081,55.750815)"><tspan
-             sodipodi:role="line"
-             id="tspan2"
-             x="-257.23676"
-             y="80.000008">Random hexamers</tspan></text>
-        <text
-           xml:space="preserve"
-           style="font-size:10.6667px;line-height:0;font-family:Arial;-inkscape-font-specification:Arial;font-variation-settings:normal;text-align:center;text-decoration-color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.13386;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
-           x="-262.26282"
-           y="96.820351"
-           id="text2-6"
-           transform="matrix(0.50866562,0,0,0.50866562,-276.91081,55.750815)"><tspan
-             sodipodi:role="line"
-             id="tspan2-0"
-             x="-262.26282"
-             y="96.820351">DNA polymerase</tspan></text>
-        <text
-           xml:space="preserve"
-           style="font-size:10.6667px;line-height:0;font-family:Arial;-inkscape-font-specification:Arial;font-variation-settings:normal;text-align:center;text-decoration-color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.13386;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
-           x="-264.92429"
-           y="115.76049"
-           id="text2-6-4"
-           transform="matrix(0.50866562,0,0,0.50866562,-276.91081,55.750815)"><tspan
-             sodipodi:role="line"
-             id="tspan2-0-0"
-             x="-263.4425"
-             y="115.76049">Denatured DNA </tspan></text>
       </g>
-      <rect
-         style="font-variation-settings:normal;fill:none;fill-opacity:1;stroke:#b3b3b3;stroke-width:0.256697;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
-         id="rect1"
-         width="19.130003"
-         height="8.6116619"
-         x="187.64159"
-         y="50.740147"
-         rx="0.83741766" />
+      <path
+         id="path4790-8"
+         style="fill:none;stroke:#ff9955;stroke-width:0.430153;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
+         d="m 173.80706,55.279591 c 2.83969,0.08282 5.48968,0.452316 7.39507,1.947202 2.55665,2.005838 3.77261,6.037693 6.69652,8.013425 2.9239,1.97573 7.55558,1.895267 12.18733,1.814802" />
+      <path
+         id="path4792-3"
+         style="fill:none;stroke:#aaaaff;stroke-width:0.430153;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+         d="m 170.85093,55.261642 c 0.99277,-0.0052 1.98552,-0.01037 2.95613,0.01794" />
+      <ellipse
+         style="fill:#3737c8;stroke:none;stroke-width:0.0589379;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
+         id="path4788-9"
+         cx="200.90048"
+         cy="66.965218"
+         rx="0.61045271"
+         ry="0.61051095" />
+      <g
+         id="g4-0"
+         transform="matrix(0.29336584,0.03637246,-0.03637246,0.29336584,93.619365,-42.452614)">
+        <ellipse
+           style="fill:#3737c8;stroke:none;stroke-width:0.199376;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
+           id="path4788-0-5"
+           cx="454.46362"
+           cy="-32.688885"
+           rx="2.065047"
+           ry="2.0652437"
+           transform="rotate(45.000001)" />
+        <g
+           id="g10-2"
+           transform="translate(-12.232104,-0.04423199)"
+           style="stroke-width:1.05827;stroke-dasharray:none">
+          <path
+             style="fill:#000000;stroke:#37c871;stroke-width:1.05827;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
+             d="m 354.2122,294.82452 c 4.1858,2.95308 8.3716,5.90617 12.5574,8.85925"
+             id="path4789-27"
+             transform="rotate(9.9788491,327.01637,321.69876)" />
+          <path
+             style="fill:#000000;stroke:#aaaaff;stroke-width:1.05827;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
+             d="m 354.2122,294.82452 c 2.53929,1.92053 5.07859,3.84106 7.61788,5.76159"
+             id="path4789-2-3"
+             transform="rotate(7.8974291,242.36179,415.87966)"
+             sodipodi:nodetypes="cc" />
+        </g>
+      </g>
+      <g
+         id="g4794"
+         transform="matrix(0.29561202,0,0,0.29561202,375.76214,-45.008972)">
+        <ellipse
+           style="fill:#3737c8;stroke:none;stroke-width:0.199376;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
+           id="path4788-2"
+           cx="-681.56921"
+           cy="380.27155"
+           rx="2.065047"
+           ry="2.0652437" />
+        <path
+           id="path4791"
+           style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#aaaaff;stroke-width:1.45512;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
+           d="m -729.11402,380.35093 h -10" />
+        <path
+           id="path4794"
+           style="font-variation-settings:normal;opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#ff9955;stroke-width:1.45512;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
+           d="m -684.33257,380.35093 h -45" />
+      </g>
+      <path
+         style="font-variation-settings:normal;fill:none;fill-opacity:1;stroke:#37c871;stroke-width:1.45512;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+         d="m -741.66338,383.2326 c 51.66667,0 103.33334,0 155,0"
+         id="path3-0"
+         inkscape:path-effect="#path-effect3"
+         inkscape:original-d="m -741.66338,383.2326 c 51.66667,0 103.33334,0 155,0"
+         transform="matrix(0.29561202,0,0,0.29561202,375.76214,-44.811307)" />
+      <g
+         id="g32"
+         transform="matrix(1.4008372,0,0,1.4008372,-76.033353,-26.256807)">
+        <g
+           id="g6-3"
+           transform="matrix(0.29561202,0,0,0.29561202,319.49801,24.411996)">
+          <g
+             id="g3-3"
+             transform="matrix(0.50866562,0,0,0.50866562,-276.91081,55.750815)">
+            <ellipse
+               style="fill:#3737c8;stroke:none;stroke-width:0.199376;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
+               id="path4788-9-0"
+               cx="-316.28671"
+               cy="94.870476"
+               rx="2.065047"
+               ry="2.0652437"
+               inkscape:transform-center-x="-0.96828734"
+               inkscape:transform-center-y="3.7763206" />
+            <path
+               style="font-variation-settings:normal;fill:none;fill-opacity:1;stroke:#aaaaff;stroke-width:0.775522;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+               d="m -586.66338,303.2326 c 3.33334,0 6.66667,0 10,0"
+               id="path2-8"
+               inkscape:path-effect="#path-effect2"
+               inkscape:original-d="m -586.66338,303.2326 c 3.33334,0 6.66667,0 10,0"
+               transform="matrix(1.6546537,0,0,3.2523197,646.16492,-909.06939)" />
+            <path
+               style="font-variation-settings:normal;fill:none;fill-opacity:1;stroke:#37c871;stroke-width:0.775522;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+               d="m -586.66338,303.2326 c 3.33334,0 6.66667,0 10,0"
+               id="path2-3"
+               inkscape:path-effect="#path-effect2-3"
+               inkscape:original-d="m -586.66338,303.2326 c 3.33334,0 6.66667,0 10,0"
+               transform="matrix(1.6546537,0,0,3.2523197,646.16492,-873.60841)" />
+          </g>
+          <text
+             xml:space="preserve"
+             style="font-size:10.6667px;line-height:0;font-family:Arial;-inkscape-font-specification:Arial;font-variation-settings:normal;text-align:center;text-decoration-color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.13386;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+             x="-257.23676"
+             y="80.000008"
+             id="text2"
+             transform="matrix(0.50866562,0,0,0.50866562,-276.91081,55.750815)"><tspan
+               sodipodi:role="line"
+               id="tspan2"
+               x="-257.23676"
+               y="80.000008">Random hexamers</tspan></text>
+          <text
+             xml:space="preserve"
+             style="font-size:10.6667px;line-height:0;font-family:Arial;-inkscape-font-specification:Arial;font-variation-settings:normal;text-align:center;text-decoration-color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.13386;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+             x="-262.26282"
+             y="96.820351"
+             id="text2-6"
+             transform="matrix(0.50866562,0,0,0.50866562,-276.91081,55.750815)"><tspan
+               sodipodi:role="line"
+               id="tspan2-0"
+               x="-262.26282"
+               y="96.820351">DNA polymerase</tspan></text>
+          <text
+             xml:space="preserve"
+             style="font-size:10.6667px;line-height:0;font-family:Arial;-inkscape-font-specification:Arial;font-variation-settings:normal;text-align:center;text-decoration-color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.13386;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+             x="-264.92429"
+             y="115.76049"
+             id="text2-6-4"
+             transform="matrix(0.50866562,0,0,0.50866562,-276.91081,55.750815)"><tspan
+               sodipodi:role="line"
+               id="tspan2-0-0"
+               x="-263.4425"
+               y="115.76049">Denatured DNA </tspan></text>
+        </g>
+        <rect
+           style="font-variation-settings:normal;fill:none;fill-opacity:1;stroke:#b3b3b3;stroke-width:0.256697;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+           id="rect1"
+           width="19.130003"
+           height="8.6116619"
+           x="187.64159"
+           y="50.740147"
+           rx="0.83741766" />
+      </g>
     </g>
     <g
        id="g50"
-       transform="matrix(0.28692774,0,0,0.28692774,284.19447,-5.1550316)">
+       transform="matrix(0.28692774,0,0,0.28692774,284.19447,-0.92169803)">
       <g
          id="g6-8-4-4-5"
          style="fill:#00d400"
@@ -38066,35 +38082,35 @@
       </g>
       <g
          id="g40"
-         transform="matrix(1.2598521,0,0,1.2598521,233.98285,81.693856)"
-         style="stroke-width:0.44538314;stroke-dasharray:none">
+         transform="matrix(1.2598521,0,0,1.2598521,235.8271,78.005354)"
+         style="stroke-width:0.445383;stroke-dasharray:none">
         <g
            id="g16-3"
            transform="matrix(1.1953693,0,0,1.1953693,193.33196,-44.388057)"
-           style="stroke-width:0.37259042;stroke-dasharray:none">
+           style="stroke-width:0.37259;stroke-dasharray:none">
           <g
              id="g38"
              transform="translate(32.845215,4.1774954)"
-             style="stroke-width:0.37259042;stroke-dasharray:none">
+             style="stroke-width:0.37259;stroke-dasharray:none">
             <g
                id="g36"
                transform="matrix(1.0302664,0,0,-1.0302664,29.573512,430.87431)"
-               style="stroke-width:0.36164473;stroke-dasharray:none">
+               style="stroke-width:0.361645;stroke-dasharray:none">
               <g
                  id="g5-4-8-29"
                  transform="matrix(0.51857644,0,0,1.1580091,-636.55118,-19.916688)"
-                 style="stroke-width:0.46668062;stroke-dasharray:none">
+                 style="stroke-width:0.466681;stroke-dasharray:none">
                 <g
                    id="g6-8-0-7"
                    transform="matrix(0.45102198,0,0,0.45102198,-128.50395,120.53799)"
-                   style="stroke-width:1.03471813;stroke-dasharray:none">
+                   style="stroke-width:1.03472;stroke-dasharray:none">
                   <path
                      id="rect3-98-1-34"
-                     style="fill:#55d400;stroke:none;stroke-width:1.03471813;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
+                     style="fill:#55d400;stroke:none;stroke-width:1.03472;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
                      d="m -207.98722,180.49707 h -20.95079 c -2.84783,0 -5.14048,-1.1091 -5.14048,-2.48676 0,-1.37767 2.29265,-2.48677 5.14048,-2.48677 v 0 h 20.93321" />
                   <path
                      id="path5-7-5-8"
-                     style="fill:#aade87;stroke:none;stroke-width:1.03471813;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
+                     style="fill:#aade87;stroke:none;stroke-width:1.03472;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
                      d="m -208.0048,175.52354 h 20.59338 c 2.84783,0 5.14048,1.1091 5.14048,2.48677 0,1.37766 -2.29265,2.48676 -5.14048,2.48676 h -20.5758" />
                 </g>
               </g>
@@ -38104,9 +38120,9 @@
                xml:space="preserve"
                x="-737.25073"
                y="221.1454"
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.47623px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.37259042;stroke-dasharray:none"><tspan
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.47623px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.37259;stroke-dasharray:none"><tspan
                  id="tspan4-0-7-9-0-15"
-                 style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.47623px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.37259042;stroke-dasharray:none"
+                 style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.47623px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.37259;stroke-dasharray:none"
                  x="-737.25073"
                  y="221.1454">Chimera artifact</tspan></text>
             <text
@@ -38114,30 +38130,30 @@
                xml:space="preserve"
                x="-737.25073"
                y="214.11639"
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.47623px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.37259042;stroke-dasharray:none"><tspan
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.47623px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.37259;stroke-dasharray:none"><tspan
                  id="tspan4-0-7-9-0-15-6"
-                 style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.47623px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.37259042;stroke-dasharray:none"
+                 style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.47623px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.37259;stroke-dasharray:none"
                  x="-737.25073"
                  y="214.11639">Chimeric read</tspan></text>
             <g
                id="g37"
                transform="matrix(1.0302664,0,0,-1.0302664,27.094461,445.52975)"
-               style="stroke-width:0.36164473;stroke-dasharray:none">
+               style="stroke-width:0.361645;stroke-dasharray:none">
               <g
                  id="g5-6-0-1-80"
                  transform="matrix(0.23388932,0,0,0.52228755,-700.78409,128.51969)"
-                 style="stroke-width:1.03471825;stroke-dasharray:none">
+                 style="stroke-width:1.03472;stroke-dasharray:none">
                 <g
                    id="g7-1-1-2"
                    transform="translate(0,-2.7760618)"
-                   style="stroke-width:1.03471825;stroke-dasharray:none">
+                   style="stroke-width:1.03472;stroke-dasharray:none">
                   <path
                      id="rect3-9-2-15-2"
-                     style="fill:#ff8080;stroke:none;stroke-width:1.03471825;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
+                     style="fill:#ff8080;stroke:none;stroke-width:1.03472;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
                      d="m -207.98722,180.49707 h -20.95079 c -2.84783,0 -5.14048,-1.1091 -5.14048,-2.48676 0,-1.37767 2.29265,-2.48677 5.14048,-2.48677 v 0 h 20.93321" />
                   <path
                      id="path5-0-2-1-67"
-                     style="fill:#ffaaaa;stroke:none;stroke-width:1.03471825;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
+                     style="fill:#ffaaaa;stroke:none;stroke-width:1.03472;stroke-linecap:square;stroke-miterlimit:3.4;stroke-dasharray:none;paint-order:fill markers stroke"
                      d="m -208.0048,175.52354 h 20.59338 c 2.84783,0 5.14048,1.1091 5.14048,2.48677 0,1.37766 -2.29265,2.48676 -5.14048,2.48676 h -20.5758" />
                 </g>
               </g>
@@ -38145,22 +38161,22 @@
             <g
                id="g34"
                transform="matrix(1.2142946,0,0,1.2142946,-14.330518,155.50649)"
-               style="stroke-width:0.30683692;stroke-dasharray:none">
+               style="stroke-width:0.306837;stroke-dasharray:none">
               <g
                  id="g5-6-0-1-80-8"
                  transform="matrix(0.19844305,0,0,0.4431341,-560.46478,-37.083034)"
-                 style="font-variation-settings:normal;fill:#00d400;fill-opacity:1;stroke:none;stroke-width:1.03471819;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000">
+                 style="font-variation-settings:normal;fill:#00d400;fill-opacity:1;stroke:none;stroke-width:1.03472;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000">
                 <g
                    id="g7-1-1-2-8"
                    transform="translate(0,-2.7760618)"
-                   style="font-variation-settings:normal;fill:#00d400;fill-opacity:1;stroke:none;stroke-width:1.03471819;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1">
+                   style="font-variation-settings:normal;fill:#00d400;fill-opacity:1;stroke:none;stroke-width:1.03472;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1">
                   <path
                      id="rect3-9-2-15-2-8"
-                     style="font-variation-settings:normal;fill:#00d400;fill-opacity:1;stroke:none;stroke-width:1.03471819;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
+                     style="font-variation-settings:normal;fill:#00d400;fill-opacity:1;stroke:none;stroke-width:1.03472;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
                      d="m -207.98722,180.49707 h -20.95079 c -2.84783,0 -5.14048,-1.1091 -5.14048,-2.48676 0,-1.37767 2.29265,-2.48677 5.14048,-2.48677 v 0 h 20.93321" />
                   <path
                      id="path5-0-2-1-67-7"
-                     style="font-variation-settings:normal;fill:#00d400;fill-opacity:1;stroke:none;stroke-width:1.03471819;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
+                     style="font-variation-settings:normal;fill:#00d400;fill-opacity:1;stroke:none;stroke-width:1.03472;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
                      d="m -208.0048,175.52354 h 20.59338 c 2.84783,0 5.14048,1.1091 5.14048,2.48677 0,1.37766 -2.29265,2.48676 -5.14048,2.48676 h -20.5758" />
                 </g>
               </g>
@@ -38170,15 +38186,15 @@
                xml:space="preserve"
                x="-737.40247"
                y="206.40594"
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.47623px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.37259042;stroke-dasharray:none"><tspan
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.47623px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.37259;stroke-dasharray:none"><tspan
                  id="tspan4-0-7-9-0-2-1"
-                 style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.47623px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.37259042;stroke-dasharray:none"
+                 style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.47623px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.37259;stroke-dasharray:none"
                  x="-737.40247"
                  y="206.40594">Biological read </tspan></text>
           </g>
         </g>
         <rect
-           style="font-variation-settings:normal;fill:none;fill-opacity:1;stroke:#b3b3b3;stroke-width:0.44538314;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+           style="font-variation-settings:normal;fill:none;fill-opacity:1;stroke:#b3b3b3;stroke-width:0.445383;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
            id="rect1-5-2"
            width="77.480812"
            height="27.40406"
@@ -38189,7 +38205,7 @@
     </g>
     <g
        id="g48"
-       transform="matrix(0.29561202,0,0,0.29561202,284.06678,-11.245119)">
+       transform="matrix(0.29561202,0,0,0.29561202,284.06678,-7.0117848)">
       <g
          id="g42"
          transform="translate(22.325477,152.40001)">
@@ -38281,64 +38297,64 @@
       </g>
       <g
          id="g20-7"
-         transform="matrix(1.493436,0,0,1.493436,529.13153,32.924793)"
-         style="stroke-width:0.31938198;stroke-dasharray:none">
+         transform="matrix(1.493436,0,0,1.493436,529.13153,27.263892)"
+         style="stroke-width:0.319382;stroke-dasharray:none">
         <g
            id="g16-9"
            transform="translate(61.016176,1.2611826)"
-           style="stroke-width:0.31938198;stroke-dasharray:none">
+           style="stroke-width:0.319382;stroke-dasharray:none">
           <g
              id="g5-4-8-2"
              transform="matrix(0.51857644,0,0,1.1580091,-607.78901,-18.257853)"
-             style="font-variation-settings:normal;opacity:1;fill:#00d400;fill-opacity:1;stroke:none;stroke-width:0.4121431;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1">
+             style="font-variation-settings:normal;opacity:1;fill:#00d400;fill-opacity:1;stroke:none;stroke-width:0.412143;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1">
             <g
                id="g6-8-0-2"
                transform="matrix(0.45102198,0,0,0.45102198,-128.50395,120.53799)"
-               style="font-variation-settings:normal;fill:#00d400;fill-opacity:1;stroke:none;stroke-width:0.91379826;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1">
+               style="font-variation-settings:normal;fill:#00d400;fill-opacity:1;stroke:none;stroke-width:0.913798;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1">
               <path
                  id="rect3-98-1-3"
-                 style="font-variation-settings:normal;fill:#00d400;fill-opacity:1;stroke:none;stroke-width:0.91379826;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
+                 style="font-variation-settings:normal;fill:#00d400;fill-opacity:1;stroke:none;stroke-width:0.913798;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
                  d="m -207.98722,180.49707 h -20.95079 c -2.84783,0 -5.14048,-1.1091 -5.14048,-2.48676 0,-1.37767 2.29265,-2.48677 5.14048,-2.48677 v 0 h 20.93321" />
               <path
                  id="path5-7-5-1"
-                 style="font-variation-settings:normal;fill:#00d400;fill-opacity:1;stroke:none;stroke-width:0.91379826;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
+                 style="font-variation-settings:normal;fill:#00d400;fill-opacity:1;stroke:none;stroke-width:0.913798;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
                  d="m -208.0048,175.52354 h 20.59338 c 2.84783,0 5.14048,1.1091 5.14048,2.48677 0,1.37766 -2.29265,2.48676 -5.14048,2.48676 h -20.5758" />
             </g>
           </g>
           <g
              id="g19889-3"
              transform="matrix(1.1786219,0,0,1.1786219,-45.060225,154.82418)"
-             style="stroke-width:0.27097917;stroke-dasharray:none">
+             style="stroke-width:0.270979;stroke-dasharray:none">
             <text
                id="text4-3-5-3-0-2"
                xml:space="preserve"
                x="-1835.11"
                y="51.882877"
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.33334px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.27097951;stroke-dasharray:none"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.33334px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.27098;stroke-dasharray:none"
                transform="matrix(0.99999871,0,0,0.99999879,1266.3004,0)"><tspan
                  id="tspan4-0-7-9-0-1"
-                 style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.33334px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.27097951;stroke-dasharray:none"
+                 style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.33334px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.27098;stroke-dasharray:none"
                  x="-1835.11"
                  y="51.882877">Artificial read</tspan></text>
             <g
                id="g18-6"
                transform="translate(0,-3.3937942)"
-               style="stroke-width:0.27097917;stroke-dasharray:none">
+               style="stroke-width:0.270979;stroke-dasharray:none">
               <g
                  id="g5-6-0-1-8"
                  transform="matrix(0.19844305,0,0,0.4431341,-534.13923,-16.67018)"
-                 style="font-variation-settings:normal;opacity:1;fill:#ff5555;fill-opacity:1;stroke-width:0.91379836;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1">
+                 style="font-variation-settings:normal;opacity:1;fill:#ff5555;fill-opacity:1;stroke-width:0.913798;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1">
                 <g
                    id="g7-1-1-1"
                    transform="translate(0,-2.7760618)"
-                   style="font-variation-settings:normal;fill:#ff5555;fill-opacity:1;stroke-width:0.91379836;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1">
+                   style="font-variation-settings:normal;fill:#ff5555;fill-opacity:1;stroke-width:0.913798;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;stop-color:#000000;stop-opacity:1">
                   <path
                      id="rect3-9-2-15-0"
-                     style="font-variation-settings:normal;fill:#ff5555;fill-opacity:1;stroke:none;stroke-width:0.91379836;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
+                     style="font-variation-settings:normal;fill:#ff5555;fill-opacity:1;stroke:none;stroke-width:0.913798;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
                      d="m -207.98722,180.49707 h -20.95079 c -2.84783,0 -5.14048,-1.1091 -5.14048,-2.48676 0,-1.37767 2.29265,-2.48677 5.14048,-2.48677 v 0 h 20.93321" />
                   <path
                      id="path5-0-2-1-6"
-                     style="font-variation-settings:normal;fill:#ff5555;fill-opacity:1;stroke:none;stroke-width:0.91379836;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
+                     style="font-variation-settings:normal;fill:#ff5555;fill-opacity:1;stroke:none;stroke-width:0.913798;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke;stop-color:#000000;stop-opacity:1"
                      d="m -208.0048,175.52354 h 20.59338 c 2.84783,0 5.14048,1.1091 5.14048,2.48677 0,1.37766 -2.29265,2.48676 -5.14048,2.48676 h -20.5758" />
                 </g>
               </g>
@@ -38347,17 +38363,17 @@
                  xml:space="preserve"
                  x="-1835.5084"
                  y="62.660496"
-                 style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.33334px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.27097951;stroke-dasharray:none"
+                 style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.33334px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.27098;stroke-dasharray:none"
                  transform="matrix(0.99999871,0,0,0.99999879,1266.3004,0)"><tspan
                    id="tspan4-0-7-9-0-2-4"
-                   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.33334px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.27097951;stroke-dasharray:none"
+                   style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.33334px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.27098;stroke-dasharray:none"
                    x="-1835.5084"
                    y="62.660496">Biological read</tspan></text>
             </g>
           </g>
         </g>
         <rect
-           style="font-variation-settings:normal;fill:none;fill-opacity:1;stroke:#b3b3b3;stroke-width:0.31938198;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+           style="font-variation-settings:normal;fill:none;fill-opacity:1;stroke:#b3b3b3;stroke-width:0.319382;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
            id="rect1-5-9"
            width="56.675888"
            height="18.483002"
@@ -38370,28 +38386,28 @@
        xml:space="preserve"
        style="font-size:4.23333px;line-height:0;font-family:Arial;-inkscape-font-specification:Arial;font-variation-settings:normal;text-align:center;text-decoration-color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.430153;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
        x="123.0682"
-       y="40.881306"
+       y="33.472965"
        id="text6-8"><tspan
          sodipodi:role="line"
          id="tspan6-32"
          x="123.0682"
-         y="40.881306"
+         y="33.472965"
          style="font-size:4.23333px;stroke-width:0.430153">DNA extraction</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:4.23333px;line-height:0;font-family:Arial;-inkscape-font-specification:Arial;font-variation-settings:normal;text-align:center;text-decoration-color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.430153;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
        x="181.69049"
-       y="40.932983"
+       y="33.524643"
        id="text6-4"><tspan
          sodipodi:role="line"
          id="tspan6-37"
          x="181.69049"
-         y="40.932983"
+         y="33.524643"
          style="font-size:4.23333px;stroke-width:0.430153">Whole genome amplification</tspan></text>
     <g
        id="g467"
        clip-path="url(#clipPath468-9)"
-       transform="matrix(0.23919824,0,0,0.23919824,5.0122355,42.554926)">
+       transform="matrix(0.25101476,0,0,0.25101476,-3.4429314,45.112727)">
       <image
          width="1"
          height="1"
@@ -38406,61 +38422,61 @@
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:0;font-family:Arial;-inkscape-font-specification:Arial;font-variation-settings:normal;text-align:center;text-decoration-color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.430153;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
-       x="196.90208"
-       y="121.96967"
+       x="196.37292"
+       y="128.31966"
        id="text6-4-6"><tspan
          sodipodi:role="line"
          id="tspan6-37-5"
-         x="196.90208"
-         y="121.96967"
+         x="196.37292"
+         y="128.31966"
          style="font-size:3.52778px;stroke-width:0.430153">Nanopore Sequencing</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:4.23333333px;line-height:0;font-family:Arial;-inkscape-font-specification:Arial;font-variation-settings:normal;text-align:center;text-decoration-color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.430153;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
-       x="87.375038"
-       y="98.326988"
+       style="font-size:4.23333px;line-height:0;font-family:Arial;-inkscape-font-specification:Arial;font-variation-settings:normal;text-align:center;text-decoration-color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.430153;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+       x="90.020874"
+       y="96.739487"
        id="text6-4-6-4"><tspan
          sodipodi:role="line"
          id="tspan6-37-5-8"
-         x="87.375038"
-         y="98.326988"
-         style="stroke-width:0.430153;font-size:4.23333333px">ChimeraLM</tspan></text>
+         x="90.020874"
+         y="96.739487"
+         style="font-size:4.23333px;stroke-width:0.430153">ChimeraLM</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:4.23333px;line-height:0;font-family:Arial;-inkscape-font-specification:Arial;font-variation-settings:normal;text-align:center;text-decoration-color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.430153;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
-       x="60.467621"
-       y="98.326988"
+       x="62.055122"
+       y="96.739487"
        id="text6-4-6-4-2"><tspan
          sodipodi:role="line"
          id="tspan6-37-5-8-5"
-         x="60.467621"
-         y="98.326988"
+         x="62.055122"
+         y="96.739487"
          style="font-size:4.23333px;stroke-width:0.430153">Clean reads</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:4.23333px;line-height:0;font-family:Arial;-inkscape-font-specification:Arial;font-variation-settings:normal;text-align:center;text-decoration-color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.430153;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
-       x="24.01952"
-       y="98.326988"
+       x="25.607021"
+       y="96.739487"
        id="text6-4-6-4-2-0"><tspan
          sodipodi:role="line"
          id="tspan6-37-5-8-5-1"
-         x="24.01952"
-         y="98.326988"
+         x="25.607021"
+         y="96.739487"
          style="font-size:4.23333px;stroke-width:0.430153">High-confidence event</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:4.23333px;line-height:0;font-family:Arial;-inkscape-font-specification:Arial;font-variation-settings:normal;text-align:center;text-decoration-color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.430153;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
        x="73.121422"
-       y="40.93298"
+       y="33.524639"
        id="text6-9"><tspan
          sodipodi:role="line"
          id="tspan6-3"
          x="73.121422"
-         y="40.93298"
+         y="33.524639"
          style="font-size:4.23333px;stroke-width:0.430153">Single-cell sorting</tspan></text>
     <g
        id="g8-1"
-       transform="matrix(0.29561202,0,0,0.29561202,320.85059,27.355473)">
+       transform="matrix(0.30073021,0,0,0.30073021,325.33939,21.7324)">
       <g
          id="g25"
          clip-path="url(#clipPath26)"
@@ -38983,16 +38999,16 @@
        xml:space="preserve"
        style="font-size:4.23333px;line-height:0;font-family:Arial;-inkscape-font-specification:Arial;font-variation-settings:normal;text-align:center;text-decoration-color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.430153;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
        x="26.688585"
-       y="40.932579"
+       y="33.524239"
        id="text6-9-3"><tspan
          sodipodi:role="line"
          id="tspan6-3-0"
          x="27.276663"
-         y="40.932579"
+         y="33.524239"
          style="font-size:4.23333px;stroke-width:0.430153">Cellular composition   </tspan></text>
     <g
        id="g14"
-       transform="matrix(0.29561202,0,0,0.29561202,271.6481,-1.0818826)">
+       transform="matrix(0.29561202,0,0,0.29561202,271.6481,-6.3735496)">
       <path
          id="path83-0-1-0"
          d="m -770.80308,210.41971 33.82046,-1e-5"
@@ -39004,7 +39020,7 @@
     </g>
     <g
        id="g14-1"
-       transform="matrix(0.29561202,0,0,0.29561202,324.26704,-1.0818819)">
+       transform="matrix(0.29561202,0,0,0.29561202,324.26704,-6.3735489)">
       <path
          id="path83-0-1-4"
          d="m -770.80308,210.41971 33.82046,-1e-5"
@@ -39016,7 +39032,7 @@
     </g>
     <g
        id="g14-1-0"
-       transform="matrix(0.29561202,0,0,0.29561202,370.97375,-1.0818826)">
+       transform="matrix(0.29561202,0,0,0.29561202,370.97375,-6.3735496)">
       <path
          id="path83-0-1-4-9"
          d="m -770.80308,210.41971 33.82046,-1e-5"
@@ -39028,7 +39044,7 @@
     </g>
     <g
        id="g14-1-0-3"
-       transform="matrix(0,0.29561202,-0.29561202,0,260.57059,304.67335)">
+       transform="matrix(0,0.29561202,-0.29561202,0,260.04142,304.67335)">
       <path
          id="path83-0-1-4-9-3"
          d="m -770.80308,210.41971 33.82046,-1e-5"
@@ -39040,10 +39056,10 @@
     </g>
     <g
        id="g12"
-       transform="matrix(1.1172738,0,0,1.1172738,-7.5790119,-2.464096)">
+       transform="matrix(1.1172738,0,0,1.1172738,-7.5790119,1.7692374)">
       <text
          xml:space="preserve"
-         style="font-size:2.84173852px;line-height:0;font-family:Arial;-inkscape-font-specification:Arial;font-variation-settings:normal;text-align:center;text-decoration-color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.385002;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+         style="font-size:2.84174px;line-height:0;font-family:Arial;-inkscape-font-specification:Arial;font-variation-settings:normal;text-align:center;text-decoration-color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.385002;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
          x="163.957"
          y="101.86459"
          id="text6-4-6-5"><tspan
@@ -39051,7 +39067,7 @@
            id="tspan6-37-5-9"
            x="163.957"
            y="101.86459"
-           style="stroke-width:0.385002;font-size:2.84173852px">Base calling</tspan></text>
+           style="font-size:2.84174px;stroke-width:0.385002">Base calling</tspan></text>
       <g
          id="g14-1-0-3-5"
          transform="matrix(-0.26458333,0,0,-0.26458333,-34.981304,160.18397)">
@@ -39067,10 +39083,10 @@
     </g>
     <g
        id="g1"
-       transform="matrix(1.1172738,0,0,1.1172738,-7.5790119,-2.7761347)">
+       transform="matrix(1.1172738,0,0,1.1172738,-7.5790119,1.4571987)">
       <text
          xml:space="preserve"
-         style="font-size:2.84173852px;line-height:0;font-family:Arial;-inkscape-font-specification:Arial;font-variation-settings:normal;text-align:center;text-decoration-color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.385002;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+         style="font-size:2.84174px;line-height:0;font-family:Arial;-inkscape-font-specification:Arial;font-variation-settings:normal;text-align:center;text-decoration-color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.385002;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
          x="132.73618"
          y="102.12917"
          id="text6-4-6-5-3"><tspan
@@ -39078,7 +39094,7 @@
            id="tspan6-37-5-9-3"
            x="132.73618"
            y="102.12917"
-           style="stroke-width:0.385002;font-size:2.84173852px">Mapping</tspan></text>
+           style="font-size:2.84174px;stroke-width:0.385002">Mapping</tspan></text>
       <g
          id="g20"
          transform="translate(-2.8993462,6.0292345)">
@@ -39120,7 +39136,7 @@
     </g>
     <g
        id="g1-1"
-       transform="matrix(1.1172738,0,0,1.1172738,-40.391961,-4.1923696)">
+       transform="matrix(1.1172738,0,0,1.1172738,-40.391961,0.04096394)">
       <g
          id="g14-1-0-3-5-3-4"
          transform="matrix(-0.26458333,0,0,-0.26458333,-67.158854,161.69226)">
@@ -39136,7 +39152,7 @@
     </g>
     <g
        id="g1-1-0"
-       transform="matrix(1.1172738,0,0,1.1172738,-72.976631,-4.8861015)">
+       transform="matrix(1.1172738,0,0,1.1172738,-72.976631,-0.65276793)">
       <g
          id="g14-1-0-3-5-3-4-6"
          transform="matrix(-0.26458333,0,0,-0.26458333,-67.158854,161.69226)">
@@ -39156,7 +39172,7 @@
     </g>
     <g
        id="g1-1-0-6"
-       transform="matrix(1.1172738,0,0,1.1172738,-100.85139,-4.8841004)">
+       transform="matrix(1.1172738,0,0,1.1172738,-100.85139,-0.65076683)">
       <g
          id="g14-1-0-3-5-3-4-6-7"
          transform="matrix(-0.26458333,0,0,-0.26458333,-67.158854,161.69226)">
@@ -39176,7 +39192,7 @@
     </g>
     <g
        id="g56"
-       transform="matrix(0.35240075,0,0,0.35240075,334.26582,-8.6382295)">
+       transform="matrix(0.36441287,0,0,0.36441287,345.55419,-8.2257719)">
       <g
          id="g52">
         <g
@@ -39261,7 +39277,7 @@
         </g>
         <text
            xml:space="preserve"
-           style="font-size:8.00855907px;line-height:0;font-family:Arial;-inkscape-font-specification:Arial;font-variation-settings:normal;text-align:center;text-decoration-color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.45512;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+           style="font-size:8.00856px;line-height:0;font-family:Arial;-inkscape-font-specification:Arial;font-variation-settings:normal;text-align:center;text-decoration-color:#000000;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.45512;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
            x="-883.05676"
            y="323.81769"
            id="text6-4-6-5-3-7"><tspan
@@ -39283,7 +39299,7 @@
     </g>
     <g
        id="g4795"
-       transform="matrix(0.33520875,0,0,0.33520875,-72.650348,-1.0885864)">
+       transform="matrix(0.35430497,0,0,0.35430497,-81.289403,-2.8017021)">
       <g
          id="g4796"
          transform="translate(-46.045899,-16.683297)">
