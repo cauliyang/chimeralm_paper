@@ -97,26 +97,25 @@
 \newacronym{gpu}{GPU}{Graphics Processing Unit}
 \newacronym{hpc}{HPC}{High Performance Computing}
 \newacronym{sv}{SV}{Structural Variation}
-
+\newacronym{snp}{SNP}{Single Nucleotide Polymorphism}
+\newacronym{ont}{ONT}{Oxford Nanopore Technologies}
+\newacronym{pb}{PacBio}{Pacific Biosciences}
 \newacronym{del}{DEL}{deletion}
 \newacronym{dup}{DUP}{duplication}
 \newacronym{ins}{INS}{insertion}
 \newacronym{inv}{INV}{inversion}
 \newacronym{tra}{TRA}{translocation}
+\newacronym{pcr}{PCR}{Polymerase Chain Reaction}
+\newacronym{mrna}{mRNA}{messenger RNA}
 
 \newacronym{ide}{IDE}{Integrated Development Environment}
 \newacronym{cd}{CD}{Continuous Development}
 \newacronym{ucsc}{UCSC}{UCSC Genome Browser}
+
 \newacronym{glm}{GLM}{Genomic Language Model}
 \newacronym{lcglm}{LCGLM}{long-context genomic language model}
-\newacronym{snp}{SNP}{Single Nucleotide Polymorphism}
-
 \newacronym{mlp}{MLP}{multilayer perceptron}
-\newacronym{ont}{ONT}{Oxford Nanopore Technologies}
-\newacronym{pb}{PacBio}{Pacific Biosciences}
-
-\newacronym{pcr}{PCR}{Polymerase Chain Reaction}
-\newacronym{mrna}{mRNA}{messenger RNA}
+\newacronym{gelu}{GELU}{Gaussian Error Linear Unit}
 
 %%%%%=============================================================================%%%%
 %%%%  Remarks: This template is provided to aid authors with the preparation
@@ -445,9 +444,69 @@ As single-cell approaches become increasingly central to modern biology and medi
 
 \subsection*{Model architecture}
 
-\subsection*{Model training}
+ChimeraLM use a pre-trained HyenaDNA which provides robust genomic sequence representations learned from large-scale genomic data.
+The backbone model handles DNA sequence tokenization using single base pair resolution, converting nucleotide sequences into token representations.
+
+Input sequences are processed through the Hyena operators.
+The backbone generates contextualized hidden representations for each position in the input sequence, capturing both local sequence motifs and long-range dependencies essential for distinguishing biological sequences from chimeric artifacts.
+
+ChimeraLM employs a binary sequence classifier designed specifically for genomic sequence classification tasks.
+The classification head processes the hidden states through a multi-stage architecture optimized for variable-length sequence classification.
+The classifier implements attention-based pooling to aggregate variable-length sequence representations into fixed-size feature vectors.
+The attention pooling mechanism computes position-wise attention weights through a two-layer neural network where the first linear layer projects from the hidden dimension to 256 dimensions, followed by \gls{gelu} activation and a second linear layer projecting to a single attention score per position.
+The attention weights are normalized using \emph{softmax} and applied to compute the weighted sum of hidden states across sequence positions.
+When attention masks are provided for variable-length sequences, the attention weights are masked to exclude padding tokens and renormalized to ensure proper probability distribution over valid sequence positions.
+This approach accommodates the natural variability in sequencing read lengths without introducing computational inefficiency or artificial sequence information.
+
+The pooled sequence representation is processed through a \gls{mlp} with residual connections.
+The \gls{mlp} uses two hidden layers, each consisting of linear transformation to 512 hidden dimensions, \gls{gelu} activation function, and dropout regularization with rate 0.1.
+This residual design enables stable gradient flow during training and improved representation learning for complex genomic patterns.
+
+The final classification layer maps the processed features to binary classification logits using a linear transformation with output dimension 2.
+The model outputs two logits corresponding to biological and artificial classes rather than a single probability, enabling the use of cross-entropy loss during training.
+Classification predictions are made by selecting the class with the highest logit value.
+
+\subsection*{Model training and optimization}
+
+\paragraph{Training data preparation}
+
+The tokenizer was initialized from the pre-trained HyenaDNA model to maintain consistency with the backbone architecture and preserve the benefits of pre-training on large-scale genomic data.
+This approach ensures that input sequences are processed using the same tokenization scheme employed during the backbone model\textquotesingle{s} original training, enabling effective transfer learning for the chimeric detection task.
+
+\paragraph{Training configuration and hyperparameters}
+
+Model training was conducted using PyTorch Lightning framework with mixed-precision training enabled through bf16-mixed precision to accelerate computation while maintaining numerical stability.
+The training process was configured with a minimum of 10 epochs and maximum of 100 epochs to allow sufficient model convergence while preventing excessive computational cost.
+
+Early stopping was implemented with a patience of 10 epochs to prevent overfitting and automatically terminate training when validation performance ceased to improve.
+This approach ensures optimal model generalization by identifying the point of best validation performance rather than training to completion.
+The training process used a fixed random seed of 12345 to ensure reproducibility across multiple training runs and facilitate comparison of different model configurations.
+
+\paragraph{Data loading and computational configuration}
+Training employed a batch size of 48 sequences per batch, balancing computational efficiency with memory constraints and gradient stability.
+Data loading was optimized using 30 parallel workers to minimize I/O bottlenecks and ensure continuous data supply to the \gls{gpu} during training.
+
+The training infrastructure utilized \gls{gpu} acceleration (two A100 \glspl{gpu}) to enable efficient processing of the large-scale genomic sequence datasets.
+Mixed-precision training with brain floating-point 16-bit (bf16) format was employed to reduce memory requirements and accelerate computation while maintaining numerical precision sufficient for stable gradient computation and model convergence.
+
+\paragraph{Model validation and evaluation}
+Model performance was continuously monitored throughout training using the validation dataset.
+Validation metrics were computed at the end of each epoch to track model improvement and trigger early stopping when performance plateaued.
+The validation process used the same data preprocessing and tokenization procedures as training to ensure consistent evaluation conditions.
+The final model selection was based on optimal validation performance as determined by the early stopping callback.
+This approach ensures that the reported model represents the configuration with the best generalization performance rather than the final training epoch, preventing overfitting and providing realistic performance estimates for unseen data.
+
+\paragraph{Training infrastructure and implementation}
+The training process was managed using Hydra configuration framework to enable reproducible experimentation and systematic hyperparameter management.
+Default callbacks were employed for standard training monitoring, including metrics logging, model checkpointing, and training progress tracking.
+The configuration system allowed for systematic exploration of hyperparameters while maintaining experimental reproducibility and version control.
+
+All training experiments were conducted using consistent hardware configurations and software environments to ensure reliable performance comparisons.
+The model training process typically required 24-48 hours depending on dataset size and convergence characteristics, with automatic checkpointing enabled to prevent loss of progress due to hardware failures or interruptions.
 
 \subsection*{SV evaluation}
+
+
 
 \backmatter
 
@@ -546,6 +605,44 @@ RY has served as an advisor/consultant for Tempus AI, Inc. This relationship is 
 %%\input sn-article.bbl
 
 \end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
