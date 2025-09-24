@@ -312,7 +312,6 @@ ChimeraLM processing reduced the chimeric fraction to just 1.5\% while preservin
 
 These results demonstrate ChimeraLM\textquotesingle s effectiveness across different Nanopore sequencing platforms and highlight the substantial chimeric artifact burden introduced by \gls{wga}, which varies between platforms but is consistently and dramatically reduced by ChimeraLM processing.
 
-
 \subsection*{ChimeraLM outperforms existing chimera artifact detection tools}
 
 We benchmarked ChimeraLM against established computational methods for chimeric sequence detection, including SACRA~\cite{kiguchi2021long} and 3rd-ChimeraMiner~\cite{lu2023exploration}, using both P2 and Mk1c datasets (Fig.~\ref{fig:figure2}c and Fig.~\ref{fig:figure2}d).
@@ -477,6 +476,9 @@ The backbone generates contextualized hidden representations for each position i
 ChimeraLM employs a binary sequence classifier designed specifically for genomic sequence classification tasks.
 The classification head processes the hidden states through a multi-stage architecture optimized for variable-length sequence classification.
 The classifier implements attention-based pooling to aggregate variable-length sequence representations into fixed-size feature vectors.
+$$
+	\textrm{attention\_weights} = \textrm{softmax}(\textrm{Linear}(\textrm{GELU}(\textrm{Linear}(\textrm{hidden\_states}))))
+$$
 The attention pooling mechanism computes position-wise attention weights through a two-layer neural network where the first linear layer projects from the hidden dimension to 256 dimensions, followed by \gls{gelu} activation and a second linear layer projecting to a single attention score per position.
 The attention weights are normalized using \emph{softmax} and applied to compute the weighted sum of hidden states across sequence positions.
 When attention masks are provided for variable-length sequences, the attention weights are masked to exclude padding tokens and renormalized to ensure proper probability distribution over valid sequence positions.
@@ -493,18 +495,35 @@ Classification predictions are made by selecting the class with the highest logi
 \subsection*{Model training and optimization}
 
 \paragraph{Training data preparation}
-
+ChimeraLM was trained using the paired \gls{wga} and bulk sequencing dataset constructed from PromethION P2 platform data.
 The tokenizer was initialized from the pre-trained HyenaDNA model to maintain consistency with the backbone architecture and preserve the benefits of pre-training on large-scale genomic data.
 This approach ensures that input sequences are processed using the same tokenization scheme employed during the backbone model\textquotesingle{s} original training, enabling effective transfer learning for the chimeric detection task.
 
-\paragraph{Training configuration and hyperparameters}
+\paragraph{Model training framework and optimization}
+Model training was implemented within the PyTorch Lightning framework, providing a standardized interface for supervised classification tasks with automatic handling of training loops, validation procedures, and model checkpointing.
+The training process employed mixed-precision computation using bf16-mixed precision to accelerate training while maintaining numerical stability for gradient computation.
 
-Model training was conducted using PyTorch Lightning framework with mixed-precision training enabled through bf16-mixed precision to accelerate computation while maintaining numerical stability.
-The training process was configured with 100 epochs to allow sufficient model convergence while preventing excessive computational cost.
+The optimization procedure utilized the AdamW optimizer~\cite{adamw}, an extension of the Adam optimizer~\cite{kingma2014adam} that incorporates decoupled weight decay regularization.
+The optimizer was configured with a learning rate of $1\times10^-4$ and weight decay coefficient of 0.01.
+The AdamW optimizer updates model parameters $\theta$ according to the following formulation:
+$$
+	\theta_{t+1} = \theta_t - \alpha \left( \frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon} + \lambda \theta_t \right)
+$$
+where $\alpha$ represents the learning rate, $\hat{m}_t$ and $\hat{v}_t$ are bias-corrected first and second moment estimates, $\epsilon$ is a small constant for numerical stability, and $\lambda$ denotes the weight decay coefficient.
+The decoupled weight decay term $\lambda \theta_t$ provides regularization that is independent of the gradient-based updates, improving optimization dynamics compared to L2 regularization incorporated within the loss function.
 
-Early stopping was implemented with a patience of 10 epochs to prevent overfitting and automatically terminate training when validation performance ceased to improve.
+Early stopping was implemented with a patience of 10 epochs to prevent over-fitting and automatically terminate training when validation performance ceased to improve.
 This approach ensures optimal model generalization by identifying the point of best validation performance rather than training to completion.
 The training process used a fixed random seed of 12345 to ensure reproducibility across multiple training runs and facilitate comparison of different model configurations.
+
+\paragraph{Loss function and objective formulation}
+The training objective employed cross-entropy loss for the binary classification task, providing probabilistically grounded optimization that encourages the model to produce well-calibrated probability estimates.
+For a training example with true class label $y \in \{0,1\}$ and model output logits $z = [z_0, z_1]$, the cross-entropy loss is computed as:
+$$
+	\mathcal{L} = -\log(\textrm{softmax}(z_y)) = -\log\left(\frac{\exp(z_y)}{\exp(z_0) + \exp(z_1)}\right)
+$$
+where the softmax function converts logits to normalized probability distributions over the two classes (biological and artificial).
+The cross-entropy formulation provides strong gradients for misclassified examples while allowing confident predictions to contribute minimal loss, enabling efficient learning of the decision boundary between biological sequences and chimeric artifacts.
 
 \paragraph{Data loading and computational configuration}
 Training employed a batch size of 48 sequences per batch, balancing computational efficiency with memory constraints and gradient stability.
@@ -515,8 +534,15 @@ Mixed-precision training with brain floating-point 16-bit (bf16) format was empl
 
 \paragraph{Model validation and evaluation}
 Model performance was continuously monitored throughout training using the validation dataset.
+The model evaluation metrics included accuracy, precision, recall and the F1 score, calculated using the following equations:
+\begin{align*}
+	\textrm{Precision} & = \frac{\textrm{TP}}{\textrm{TP}+\textrm{FP}}                                                     \\
+	\textrm{Recall}    & = \frac{\textrm{TP}}{\textrm{TP}+\textrm{FN}}                                                     \\
+	\textrm{F1}        & = 2 \times \frac{\textrm{Precision} \times \textrm{Recall}}{\textrm{Precision} + \textrm{Recall}}
+\end{align*}
 Validation metrics were computed at the end of each epoch to track model improvement and trigger early stopping when performance plateaued.
 The validation process used the same data preprocessing and tokenization procedures as training to ensure consistent evaluation conditions.
+
 The final model selection was based on optimal validation performance as determined by the early stopping callback.
 This approach ensures that the reported model represents the configuration with the best generalization performance rather than the final training epoch, preventing overfitting and providing realistic performance estimates for unseen data.
 
@@ -529,6 +555,12 @@ All training experiments were conducted using consistent hardware configurations
 The model training process typically required 24-48 hours depending on dataset size and convergence characteristics, with automatic checkpointing enabled to prevent loss of progress due to hardware failures or interruptions.
 
 \subsection*{SV evaluation}
+
+
+\subsection{Computing resource}
+
+All computations were performed on a \gls{hpc} server equipped with a 64-core Intel(R) Xeon(R) Gold 6338 CPU and 256 GB of RAM.
+The server was also configured with two NVIDIA A100 \glspl{gpu}, each with 80 GB of memory, enabling efficient processing of both CPU-intensive tasks and \gls{gpu}-accelerated deep learning workloads.
 
 
 
@@ -573,6 +605,11 @@ This project was supported in part by NIH grants R35GM142441 and R01CA259388 awa
 \bmhead{Data Availability}
 
 \bmhead{Code Availability}
+
+ChimeraLM, implemented in Python, is open source and available on GitHub (\url{https://github.com/ylab-hi/ChimeraLM}) under the Apache License, Version 2.0.
+The package can be installed via PyPI (\url{https://pypi.org/project/chimeralm/}) using pip, with wheel distributions provided for Windows, Linux, and macOS to ensure easy cross-platform installation.
+An interactive demo is available on Hugging Face (\url{https://huggingface.co/spaces/yangliz5/chimeralmr}), allowing users to test ChimeraLM\textquotesingle{s} functionality without local installation.
+For large-scale analyses, we recommend using ChimeraLM on systems with \gls{gpu} acceleration. Detailed system requirements and optimization guidelines are available in the repository's documentation.
 
 \bmhead{Conflict of interest}
 
@@ -629,6 +666,20 @@ RY has served as an advisor/consultant for Tempus AI, Inc. This relationship is 
 %%\input sn-article.bbl
 
 \end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
