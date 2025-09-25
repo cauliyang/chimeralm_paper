@@ -107,6 +107,7 @@
 \newacronym{tra}{TRA}{translocation}
 \newacronym{pcr}{PCR}{Polymerase Chain Reaction}
 \newacronym{mrna}{mRNA}{messenger RNA}
+\newacronym{facs}{FACS}{Fluorescence-activated cell sorting}
 
 \newacronym{ide}{IDE}{Integrated Development Environment}
 \newacronym{cd}{CD}{Continuous Development}
@@ -228,9 +229,9 @@ In this study, we present ChimeraLM, demonstrate its superior performance compar
 \subsection*{ChimeraLM integrates seamlessly into single-cell genomic workflows}
 
 To systematically address \gls{wga}-induced chimeric artifacts, we developed ChimeraLM as an integrated component of single-cell genomic analysis pipelines (Fig.~\ref{fig:figure1}a).
-Our approach leverages the standard single-cell workflow, beginning with cellular isolation through FACS or microfluidics-based sorting, followed by DNA extraction and whole genome amplification using established protocols.
-Amplified genomic material is then processed through long-read sequencing platforms such as Nanopore technology to generate comprehensive genomic coverage.
+Our approach leverages the standard single-cell workflow, beginning with cellular isolation through \gls{facs} or microfluidics-based sorting, followed by DNA extraction and whole genome amplification using established protocols.
 
+Amplified genomic material is then processed through long-read sequencing platforms such as Nanopore technology to generate comprehensive genomic coverage.
 ChimeraLM operates at a critical juncture in the analysis pipeline, positioned between initial read processing and downstream analysis, for example, structural variants detection (Fig.~\ref{fig:figure1}a).
 Following standard quality filtering and read cleaning procedures, ChimeraLM evaluates each sequencing read to classify it as either biological or chimeric artifacts.
 This binary classification enables the selective retention of authentic genomic sequences while filtering out amplification artifacts before they can impact downstream analyses.
@@ -263,7 +264,7 @@ ChimeraLM employs a sophisticated neural architecture specifically designed for 
 The model enables single-base pair resolution and accepts DNA sequences as input, which are first tokenized and encoded into numerical representations suitable for deep learning processing.
 This encoding preserves the sequential nature of genomic information while enabling efficient computation on modern hardware.
 
-The core of ChimeraLM\textquotesingle s architecture consists of Hyena operators, a recent advancement in sequence modeling that provides computational advantages over traditional transformer attention mechanisms while maintaining the ability to capture long-range dependencies in genomic sequences.
+The core of ChimeraLM\textquotesingle s architecture consists of Hyena operators~\cite{Poli2023HyenaHT}, a recent advancement in sequence modeling that provides computational advantages over traditional transformer attention mechanisms while maintaining the ability to capture long-range dependencies in genomic sequences.
 Hyena operators enable ChimeraLM to process variable-length sequencing reads efficiently while learning complex patterns that distinguish biological sequences from chimeric artifacts.
 Moreover, the hyena operators are initialized with HyenaDNA~\cite{nguyen2023hyenadna}, a pre-trained long-context genomic language model, which provides a strong foundation for learning genomic sequence features relevant to chimeric detection.
 
@@ -413,7 +414,7 @@ ChimeraLM\textquotesingle s success exemplifies the transformative potential of 
 The recent emergence of foundation models for biological sequences has demonstrated remarkable capabilities across diverse tasks, but most applications have focused on prediction of molecular phenotypes or functional annotations.
 ChimeraLM represents one of the first applications of \gls{glm} to quality control and data preprocessing, suggesting that these approaches may have broader utility for improving experimental data quality than previously recognized.
 
-The architectural innovations incorporated in ChimeraLM, particularly the use of Hyena operators for efficient long-range modeling, may have applications beyond chimeric detection.
+The architectural innovations incorporated in ChimeraLM, particularly the use of Hyena operators for efficient long-range modeling, may have applications beyond chimeric detection~\cite{Poli2023HyenaHT, nguyen2023hyenadna}.
 Similar approaches could potentially address other quality control challenges in genomics, such as contamination detection, adapter artifact identification, or systematic error correction in diverse sequencing technologies.
 
 While ChimeraLM represents a significant advance, several limitations merit consideration.
@@ -500,7 +501,7 @@ The tokenizer was initialized from the pre-trained HyenaDNA model to maintain co
 This approach ensures that input sequences are processed using the same tokenization scheme employed during the backbone model\textquotesingle{s} original training, enabling effective transfer learning for the chimeric detection task.
 
 \paragraph{Model training framework and optimization}
-Model training was implemented within the PyTorch Lightning framework, providing a standardized interface for supervised classification tasks with automatic handling of training loops, validation procedures, and model checkpointing.
+Model training was implemented within PyTorch~\cite{paszke2019pytorch} and PyTorch Lightning framework~\cite{Falcon_PyTorch_Lightning_2019}, providing a standardized interface for supervised classification tasks with automatic handling of training loops, validation procedures, and model checkpointing.
 The training process employed mixed-precision computation using bf16-mixed precision to accelerate training while maintaining numerical stability for gradient computation.
 
 The optimization procedure utilized the AdamW optimizer~\cite{adamw}, an extension of the Adam optimizer~\cite{kingma2014adam} that incorporates decoupled weight decay regularization.
@@ -510,7 +511,7 @@ $$
 	\theta_{t+1} = \theta_t - \alpha \left( \frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon} + \lambda \theta_t \right)
 $$
 where $\alpha$ represents the learning rate, $\hat{m}_t$ and $\hat{v}_t$ are bias-corrected first and second moment estimates, $\epsilon$ is a small constant for numerical stability, and $\lambda$ denotes the weight decay coefficient.
-The decoupled weight decay term $\lambda \theta_t$ provides regularization that is independent of the gradient-based updates, improving optimization dynamics compared to L2 regularization incorporated within the loss function.
+The decoupled weight decay term $\lambda \theta_t$ provides regularization that is independent of the gradient-based updates.
 
 Early stopping was implemented with a patience of 10 epochs to prevent over-fitting and automatically terminate training when validation performance ceased to improve.
 This approach ensures optimal model generalization by identifying the point of best validation performance rather than training to completion.
@@ -547,7 +548,7 @@ The final model selection was based on optimal validation performance as determi
 This approach ensures that the reported model represents the configuration with the best generalization performance rather than the final training epoch, preventing overfitting and providing realistic performance estimates for unseen data.
 
 \paragraph{Training infrastructure and implementation}
-The training process was managed using Hydra configuration framework to enable reproducible experimentation and systematic hyperparameter management.
+The training process was managed using Hydra~\cite{Yadan2019Hydra} configuration framework to enable reproducible experimentation and systematic hyperparameter management.
 Default callbacks were employed for standard training monitoring, including metrics logging, model checkpointing, and training progress tracking.
 The configuration system allowed for systematic exploration of hyperparameters while maintaining experimental reproducibility and version control.
 
@@ -558,8 +559,9 @@ The model training process typically required 24-48 hours depending on dataset s
 
 \paragraph*{Construction of gold-standard SV dataset}
 
+\subsection*{Figure plotting and visualization}
 
-
+The figures are created using Python with libraries including Matplotlib~\cite{Hunter2007} and Seaborn~\cite{Waskom2021}.
 
 \subsection*{Computing resource}
 
@@ -675,97 +677,3 @@ RY has served as an advisor/consultant for Tempus AI, Inc. This relationship is 
 %%\input sn-article.bbl
 
 \end{document}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
