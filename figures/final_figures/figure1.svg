@@ -24,15 +24,15 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="2.4137909"
-     inkscape:cx="447.22184"
-     inkscape:cy="380.10749"
+     inkscape:zoom="1.4057547"
+     inkscape:cx="596.83243"
+     inkscape:cy="567.31092"
      inkscape:window-width="3824"
      inkscape:window-height="2082"
      inkscape:window-x="3848"
      inkscape:window-y="40"
      inkscape:window-maximized="0"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g30"
      showgrid="true"
      showguides="false">
     <inkscape:grid
@@ -21728,7 +21728,7 @@
          id="path1"
          d="M 35.589933,149.451 H 6.6679686 c -2.450964,0 -4.437771,1.98683 -4.437771,4.43776 v 41.63108 c 0,2.45093 1.986807,4.43775 4.437771,4.43775 H 35.589933 c 2.450965,0 4.437771,-1.98682 4.437771,-4.43775 v -41.63108 c 0,-2.45093 -1.986806,-4.43776 -4.437771,-4.43776 z"
          style="fill:#f5f6f7;fill-opacity:1;fill-rule:nonzero;stroke:#d6dbdf;stroke-width:0.666106;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
-         inkscape:export-filename="figure1.pdf"
+         inkscape:export-filename="figure1.png"
          inkscape:export-xdpi="300"
          inkscape:export-ydpi="300" />
       <path
@@ -21746,51 +21746,51 @@
       <text
          id="text4"
          xml:space="preserve"
-         x="70.047318"
+         x="65.284813"
          y="195.51472"
-         style="font-size:2.67261px;stroke-width:0.222717"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.222717"><tspan
            id="tspan4"
-           style="font-variant:normal;font-weight:700;font-size:2.66263px;font-family:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.222717"
-           x="70.047318"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.222717"
+           x="65.284813"
            y="195.51472">Hyena Operator</tspan></text>
       <text
          id="text5"
          xml:space="preserve"
          x="140.63722"
-         y="195.49847"
-         style="font-size:2.67261px;stroke-width:0.222717"><tspan
+         y="195.4613"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.222717"><tspan
            id="tspan5"
-           style="font-variant:normal;font-weight:700;font-size:2.66263px;font-family:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.222717"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.222717"
            x="140.63722"
-           y="195.49847">Attention Pooling</tspan></text>
+           y="195.4613">Attention Pooling</tspan></text>
       <text
          id="text6"
          xml:space="preserve"
          x="208.77232"
-         y="195.77864"
-         style="font-size:2.67261px;stroke-width:0.222717"><tspan
+         y="195.4613"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.222717"><tspan
            id="tspan6"
-           style="font-variant:normal;font-weight:700;font-size:2.66263px;font-family:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.222717"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.222717"
            x="208.77232"
-           y="195.77864">MLP</tspan></text>
+           y="195.4613">MLP</tspan></text>
       <text
          id="text7"
          xml:space="preserve"
-         x="256.73248"
-         y="195.77864"
-         style="font-size:2.67261px;stroke-width:0.222717"><tspan
+         x="255.67415"
+         y="195.4613"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.222717"><tspan
            id="tspan7"
-           style="font-variant:normal;font-weight:700;font-size:2.66263px;font-family:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.222717"
-           x="256.73248"
-           y="195.77864">MLP</tspan></text>
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.222717"
+           x="255.67415"
+           y="195.4613">MLP</tspan></text>
       <text
          id="text8"
          xml:space="preserve"
          x="47.281166"
          y="152.84363"
-         style="font-size:2.67261px;stroke-width:0.222717"><tspan
+         style="font-size:3.52777778px;stroke-width:0.222717"><tspan
            id="tspan8"
-           style="font-variant:normal;font-weight:700;font-size:2.66263px;font-family:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.222717"
+           style="font-variant:normal;font-weight:700;font-family:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.222717;font-size:3.52777778px"
            x="47.281166"
            y="152.84363">Model</tspan></text>
       <text
@@ -21798,9 +21798,9 @@
          xml:space="preserve"
          x="3.7169576"
          y="152.84363"
-         style="font-size:2.67261px;stroke-width:0.222717"><tspan
+         style="font-size:3.52777778px;stroke-width:0.222717"><tspan
            id="tspan9"
-           style="font-variant:normal;font-weight:700;font-size:2.66263px;font-family:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.222717"
+           style="font-variant:normal;font-weight:700;font-family:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.222717;font-size:3.52777778px"
            x="3.7169576"
            y="152.84363">Input</tspan></text>
       <text
@@ -21808,9 +21808,9 @@
          xml:space="preserve"
          x="273.01526"
          y="153.03615"
-         style="font-size:2.67261px;stroke-width:0.222717"><tspan
+         style="font-size:3.52777778px;stroke-width:0.222717"><tspan
            id="tspan10"
-           style="font-variant:normal;font-weight:700;font-size:2.66263px;font-family:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.222717"
+           style="font-variant:normal;font-weight:700;font-family:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.222717;font-size:3.52777778px"
            x="273.01526"
            y="153.03615">Predict</tspan></text>
       <path
@@ -39822,26 +39822,30 @@
                style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.02157px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25274"
                x="224.89087"
                y="111.91189">No Match </tspan></text>
-          <text
-             id="text64"
-             xml:space="preserve"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.03287px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.25274"
-             x="227.16776"
-             y="118.57238"><tspan
-               id="tspan64"
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.01437px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25274"
-               x="227.16776"
-               y="118.57238">Artifcial</tspan></text>
-          <text
-             id="text65"
-             xml:space="preserve"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.03287px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.25274"
-             x="227.02875"
-             y="122.0976"><tspan
-               id="tspan65"
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.01437px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25274"
-               x="227.02875"
-               y="122.0976">Chimeric</tspan></text>
+          <g
+             id="g54"
+             transform="translate(0.76808234,-0.52916667)">
+            <text
+               id="text64"
+               xml:space="preserve"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.175px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.25274"
+               x="224.52196"
+               y="118.57238"><tspan
+                 id="tspan64"
+                 style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.175px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25274"
+                 x="224.52196"
+                 y="118.57238">Artifcial</tspan></text>
+            <text
+               id="text65"
+               xml:space="preserve"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.175px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.25274"
+               x="224.38295"
+               y="122.0976"><tspan
+                 id="tspan65"
+                 style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.175px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25274"
+                 x="224.38295"
+                 y="122.0976">Chimeric</tspan></text>
+          </g>
           <path
              id="path66-4"
              d="m 283.94005,108.03968 h -15.92574 c -1.4741,0 -2.66907,1.19496 -2.66907,2.66907 v 13.64744 c 0,1.4741 1.19497,2.66907 2.66907,2.66907 h 15.92574 c 1.4741,0 2.66907,-1.19497 2.66907,-2.66907 v -13.64744 c 0,-1.47411 -1.19497,-2.66907 -2.66907,-2.66907 z"
@@ -39863,32 +39867,36 @@
              id="text72"
              xml:space="preserve"
              style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.03287px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.25274"
-             x="271.12515"
+             x="271.41537"
              y="111.80222"><tspan
                id="tspan72"
                style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.02157px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25274"
-               x="271.12515"
+               x="271.41537"
                y="111.80222">Match</tspan></text>
-          <text
-             id="text73"
-             xml:space="preserve"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.03287px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.25274"
-             x="270.99011"
-             y="116.9275"><tspan
-               id="tspan73"
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.01437px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25274"
-               x="270.99011"
-               y="116.9275">Biological</tspan></text>
-          <text
-             id="text74"
-             xml:space="preserve"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.03287px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.25274"
-             x="271.3988"
-             y="120.45271"><tspan
-               id="tspan74"
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.01437px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25274"
-               x="271.3988"
-               y="120.45271">Chimeric</tspan></text>
+          <g
+             id="g61"
+             transform="translate(-1.4713996,1.0583333)">
+            <text
+               id="text73"
+               xml:space="preserve"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.175px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.25274"
+               x="270.52576"
+               y="116.9275"><tspan
+                 id="tspan73"
+                 style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.175px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25274"
+                 x="270.52576"
+                 y="116.9275">Biological</tspan></text>
+            <text
+               id="text74"
+               xml:space="preserve"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.175px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.25274"
+               x="270.58618"
+               y="120.45271"><tspan
+                 id="tspan74"
+                 style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.175px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.25274"
+                 x="270.58618"
+                 y="120.45271">Chimeric</tspan></text>
+          </g>
           <g
              id="g8"
              transform="matrix(0.26458333,0,0,0.26458333,358.9962,22.595318)">
