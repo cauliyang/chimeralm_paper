@@ -177,13 +177,13 @@
 \affil[1]{\orgdiv{Department of Urology}, \orgname{Northwestern University Feinberg School of Medicine}, \orgaddress{\street{303 E Superior St}, \city{Chicago}, \postcode{60611}, \state{IL}, \country{USA}}}
 \affil[2]{\orgdiv{Robert H. Lurie Comprehensive Cancer Center}, \orgname{Northwestern University Feinberg School of Medicine}, \orgaddress{\street{675 N St Clair St}, \city{Chicago}, \postcode{60611}, \state{IL}, \country{USA}}}
 
-\abstract{Single-cell genomic analysis requires \gls{wga} to generate sufficient DNA for sequencing, but this process introduces chimeric artifacts that manifest as false-positive structural variants and compromise downstream analyses.
-	Here, we developed ChimeraLM, a \gls{glm} that accurately detects and removes \gls{wga}-induced chimeric artifacts.
-	The model architecture incorporates Hyena operators and attention mechanisms optimized for variable-length genomic sequences.
-	ChimeraLM achieved high performance in chimeric detection (F1 score: \textbf{0.81}) and dramatically outperformed existing methods, reducing chimeric contamination by $\thicksim95$\% compared to 0\% for established tools.
-	When applied to \gls{sv} analysis, ChimeraLM improved the validation rate of detected events by \textbf{12-16} fold while preserving $>87$\% of genuine structural variants across multiple Nanopore sequencing platforms.
-	ChimeraLM processing normalized \gls{sv} type distributions toward bulk sequencing profiles, eliminating the overwhelming bias toward false-positive \gls{inv} characteristic of unprocessed \gls{wga} data.
-	This approach addresses a fundamental bottleneck in single-cell genomics and enables more reliable genomic analysis of individual cells for applications spanning basic research, clinical diagnostics, and therapeutic development.}
+\abstract{Single-cell genomic analysis relies on \gls{wga} to generate sufficient DNA for sequencing, yet this process introduces extensive chimeric artifacts that manifest as false-positive \gls{sv} and compromise downstream analyses.
+	Here, we developed ChimeraLM, a \gls{glm} that accurately identifies and removes \gls{wga}-induced chimeric artifacts.
+	The model architecture integrates Hyena operators with attention mechanisms optimized for variable-length genomic sequences.
+	ChimeraLM achieved state-of-the-art performance in chimeric detection (F1 score: \textbf{0.81}) and dramatically outperformed existing approaches, reducing chimeric contamination by $\thicksim95$\% compared to 0\% for established tools.
+	When applied to \gls{sv} analysis, ChimeraLM improved the validation rate of detected events by \textbf{12-16} fold while preserving $>87$\% of genuine \gls{sv} across multiple Nanopore sequencing platforms.
+	Importantly, ChimeraLM processing normalized \gls{sv} type distributions toward bulk sequencing profiles, eliminating the characteristic false-positive \gls{inv} bias of unprocessed \gls{wga} data.
+	This approach directly addresses a fundamental bottleneck in single-cell genomics, enables more reliable genomic analysis of individual cells for applications spanning basic research, clinical diagnostics, and therapeutic development.}
 \keywords{Whole Genomics Amplification, Genomic Language Model, Structural Variation}
 
 \maketitle
