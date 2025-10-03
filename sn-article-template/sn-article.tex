@@ -287,8 +287,7 @@ This end-to-end architecture enables ChimeraLM to learn directly from raw sequen
 		(a) ChimeraLM performance metrics on test dataset. Bar chart showing F1 score (0.805), precision (0.700), and recall (0.946) achieved by ChimeraLM on held-out test data for binary classification of biological versus chimera artifact.
 		(b) Chimeric read reduction across sequencing platforms. Stacked bar charts comparing chimeric read proportions (dark teal) versus non-chimeric reads (light teal) across bulk sequencing, \gls{wga}, and ChimeraLM-processed samples for PC3 cell line data. Left side shows PromethION P2 platform data with chimeric rates of 2.3\% (bulk), 46.0\% (\gls{wga}), and 4.9\% (ChimeraLM). Right side shows MinION Mk1c platform data with chimeric rates of 2.5\% (bulk), 23.0\% (\gls{wga}), and 1.5\% (ChimeraLM).
 		(c) Benchmarking on P2 platform data. Percentage reduction in chimeric reads achieved by ChimeraLM (~90\%) compared to existing computational methods SACRA and 3rd-ChimeraMiner (both 0\% reduction).
-		(d) Benchmarking on Mk1c platform data. Percentage reduction in chimeric reads achieved by ChimeraLM (~90\%) compared to SACRA and 3rd-ChimeraMiner (both 0\% reduction) using MinION Mk1c sequencing data.
-	}\label{fig:figure2}
+		(d) Benchmarking on Mk1c platform data. Percentage reduction in chimeric reads achieved by ChimeraLM (~90\%) compared to SACRA and 3rd-ChimeraMiner (both 0\% reduction) using MinION Mk1c sequencing data.}\label{fig:figure2}
 \end{figure}
 
 \subsection*{ChimeraLM achieves high performance in chimeric artifact detection}
@@ -590,10 +589,9 @@ The model training process typically required 24-48 hours depending on dataset s
 
 \subsection*{SV evaluation}
 
-Sniffles2~\cite{Sedlazeck2018, Smolka2024} is used.
+Sniffles2~\cite{Sedlazeck2018, Smolka2024}, Manta~\cite{chen2016manta}, DELLY~\cite{rausch2012delly}, DeBreak~\cite{chen2023deciphering}, SVIM~\cite{heller2019svim}, cuteSV~\cite{jiang2020longreadbased}, and SvABA~\cite{wala2018svaba} is used.
 
 \paragraph*{Construction of gold-standard SV dataset}
-
 
 \subsection*{Figure plotting and visualization}
 
