@@ -331,11 +331,10 @@ The consistent superior performance across different sequencing platforms establ
 	\begin{center}
 		\includegraphics[width=0.95\textwidth]{final_figures/figure3}
 	\end{center}
-	\caption{{\bf Structural variant detection accuracy and type distribution analysis.}
+	\caption{{\bf \gls{sv} detection accuracy and type distribution analysis.}
 		(a,b) \gls{sv} validation using bulk sequencing gold standard. Stacked bar charts showing total \gls{sv} calls (log scale) classified as supported (dark teal) or unsupported (light teal) events when compared against bulk sequencing reference data. Panel (a) shows PromethION P2 results; panel (b) shows MinION Mk1c results. Numbers above bars indicate absolute counts of supported/unsupported events.
 		(c,d) \gls{sv} type distributions across sample processing methods. Bar charts displaying the number of detected structural variants by type: \gls{del} (green), \gls{dup} (orange), \gls{ins} (blue), \gls{inv} (pink), and \gls{tra} (light green). Panel (c) shows P2 platform data; panel (d) shows Mk1c platform data. Data compared across bulk sequencing, ChimeraLM-filtered, and unfiltered \gls{wga} samples.
-		(e,f) Composition of chimeric artifact-supported \gls{sv}. Pie charts showing the proportion of different \gls{sv} types among events supported specifically by reads classified as chimeric artifacts by ChimeraLM in unfiltered \gls{wga} data. Panel (e) shows P2 data; panel (f) shows Mk1c data. Percentages indicate relative frequency of each \gls{sv} class within the chimeric artifact-supported subset.
-	}\label{fig:figure3}
+		(e,f) Composition of chimeric artifact-supported \gls{sv}. Pie charts showing the proportion of different \gls{sv} types among events supported specifically by reads classified as chimeric artifacts by ChimeraLM in unfiltered \gls{wga} data. Panel (e) shows P2 data; panel (f) shows Mk1c data. Percentages indicate relative frequency of each \gls{sv} class within the chimeric artifact-supported subset.}\label{fig:figure3}
 \end{figure}
 
 \subsection*{ChimeraLM improves structural variant calling accuracy by reducing false positives}
@@ -394,11 +393,38 @@ The consistency across both datasets validates ChimeraLM\textquotesingle s abili
 	\begin{center}
 		\includegraphics[width=0.95\textwidth]{final_figures/figure4}
 	\end{center}
-	\caption{Explainable attention}\label{fig:figure4}
+	\caption{Explainable attention with read \emph{6f4568e5-3543-48c7-a64b-f4010c03804c}}\label{fig:figure4}
 \end{figure}
 
-\section*{Discussion}
+\subsection*{ChimeraLM learns biologically relevant sequence features}
 
+To investigate whether ChimeraLM captures biologically meaningful features for chimeric artifact detection, we examined the attention weight distributions of the model's pooling mechanism.
+The attention weights indicate which sequence regions contribute most strongly to classification decisions, providing insight into the types of patterns the model learns during training.
+
+We identified a representative example that illustrates ChimeraLM's capability to focus on biologically relevant sequence features (Fig.~\ref{fig:figure4}).
+In this chimeric read, the attention weight profile showed predominantly low values across most of the sequence, with a pronounced spike occurring at the position corresponding to the end of the primary alignment where the chimeric junction is located.
+This focused attention pattern demonstrates that the model can learn to identify critical transition points where DNA fragments from different genomic loci are artificially joined during \gls{wga}.
+
+The alignment pattern further illustrates how biologically meaningful features can inform model predictions.
+The primary alignment (salmon region) extends from the sequence start to position approximately 1650, where it terminates at the chimeric junction.
+Beyond this point, the sequence aligns to a distant genomic location (green region).
+The attention weight peak coincides with this transition point, demonstrating that ChimeraLM learned to utilize the end of primary alignment as a diagnostic feature for this chimeric artifact.
+
+In this case, ChimeraLM's attention mechanism successfully identified the junction region where artificial joining occurred.
+Quantitative analysis demonstrated significantly higher attention weights in the window region with size 100 nt surrounding the chimeric breakpoint compared to background regions (Fig.~\ref{fig:figure4}b).
+The median attention weight in the window region was approximately 3-fold higher than background levels, with the difference achieving high statistical significance ($p < 0.001$, Wilcoxon rank-sum test).
+This preferential attention allocation suggests that the model learned to recognize sequence discontinuities, orientation changes, or other local features characteristic of artificial joining events.
+
+The example illustrates the possible mechanism of chimera formation during \gls{wga} (Fig.~\ref{fig:figure4}c).
+Original DNA fragments from distant genomic locations (Fragment A and Fragment B) undergo random orientation during amplification, with Fragment A reverse-complemented while Fragment B maintains its original orientation.
+These fragments are then artificially joined to create a chimeric construct containing sequence from both genomic loci.
+The resulting chimeric read exhibits discordant alignment patterns when mapped to the reference genome, with portions aligning in different orientations at distant genomic positions.
+
+This example demonstrates that ChimeraLM has the capacity to learn biologically interpretable features related to chimera formation mechanisms.
+The attention mechanism's ability to focus on junction points provides evidence that the model's learned representations can align with biological understanding of \gls{wga} artifacts, though the specific features and attention patterns may vary across different chimeric sequences.
+This case illustrates the potential for deep learning models to discover relevant sequence patterns that contribute to accurate chimeric artifact detection.
+
+\section*{Discussion}
 The development of ChimeraLM addresses a fundamental bottleneck that has limited the widespread adoption and reliability of single-cell genomic approaches.
 While \gls{wga} has enabled genomic analysis of individual cells, the systematic introduction of chimeric artifacts has remained an unsolved challenge that compromises downstream interpretations and limits the biological insights.
 
@@ -606,6 +632,13 @@ The server was also configured with two NVIDIA A100 \glspl{gpu}, each with 80 GB
 	\caption{{\bf Distribution of chimeric alignments per chimeric read stratified by ChimeraLM prediction.}
 		(a) PromethION P2 platform chimeric alignment analysis. Bar chart showing the distribution of chimeric reads based on the number of chimeric alignments per read (x-axis: 2, 3, 4+ alignments) and total read count (y-axis, log scale). Bars are colored by ChimeraLM\textquotesingle s binary classification: biological (dark teal) and artificial (coral). Analysis includes only reads identified as chimeric (minimum 2 alignments per read).
 		(b) MinION Mk1c platform chimeric alignment analysis. Bar chart showing the distribution of chimeric reads based on the number of chimeric alignments per read (x-axis: 2, 3, 4+ alignments) and total read count (y-axis, log scale). Bars are colored by ChimeraLM\textquotesingle s binary classification: biological (dark teal) and artificial (coral). Analysis includes only reads identified as chimeric (minimum 2 alignments per read). }\label{fig:sf2}
+\end{figure}
+
+\begin{figure}[!ht]
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{final_figures/sf3}
+	\end{center}
+	\caption{Attention}\label{fig:sf3}
 \end{figure}
 
 \bmhead{Acknowledgements}
