@@ -527,14 +527,14 @@ The backbone model handles DNA sequence tokenization using single base pair reso
 The tokenizer employs character-level encoding where each nucleotide is mapped to a unique token ID.
 For a DNA sequence $S = (s_1, s_2, \ldots, s_L)$ where $s_i \in \{\text{A}, \text{C}, \text{G}, \text{T}, \text{N}\}$ and $L$ is the sequence length, the tokenization function $\tau$ maps each nucleotide to an integer token:
 $$
-\tau(s_i) = \begin{cases}
-7 & \text{if } s_i = \text{A} \\
-8 & \text{if } s_i = \text{C} \\
-9 & \text{if } s_i = \text{G} \\
-10 & \text{if } s_i = \text{T} \\
-11 & \text{if } s_i = \text{N} \\
-6 & \text{otherwise (unknown)}
-\end{cases}
+	\tau(s_i) = \begin{cases}
+		7  & \text{if } s_i = \text{A}  \\
+		8  & \text{if } s_i = \text{C}  \\
+		9  & \text{if } s_i = \text{G}  \\
+		10 & \text{if } s_i = \text{T}  \\
+		11 & \text{if } s_i = \text{N}  \\
+		6  & \text{otherwise (unknown)}
+	\end{cases}
 $$
 Additional special tokens include [CLS]=0, [SEP]=1, [BOS]=2, [MASK]=3, [PAD]=4, and [RESERVED]=5.
 The tokenized sequence is represented as $\mathbf{x} = (\tau(s_1), \tau(s_2), \ldots, \tau(s_L))$, with truncation applied when $L > 32{,}768$ and padding tokens appended when $L < 32{,}768$ to enable batch processing.
@@ -543,7 +543,7 @@ The tokenized sequence is represented as $\mathbf{x} = (\tau(s_1), \tau(s_2), \l
 Input sequences are processed through the Hyena operators.
 For a tokenized input sequence $\mathbf{x} \in \mathbb{Z}^{L}$, the backbone model generates contextualized hidden representations:
 $$
-\mathbf{H} = \text{HyenaDNA}(\mathbf{x}) \in \mathbb{R}^{L \times d_{\text{hidden}}}
+	\mathbf{H} = \text{HyenaDNA}(\mathbf{x}) \in \mathbb{R}^{L \times d_{\text{hidden}}}
 $$
 where $\mathbf{H} = (\mathbf{h}_1, \mathbf{h}_2, \ldots, \mathbf{h}_L)$ represents position-wise hidden states with dimension $d_{\text{hidden}} = 256$.
 The backbone generates contextualized hidden representations for each position in the input sequence, capturing both local sequence motifs and long-range dependencies essential for distinguishing biological sequences from chimeric artifacts.
@@ -556,22 +556,22 @@ The classifier implements attention-based pooling to aggregate variable-length s
 The attention pooling mechanism computes position-wise attention weights through a two-layer neural network.
 For hidden states $\mathbf{H} \in \mathbb{R}^{L \times 256}$, attention scores are computed as:
 \begin{align*}
-\mathbf{e} &= \text{Linear}_{256 \to 256}(\mathbf{H}) \in \mathbb{R}^{L \times 256} \\
-\mathbf{e}' &= \text{GELU}(\mathbf{e}) \in \mathbb{R}^{L \times 256} \\
-\mathbf{s} &= \text{Linear}_{256 \to 1}(\mathbf{e}') \in \mathbb{R}^{L \times 1} \\
-\boldsymbol{\alpha} &= \text{softmax}(\mathbf{s}) \in \mathbb{R}^{L \times 1}
+	\mathbf{e}          & = \text{Linear}_{256 \to 256}(\mathbf{H}) \in \mathbb{R}^{L \times 256} \\
+	\mathbf{e}'         & = \text{GELU}(\mathbf{e}) \in \mathbb{R}^{L \times 256}                 \\
+	\mathbf{s}          & = \text{Linear}_{256 \to 1}(\mathbf{e}') \in \mathbb{R}^{L \times 1}    \\
+	\boldsymbol{\alpha} & = \text{softmax}(\mathbf{s}) \in \mathbb{R}^{L \times 1}
 \end{align*}
 where the first linear layer projects from dimension 256 to 256, followed by \gls{gelu} activation, and a second linear layer projects to a single attention score per position.
 
 When attention masks $\mathbf{m} \in \{0,1\}^L$ are provided for variable-length sequences (to handle padding), the attention weights are masked and renormalized:
 $$
-\boldsymbol{\alpha}_{\text{masked}} = \frac{\boldsymbol{\alpha} \odot \mathbf{m}}{\sum_{i=1}^{L} (\alpha_i \cdot m_i) + \epsilon}
+	\boldsymbol{\alpha}_{\text{masked}} = \frac{\boldsymbol{\alpha} \odot \mathbf{m}}{\sum_{i=1}^{L} (\alpha_i \cdot m_i) + \epsilon}
 $$
 where $\odot$ denotes element-wise multiplication and $\epsilon = 10^{-9}$ ensures numerical stability.
 
 The pooled representation is computed as the weighted sum of hidden states:
 $$
-\mathbf{h}_{\text{pooled}} = \sum_{i=1}^{L} \alpha_i \mathbf{h}_i \in \mathbb{R}^{256}
+	\mathbf{h}_{\text{pooled}} = \sum_{i=1}^{L} \alpha_i \mathbf{h}_i \in \mathbb{R}^{256}
 $$
 This approach accommodates the natural variability in sequencing read lengths without introducing computational inefficiency or artificial sequence information.
 
@@ -579,16 +579,16 @@ This approach accommodates the natural variability in sequencing read lengths wi
 The pooled sequence representation is processed through a \gls{mlp} with residual connections.
 For the pooled representation $\mathbf{h}_{\text{pooled}} \in \mathbb{R}^{256}$, the first layer performs dimensionality expansion:
 $$
-\mathbf{f}_1 = \text{Dropout}_{0.1}(\text{GELU}(\text{Linear}_{256 \to 512}(\mathbf{h}_{\text{pooled}}))) \in \mathbb{R}^{512}
+	\mathbf{f}_1 = \text{Dropout}_{0.1}(\text{GELU}(\text{Linear}_{256 \to 512}(\mathbf{h}_{\text{pooled}}))) \in \mathbb{R}^{512}
 $$
 
 For subsequent layers when dimensions match, residual blocks are employed.
 A residual block $\mathcal{R}$ with input $\mathbf{f}_{\text{in}} \in \mathbb{R}^{512}$ computes:
 \begin{align*}
-\mathbf{z}_1 &= \text{Linear}_{512 \to 512}(\mathbf{f}_{\text{in}}) \\
-\mathbf{z}_2 &= \text{Dropout}_{0.1}(\text{GELU}(\mathbf{z}_1)) \\
-\mathbf{z}_3 &= \text{Linear}_{512 \to 512}(\mathbf{z}_2) \\
-\mathbf{f}_{\text{out}} &= \text{Dropout}_{0.1}(\mathbf{z}_3) + \mathbf{f}_{\text{in}}
+	\mathbf{z}_1            & = \text{Linear}_{512 \to 512}(\mathbf{f}_{\text{in}})         \\
+	\mathbf{z}_2            & = \text{Dropout}_{0.1}(\text{GELU}(\mathbf{z}_1))             \\
+	\mathbf{z}_3            & = \text{Linear}_{512 \to 512}(\mathbf{z}_2)                   \\
+	\mathbf{f}_{\text{out}} & = \text{Dropout}_{0.1}(\mathbf{z}_3) + \mathbf{f}_{\text{in}}
 \end{align*}
 where the final addition represents the skip connection that adds the input to the transformed output.
 This residual design enables stable gradient flow during training and improved representation learning for complex genomic patterns.
@@ -597,21 +597,21 @@ This residual design enables stable gradient flow during training and improved r
 The final classification layer maps the processed features to binary classification logits.
 For the final feature representation $\mathbf{f}_{\text{final}} \in \mathbb{R}^{512}$ from the \gls{mlp}, the output logits are computed as:
 $$
-\mathbf{z} = [z_0, z_1] = \text{Linear}_{512 \to 2}(\mathbf{f}_{\text{final}}) \in \mathbb{R}^{2}
+	\mathbf{z} = [z_0, z_1] = \text{Linear}_{512 \to 2}(\mathbf{f}_{\text{final}}) \in \mathbb{R}^{2}
 $$
 where $z_0$ represents the logit for the ``biological'' class and $z_1$ represents the logit for the ``artificial chimeric'' class.
 
 The model outputs two logits rather than a single probability, enabling the use of cross-entropy loss during training.
 During inference, classification predictions are made by selecting the class with the highest logit:
 $$
-\hat{y} = \argmax_{i \in \{0,1\}} z_i
+	\hat{y} = \argmax_{i \in \{0,1\}} z_i
 $$
 Equivalently, after applying softmax, the predicted class corresponds to $\hat{y} = 1$ (artificial chimeric) if $z_1 > z_0$, otherwise $\hat{y} = 0$ (biological).
 
 \paragraph{Complete model architecture}
 The complete ChimeraLM architecture can be summarized as a composition of functions:
 $$
-\hat{y} = \argmax(\text{Linear}_{512 \to 2}(\mathcal{R}(\text{MLP}(\text{AttentionPool}(\text{HyenaDNA}(\tau(S)))))))
+	\hat{y} = \argmax(\text{Linear}_{512 \to 2}(\mathcal{R}(\text{MLP}(\text{AttentionPool}(\text{HyenaDNA}(\tau(S)))))))
 $$
 where $\tau$ denotes tokenization, HyenaDNA is the pre-trained backbone encoder, AttentionPool performs attention-based pooling, MLP is the first feedforward layer with expansion, $\mathcal{R}$ represents residual blocks, and the final linear layer produces binary classification logits.
 
@@ -640,10 +640,10 @@ The decoupled weight decay term $\lambda \theta_t$ provides regularization that 
 A learning rate scheduler (ReduceLROnPlateau) was employed to dynamically adjust the learning rate during training based on validation loss performance.
 The scheduler monitors validation loss $\mathcal{L}_{\text{val}}$ and reduces the learning rate by a factor of 0.1 when no improvement is observed for 10 consecutive epochs:
 $$
-\alpha_{t+1} = \begin{cases}
-0.1 \cdot \alpha_t & \text{if } \min(\mathcal{L}_{\text{val}}^{t-10}, \ldots, \mathcal{L}_{\text{val}}^{t}) \geq \mathcal{L}_{\text{val}}^{t-11} \\
-\alpha_t & \text{otherwise}
-\end{cases}
+	\alpha_{t+1} = \begin{cases}
+		0.1 \cdot \alpha_t & \text{if } \min(\mathcal{L}_{\text{val}}^{t-10}, \ldots, \mathcal{L}_{\text{val}}^{t}) \geq \mathcal{L}_{\text{val}}^{t-11} \\
+		\alpha_t           & \text{otherwise}
+	\end{cases}
 $$
 where $\alpha_t$ denotes the learning rate at epoch $t$.
 This adaptive learning rate adjustment enables fine-grained optimization as training progresses, allowing the model to escape plateaus and achieve better convergence.
