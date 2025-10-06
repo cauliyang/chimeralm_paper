@@ -584,13 +584,50 @@ The model training process typically required 24-48 hours depending on dataset s
 
 \subsection*{SV evaluation}
 
-Sniffles2~\cite{Sedlazeck2018, Smolka2024}, Manta~\cite{chen2016manta}, DELLY~\cite{rausch2012delly}, DeBreak~\cite{chen2023deciphering}, SVIM~\cite{heller2019svim}, cuteSV~\cite{jiang2020longreadbased}, and SvABA~\cite{wala2018svaba} were used.
+\paragraph{SV calling}
+Multiple \gls{sv} calling tools were employed to ensure comprehensive detection of structural variants across different sequencing platforms.
+For long-read sequencing data (Oxford Nanopore PromethION P2 and MinION Mk1c), we used Sniffles2~\cite{Sedlazeck2018, Smolka2024}, DeBreak~\cite{chen2023deciphering}, SVIM~\cite{heller2019svim}, and cuteSV~\cite{jiang2020longreadbased}.
+For short-read sequencing data (Illumina HiSeq), we used Manta~\cite{chen2016manta}, DELLY~\cite{rausch2012delly}, and SvABA~\cite{wala2018svaba}.
+Each tool was run with default parameters optimized for their respective sequencing technologies.
 
-\paragraph*{Construction of gold-standard SV dataset}
+\paragraph{Construction of gold-standard SV dataset}
+To construct a high-confidence gold-standard \gls{sv} dataset, we integrated \gls{sv} calls from both long-read and short-read sequencing platforms using bulk sequencing data from the PC3 cell line (Fig.~\ref{fig:figure3}a).
+This multi-platform, multi-caller approach ensures robust identification of genuine structural variants while minimizing false positives.
+
+For each sequencing platform, \gls{sv} events were filtered to retain only those detected by $\geq$2 independent \gls{sv} callers, reducing platform-specific false positives.
+Subsequently, \gls{sv} events supported by $\geq$2 sequencing datasets (requiring support from both long-read and short-read platforms) were retained as high-confidence events.
+This stringent filtering strategy ensures that the gold-standard dataset contains only structural variants with strong multi-platform evidence, providing a reliable reference for evaluating ChimeraLM's impact on \gls{sv} detection accuracy.
+
+The resulting gold-standard dataset represents high-confidence structural variants that can be reliably detected across different sequencing technologies and calling algorithms, serving as ground truth for assessing the biological relevance of \gls{sv} calls in \gls{wga} samples before and after ChimeraLM filtering.
+
+\subsection*{Benchmarking against existing methods}
+
+ChimeraLM was benchmarked against two existing computational methods for chimeric artifact detection: SACRA~\cite{kiguchi2021long} and 3rd-ChimeraMiner~\cite{lu2023exploration}.
+Both tools were run on the same \gls{wga} datasets (PromethION P2 and MinION Mk1c) using default parameters as recommended in their respective documentation.
+Performance was evaluated by comparing the percentage reduction in chimeric reads achieved by each method relative to unprocessed \gls{wga} data.
+Chimeric reads were identified using alignment-based criteria, and reduction rates were calculated as the proportion of chimeric reads successfully removed by each method.
+
+\subsection*{Attention weight analysis}
+
+To investigate the interpretability of ChimeraLM's decision-making process, we analyzed attention weights from the attention pooling mechanism for representative chimeric reads.
+Attention weights indicate the relative importance assigned to each sequence position during classification.
+For selected chimeric reads, we extracted per-position attention weights and visualized them alongside read alignments to reference genome coordinates.
+
+Chimeric junction positions were identified from alignment data, and a window region of $\pm$50 bp surrounding each junction was defined.
+Attention weights within the junction window were compared to background regions using the Wilcoxon rank-sum test.
+Statistical significance was assessed at $p < 0.001$ threshold to identify cases where the model exhibited significantly elevated attention at chimeric junctions.
+
+\subsection*{Statistical analysis}
+
+Statistical comparisons were performed using non-parametric tests implemented in Python's SciPy library~\cite{2020SciPy-NMeth}.
+The Wilcoxon rank-sum test (Mann-Whitney U test) was used to compare attention weight distributions between junction windows and background regions, as attention weights do not follow normal distributions.
+All statistical tests were two-sided, and $p$-values less than 0.001 were considered statistically significant.
 
 \subsection*{Figure plotting and visualization}
 
-The figures were created using Python with libraries including Matplotlib~\cite{Hunter2007} and Seaborn~\cite{Waskom2021}.
+All figures were created using Python with libraries including Matplotlib~\cite{Hunter2007} and Seaborn~\cite{Waskom2021}.
+Genomic alignment visualizations were generated using custom scripts to illustrate read-to-reference mappings, orientation patterns, and chimeric junction positions.
+Statistical plots including box plots, bar charts, and pie charts were generated with standard plotting functions, with colors selected to ensure accessibility and clarity.
 
 \subsection*{Computing resource}
 
