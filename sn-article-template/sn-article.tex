@@ -469,6 +469,24 @@ As single-cell approaches become increasingly central to modern biology and medi
 
 \subsection*{MDA sequencing}
 
+\subsection*{Sequencing and data processing}
+
+\paragraph{Sequencing platforms}
+Long-read sequencing was performed using Oxford Nanopore Technologies platforms, including PromethION P2 and MinION Mk1c devices.
+Both \gls{wga}-amplified and bulk (non-amplified) DNA samples from PC3 cell line were sequenced to generate paired datasets for training and evaluation.
+Sequencing libraries were prepared following manufacturer's protocols for genomic DNA sequencing.
+
+\paragraph{Read alignment and processing}
+Raw sequencing reads were basecalled and quality-filtered using standard Nanopore basecalling pipelines.
+Reads were aligned to the human reference genome (GRCh38/hg38) using minimap2~\cite{li2018minimap2} with parameters optimized for long-read genomic alignment (-ax map-ont).
+Alignment files were processed using SAMtools~\cite{danecek2021twelve} for sorting, indexing, and quality filtering.
+
+\paragraph{Chimeric read identification}
+Chimeric reads were identified based on the presence of supplementary alignments in BAM files using the SA (Supplementary Alignment) tag.
+The SA tag indicates that a read has additional alignments beyond the primary alignment, which is characteristic of chimeric sequences that map to multiple distant genomic locations.
+Reads containing the SA tag were classified as chimeric reads, while reads without the SA tag (single continuous alignments) were classified as non-chimeric.
+This approach leverages the standard BAM format specification to reliably identify reads with complex alignment patterns.
+
 \subsection*{Training data construction}
 
 \paragraph{Paired sequencing dataset generation}
@@ -568,8 +586,10 @@ The model evaluation metrics included accuracy, precision, recall and the F1 sco
 \begin{align*}
 	\textrm{Precision} & = \frac{\textrm{TP}}{\textrm{TP}+\textrm{FP}}                                                     \\
 	\textrm{Recall}    & = \frac{\textrm{TP}}{\textrm{TP}+\textrm{FN}}                                                     \\
-	\textrm{F1}        & = 2 \times \frac{\textrm{Precision} \times \textrm{Recall}}{\textrm{Precision} + \textrm{Recall}}
+	\textrm{F1}        & = 2 \times \frac{\textrm{Precision} \times \textrm{Recall}}{\textrm{Precision} + \textrm{Recall}} \\
+	\textrm{Accuracy}  & = \frac{\textrm{TP} + \textrm{TN}}{\textrm{TP} + \textrm{TN} + \textrm{FP} + \textrm{FN}}
 \end{align*}
+where TP (true positives) represents chimeric reads correctly classified as artificial, TN (true negatives) represents biological reads correctly classified as biological, FP (false positives) represents biological reads incorrectly classified as artificial, and FN (false negatives) represents chimeric reads incorrectly classified as biological.
 Validation metrics were computed at the end of each epoch to track model improvement and trigger early stopping when performance plateaued.
 The validation process used the same data preprocessing and tokenization procedures as training to ensure consistent evaluation conditions.
 
@@ -583,6 +603,33 @@ The configuration system allowed for systematic exploration of hyperparameters w
 
 All training experiments were conducted using consistent hardware configurations and software environments to ensure reliable performance comparisons.
 The model training process typically required 24-48 hours depending on dataset size and convergence characteristics, with automatic checkpointing enabled to prevent loss of progress due to hardware failures or interruptions.
+
+\subsection*{Model inference and application}
+
+\paragraph{Inference pipeline}
+For applying ChimeraLM to new \gls{wga} sequencing datasets, the model takes a BAM file as input.
+Reads are extracted from the BAM file and converted to FASTA format for sequence processing.
+Each read sequence is tokenized using the HyenaDNA tokenizer with single base pair resolution.
+The trained ChimeraLM model processes sequences in batches, generating two logits $[z_0, z_1]$ for each read, where $z_0$ corresponds to the ``biological'' class and $z_1$ corresponds to the ``artificial chimeric'' class.
+
+\paragraph{Classification decision}
+The final classification is determined by applying the softmax function to convert logits to probabilities:
+$$
+	p_i = \frac{\exp(z_i)}{\exp(z_0) + \exp(z_1)}, \quad i \in \{0, 1\}
+$$
+The predicted class is the one with the higher probability. If $p_1 > p_0$ (i.e., $z_1 > z_0$), the read is classified as ``artificial chimeric''; otherwise, it is classified as ``biological.''
+
+\paragraph{Output filtering}
+ChimeraLM outputs a filtered BAM file containing only reads classified as ``biological,'' effectively removing chimeric artifacts from the dataset.
+The filtered BAM file retains all original alignment information and can be directly used for downstream genomic analyses, including structural variant calling.
+Reads classified as ``artificial chimeric'' are excluded from the output file.
+
+\subsection*{Test set evaluation}
+
+Final model performance was evaluated on the held-out test set that remained completely isolated from the training process.
+The test set evaluation provides an unbiased estimate of ChimeraLM's generalization performance on previously unseen data.
+For the binary classification task, true positives (TP) represent chimeric reads correctly classified as artificial, true negatives (TN) represent biological reads correctly classified as biological, false positives (FP) represent biological reads incorrectly classified as artificial, and false negatives (FN) represent chimeric reads incorrectly classified as biological.
+All metrics (Precision, Recall, F1 score, Accuracy) were computed using the same formulations as described in the Model validation and evaluation section.
 
 \subsection*{SV evaluation}
 
@@ -635,6 +682,18 @@ Statistical plots including box plots, bar charts, and pie charts were generated
 
 All computations were performed on a \gls{hpc} server equipped with a 64-core Intel(R) Xeon(R) Gold 6338 CPU and 256 GB of RAM.
 The server was also configured with two NVIDIA A100 \glspl{gpu}, each with 80 GB of memory, enabling efficient processing of both CPU-intensive tasks and \gls{gpu}-accelerated deep learning workloads.
+
+\subsection*{Software and reproducibility}
+
+All analyses were conducted using Python 3.10 with PyTorch 2.0~\cite{paszke2019pytorch} and PyTorch Lightning 2.0~\cite{Falcon_PyTorch_Lightning_2019}.
+Key dependencies include NumPy~\cite{harris2020array} for numerical computing, Pandas~\cite{mckinney2010data} for data manipulation, and Scikit-learn~\cite{pedregosa2011scikit} for machine learning utilities.
+The HyenaDNA model~\cite{nguyen2023hyenadna} was obtained from the official repository and adapted for chimeric detection.
+
+Random seeds were fixed (seed=12345) for all stochastic operations including data shuffling, weight initialization, and dropout to ensure reproducibility of results.
+Model checkpoints were saved at the end of each training epoch, and the best-performing model based on validation metrics was selected for final evaluation.
+
+All custom scripts for data processing, model training, and evaluation are documented with inline comments and structured to facilitate replication of the reported results.
+Computational workflows were managed using configuration files (Hydra framework~\cite{Yadan2019Hydra}) to enable systematic tracking of experimental parameters and ensure reproducible execution across different computing environments.
 
 \backmatter
 
