@@ -392,36 +392,34 @@ The consistency across both datasets validates ChimeraLM\textquotesingle s abili
 	\begin{center}
 		\includegraphics[width=\textwidth]{final_figures/figure4}
 	\end{center}
-	\caption{Explainable attention with read \emph{6f4568e5-3543-48c7-a64b-f4010c03804c}}\label{fig:figure4}
+	\caption{{\bf Attention-based interpretability reveals ChimeraLM's capacity to focus on chimeric junction regions.}
+		(a) Attention weight profile across a representative chimeric read. Upper panel shows attention weights per sequence position (blue line) with overall mean attention (dashed line). Red vertical line indicates the chimeric junction position in the read, with pink shading marking the junction window ($\pm$50 bp). Purple arrow indicates the corresponding \gls{sv} breakpoint position in the reference genome. Lower panel illustrates read alignment: the read (top bar) shows reverse-complemented sequence (red with leftward arrows) transitioning to forward sequence (green with rightward arrows) at the junction. Reference genome (bottom bar) shows continuous forward orientation, with gray regions indicating alignment relationships.
+		(b) Quantitative comparison of attention weights between junction window and background regions. Box plots show significantly elevated attention weights in the junction window (median $\sim$0.0008) compared to background regions (median $\sim$0.0003), with statistical significance indicated (***, $p < 0.001$, Wilcoxon rank-sum test).
+		(c) Proposed mechanism of chimera formation during \gls{wga}. Step 1: Original DNA fragments from distant genomic loci (Fragment A and Fragment B) exist in forward orientation. Step 2: During \gls{wga}, Fragment A undergoes random reverse-complementation while Fragment B maintains forward orientation. Step 3: Template switching causes artificial joining of the two fragments, creating a chimeric artifact with discordant orientation patterns.}\label{fig:figure4}
 \end{figure}
 
-\subsection*{ChimeraLM learns biologically relevant sequence features}
+\subsection*{ChimeraLM demonstrates capacity to learn biologically relevant sequence features}
 
-To investigate whether ChimeraLM captures biologically meaningful features for chimeric artifact detection, we examined the attention weight distributions of the model's pooling mechanism.
-The attention weights indicate which sequence regions contribute most strongly to classification decisions, providing insight into the types of patterns the model learns during training.
+To investigate whether ChimeraLM can capture biologically meaningful features for chimeric artifact detection, we examined the attention weight distributions from the model's pooling mechanism.
+Attention weights indicate which sequence regions contribute most strongly to individual classification decisions, providing potential insight into learned patterns.
 
-We identified a representative example that illustrates ChimeraLM's capability to focus on biologically relevant sequence features (Fig.~\ref{fig:figure4}).
-In this chimeric read, the attention weight profile showed predominantly low values across most of the sequence, with a pronounced spike occurring at the position corresponding to the end of the primary alignment where the chimeric junction is located.
-This focused attention pattern demonstrates that the model can learn to identify critical transition points where DNA fragments from different genomic loci are artificially joined during \gls{wga}.
+We present representative examples where ChimeraLM's attention mechanism shows focused activity at chimeric junction sites (Fig.~\ref{fig:figure4} and Extended Data Fig.~\ref{fig:sf3}).
+In these chimeric reads, the attention profiles exhibited predominantly low baseline weights with pronounced peaks coinciding with chimeric junctions where reads transition between reverse-complemented and forward-oriented sequences.
+These junctions represent artificial joining points where DNA fragments from different genomic loci were ligated during \gls{wga}.
 
-The alignment pattern further illustrates how biologically meaningful features can inform model predictions.
-The primary alignment (salmon region) extends from the sequence start to position approximately 1650, where it terminates at the chimeric junction.
-Beyond this point, the sequence aligns to a distant genomic location (green region).
-The attention weight peak coincides with this transition point, demonstrating that ChimeraLM learned to utilize the end of primary alignment as a diagnostic feature for this chimeric artifact.
+The alignment pattern illustrates the structural signature present in these examples (Fig.~\ref{fig:figure4}a).
+In the first example, the read portion aligns in reverse orientation (red), while the downstream portion aligns in forward orientation to a distant genomic location (green).
+This discordant orientation pattern represents a characteristic feature of \gls{wga}-induced chimeric artifacts.
 
-In this case, ChimeraLM's attention mechanism successfully identified the junction region where artificial joining occurred.
-Quantitative analysis demonstrated significantly higher attention weights in the window region with size 100 nt surrounding the chimeric breakpoint compared to background regions (Fig.~\ref{fig:figure4}b).
-The median attention weight in the window region was approximately 3-fold higher than background levels, with the difference achieving high statistical significance ($p < 0.001$, Wilcoxon rank-sum test).
-This preferential attention allocation suggests that the model learned to recognize sequence discontinuities, orientation changes, or other local features characteristic of artificial joining events.
+For these specific examples, quantitative analysis showed that attention weights within 100 bp windows ($\pm$50 bp) centered on chimeric junctions exhibited significantly higher values compared to background regions (Fig.~\ref{fig:figure4}b).
+The median attention weight in the junction window was approximately 2.7-fold higher than background (window median: 0.0008; background median: 0.0003; $p < 0.001$, Wilcoxon rank-sum test).
 
-The example illustrates the possible mechanism of chimera formation during \gls{wga} (Fig.~\ref{fig:figure4}c).
-Original DNA fragments from distant genomic locations (Fragment A and Fragment B) undergo random orientation during amplification, with Fragment A reverse-complemented while Fragment B maintains its original orientation.
-These fragments are then artificially joined to create a chimeric construct containing sequence from both genomic loci.
-The resulting chimeric read exhibits discordant alignment patterns when mapped to the reference genome, with portions aligning in different orientations at distant genomic positions.
+These examples align with the proposed mechanism of chimera formation during \gls{wga} (Fig.~\ref{fig:figure4}c).
+Original DNA fragments from distant genomic loci undergo random orientation changes during amplification.
+Template switching events cause these independently oriented fragments to be artificially joined, creating chimeric constructs with orientation discontinuities at junction sites.
 
-This example demonstrates that ChimeraLM has the capacity to learn biologically interpretable features related to chimera formation mechanisms.
-The attention mechanism's ability to focus on junction points provides evidence that the model's learned representations can align with biological understanding of \gls{wga} artifacts, though the specific features and attention patterns may vary across different chimeric sequences.
-This case illustrates the potential for deep learning models to discover relevant sequence patterns that contribute to accurate chimeric artifact detection.
+These case studies demonstrate that ChimeraLM has the capacity to learn biologically interpretable features related to chimeric junction sites, though the prevalence and consistency of this attention pattern across the full dataset remains to be systematically characterized.
+The observation that the model can focus on mechanistically relevant sequence features in at least some cases provides evidence that ChimeraLM's learned representations may incorporate structural signatures of \gls{wga} artifacts rather than relying solely on other sequence characteristics.
 
 \section*{Discussion}
 The development of ChimeraLM addresses a fundamental bottleneck that has limited the widespread adoption and reliability of single-cell genomic approaches.
