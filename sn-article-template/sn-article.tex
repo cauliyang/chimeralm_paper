@@ -192,27 +192,23 @@
 
 Single-cell genomics has revolutionized our understanding of cellular heterogeneity and development by enabling the characterization of individual cells rather than bulk populations~\cite{kalef2024single, sun2024mapping}.
 This approach has proven instrumental in uncovering rare cell types, tracking developmental trajectories, and identifying somatic mutations that drive disease progression.
-However, the limited amount of DNA present in a single cell, typically only a few picograms, poses significant technical challenges for comprehensive genomic analysis~\cite{leung2016highly, gawad2016single}.
+However, the limited DNA content in a single cell—typically only a few picograms—poses significant technical challenges for comprehensive genomic analysis~\cite{leung2016highly, gawad2016single}.
 
-To overcome this fundamental limitation, \gls{wga} has become an essential preprocessing step in single-cell genomic studies~\cite{zong2012genome, huang2015single}.
+To overcome this limitation, \gls{wga} has become essential for single-cell genomic studies~\cite{zong2012genome, huang2015single}.
 Various \gls{wga} techniques, including \gls{mda}, \gls{malbac}, and other emerging methods, can amplify the entire genome from a single cell by several orders of magnitude, generating sufficient DNA material for high-coverage sequencing~\cite{de2014quantitative, biezuner2021comparison,fu2015uniform, agyabeng2025evaluating}.
-This amplification enables researchers to achieve the depth and breadth of coverage necessary for reliable variant calling, copy number analysis, and structural variation detection.
+This amplification enables the depth and breadth of coverage necessary for reliable variant calling, copy number analysis, and structural variation detection.
 
-Despite its critical role in single-cell genomics, \gls{wga} introduces systematic artifacts that can significantly impact downstream analyses~\cite{lu2023chimera, lu2023exploration}.
-Among the most problematic are chimeric sequences\textemdash artificial DNA constructs formed when DNA fragments from different genomic loci are erroneously joined during the amplification process~\cite{lu2023chimera, lu2023exploration, agyabeng2025evaluating}.
-These chimeric artifacts can manifest as false-positive structural variations that do not exist in the original cell~\cite{lu2023chimera}.
-The presence of such artifacts poses a substantial challenge for accurate \gls{sv} detection, potentially leading to misinterpretation of genomic rearrangements and their biological significance.
+Despite its critical role, \gls{wga} introduces systematic artifacts that significantly impact downstream analyses~\cite{lu2023chimera, lu2023exploration}.
+Among the most problematic are chimeric sequences—artificial DNA constructs formed when fragments from different genomic loci are erroneously joined during amplification~\cite{lu2023chimera, lu2023exploration, agyabeng2025evaluating}.
+These chimeric artifacts manifest as false-positive structural variations that do not exist in the original cell~\cite{lu2023chimera}, posing substantial challenges for accurate \gls{sv} detection and potentially leading to misinterpretation of genomic rearrangements and their biological significance.
 
 Current computational approaches for identifying \gls{wga}-induced artifacts rely primarily on coverage-based metrics and read-pair orientation patterns~\cite{kiguchi2021long, lu2023exploration}.
-However, these methods often fail to distinguish between genuine structural variations and amplification artifacts, particularly when chimeric sequences exhibit complex rearrangement patterns or occur in repetitive genomic regions~\cite{kosugi2019comprehensive, mahmoud2019structural}.
-The lack of robust artifact detection methods has limited the reliability of structural variant analysis in single-cell studies and hindered the full realization of single-cell genomics' potential.
+However, these methods often fail to distinguish genuine structural variations from amplification artifacts, particularly when chimeric sequences exhibit complex rearrangement patterns or occur in repetitive genomic regions~\cite{kosugi2019comprehensive, mahmoud2019structural}.
+This lack of robust artifact detection has limited the reliability of structural variant analysis in single-cell studies and hindered the full realization of single-cell genomics' potential.
 
-To address these challenges, we developed ChimeraLM, a genomic language model specifically designed to detect chimeric artifacts introduced by whole genome amplification.
-By leveraging deep learning approaches to capture sequence patterns and contextual information in genomic reads~\cite{dalla2025nucleotide, zhou2023dnabert, nguyen2023hyenadna}, ChimeraLM can effectively distinguish between genuine biological sequences and \gls{wga}-induced chimeric artifacts.
-This approach represents a significant advancement in single-cell genomic analysis, offering improved accuracy in artifact detection and enabling more reliable \gls{sv} analysis in single-cell studies.
-This methodology represents a significant advancement in single-cell genomic analysis, offering a principled approach to improve the reliability of \gls{sv} detection and enable more precise characterization of genomic alterations in individual cells.
-
-In this study, we present ChimeraLM, demonstrate its superior performance compared to existing methods, and illustrate its practical applications in genomic studies.
+Here, we developed ChimeraLM, a genomic language model specifically designed to detect chimeric artifacts introduced by whole genome amplification.
+By leveraging deep learning to capture sequence patterns and contextual information in genomic reads~\cite{dalla2025nucleotide, zhou2023dnabert, nguyen2023hyenadna}, ChimeraLM effectively distinguishes genuine biological sequences from \gls{wga}-induced chimeric artifacts.
+We demonstrate that ChimeraLM achieves superior performance compared to existing methods and substantially improves the reliability of \gls{sv} detection in single-cell genomic studies.
 
 \begin{figure}[!ht]
 	\begin{center}
