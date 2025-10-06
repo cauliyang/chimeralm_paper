@@ -419,12 +419,12 @@ These case studies demonstrate that ChimeraLM has the capacity to learn biologic
 The observation that the model can focus on mechanistically relevant sequence features in at least some cases provides evidence that ChimeraLM's learned representations may incorporate structural signatures of \gls{wga} artifacts rather than relying solely on other sequence characteristics.
 
 \section*{Discussion}
-The development of ChimeraLM addresses a fundamental bottleneck that has limited the widespread adoption and reliability of single-cell genomic approaches.
-While \gls{wga} has enabled genomic analysis of individual cells, the systematic introduction of chimeric artifacts has remained an unsolved challenge that compromises downstream interpretations and limits the biological insights.
+ChimeraLM addresses a fundamental bottleneck that has limited the widespread adoption and reliability of single-cell genomic approaches.
+While \gls{wga} has enabled genomic analysis of individual cells, the systematic introduction of chimeric artifacts has remained an unsolved challenge that compromises downstream interpretations and limits biological insights.
 
-Traditional approaches to managing \gls{wga} artifacts have focused on post-hoc filtering of \gls{sv} calls or coverage-based correction methods \textbf{(cite)}.
+Traditional approaches to managing \gls{wga} artifacts have focused on post-hoc filtering of \gls{sv} calls or coverage-based correction methods~\cite{kiguchi2021long, lu2023exploration}.
 ChimeraLM represents a paradigm shift toward proactive identification of problematic sequences before they impact downstream analyses.
-This upstream intervention strategy is conceptually superior because it addresses the root cause of analytical errors rather than attempting to correct their consequences after variant calling.
+This upstream intervention strategy addresses the root cause of analytical errors rather than attempting to correct their consequences after variant calling.
 
 The success of this approach demonstrates the power of modern genomic language models to capture complex sequence patterns that are not readily apparent through traditional bioinformatics methods.
 Unlike rule-based approaches that rely on predefined criteria, ChimeraLM learns directly from data, enabling discovery of subtle features that distinguish authentic biological sequences from amplification artifacts~\cite{lu2023exploration, agyabeng2025evaluating, nguyen2023hyenadna}.
@@ -432,12 +432,12 @@ This data-driven approach is particularly valuable for complex genomic phenomena
 
 The demonstrated effectiveness of ChimeraLM has broader implications for single-cell genomics methodology.
 The ability to substantially improve data quality through computational approaches reduces the experimental burden of optimizing amplification protocols and may enable researchers to focus on biological questions rather than technical optimization.
-This could accelerate the adoption of single-cell genomic approaches in laboratories with limited specialized expertise in amplification chemistry.
+This could accelerate adoption of single-cell genomic approaches in laboratories with limited specialized expertise in amplification chemistry.
 
-Furthermore, the improved reliability of \gls{sv} detection opens new avenues for applications that have been previously constrained by high false-positive rates.
+Furthermore, improved reliability of \gls{sv} detection opens new avenues for applications that have been previously constrained by high false-positive rates.
 Studies of chromosomal instability, copy number evolution, and \gls{sv} burden in individual cells become more feasible when researchers can have confidence in the authenticity of detected events.
 
-ChimeraLM\textquotesingle s success exemplifies the transformative potential of language model approaches in genomics.
+ChimeraLM's success exemplifies the transformative potential of language model approaches in genomics.
 The recent emergence of foundation models for biological sequences has demonstrated remarkable capabilities across diverse tasks, but most applications have focused on prediction of molecular phenotypes or functional annotations.
 ChimeraLM represents one of the first applications of \gls{glm} to quality control and data preprocessing, suggesting that these approaches may have broader utility for improving experimental data quality than previously recognized.
 
@@ -448,7 +448,7 @@ While ChimeraLM represents a significant advance, several limitations merit cons
 The requirement for paired bulk sequencing data for training constrains the initial application scope, though this limitation may be addressable through transfer learning approaches as the method matures.
 The current focus on Nanopore platforms, while representing the most common long-read technology for single-cell applications, leaves questions about broader platform compatibility.
 
-Perhaps more fundamentally, the binary classification approach assumes a clear distinction between biological and artificial sequences.
+More fundamentally, the binary classification approach assumes a clear distinction between biological and artificial sequences.
 In reality, some chimeric events may represent genuine biological phenomena, such as chromothripsis or complex structural rearrangements.
 Future developments may need to incorporate more nuanced classification schemes that can distinguish between different types of chimeric events based on their likely biological relevance.
 
@@ -456,7 +456,7 @@ The success of ChimeraLM suggests several promising directions for future develo
 Integration with real-time sequencing platforms could enable immediate quality assessment and adaptive sampling strategies.
 Extension to other single-cell genomic applications, such as chromatin accessibility or methylation analysis, could address analogous quality control challenges in emerging single-cell methods.
 
-The interpretability features of modern language models could be leveraged to provide insights into the sequence features that distinguish chimeric artifacts, potentially informing the development of improved amplification protocols.
+The interpretability features of modern language models could be leveraged to provide insights into the sequence features that distinguish chimeric artifacts, potentially informing development of improved amplification protocols.
 This feedback loop between computational analysis and experimental optimization could drive continuous improvement in single-cell genomic methods.
 
 ChimeraLM demonstrates that sophisticated computational approaches can effectively address fundamental technical challenges that have limited single-cell genomics.
@@ -473,7 +473,7 @@ As single-cell approaches become increasingly central to modern biology and medi
 Training data for ChimeraLM was constructed using a novel comparative approach that leverages paired \gls{wga} and bulk sequencing datasets from identical biological samples (PC3 cell line).
 This methodology exploits the fundamental difference between amplified and non-amplified samples to establish reliable ground truth labels for supervised learning.
 Bulk sequencing data serves as a reference standard containing only genuine biological sequences, while \gls{wga} data contains both authentic genomic content and amplification-induced chimeric artifacts.
-Sample preparation involved processing PC3 cell line generate matched \gls{wga} and bulk sequencing datasets.
+Sample preparation involved processing PC3 cell line to generate matched \gls{wga} and bulk sequencing datasets.
 
 \paragraph{Ground truth labeling methodology}
 The core innovation of our training data construction lies in the comparative labeling strategy that automatically generates binary classification labels.
@@ -495,7 +495,7 @@ Stratification ensured that each data partition maintained similar proportions o
 
 \subsection*{Model architecture}
 
-ChimeraLM use a pre-trained HyenaDNA which provides robust genomic sequence representations learned from large-scale genomic data.
+ChimeraLM uses a pre-trained HyenaDNA which provides robust genomic sequence representations learned from large-scale genomic data.
 The backbone model handles DNA sequence tokenization using single base pair resolution, converting nucleotide sequences into token representations.
 
 Input sequences are processed through the Hyena operators.
@@ -584,13 +584,13 @@ The model training process typically required 24-48 hours depending on dataset s
 
 \subsection*{SV evaluation}
 
-Sniffles2~\cite{Sedlazeck2018, Smolka2024}, Manta~\cite{chen2016manta}, DELLY~\cite{rausch2012delly}, DeBreak~\cite{chen2023deciphering}, SVIM~\cite{heller2019svim}, cuteSV~\cite{jiang2020longreadbased}, and SvABA~\cite{wala2018svaba} is used.
+Sniffles2~\cite{Sedlazeck2018, Smolka2024}, Manta~\cite{chen2016manta}, DELLY~\cite{rausch2012delly}, DeBreak~\cite{chen2023deciphering}, SVIM~\cite{heller2019svim}, cuteSV~\cite{jiang2020longreadbased}, and SvABA~\cite{wala2018svaba} were used.
 
 \paragraph*{Construction of gold-standard SV dataset}
 
 \subsection*{Figure plotting and visualization}
 
-The figures are created using Python with libraries including Matplotlib~\cite{Hunter2007} and Seaborn~\cite{Waskom2021}.
+The figures were created using Python with libraries including Matplotlib~\cite{Hunter2007} and Seaborn~\cite{Waskom2021}.
 
 \subsection*{Computing resource}
 
