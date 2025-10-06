@@ -1,0 +1,34 @@
+PRESUBMISSION ENQUIRY FOR NATURE METHODS
+
+Title: ChimeraLM: A genomic language model for detecting whole genome amplification artifacts in single-cell sequencing
+
+Dear Editor,
+
+We would like to submit our manuscript describing ChimeraLM, a deep learning method that addresses a critical bottleneck in single-cell genomics by detecting chimeric artifacts introduced during whole genome amplification (WGA). We believe this work is well-suited for Nature Methods given its focus on a novel computational method with broad applications in single-cell genomics.
+
+Single-cell genomic analysis requires WGA to generate sufficient DNA for sequencing. However, WGA systematically introduces chimeric artifacts—artificial DNA sequences formed when fragments from different genomic loci are erroneously joined during amplification. These artifacts manifest as false-positive structural variants (SVs), severely compromising the reliability of single-cell genomic studies. Current computational methods fail to effectively distinguish genuine SVs from WGA-induced artifacts.
+
+ChimeraLM employs a genomic language model architecture based on Hyena operators to classify sequencing reads as biological or chimeric artifacts. We developed a novel training strategy using paired WGA and bulk sequencing data from the same biological sample to establish ground truth labels. Key findings include:
+
+- ChimeraLM achieves high performance (F1=0.805, recall=0.946) in artifact detection
+- Reduces chimeric contamination by ~90% across two Nanopore sequencing platforms
+- Substantially outperforms existing methods (SACRA, 3rd-ChimeraMiner showed 0% reduction)
+- Improves SV calling accuracy ~12-fold (from 0.24% to 2.64% validation rate)
+- Demonstrates interpretability through attention weights focusing on chimeric junctions
+
+ChimeraLM represents the first application of genomic language models to quality control in single-cell sequencing. The method integrates seamlessly into existing workflows and substantially improves data quality without modifying experimental protocols. We validate performance across multiple sequencing platforms and demonstrate practical impact on downstream SV analysis using gold-standard datasets.
+
+This work addresses a fundamental technical challenge limiting single-cell genomics and provides a robust computational solution with immediate practical applications for the genomics community.
+
+We look forward to your feedback on the suitability of this work for Nature Methods.
+
+Sincerely,
+[Authors]
+
+---
+
+Suggested keywords: single-cell genomics, whole genome amplification, chimeric artifacts, genomic language models, structural variants, deep learning, long-read sequencing
+
+Manuscript type: Article (computational method)
+
+Estimated length: ~4,000 words main text, 4 main figures, 3 extended data figures
