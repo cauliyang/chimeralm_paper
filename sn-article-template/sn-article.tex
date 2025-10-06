@@ -484,7 +484,9 @@ Alignment files were processed using SAMtools~\cite{danecek2021twelve} for sorti
 \paragraph{Chimeric read identification}
 Chimeric reads were identified based on the presence of supplementary alignments in BAM files using the SA (Supplementary Alignment) tag.
 The SA tag indicates that a read has additional alignments beyond the primary alignment, which is characteristic of chimeric sequences that map to multiple distant genomic locations.
-Reads containing the SA tag were classified as chimeric reads, while reads without the SA tag (single continuous alignments) were classified as non-chimeric.
+To ensure accurate identification, we applied stringent filtering criteria: reads were classified as chimeric only if they (1) contained the SA tag, (2) were not unmapped, (3) were not secondary alignments, and (4) were not supplementary alignments themselves.
+This filtering approach ensures that only primary alignments with supplementary mapping evidence are considered chimeric, avoiding double-counting of the same chimeric event and excluding low-quality or ambiguous alignments.
+Reads without the SA tag (single continuous alignments) were classified as non-chimeric.
 This approach leverages the standard BAM format specification to reliably identify reads with complex alignment patterns.
 
 \subsection*{Training data construction}
@@ -515,8 +517,9 @@ Stratification ensured that each data partition maintained similar proportions o
 
 \subsection*{Model architecture}
 
-ChimeraLM uses a pre-trained HyenaDNA which provides robust genomic sequence representations learned from large-scale genomic data.
-The backbone model handles DNA sequence tokenization using single base pair resolution, converting nucleotide sequences into token representations.
+ChimeraLM uses a pre-trained HyenaDNA model (hyenadna-small-32k-seqlen) which provides robust genomic sequence representations learned from large-scale genomic data.
+The backbone model handles DNA sequence tokenization using single base pair resolution with a maximum sequence length of 32,768 base pairs, converting nucleotide sequences into token representations.
+The tokenizer employs character-level encoding where each nucleotide (A, C, G, T, N) is mapped to a unique token ID, with additional special tokens for sequence boundaries and padding.
 
 Input sequences are processed through the Hyena operators.
 The backbone generates contextualized hidden representations for each position in the input sequence, capturing both local sequence motifs and long-range dependencies essential for distinguishing biological sequences from chimeric artifacts.
@@ -527,13 +530,15 @@ The classifier implements attention-based pooling to aggregate variable-length s
 $$
 	\textrm{attention\_weights} = \textrm{softmax}(\textrm{Linear}(\textrm{GELU}(\textrm{Linear}(\textrm{hidden\_states}))))
 $$
-The attention pooling mechanism computes position-wise attention weights through a two-layer neural network where the first linear layer projects from the hidden dimension to 256 dimensions, followed by \gls{gelu} activation and a second linear layer projecting to a single attention score per position.
+The attention pooling mechanism computes position-wise attention weights through a two-layer neural network where the first linear layer projects from the input hidden dimension (256) to half the classifier hidden dimension (256 dimensions), followed by \gls{gelu} activation and a second linear layer projecting to a single attention score per position.
 The attention weights are normalized using \emph{softmax} and applied to compute the weighted sum of hidden states across sequence positions.
 When attention masks are provided for variable-length sequences, the attention weights are masked to exclude padding tokens and renormalized to ensure proper probability distribution over valid sequence positions.
 This approach accommodates the natural variability in sequencing read lengths without introducing computational inefficiency or artificial sequence information.
 
 The pooled sequence representation is processed through a \gls{mlp} with residual connections.
-The \gls{mlp} uses two hidden layers, each consisting of linear transformation to 512 hidden dimensions, \gls{gelu} activation function, and dropout regularization with rate 0.1.
+The \gls{mlp} consists of two sequential layers:
+First, a linear transformation from input dimension (256) to hidden dimension (512), followed by \gls{gelu} activation and dropout (rate 0.1).
+Second, for subsequent layers when input and hidden dimensions match, residual blocks are employed consisting of two linear transformations (512→512) with \gls{gelu} activation and dropout between them, combined with skip connections that add the input to the output.
 This residual design enables stable gradient flow during training and improved representation learning for complex genomic patterns.
 
 The final classification layer maps the processed features to binary classification logits using a linear transformation with output dimension 2.
@@ -544,21 +549,25 @@ Classification predictions are made by selecting the class with the highest logi
 
 \paragraph{Training data preparation}
 ChimeraLM was trained using the paired \gls{wga} and bulk sequencing dataset constructed from PromethION P2 platform data.
-The tokenizer was initialized from the pre-trained HyenaDNA model to maintain consistency with the backbone architecture and preserve the benefits of pre-training on large-scale genomic data.
-This approach ensures that input sequences are processed using the same tokenization scheme employed during the backbone model\textquotesingle{s} original training, enabling effective transfer learning for the chimeric detection task.
+The tokenizer was initialized from the pre-trained HyenaDNA model (hyenadna-small-32k-seqlen) using the Hugging Face transformers library, loading the pre-configured tokenizer with maximum sequence length of 32,768 bp, automatic truncation, and padding enabled.
+This approach ensures that input sequences are processed using the same tokenization scheme employed during the backbone model's original training, enabling effective transfer learning for the chimeric detection task.
+Sequences longer than the maximum length are truncated, while shorter sequences are padded to enable efficient batch processing.
 
 \paragraph{Model training framework and optimization}
 Model training was implemented within PyTorch~\cite{paszke2019pytorch} and PyTorch Lightning framework~\cite{Falcon_PyTorch_Lightning_2019}, providing a standardized interface for supervised classification tasks with automatic handling of training loops, validation procedures, and model checkpointing.
 The training process employed mixed-precision computation using bf16-mixed precision to accelerate training while maintaining numerical stability for gradient computation.
 
 The optimization procedure utilized the AdamW optimizer~\cite{adamw}, an extension of the Adam optimizer~\cite{kingma2014adam} that incorporates decoupled weight decay regularization.
-The optimizer was configured with a learning rate of $1\times10^-4$ and weight decay coefficient of 0.01.
+The optimizer was configured with a learning rate of $1\times10^{-4}$ and weight decay coefficient of 0.01.
 The AdamW optimizer updates model parameters $\theta$ according to the following formulation:
 $$
 	\theta_{t+1} = \theta_t - \alpha \left( \frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon} + \lambda \theta_t \right)
 $$
 where $\alpha$ represents the learning rate, $\hat{m}_t$ and $\hat{v}_t$ are bias-corrected first and second moment estimates, $\epsilon$ is a small constant for numerical stability, and $\lambda$ denotes the weight decay coefficient.
 The decoupled weight decay term $\lambda \theta_t$ provides regularization that is independent of the gradient-based updates.
+
+A learning rate scheduler (ReduceLROnPlateau) was employed to dynamically adjust the learning rate during training based on validation loss performance.
+The scheduler monitors validation loss and reduces the learning rate by a factor of 0.1 when no improvement is observed for 10 consecutive epochs, enabling fine-grained optimization as training progresses.
 
 Early stopping was implemented with a patience of 10 epochs to prevent over-fitting and automatically terminate training when validation performance ceased to improve.
 This approach ensures optimal model generalization by identifying the point of best validation performance rather than training to completion.
@@ -608,8 +617,9 @@ The model training process typically required 24-48 hours depending on dataset s
 
 \paragraph{Inference pipeline}
 For applying ChimeraLM to new \gls{wga} sequencing datasets, the model takes a BAM file as input.
-Reads are extracted from the BAM file and converted to FASTA format for sequence processing.
-Each read sequence is tokenized using the HyenaDNA tokenizer with single base pair resolution.
+Chimeric reads are first identified using the same SA tag-based filtering criteria described in the data processing section: reads must contain the SA tag and must not be unmapped, secondary, or supplementary alignments.
+Identified chimeric reads are extracted with their sequence information (read ID and DNA sequence).
+Each read sequence is tokenized using the HyenaDNA tokenizer with single base pair resolution, applying truncation for sequences exceeding 32,768 bp and padding for shorter sequences to enable batch processing.
 The trained ChimeraLM model processes sequences in batches, generating two logits $[z_0, z_1]$ for each read, where $z_0$ corresponds to the ``biological'' class and $z_1$ corresponds to the ``artificial chimeric'' class.
 
 \paragraph{Classification decision}
