@@ -519,31 +519,98 @@ Stratification ensured that each data partition maintained similar proportions o
 
 ChimeraLM uses a pre-trained HyenaDNA model (hyenadna-small-32k-seqlen) which provides robust genomic sequence representations learned from large-scale genomic data.
 The backbone model handles DNA sequence tokenization using single base pair resolution with a maximum sequence length of 32,768 base pairs, converting nucleotide sequences into token representations.
-The tokenizer employs character-level encoding where each nucleotide (A, C, G, T, N) is mapped to a unique token ID, with additional special tokens for sequence boundaries and padding.
 
+\paragraph{Tokenization}
+The tokenizer employs character-level encoding where each nucleotide is mapped to a unique token ID.
+For a DNA sequence $S = (s_1, s_2, \ldots, s_L)$ where $s_i \in \{\text{A}, \text{C}, \text{G}, \text{T}, \text{N}\}$ and $L$ is the sequence length, the tokenization function $\tau$ maps each nucleotide to an integer token:
+$$
+\tau(s_i) = \begin{cases}
+7 & \text{if } s_i = \text{A} \\
+8 & \text{if } s_i = \text{C} \\
+9 & \text{if } s_i = \text{G} \\
+10 & \text{if } s_i = \text{T} \\
+11 & \text{if } s_i = \text{N} \\
+6 & \text{otherwise (unknown)}
+\end{cases}
+$$
+Additional special tokens include [CLS]=0, [SEP]=1, [BOS]=2, [MASK]=3, [PAD]=4, and [RESERVED]=5.
+The tokenized sequence is represented as $\mathbf{x} = (\tau(s_1), \tau(s_2), \ldots, \tau(s_L))$, with truncation applied when $L > 32{,}768$ and padding tokens appended when $L < 32{,}768$ to enable batch processing.
+
+\paragraph{Backbone encoding}
 Input sequences are processed through the Hyena operators.
+For a tokenized input sequence $\mathbf{x} \in \mathbb{Z}^{L}$, the backbone model generates contextualized hidden representations:
+$$
+\mathbf{H} = \text{HyenaDNA}(\mathbf{x}) \in \mathbb{R}^{L \times d_{\text{hidden}}}
+$$
+where $\mathbf{H} = (\mathbf{h}_1, \mathbf{h}_2, \ldots, \mathbf{h}_L)$ represents position-wise hidden states with dimension $d_{\text{hidden}} = 256$.
 The backbone generates contextualized hidden representations for each position in the input sequence, capturing both local sequence motifs and long-range dependencies essential for distinguishing biological sequences from chimeric artifacts.
 
+\paragraph{Classification head with attention pooling}
 ChimeraLM employs a binary sequence classifier designed specifically for genomic sequence classification tasks.
 The classification head processes the hidden states through a multi-stage architecture optimized for variable-length sequence classification.
 The classifier implements attention-based pooling to aggregate variable-length sequence representations into fixed-size feature vectors.
+
+The attention pooling mechanism computes position-wise attention weights through a two-layer neural network.
+For hidden states $\mathbf{H} \in \mathbb{R}^{L \times 256}$, attention scores are computed as:
+\begin{align*}
+\mathbf{e} &= \text{Linear}_{256 \to 256}(\mathbf{H}) \in \mathbb{R}^{L \times 256} \\
+\mathbf{e}' &= \text{GELU}(\mathbf{e}) \in \mathbb{R}^{L \times 256} \\
+\mathbf{s} &= \text{Linear}_{256 \to 1}(\mathbf{e}') \in \mathbb{R}^{L \times 1} \\
+\boldsymbol{\alpha} &= \text{softmax}(\mathbf{s}) \in \mathbb{R}^{L \times 1}
+\end{align*}
+where the first linear layer projects from dimension 256 to 256, followed by \gls{gelu} activation, and a second linear layer projects to a single attention score per position.
+
+When attention masks $\mathbf{m} \in \{0,1\}^L$ are provided for variable-length sequences (to handle padding), the attention weights are masked and renormalized:
 $$
-	\textrm{attention\_weights} = \textrm{softmax}(\textrm{Linear}(\textrm{GELU}(\textrm{Linear}(\textrm{hidden\_states}))))
+\boldsymbol{\alpha}_{\text{masked}} = \frac{\boldsymbol{\alpha} \odot \mathbf{m}}{\sum_{i=1}^{L} (\alpha_i \cdot m_i) + \epsilon}
 $$
-The attention pooling mechanism computes position-wise attention weights through a two-layer neural network where the first linear layer projects from the input hidden dimension (256) to half the classifier hidden dimension (256 dimensions), followed by \gls{gelu} activation and a second linear layer projecting to a single attention score per position.
-The attention weights are normalized using \emph{softmax} and applied to compute the weighted sum of hidden states across sequence positions.
-When attention masks are provided for variable-length sequences, the attention weights are masked to exclude padding tokens and renormalized to ensure proper probability distribution over valid sequence positions.
+where $\odot$ denotes element-wise multiplication and $\epsilon = 10^{-9}$ ensures numerical stability.
+
+The pooled representation is computed as the weighted sum of hidden states:
+$$
+\mathbf{h}_{\text{pooled}} = \sum_{i=1}^{L} \alpha_i \mathbf{h}_i \in \mathbb{R}^{256}
+$$
 This approach accommodates the natural variability in sequencing read lengths without introducing computational inefficiency or artificial sequence information.
 
+\paragraph{Multi-layer perceptron with residual connections}
 The pooled sequence representation is processed through a \gls{mlp} with residual connections.
-The \gls{mlp} consists of two sequential layers:
-First, a linear transformation from input dimension (256) to hidden dimension (512), followed by \gls{gelu} activation and dropout (rate 0.1).
-Second, for subsequent layers when input and hidden dimensions match, residual blocks are employed consisting of two linear transformations (512→512) with \gls{gelu} activation and dropout between them, combined with skip connections that add the input to the output.
+For the pooled representation $\mathbf{h}_{\text{pooled}} \in \mathbb{R}^{256}$, the first layer performs dimensionality expansion:
+$$
+\mathbf{f}_1 = \text{Dropout}_{0.1}(\text{GELU}(\text{Linear}_{256 \to 512}(\mathbf{h}_{\text{pooled}}))) \in \mathbb{R}^{512}
+$$
+
+For subsequent layers when dimensions match, residual blocks are employed.
+A residual block $\mathcal{R}$ with input $\mathbf{f}_{\text{in}} \in \mathbb{R}^{512}$ computes:
+\begin{align*}
+\mathbf{z}_1 &= \text{Linear}_{512 \to 512}(\mathbf{f}_{\text{in}}) \\
+\mathbf{z}_2 &= \text{Dropout}_{0.1}(\text{GELU}(\mathbf{z}_1)) \\
+\mathbf{z}_3 &= \text{Linear}_{512 \to 512}(\mathbf{z}_2) \\
+\mathbf{f}_{\text{out}} &= \text{Dropout}_{0.1}(\mathbf{z}_3) + \mathbf{f}_{\text{in}}
+\end{align*}
+where the final addition represents the skip connection that adds the input to the transformed output.
 This residual design enables stable gradient flow during training and improved representation learning for complex genomic patterns.
 
-The final classification layer maps the processed features to binary classification logits using a linear transformation with output dimension 2.
-The model outputs two logits corresponding to biological and artificial classes rather than a single probability, enabling the use of cross-entropy loss during training.
-Classification predictions are made by selecting the class with the highest logit value.
+\paragraph{Output layer and classification}
+The final classification layer maps the processed features to binary classification logits.
+For the final feature representation $\mathbf{f}_{\text{final}} \in \mathbb{R}^{512}$ from the \gls{mlp}, the output logits are computed as:
+$$
+\mathbf{z} = [z_0, z_1] = \text{Linear}_{512 \to 2}(\mathbf{f}_{\text{final}}) \in \mathbb{R}^{2}
+$$
+where $z_0$ represents the logit for the ``biological'' class and $z_1$ represents the logit for the ``artificial chimeric'' class.
+
+The model outputs two logits rather than a single probability, enabling the use of cross-entropy loss during training.
+During inference, classification predictions are made by selecting the class with the highest logit:
+$$
+\hat{y} = \argmax_{i \in \{0,1\}} z_i
+$$
+Equivalently, after applying softmax, the predicted class corresponds to $\hat{y} = 1$ (artificial chimeric) if $z_1 > z_0$, otherwise $\hat{y} = 0$ (biological).
+
+\paragraph{Complete model architecture}
+The complete ChimeraLM architecture can be summarized as a composition of functions:
+$$
+\hat{y} = \argmax(\text{Linear}_{512 \to 2}(\mathcal{R}(\text{MLP}(\text{AttentionPool}(\text{HyenaDNA}(\tau(S)))))))
+$$
+where $\tau$ denotes tokenization, HyenaDNA is the pre-trained backbone encoder, AttentionPool performs attention-based pooling, MLP is the first feedforward layer with expansion, $\mathcal{R}$ represents residual blocks, and the final linear layer produces binary classification logits.
 
 \subsection*{Model training and optimization}
 
@@ -566,8 +633,17 @@ $$
 where $\alpha$ represents the learning rate, $\hat{m}_t$ and $\hat{v}_t$ are bias-corrected first and second moment estimates, $\epsilon$ is a small constant for numerical stability, and $\lambda$ denotes the weight decay coefficient.
 The decoupled weight decay term $\lambda \theta_t$ provides regularization that is independent of the gradient-based updates.
 
+\paragraph{Learning rate scheduling}
 A learning rate scheduler (ReduceLROnPlateau) was employed to dynamically adjust the learning rate during training based on validation loss performance.
-The scheduler monitors validation loss and reduces the learning rate by a factor of 0.1 when no improvement is observed for 10 consecutive epochs, enabling fine-grained optimization as training progresses.
+The scheduler monitors validation loss $\mathcal{L}_{\text{val}}$ and reduces the learning rate by a factor of 0.1 when no improvement is observed for 10 consecutive epochs:
+$$
+\alpha_{t+1} = \begin{cases}
+0.1 \cdot \alpha_t & \text{if } \min(\mathcal{L}_{\text{val}}^{t-10}, \ldots, \mathcal{L}_{\text{val}}^{t}) \geq \mathcal{L}_{\text{val}}^{t-11} \\
+\alpha_t & \text{otherwise}
+\end{cases}
+$$
+where $\alpha_t$ denotes the learning rate at epoch $t$.
+This adaptive learning rate adjustment enables fine-grained optimization as training progresses, allowing the model to escape plateaus and achieve better convergence.
 
 Early stopping was implemented with a patience of 10 epochs to prevent over-fitting and automatically terminate training when validation performance ceased to improve.
 This approach ensures optimal model generalization by identifying the point of best validation performance rather than training to completion.
@@ -583,10 +659,10 @@ where the softmax function converts logits to normalized probability distributio
 The cross-entropy formulation provides strong gradients for misclassified examples while allowing confident predictions to contribute minimal loss, enabling efficient learning of the decision boundary between biological sequences and chimeric artifacts.
 
 \paragraph{Data loading and computational configuration}
-Training employed a batch size of 48 sequences per batch, balancing computational efficiency with memory constraints and gradient stability.
+Training employed a batch size of 16 sequences per batch, balancing computational efficiency with memory constraints and gradient stability.
 Data loading was optimized using 30 parallel workers to minimize I/O bottlenecks and ensure continuous data supply to the \gls{gpu} during training.
 
-The training infrastructure utilized \gls{gpu} acceleration (two A100 \glspl{gpu}) to enable efficient processing of the large-scale genomic sequence datasets.
+The training infrastructure utilized \gls{gpu} acceleration to enable efficient processing of the large-scale genomic sequence datasets.
 Mixed-precision training with brain floating-point 16-bit (bf16) format was employed to reduce memory requirements and accelerate computation while maintaining numerical precision sufficient for stable gradient computation and model convergence.
 
 \paragraph{Model validation and evaluation}
