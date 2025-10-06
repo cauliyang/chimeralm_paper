@@ -279,10 +279,10 @@ This end-to-end architecture enables ChimeraLM to learn directly from raw sequen
 		\includegraphics[width=0.95\textwidth]{final_figures/figure2}
 	\end{center}
 	\caption{{\bf ChimeraLM performance evaluation and benchmarking against existing methods.}
-		(a) ChimeraLM performance metrics on test dataset. Bar chart showing F1 score (0.805), precision (0.700), and recall (0.946) achieved by ChimeraLM on held-out test data for binary classification of biological versus chimera artifact.
-		(b) Chimeric read reduction across sequencing platforms. Stacked bar charts comparing chimeric read proportions (dark teal) versus non-chimeric reads (light teal) across bulk sequencing, \gls{wga}, and ChimeraLM-processed samples for PC3 cell line data. Left side shows PromethION P2 platform data with chimeric rates of 2.3\% (bulk), 46.0\% (\gls{wga}), and 4.9\% (ChimeraLM). Right side shows MinION Mk1c platform data with chimeric rates of 2.5\% (bulk), 23.0\% (\gls{wga}), and 1.5\% (ChimeraLM).
-		(c) Benchmarking on P2 platform data. Percentage reduction in chimeric reads achieved by ChimeraLM (~90\%) compared to existing computational methods SACRA and 3rd-ChimeraMiner (both 0\% reduction).
-		(d) Benchmarking on Mk1c platform data. Percentage reduction in chimeric reads achieved by ChimeraLM (~90\%) compared to SACRA and 3rd-ChimeraMiner (both 0\% reduction) using MinION Mk1c sequencing data.}\label{fig:figure2}
+		(a) ChimeraLM performance metrics on test dataset. Bar chart showing F1 score (0.805), precision (0.700), and recall (0.946) achieved by ChimeraLM on held-out test data for binary classification of biological versus chimeric artifacts.
+		(b) Chimeric read reduction across sequencing platforms. Stacked bar charts comparing chimeric read proportions (dark teal) versus non-chimeric reads (light teal) across bulk sequencing, \gls{wga}, and ChimeraLM-processed samples for PC3 cell line data. Left panel shows PromethION P2 platform data with chimeric rates of 2.3\% (bulk), 46.0\% (\gls{wga}), and 4.9\% (ChimeraLM). Right panel shows MinION Mk1c platform data with chimeric rates of 2.5\% (bulk), 23.0\% (\gls{wga}), and 1.5\% (ChimeraLM).
+		(c) Benchmarking on P2 platform data. Bar chart showing percentage reduction in chimeric reads achieved by ChimeraLM ($\sim$92\%) compared to existing computational methods SACRA and 3rd-ChimeraMiner (both 0\% reduction).
+		(d) Benchmarking on Mk1c platform data. Bar chart showing percentage reduction in chimeric reads achieved by ChimeraLM ($\sim$91\%) compared to SACRA and 3rd-ChimeraMiner (both 0\% reduction).}\label{fig:figure2}
 \end{figure}
 
 \subsection*{ChimeraLM achieves high performance in chimeric artifact detection}
@@ -616,7 +616,7 @@ The server was also configured with two NVIDIA A100 \glspl{gpu}, each with 80 GB
 		\includegraphics[width=0.8\textwidth]{final_figures/sf1}
 	\end{center}
 	\caption{{\bf Distribution of chimeric read matches between \gls{wga} and bulk sequencing datasets.}
-		Bar chart showing the number of chimeric reads (y-axis, log scale) stratified by the number of matches found when comparing \gls{wga} chimeric reads against bulk sequencing data (x-axis). Match 0 indicates chimeric reads with no matches in bulk data (labeled as artificial chimeric artifacts, $\sim$10$^7$ reads). Match 1, 2, and 3 indicate chimeric reads with 1, 2, or 3 matches in bulk data respectively (labeled as biological reads, $\sim$10$^5$-10$^5$ reads each). This matching strategy forms the basis for ground truth labeling in supervised training.}\label{fig:sf1}
+		Bar chart showing the number of chimeric reads (y-axis, log scale) stratified by the number of matches found when comparing \gls{wga} chimeric reads against bulk sequencing data (x-axis). Match 0 indicates chimeric reads with no matches in bulk data (labeled as artificial chimeric artifacts, $\sim$10$^7$ reads). Match 1, 2, and 3 indicate chimeric reads with 1, 2, or 3 matches in bulk data respectively (labeled as biological reads, $\sim$10$^5$ reads each). This matching strategy forms the basis for ground truth labeling in supervised training.}\label{fig:sf1}
 \end{figure}
 
 \begin{figure}[!ht]
@@ -624,15 +624,18 @@ The server was also configured with two NVIDIA A100 \glspl{gpu}, each with 80 GB
 		\includegraphics[width=\textwidth]{final_figures/sf2}
 	\end{center}
 	\caption{{\bf Distribution of chimeric alignments per chimeric read stratified by ChimeraLM prediction.}
-		(a) PromethION P2 platform chimeric alignment analysis. Bar chart showing the distribution of chimeric reads based on the number of chimeric alignments per read (x-axis: 2, 3, 4+ alignments) and total read count (y-axis, log scale). Bars are colored by ChimeraLM\textquotesingle s binary classification: biological (dark teal) and artificial (coral). Analysis includes only reads identified as chimeric (minimum 2 alignments per read).
-		(b) MinION Mk1c platform chimeric alignment analysis. Bar chart showing the distribution of chimeric reads based on the number of chimeric alignments per read (x-axis: 2, 3, 4+ alignments) and total read count (y-axis, log scale). Bars are colored by ChimeraLM\textquotesingle s binary classification: biological (dark teal) and artificial (coral). Analysis includes only reads identified as chimeric (minimum 2 alignments per read). }\label{fig:sf2}
+		(a) PromethION P2 platform chimeric alignment analysis. Bar chart showing the distribution of chimeric reads based on the number of chimeric alignments per read (x-axis: 2, 3, 4+ alignments) and total read count (y-axis, log scale). Bars are colored by ChimeraLM's binary classification: biological (dark teal) and artificial (coral). Analysis includes only reads identified as chimeric (minimum 2 alignments per read).
+		(b) MinION Mk1c platform chimeric alignment analysis. Bar chart showing the distribution of chimeric reads based on the number of chimeric alignments per read (x-axis: 2, 3, 4+ alignments) and total read count (y-axis, log scale). Bars are colored by ChimeraLM's binary classification: biological (dark teal) and artificial (coral). Analysis includes only reads identified as chimeric (minimum 2 alignments per read).}\label{fig:sf2}
 \end{figure}
 
 \begin{figure}[!ht]
 	\begin{center}
 		\includegraphics[width=\textwidth]{final_figures/sf3}
 	\end{center}
-	\caption{Attention}\label{fig:sf3}
+	\caption{{\bf Additional example of attention-based interpretability showing ChimeraLM's focus on chimeric junction.}
+		(a) Attention weight profile across another representative chimeric read. Upper panel shows attention weights per sequence position (blue line) with overall mean attention (dashed line). Red vertical line indicates the chimeric junction position in the read, with pink shading marking the junction window ($\pm$50 bp). Purple arrows indicate the corresponding \gls{sv} breakpoint positions in the reference genome. Lower panel illustrates read alignment: the read (top bar) shows forward sequence (green with rightward arrows) transitioning to reverse-complemented sequence (red with leftward arrows) at the junction. Reference genome (bottom bar) shows continuous forward orientation, with gray regions indicating alignment relationships.
+		(b) Quantitative comparison of attention weights between junction window and background regions. Box plots show significantly elevated attention weights in the junction window compared to background regions, with statistical significance indicated (***, $p < 0.001$, Wilcoxon rank-sum test).
+		(c) Chimera formation mechanism illustrated for this example. Step 1: Original DNA fragments from distant genomic loci (Fragment A and Fragment B) exist in forward orientation. Step 2: During \gls{wga}, Fragment A maintains forward orientation while Fragment B undergoes random reverse-complementation. Step 3: Template switching causes artificial joining of the two fragments with opposite orientations, creating a chimeric artifact.}\label{fig:sf3}
 \end{figure}
 
 \bmhead{Acknowledgements}
