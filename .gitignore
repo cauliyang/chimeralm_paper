@@ -514,6 +514,7 @@ poetry.toml
 
 # LSP config files
 pyrightconfig.json
+CLAUDE.md
 
 ./figures/data/
 figures/data/prediction_and_chimeric/
