@@ -363,7 +363,7 @@ The filtered data profiles more closely resembled bulk sequencing distributions,
 \subsection*{Characterization of chimeric artifact-supported false-positive structural variants}
 
 To understand the specific types of false-positive \gls{sv} that would be retained without ChimeraLM filtering, we analyzed the \gls{sv} events in unfiltered \gls{wga} data that were specifically supported by reads classified as chimeric artifacts by ChimeraLM (Fig.~\ref{fig:figure3}f,g).
-This analysis profiles the "false-positive landscape" that researchers would encounter without effective chimeric artifact removal.
+This analysis profiles the ``false-positive landscape'' that researchers would encounter without effective chimeric artifact removal.
 
 For P2 data, chimeric artifact-supported \gls{sv} were overwhelmingly dominated by \gls{inv} (88.4\% of events), with smaller contributions from \gls{del} (5.1\%), \gls{dup} (3.4\%), and \gls{ins} (3.0\%) (Fig.~\ref{fig:figure3}f).
 This extreme bias toward inversions confirms that template switching during \gls{wga} predominantly manifests as apparent \gls{inv} events in downstream \gls{sv} calling pipelines.
@@ -379,10 +379,10 @@ ChimeraLM's ability to identify and remove these specific artifacts represents a
 To validate ChimeraLM's classification accuracy, we analyzed the distribution of chimeric alignments per chimeric read, comparing how ChimeraLM classified these known chimeric sequences as biological versus artificial (Extended Data Fig.~\ref{fig:sf2}a,b).
 This provides independent validation by examining whether ChimeraLM correctly identifies the most structurally complex chimeric artifacts.
 
-Among chimeric reads, those classified as "artificial" by ChimeraLM predominantly exhibited 2 chimeric alignments per read ($\sim$1.0 $\times$ 10$^7$ and $\sim$1.4 $\times$ 10$^6$ reads in P2 and Mk1c data, respectively), representing simple two-part chimeric structures.
+Among chimeric reads, those classified as ``artificial'' by ChimeraLM predominantly exhibited 2 chimeric alignments per read ($\sim$1.0 $\times$ 10$^7$ and $\sim$1.4 $\times$ 10$^6$ reads in P2 and Mk1c data, respectively), representing simple two-part chimeric structures.
 Smaller fractions showed 3+ alignments ($\sim$2.1 $\times$ 10$^6$ and $\sim$0.2 $\times$ 10$^6$ reads in P2 and Mk1c data, respectively), indicating more complex multi-fragment chimeras from sequential template switching events.
 
-Importantly, chimeric reads classified as "biological" by ChimeraLM showed minimal representation across all alignment complexity categories, suggesting these may represent genuine structural variants or less disruptive chimeric events that preserve biological relevance.
+Importantly, chimeric reads classified as ``biological'' by ChimeraLM showed minimal representation across all alignment complexity categories, suggesting these may represent genuine structural variants or less disruptive chimeric events that preserve biological relevance.
 
 This pattern demonstrates that ChimeraLM successfully prioritizes the most structurally complex and potentially problematic chimeric artifacts for removal, while preserving chimeric reads that may still retain biological information.
 The consistency across both datasets validates ChimeraLM's ability to distinguish between different classes of chimeric complexity.
@@ -703,7 +703,7 @@ The final classification is determined by applying the softmax function to conve
 $$
 	p_i = \frac{\exp(z_i)}{\exp(z_0) + \exp(z_1)}, \quad i \in \{0, 1\}
 $$
-The predicted class is the one with the higher probability. If $p_1 > p_0$ (i.e., $z_1 > z_0$), the read is classified as ``artificial chimeric''; otherwise, it is classified as ``biological.''
+The predicted class is the one with the higher probability. If $p_1 > p_0$ (i.e.,\ $z_1 > z_0$), the read is classified as ``artificial chimeric''; otherwise, it is classified as ``biological.''
 
 \paragraph{Output filtering}
 ChimeraLM outputs a filtered BAM file containing only reads classified as ``biological,'' effectively removing chimeric artifacts from the dataset.
@@ -843,7 +843,7 @@ RY supervised this work.
 
 ChimeraLM, implemented in Python, is open source and available on GitHub (\url{https://github.com/ylab-hi/ChimeraLM}) under the Apache License, Version 2.0.
 The package can be installed via PyPI (\url{https://pypi.org/project/chimeralm/}) using pip, with wheel distributions provided for Windows, Linux, and macOS to ensure easy cross-platform installation.
-An interactive demo is available on Hugging Face (\url{https://huggingface.co/spaces/yangliz5/chimeralmr}), allowing users to test ChimeraLM\textquotesingle{s} functionality without local installation.
+An interactive demo is available on Hugging Face (\url{https://huggingface.co/spaces/yangliz5/chimeralmr}), allowing users to test ChimeraLM's functionality without local installation.
 For large-scale analyses, we recommend using ChimeraLM on systems with \gls{gpu} acceleration. Detailed system requirements and optimization guidelines are available in the repository's documentation.
 
 \bmhead{Conflict of interest}
