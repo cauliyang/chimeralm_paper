@@ -203,18 +203,18 @@ However, the limited DNA content in a single cell—typically only a few picogra
 
 To overcome this limitation, \gls{wga} has become essential for single-cell genomic studies~\cite{zong2012genome, huang2015single}.
 Various \gls{wga} techniques, including \gls{mda}, \gls{malbac}, and other emerging methods, can amplify the entire genome from a single cell by several orders of magnitude, generating sufficient DNA material for high-coverage sequencing~\cite{de2014quantitative, biezuner2021comparison,fu2015uniform, agyabeng2025evaluating}.
-This amplification enables the depth and breadth of coverage necessary for reliable variant calling, copy number analysis, and structural variation detection.
-Accurate single-cell genomics is particularly critical for studying somatic mosaicism in development and disease, tracking clonal evolution in cancer, and characterizing rare cell populations---applications where false-positive structural variants can lead to incorrect biological conclusions about genomic stability and cellular identity.
+This amplification enables the depth and breadth of coverage necessary for reliable variant calling, copy number analysis, and \gls{sv} detection.
+Accurate single-cell genomics is particularly critical for studying somatic mosaicism in development and disease, tracking clonal evolution in cancer, and characterizing rare cell populations---applications where false-positive \glspl{sv} can lead to incorrect biological conclusions about genomic stability and cellular identity.
 
 Despite its critical role, \gls{wga} introduces systematic artifacts that significantly impact downstream analyses~\cite{lu2023chimera, lu2023exploration}.
 Among the most problematic are chimeric sequences—artificial DNA constructs formed when fragments from different genomic loci are erroneously joined during amplification~\cite{lu2023chimera, lu2023exploration, agyabeng2025evaluating}.
-These chimeric artifacts manifest as false-positive structural variations that do not exist in the original cell~\cite{lu2023chimera}, posing substantial challenges for accurate \gls{sv} detection and potentially leading to misinterpretation of genomic rearrangements and their biological significance.
+These chimeric artifacts manifest as false-positive \glspl{sv} that do not exist in the original cell~\cite{lu2023chimera}, posing substantial challenges for accurate \gls{sv} detection and potentially leading to misinterpretation of genomic rearrangements and their biological significance.
 
 Current computational approaches for identifying \gls{wga}-induced artifacts rely primarily on coverage-based metrics and read-pair orientation patterns~\cite{kiguchi2021long, lu2023exploration}.
-However, these methods often fail to distinguish genuine structural variations from amplification artifacts, particularly when chimeric sequences exhibit complex rearrangement patterns or occur in repetitive genomic regions~\cite{kosugi2019comprehensive, mahmoud2019structural}.
-This lack of robust artifact detection has limited the reliability of structural variant analysis in single-cell studies and hindered the full realization of single-cell genomics' potential.
+However, these methods often fail to distinguish genuine \glspl{sv} from amplification artifacts, particularly when chimeric sequences exhibit complex rearrangement patterns or occur in repetitive genomic regions~\cite{kosugi2019comprehensive, mahmoud2019structural}.
+This lack of robust artifact detection has limited the reliability of \gls{sv} analysis in single-cell studies and hindered the full realization of single-cell genomics' potential.
 
-Here, we developed ChimeraLM, a genomic language model specifically designed to detect chimeric artifacts introduced by whole genome amplification.
+Here, we developed ChimeraLM, a genomic language model specifically designed to detect chimeric artifacts introduced by \gls{wga}.
 By leveraging deep learning to capture sequence patterns and contextual information in genomic reads~\cite{dalla2025nucleotide, zhou2023dnabert, nguyen2023hyenadna}, ChimeraLM effectively distinguishes genuine biological sequences from \gls{wga}-induced chimeric artifacts.
 We demonstrate that ChimeraLM achieves superior performance compared to existing methods and substantially improves the reliability of \gls{sv} detection in single-cell genomic studies.
 
@@ -223,7 +223,7 @@ We demonstrate that ChimeraLM achieves superior performance compared to existing
 		\includegraphics[width=\textwidth]{final_figures/figure1}
 	\end{center}
 	\caption{{\bf ChimeraLM workflow and architecture for detecting \gls{wga} artifacts in single-cell sequencing. Created with BioRender.com.}
-		{\bf Overview}: ChimeraLM removes artificial DNA sequences created during \gls{wga}, enabling accurate detection of genuine structural variants in single cells.
+			{\bf Overview}: ChimeraLM removes artificial DNA sequences created during \gls{wga}, enabling accurate detection of genuine structural variants in single cells.
 		(a)~Integration of ChimeraLM into single-cell genomic analysis workflows. Single cells are isolated from heterogeneous cellular populations through sorting technologies, followed by DNA extraction and \gls{wga} to generate sufficient material for sequencing. \gls{wga} introduces chimeric artifacts through random hexamers, DNA polymerase extension, and denatured DNA template switching. Sequencing reads from \gls{wga}-amplified samples contain both biological reads (green) and chimeric artifacts (red). ChimeraLM processes these reads to classify them as biological or artificial, enabling clean reads to proceed to \gls{sv} analysis for high-confidence event detection such as deletions.
 		(b) Dataset construction strategy for supervised learning. Training data is generated by comparing \gls{wga} sequencing reads against matched bulk sequencing data from the same biological sample. Bulk data contains only genuine biological sequences (no chimeric artifacts), while \gls{wga} data contains both biological reads and chimeric artifacts. Each \gls{wga} read is aligned against bulk data: reads that successfully match are labeled as ``biological'' (green pathway), while reads that fail to match are labeled as ``artificial chimeric'' (red pathway). This comparative approach provides reliable ground truth labels for training ChimeraLM in a supervised learning framework.
 		(c) ChimeraLM neural network architecture. Input DNA sequences are tokenized and processed through a deep learning pipeline optimized for genomic sequence analysis. The architecture employs Hyena operators for efficient long-range dependency modeling, followed by attention pooling to aggregate variable-length sequence features. \gls{mlp} components with residual connections process the pooled features to learn complex patterns distinguishing biological sequences from chimeric artifacts. The final output layer produces binary classification probabilities, predicting whether each input sequence represents a biological read or an artificial chimeric read.} \label{fig:figure1}
@@ -234,14 +234,14 @@ We demonstrate that ChimeraLM achieves superior performance compared to existing
 \subsection*{ChimeraLM integrates seamlessly into single-cell genomic workflows}
 
 To systematically address \gls{wga}-induced chimeric artifacts, we developed ChimeraLM as an integrated component of single-cell genomic analysis pipelines (Fig.~\ref{fig:figure1}a).
-Our approach leverages the standard single-cell workflow, beginning with cellular isolation through \gls{facs} or microfluidics-based sorting, followed by DNA extraction and whole genome amplification using established protocols.
+Our approach leverages the standard single-cell workflow, beginning with cellular isolation through \gls{facs} or microfluidics-based sorting, followed by DNA extraction and \gls{wga} using established protocols.
 
 Amplified genomic material is then processed through long-read sequencing platforms such as Nanopore technology to generate comprehensive genomic coverage.
-ChimeraLM operates at a critical juncture in the analysis pipeline, positioned between initial read processing and downstream analyses such as structural variant detection (Fig.~\ref{fig:figure1}a).
-Following standard quality filtering and read cleaning procedures, ChimeraLM evaluates each sequencing read to classify it as either biological or chimeric artifact.
+ChimeraLM operates at a critical juncture in the analysis pipeline, positioned after read mapping and before downstream analyses such as \gls{sv} detection (Fig.~\ref{fig:figure1}a).
+Following standard quality filtering and read alignment to the reference genome, ChimeraLM evaluates each chimeric read to classify it as either biological or chimeric artifact.
 This binary classification enables selective retention of authentic genomic sequences while filtering out amplification artifacts before they impact downstream analyses.
 
-The filtered, high-quality biological reads are subsequently processed through conventional structural variant detection algorithms, enabling identification of genuine genomic alterations such as \gls{del}, \gls{dup}, and other rearrangements.
+The filtered, high-quality biological reads are subsequently processed through conventional \gls{sv} detection algorithms, enabling identification of genuine genomic alterations such as \gls{del}, \gls{dup}, and other rearrangements.
 By removing chimeric sequences upstream of variant calling, ChimeraLM ensures that detected \gls{sv} represent true biological events rather than technical artifacts (Fig.~\ref{fig:figure1}a).
 
 This workflow design allows ChimeraLM to integrate with existing single-cell genomic pipelines without requiring substantial modifications to established protocols, providing a versatile solution for improving the accuracy of genomic studies across diverse research applications.
@@ -251,36 +251,37 @@ This workflow design allows ChimeraLM to integrate with existing single-cell gen
 To train ChimeraLM for accurate chimeric artifact detection, we developed a dataset construction strategy that leverages paired \gls{wga} and bulk sequencing data from the same biological samples (Fig.~\ref{fig:figure1}b).
 This approach exploits the fundamental difference between these datasets: while \gls{wga} data contains both biological reads and chimeric artifacts introduced during amplification, bulk sequencing from the same sample contains only genuine biological sequences.
 
-Our ground truth labeling strategy compares each \gls{wga} read against the bulk sequencing dataset (Fig.~\ref{fig:figure1}b).
-Reads that successfully match bulk data are classified as ``biological,'' indicating they represent authentic genomic sequences present in the original sample.
+Our ground truth labeling strategy compares each chimeric read of \gls{wga} against the bulk sequencing dataset (Fig.~\ref{fig:figure1}b, see \hyperref[sec:methods]{Methods} for details).
+Reads that successfully match bulk data are classified as ``biological'' indicating they represent authentic genomic sequences present in the original sample.
 Conversely, reads that fail to match bulk sequences are labeled as ``artificial chimeric'' artifacts, representing artificial constructs generated during \gls{wga} rather than genuine genomic content (Fig.~\ref{fig:figure1}b).
 
-Application of this matching strategy to the PC3 cell line dataset revealed that the majority of chimeric reads ($\sim$10$^7$ reads) showed no matches in bulk data and were classified as artificial, while smaller subsets ($\sim$10$^5$ reads each) showed 1, 2, or 3 matches and were classified as biological (Extended Data Fig.~\ref{fig:sf1}).
-This comparative approach generates a comprehensive labeled dataset where each \gls{wga} read receives binary classification based on its presence or absence in the matched bulk control, capturing the full spectrum of chimeric artifacts naturally occurring during \gls{wga} while providing reliable ground truth labels for model training.
+Application of this matching strategy to the PC3 cell line dataset revealed that 12,670,396 chimeric reads showed no matches in bulk data and were classified as artificial, while 101,094, 190,309, and 1,777 reads showed 1, 2, and 3 matches respectively and were classified as biological (Extended Data Fig.~\ref{fig:sf1}).
+Each chimeric read of \gls{wga} received a binary label based on this comparison.
+To create a balanced training dataset, we subsampled 293,180 reads from the no-match category as artificial chimeric artifacts and retained all reads with 1, 2, or 3 matches (293,180 total) as biological.
+Additionally, we subsampled 178,748 reads from the bulk sequencing data as biological controls, yielding a final dataset of 765,108 labeled reads.
 
-Following dataset construction, we partitioned the labeled reads into training (70\%), validation (20\%), and test (10\%) sets to ensure robust model development and unbiased performance evaluation.
+We then partitioned this dataset into training (70\%), validation (20\%), and test (10\%) sets using stratified splitting to ensure robust model development and unbiased performance evaluation.
 The training set was used for model parameter optimization, the validation set for hyperparameter tuning and model selection, and the test set was reserved for final performance assessment.
 This rigorous data splitting strategy ensures that ChimeraLM's reported performance metrics reflect its ability to generalize to previously unseen \gls{wga} data.
 
 \subsection*{ChimeraLM architecture leverages modern genomic language modeling advances}
 
-ChimeraLM employs a neural architecture specifically designed for genomic sequence analysis and chimeric artifact detection (Fig.~\ref{fig:figure1}c).
-The model operates at single-base pair resolution and accepts DNA sequences as input, which are tokenized and encoded into numerical representations suitable for deep learning processing.
-This encoding preserves the sequential nature of genomic information while enabling efficient computation.
+ChimeraLM employs a deep learning architecture designed to distinguish biological sequences from chimeric artifacts by analyzing DNA sequences at single-base pair resolution (Fig.~\ref{fig:figure1}c).
+This design choice is critical for detecting chimeric junctions---the breakpoints where disparate genomic regions are artificially joined during \gls{wga}---since these junctions often exhibit abrupt changes in sequence characteristics that require nucleotide-level precision to identify.
 
-The core architecture consists of Hyena operators~\cite{Poli2023HyenaHT}, a recent advancement in sequence modeling that provides computational advantages over traditional transformer attention mechanisms while maintaining the ability to capture long-range dependencies in genomic sequences.
-Hyena operators enable ChimeraLM to process variable-length sequencing reads efficiently while learning complex patterns that distinguish biological sequences from chimeric artifacts.
-The Hyena operators are initialized with HyenaDNA~\cite{nguyen2023hyenadna}, a pre-trained long-context genomic language model, providing a strong foundation for learning genomic sequence features relevant to chimeric detection.
+The architecture consists of three main components: (1) single-nucleotide tokenization following the HyenaDNA framework~\cite{nguyen2023hyenadna}, which represents each DNA base individually to preserve complete sequence information; (2) the HyenaDNA backbone, a genomic foundation model pre-trained on diverse DNA sequences that efficiently captures long-range dependencies through Hyena operators~\cite{Poli2023HyenaHT}; and (3) a classification head with attention pooling that weights sequence positions by their relevance to the chimeric/biological distinction (Fig.~\ref{fig:figure1}c).
 
-Following the Hyena operator layers, ChimeraLM incorporates an attention pooling mechanism that aggregates sequence-level features.
-This pooling strategy allows the model to handle reads of varying lengths while focusing computational attention on the most informative regions for chimeric detection.
-The attention weights learned during training provide interpretability into which sequence features contribute most strongly to classification decisions.
+The HyenaDNA backbone provides two key advantages for chimeric artifact detection.
+First, it processes full-length sequencing reads (up to 32 kb) efficiently through subquadratically-scaled operations, avoiding the computational bottleneck of traditional transformer attention while maintaining the ability to capture long-range sequence dependencies.
+Second, by initializing with weights pre-trained on diverse genomic sequences, ChimeraLM benefits from learned representations of general DNA sequence patterns, which it then fine-tunes specifically for distinguishing biological from chimeric sequences.
+The attention pooling mechanism aggregates information across the entire read length while learning to focus on informative regions, providing interpretability into which sequence features most strongly contribute to classification decisions.
 
 The aggregated features are then processed through multiple \gls{mlp} components arranged in a residual architecture.
 This design enables gradient flow optimization during training while allowing the model to learn both low-level sequence motifs and high-level compositional patterns indicative of chimeric artifacts.
 Residual connections help prevent vanishing gradients and improve model convergence during training on large genomic datasets.
 
-The final output layer produces a binary classification predicting whether each input sequence represents a biological read or an artificial chimeric artifact.
+The final classification layer applies a softmax function to produce probability scores for the binary classification task.
+For each read, the model outputs two probabilities corresponding to the ``biological'' and ``artificial chimeric'' categories, and the class with the higher probability determines the final prediction (see \hyperref[sec:methods]{Methods} for details).
 This end-to-end architecture enables ChimeraLM to learn directly from raw sequence data without requiring manual feature engineering, allowing the model to discover complex patterns that may not be apparent through traditional bioinformatics approaches.
 
 \begin{figure}[!ht]
