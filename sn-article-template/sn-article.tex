@@ -298,9 +298,9 @@ This end-to-end architecture enables ChimeraLM to learn directly from raw sequen
 \subsection*{ChimeraLM achieves high performance in chimeric artifact detection}
 
 We evaluated ChimeraLM's performance on held-out test data to assess its ability to accurately classify biological and chimeric reads (Fig.~\ref{fig:figure2}a).
-ChimeraLM demonstrated robust performance across key classification metrics, achieving an F1 score of 0.805, which balances precision and recall for the binary classification task.
-The model exhibited high recall of 0.946, indicating that it successfully identified 94.6\% of true chimeric artifacts in the test dataset, minimizing the risk of retaining false-positive structural variants in downstream analyses.
-The precision of 0.700 demonstrates that 70.0\% of reads classified as chimeric were indeed artifacts, representing a trade-off that prioritizes comprehensive artifact removal while maintaining reasonable specificity.
+ChimeraLM demonstrated robust performance across key classification metrics, achieving an F1 score of 0.80, which balances precision and recall for the binary classification task.
+The model exhibited high recall of 0.95, indicating that it successfully identified 95\% of true chimeric artifacts in the test dataset, minimizing the risk of retaining false-positive \glspl{sv} in downstream analyses.
+The precision of 0.70 demonstrates that 70\% of reads classified as chimeric were indeed artifacts, representing a trade-off that prioritizes comprehensive artifact removal while maintaining reasonable specificity.
 
 \subsection*{ChimeraLM reduces chimeric artifact burden across sequencing platforms}
 
@@ -361,7 +361,7 @@ The consistent performance across platforms demonstrates ChimeraLM's robust abil
 \subsection*{ChimeraLM normalizes structural variant type distributions toward bulk sequencing profiles}
 
 We analyzed the distribution of \gls{sv} types to assess whether ChimeraLM processing restores \gls{sv} profiles characteristic of high-quality bulk sequencing data (Fig.~\ref{fig:figure3}d,e).
-This analysis tests the hypothesis that \gls{wga} introduces systematic biases in the apparent frequency of different \gls{sv} classes, which should be corrected by effective chimeric artifact removal.
+This analysis tests the hypothesis that \gls{wga} introduces systematic biases in the apparent frequency of different \gls{sv} classes~\cite{lu2023chimera, agyabeng2025evaluating}, which should be corrected by effective chimeric artifact removal.
 
 In both P2 and Mk1c datasets, bulk sequencing exhibited balanced distributions across \gls{del}, \gls{dup}, \gls{ins}, \gls{inv}, and \gls{tra} events, with relatively modest numbers reflecting the stringent quality filtering applied to establish the gold standard (Fig.~\ref{fig:figure3}d,e).
 Unprocessed \gls{wga} data showed dramatically skewed distributions dominated by spurious \gls{inv} events, consistent with literature reports that \gls{inv} are frequently artificial in amplified samples due to template switching during \gls{wga}~\cite{lu2023exploration, lu2023chimera}.
@@ -380,7 +380,7 @@ This extreme bias toward inversions confirms that template switching during \gls
 Mk1c data showed a similar but even more pronounced pattern, with \gls{inv} comprising 92.4\% of chimeric artifact-supported events, followed by \gls{del} (3.8\%), \gls{dup} (2.4\%), and \gls{ins} (1.4\%) (Fig.~\ref{fig:figure3}g).
 The consistency of this pattern across platforms indicates that inversion artifacts represent the primary mode of false-positive \gls{sv} generation in \gls{wga} workflows.
 
-These results demonstrate that without ChimeraLM, genomic studies would be severely compromised by false-positive \gls{inv} calls, potentially leading to misinterpretation of chromosomal instability, copy number profiles, and other key genomic features.
+These results demonstrate that without ChimeraLM, genomic studies would be severely compromised by false-positive \gls{inv} calls, potentially leading to misinterpretation of chromosomal instability, copy number profiles, and other key genomic features~\cite{kosugi2019comprehensive, mahmoud2019structural}.
 ChimeraLM's ability to identify and remove these specific artifacts represents a critical advancement for accurate \gls{sv} analysis.
 
 \subsection*{ChimeraLM predictions correlate with chimeric alignment complexity}
@@ -401,8 +401,8 @@ The consistency across both datasets validates ChimeraLM's ability to distinguis
 		\includegraphics[width=\textwidth]{final_figures/figure4}
 	\end{center}
 	\caption{{\bf Attention-based interpretability reveals ChimeraLM's capacity to focus on chimeric junction regions.}
-		(a) Attention weight profile across a representative chimeric read. Upper panel shows attention weights per sequence position (blue line) with overall mean attention (dashed line). Red vertical line indicates the chimeric junction position in the read, with pink shading marking the junction window ($\pm$50 bp). Purple arrow indicates the corresponding \gls{sv} breakpoint position in the reference genome. Lower panel illustrates read alignment: the read (top bar) shows reverse-complemented sequence (red with leftward arrows) transitioning to forward sequence (green with rightward arrows) at the junction. Reference genome (bottom bar) shows continuous forward orientation, with gray regions indicating alignment relationships.
-		(b) Quantitative comparison of attention weights between junction window and background regions. Box plots show significantly elevated attention weights in the junction window (median $\sim$0.0008) compared to background regions (median $\sim$0.0003), with statistical significance indicated (***, $p < 0.001$, Wilcoxon rank-sum test).
+		(a) Attention weight profile across a representative chimeric read (read ID: 6f4568e5-3543-48c7-a64b-f4010c03804c). Upper panel shows attention weights per sequence position (blue line) with overall mean attention (dashed line). Red vertical line indicates the chimeric junction position in the read, with pink shading marking the junction window ($\pm$50 bp). Purple arrow indicates the corresponding \gls{sv} breakpoint position in the reference genome. Lower panel illustrates read alignment: the read (top bar) shows reverse-complemented sequence (red with leftward arrows) transitioning to forward sequence (green with rightward arrows) at the junction. Reference genome (bottom bar) shows continuous forward orientation, with gray regions indicating alignment relationships.
+		(b) Quantitative comparison of attention weights between junction window and background regions. Box plots show significantly elevated attention weights in the junction window compared to background regions ($p = 5.3 \times 10^{-14}$, Wilcoxon rank-sum test).
 		(c) Proposed mechanism of chimera formation during \gls{wga}. Step 1: Original DNA fragments from distant genomic loci (Fragment A and Fragment B) exist in forward orientation. Step 2: During \gls{wga}, Fragment A undergoes random reverse-complementation while Fragment B maintains forward orientation. Step 3: Template switching causes artificial joining of the two fragments, creating a chimeric artifact with discordant orientation patterns.}\label{fig:figure4}
 \end{figure}
 
@@ -419,8 +419,9 @@ The alignment pattern illustrates the structural signature present in these exam
 In the first example, the read portion aligns in reverse orientation (red), while the downstream portion aligns in forward orientation to a distant genomic location (green).
 This discordant orientation pattern represents a characteristic feature of \gls{wga}-induced chimeric artifacts.
 
-For these specific examples, quantitative analysis showed that attention weights within 100 bp windows ($\pm$50 bp) centered on chimeric junctions exhibited significantly higher values compared to background regions (Fig.~\ref{fig:figure4}b).
-The median attention weight in the junction window was approximately 2.7-fold higher than background (window median: 0.0008; background median: 0.0003; $p < 0.001$, Wilcoxon rank-sum test).
+For these specific examples, quantitative analysis showed that attention weights within 100 bp windows ($\pm$50 bp) centered on chimeric junctions exhibited significantly higher values compared to background regions.
+For the representative read shown in Fig.~\ref{fig:figure4} (read ID: 6f4568e5-3543-48c7-a64b-f4010c03804c), the difference was highly significant ($p = 5.3 \times 10^{-14}$, Wilcoxon rank-sum test).
+Similarly, the supplementary example (Extended Data Fig.~\ref{fig:sf3}, read ID: 1c66d41b-de5a-4e3d-b54d-69d41bfc3160) showed comparable statistical significance ($p = 6.8 \times 10^{-15}$, Wilcoxon rank-sum test).
 
 These examples align with the proposed mechanism of chimera formation during \gls{wga} (Fig.~\ref{fig:figure4}c).
 Original DNA fragments from distant genomic loci undergo random orientation changes during amplification.
@@ -849,8 +850,8 @@ Computational workflows were managed using configuration files (Hydra framework~
 		\includegraphics[width=\textwidth]{final_figures/sf3}
 	\end{center}
 	\caption{{\bf Additional example of attention-based interpretability showing ChimeraLM's focus on chimeric junction.}
-		(a) Attention weight profile across another representative chimeric read. Upper panel shows attention weights per sequence position (blue line) with overall mean attention (dashed line). Red vertical line indicates the chimeric junction position in the read, with pink shading marking the junction window ($\pm$50 bp). Purple arrows indicate the corresponding \gls{sv} breakpoint positions in the reference genome. Lower panel illustrates read alignment: the read (top bar) shows forward sequence (green with rightward arrows) transitioning to reverse-complemented sequence (red with leftward arrows) at the junction. Reference genome (bottom bar) shows continuous forward orientation, with gray regions indicating alignment relationships.
-		(b) Quantitative comparison of attention weights between junction window and background regions. Box plots show significantly elevated attention weights in the junction window compared to background regions, with statistical significance indicated (***, $p < 0.001$, Wilcoxon rank-sum test).
+		(a) Attention weight profile across another representative chimeric read (read ID: 1c66d41b-de5a-4e3d-b54d-69d41bfc3160). Upper panel shows attention weights per sequence position (blue line) with overall mean attention (dashed line). Red vertical line indicates the chimeric junction position in the read, with pink shading marking the junction window ($\pm$50 bp). Purple arrows indicate the corresponding \gls{sv} breakpoint positions in the reference genome. Lower panel illustrates read alignment: the read (top bar) shows forward sequence (green with rightward arrows) transitioning to reverse-complemented sequence (red with leftward arrows) at the junction. Reference genome (bottom bar) shows continuous forward orientation, with gray regions indicating alignment relationships.
+		(b) Quantitative comparison of attention weights between junction window and background regions. Box plots show significantly elevated attention weights in the junction window compared to background regions ($p = 6.8 \times 10^{-15}$, Wilcoxon rank-sum test).
 		(c) Chimera formation mechanism illustrated for this example. Step 1: Original DNA fragments from distant genomic loci (Fragment A and Fragment B) exist in forward orientation. Step 2: During \gls{wga}, Fragment A maintains forward orientation while Fragment B undergoes random reverse-complementation. Step 3: Template switching causes artificial joining of the two fragments with opposite orientations, creating a chimeric artifact.}\label{fig:sf3}
 \end{figure}
 
