@@ -493,19 +493,19 @@ As single-cell approaches become increasingly central to modern biology and medi
 
 \section*{Methods}\label{sec:methods}
 
-\subsection*{MDA sequencing}
+\subsection*{Cell culture, single-clone preparation, and nanopore sequencing}
 
-\subsection*{Sequencing and data processing}
+\paragraph{Cell culture and single-clone establishment}
+PC3 prostate cancer cells (ATCC\textsuperscript{\textregistered} CRL-1435\texttrademark) were cultured in RPMI-1640 medium supplemented with 10\% fetal bovine serum and 1\% penicillin--streptomycin at 37~\textdegree C with 5\% CO\textsubscript{2}. To minimize biological heterogeneity, a monoclonal population was established by serial dilution in 96-well plates, ensuring that each culture originated from a single cell. Mycoplasma contamination was routinely tested and confirmed negative prior to DNA extraction.
 
-\paragraph{Sequencing platforms}
-Long-read sequencing was performed using Oxford Nanopore Technologies platforms, including PromethION P2 and MinION Mk1c devices.
-Both \gls{wga}-amplified and bulk (non-amplified) DNA samples from PC3 cell line were sequenced to generate paired datasets for training and evaluation.
-Sequencing libraries were prepared following manufacturer's protocols for genomic DNA sequencing.
+\paragraph{DNA extraction and whole-genome amplification}
+From the monoclonal population, two types of DNA samples were prepared: a bulk (non-amplified) control and ten single-cell MDA-amplified genomes. Bulk high-molecular-weight DNA was extracted using the Monarch\textsuperscript{\textregistered} HMW DNA Extraction Kit for Cells \& Blood (New England Biolabs). Individual cells were isolated using 1CellDish-60~mm (iBiochips) and amplified using the REPLI-g Advanced DNA Single Cell Kit (Qiagen) following the manufacturer's protocol. DNA concentration and fragment integrity were assessed with a Qubit~4 fluorometer and Agilent TapeStation (DNA~1000/5000 ScreenTape). Only samples meeting quality standards were used for library construction.
 
-\paragraph{Read alignment and processing}
-Raw sequencing reads were basecalled and quality-filtered using standard Nanopore basecalling pipelines.
-Reads were aligned to the human reference genome (GRCh38/hg38) using minimap2~\cite{li2018minimap2} with parameters optimized for long-read genomic alignment (-ax map-ont).
-Alignment files were processed using SAMtools~\cite{danecek2021twelve} for sorting, indexing, and quality filtering.
+\paragraph{Nanopore library preparation and sequencing}
+Sequencing libraries were prepared using the Oxford Nanopore Ligation Sequencing Kit~V14 (SQK-LSK114) and sequenced on MinION~Mk1C or PromethION~P2~Solo devices with R10.4.1 flow cells according to the manufacturer's genomic DNA workflow. Because all single-cell samples originated from the same monoclonal lineage, observed differences between amplified and bulk data primarily reflect MDA-induced artifacts rather than biological variation, providing a controlled experimental setting for downstream analyses.
+
+\paragraph{Basecalling and read processing}
+Raw signal files (POD5) were basecalled using Dorado~v0.5.0 with the high-accuracy model \texttt{dna\_r10.4.1\_e8.2\_400bps\_hac@v4.3.0} {\color{red}[ref]}. Reads with mean quality $< 10$ or length $< 500$~bp were removed. Residual adapters and concatemers were trimmed using Cutadapt~v4.0~{\color{red}[ref]} in two-pass error-tolerant mode. Cleaned reads were aligned to the GRCh38.p13 reference genome using minimap2~v2.26 (\texttt{map-ont} preset)~\cite{li2018minimap2}. Resulting BAM files were sorted and indexed with SAMtools~v1.16~\cite{danecek2021twelve}. All samples were processed under identical parameters to ensure consistency across datasets.
 
 \paragraph{Chimeric read identification}
 Chimeric reads were identified based on the presence of supplementary alignments in BAM files using the SA (Supplementary Alignment) tag.
