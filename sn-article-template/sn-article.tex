@@ -112,6 +112,7 @@
 \newacronym{pcr}{PCR}{Polymerase Chain Reaction}
 \newacronym{mrna}{mRNA}{messenger RNA}
 \newacronym{facs}{FACS}{Fluorescence-activated cell sorting}
+\newacronym{sa}{SA}{Supplementary Alignment}
 
 \newacronym{ide}{IDE}{Integrated Development Environment}
 \newacronym{cd}{CD}{Continuous Development}
@@ -505,14 +506,14 @@ From the monoclonal population, two types of DNA samples were prepared: a bulk (
 Sequencing libraries were prepared using the Oxford Nanopore Ligation Sequencing Kit~V14 (SQK-LSK114) and sequenced on MinION~Mk1C or PromethION~P2~Solo devices with R10.4.1 flow cells according to the manufacturer's genomic DNA workflow. Because all single-cell samples originated from the same monoclonal lineage, observed differences between amplified and bulk data primarily reflect MDA-induced artifacts rather than biological variation, providing a controlled experimental setting for downstream analyses.
 
 \paragraph{Basecalling and read processing}
-Raw signal files (POD5) were basecalled using Dorado~v0.5.0 with the high-accuracy model \texttt{dna\_r10.4.1\_e8.2\_400bps\_hac@v4.3.0} {\color{red}[ref]}. Reads with mean quality $< 10$ or length $< 500$~bp were removed. Residual adapters and concatemers were trimmed using Cutadapt~v4.0~{\color{red}[ref]} in two-pass error-tolerant mode. Cleaned reads were aligned to the GRCh38.p13 reference genome using minimap2~v2.26 (\texttt{map-ont} preset)~\cite{li2018minimap2}. Resulting BAM files were sorted and indexed with SAMtools~v1.16~\cite{danecek2021twelve}. All samples were processed under identical parameters to ensure consistency across datasets.
+Raw signal files (POD5) were basecalled using Dorado~v0.5.0 with the high-accuracy model \texttt{dna\_r10.4.1\_e8.2\_400bps\_hac@v4.3.0}~\cite{dorado2023}. Reads with mean quality $< 10$ or length $< 500$~bp were removed. Residual adapters and concatemers were trimmed using Cutadapt~v4.0~\cite{martin2011cutadapt} in two-pass error-tolerant mode. Cleaned reads were aligned to the GRCh38.p13 reference genome using minimap2~v2.26 (\texttt{map-ont} preset)~\cite{li2018minimap2}. Resulting BAM files were sorted and indexed with SAMtools~v1.16~\cite{danecek2021twelve}. All samples were processed under identical parameters to ensure consistency across datasets.
 
 \paragraph{Chimeric read identification}
-Chimeric reads were identified based on the presence of supplementary alignments in BAM files using the SA (Supplementary Alignment) tag.
-The SA tag indicates that a read has additional alignments beyond the primary alignment, which is characteristic of chimeric sequences that map to multiple distant genomic locations.
-To ensure accurate identification, we applied stringent filtering criteria: reads were classified as chimeric only if they (1) contained the SA tag, (2) were not unmapped, (3) were not secondary alignments, and (4) were not supplementary alignments themselves.
+Chimeric reads were identified based on the presence of supplementary alignments in BAM files using the \gls{sa} tag.
+The \gls{sa} tag indicates that a read has additional alignments beyond the primary alignment, which is characteristic of chimeric sequences that map to multiple distant genomic locations.
+To ensure accurate identification, we applied stringent filtering criteria: reads were classified as chimeric only if they (1) contained the \gls{sa} tag, (2) were not unmapped, (3) were not secondary alignments, and (4) were not supplementary alignments themselves.
 This filtering approach ensures that only primary alignments with supplementary mapping evidence are considered chimeric, avoiding double-counting of the same chimeric event and excluding low-quality or ambiguous alignments.
-Reads without the SA tag (single continuous alignments) were classified as non-chimeric.
+Reads without the \gls{sa} tag (single continuous alignments) were classified as non-chimeric.
 This approach leverages the standard BAM format specification to reliably identify reads with complex alignment patterns.
 
 \subsection*{Training data construction}
