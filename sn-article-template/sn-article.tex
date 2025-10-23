@@ -204,27 +204,51 @@
 
 \section*{Main}\label{sec:main}
 
-Single-cell genomics has revolutionized our understanding of cellular heterogeneity and development by enabling the characterization of individual cells rather than bulk populations~\cite{kalef2024single, sun2024mapping, navin2011tumour}.
-This approach has proven instrumental in uncovering rare cell types, tracking developmental trajectories, and identifying somatic mutations that drive disease progression.
-However, the limited DNA content in a single cell—typically only a few picograms—poses significant technical challenges for comprehensive genomic analysis~\cite{leung2016highly, gawad2016single, chen2017singlecell}.
+Single-cell genomics has revolutionized our understanding of cellular heterogeneity and development by enabling the characterization of individual cells rather than bulk populations~\cite{kalef2024single, sun2024mapping, navin2011tumour, macaulay2014single}.
+This approach has proven instrumental in uncovering rare cell types~\cite{macaulay2014single}, tracking developmental trajectories, elucidating tumor evolution through clonal architecture analysis~\cite{navin2011tumour}, and identifying somatic mutations that drive disease progression at unprecedented resolution.
+By resolving cellular mosaicism and enabling lineage tracing at single-cell resolution, these studies have fundamentally transformed our understanding of development, disease, and evolution.
+However, the limited DNA content in a single cell—typically only 6-7 picograms containing approximately two copies of the 3-billion-base-pair human genome—poses significant technical challenges for comprehensive genomic analysis~\cite{leung2016highly, gawad2016single, chen2017singlecell}.
 
-To overcome this limitation, \gls{wga} has become essential for single-cell genomic studies~\cite{zong2012genome, huang2015single, dean2002comprehensive, chen2017singlecell}.
-Various \gls{wga} techniques, including \gls{mda}, \gls{malbac}, \gls{doppcr}, \gls{lianti}  and other emerging methods, can amplify the entire genome from a single cell by several orders of magnitude, generating sufficient DNA material for high-coverage sequencing~\cite{de2014quantitative, biezuner2021comparison,fu2015uniform, agyabeng2025evaluating, telenius1992degenerate, leung2012programmable, chen2017singlecell}.
-This amplification enables the depth and breadth of coverage necessary for reliable variant calling, copy number analysis, and \gls{sv} detection~\cite{macaulay2014single}.
-Accurate single-cell genomics is particularly critical for studying somatic mosaicism in development and disease, tracking clonal evolution in cancer, and characterizing rare cell populations---applications where false-positive \glspl{sv} can lead to incorrect biological conclusions about genomic stability and cellular identity.
+To overcome this limitation, \gls{wga} has become essential for single-cell genomic studies~\cite{zong2012genome, huang2015single, dean2002comprehensive, chen2017singlecell, macaulay2014single}.
+Various \gls{wga} techniques have been developed, each with distinct amplification mechanisms and characteristic error profiles.
+\gls{mda}, introduced by Dean et al.\cite{dean2002comprehensive}, utilizes the highly processive Phi29 DNA polymerase to achieve isothermal amplification with products exceeding 10 kb, though it suffers from pronounced amplification bias and chimera formation\cite{lasken2007mechanism, pinard2006assessment}.
+\gls{doppcr}, pioneered by Telenius et al.\cite{telenius1992degenerate}, employs thermocycling with degenerate primers to achieve more uniform coverage but generates shorter amplicons.
+\gls{malbac} combines quasi-linear preamplification with exponential amplification to reduce bias\cite{zong2012genome}, while \gls{lianti} uses transposon insertion to create defined amplification origins, significantly improving uniformity and reducing artifacts~\cite{chen2017singlecell}.
+More recently, \gls{pta}\cite{gonzalez-pena2021accurate} and \gls{dmda}\cite{dippenaar2024droplet} have emerged as promising alternatives that modify reaction conditions to suppress chimera formation, though these methods require specialized equipment and protocols that have limited their widespread adoption.
+These amplification methods can increase DNA content by several orders of magnitude (typically 1,000- to 10,000-fold), generating sufficient material for high-coverage sequencing necessary for reliable variant calling, copy number analysis, and \gls{sv} detection~\cite{macaulay2014single, de2014quantitative, biezuner2021comparison, fu2015uniform, agyabeng2025evaluating}.
 
-Despite its critical role, \gls{wga} introduces systematic artifacts that significantly impact downstream analyses~\cite{lu2023chimera, lu2023exploration,pinard2006assessment, lasken2007mechanism, chen2017singlecell}.
-Among the most problematic are chimeric sequences—artificial DNA constructs  formed through template switching, where the Phi29 polymerase dissociates from one template and reinitiates on another during amplification~\cite{lu2023chimera, lu2023exploration, agyabeng2025evaluating}.
-These chimeric artifacts manifest as false-positive \glspl{sv} that do not exist in the original cell~\cite{lu2023chimera}, posing substantial challenges for accurate \gls{sv} detection and potentially leading to misinterpretation of genomic rearrangements and their biological significance~\cite{macaulay2014single}.
-Recent innovations in \gls{wga} methodology have attempted to mitigate these artifacts, including \gls{dmda} and \gls{pta}, which employ novel reaction conditions to suppress chimera formation~\cite{gonzalez-pena2021accurate, dippenaar2024droplet}. However, these methods require specialized equipment and have not been widely adopted for single-cell studies.
+Accurate single-cell genomics is particularly critical for multiple applications where false-positive \glspl{sv} can lead to incorrect biological conclusions.
+In cancer research, distinguishing genuine clonal evolution patterns from amplification artifacts is essential for understanding tumor heterogeneity and therapeutic resistance~\cite{navin2011tumour}.
+In developmental biology, accurate detection of somatic mosaicism enables the reconstruction of lineage relationships and identification of pathogenic mutations in rare cell populations.
+For CRISPR-based genome editing, single-cell analysis with reliable \gls{sv} detection is crucial for comprehensive assessment of off-target effects and ensuring genomic stability~\cite{gonzalez-pena2021accurate}.
+However, false-positive \glspl{sv} introduced during amplification can confound these analyses, leading to misinterpretation of genomic rearrangements and their biological significance~\cite{macaulay2014single, lu2023chimera}.
+
+Despite its critical role, \gls{wga} introduces systematic artifacts that significantly impact downstream analyses~\cite{lu2023chimera, lu2023exploration, pinard2006assessment, lasken2007mechanism, chen2017singlecell}.
+Among the most problematic are chimeric sequences—artificial DNA constructs formed through template switching during amplification.
+During \gls{mda}, the highly processive Phi29 polymerase can dissociate from one genomic template and reinitiate synthesis on a spatially proximate but genomically distant template~\cite{lasken2007mechanism, lu2023chimera}.
+This phenomenon is exacerbated by the branching nature of \gls{mda}, where multiple DNA synthesis reactions occur simultaneously in a densely packed reaction environment, increasing the probability of illegitimate template switching~\cite{lasken2007mechanism}.
+Lasken and Stockwell~\cite{lasken2007mechanism} demonstrated that chimera formation occurs through both strand displacement and branch migration mechanisms, with chimeric junctions often occurring at sites of microhomology.
+These chimeric artifacts manifest as apparent \glspl{sv}—including deletions, insertions, inversions, and translocations—that do not exist in the original cell~\cite{lu2023chimera, agyabeng2025evaluating}, posing substantial challenges for accurate \gls{sv} detection in single-cell studies.
+Early work by Pinard et al.~\cite{pinard2006assessment} documented significant amplification bias and the presence of chimeric products in \gls{mda}, demonstrating that certain genomic regions can be over- or under-represented by orders of magnitude.
+
+The advent of long-read sequencing technologies, particularly PacBio and Oxford Nanopore platforms, has transformed \gls{sv} detection by enabling direct observation of structural rearrangements that span kilobases to megabases.
+Numerous computational tools have been developed to detect \glspl{sv} from long-read data, including
+Sniffles2~\cite{Sedlazeck2018, Smolka2024}, DeBreak~\cite{chen2023deciphering}, SVIM~\cite{heller2019svim}, and cuteSV~\cite{jiang2020longreadbased}.
+These methods typically employ read alignment analysis, split-read detection, and local assembly strategies to identify \gls{sv} signatures~\cite{alkan2011genome}.
+However, distinguishing genuine biological \glspl{sv} from \gls{wga}-induced chimeric artifacts remains challenging~\cite{kiguchi2021long, lu2023exploration, kosugi2019comprehensive, mahmoud2019structural}.
 
 Current computational approaches for identifying \gls{wga}-induced artifacts rely primarily on coverage-based metrics and read-pair orientation patterns~\cite{kiguchi2021long, lu2023exploration}.
-However, these methods often fail to distinguish genuine \glspl{sv} from amplification artifacts, particularly when chimeric sequences exhibit complex rearrangement patterns or occur in repetitive genomic regions~\cite{kosugi2019comprehensive, mahmoud2019structural}.
-This lack of robust artifact detection has limited the reliability of \gls{sv} analysis in single-cell studies and hindered the full realization of single-cell genomics' potential.
+However, these heuristic methods often fail to distinguish genuine \glspl{sv} from amplification artifacts, particularly when chimeric sequences exhibit complex rearrangement patterns, occur in repetitive genomic regions, or involve multiple genomic loci~\cite{kosugi2019comprehensive, mahmoud2019structural}.
+This lack of robust, automated artifact detection has limited the reliability of \gls{sv} analysis in single-cell studies and hindered the full realization of single-cell genomics' potential for studying somatic mosaicism, tumor evolution, and rare cell populations.
+
+The emergence of deep learning, particularly language models based on transformer architectures, has demonstrated remarkable success in genomics applications~\cite{dalla2025nucleotide, zhou2023dnabert, nguyen2023hyenadna, consens2023transformers}.
+Recent genomic language models have shown the ability to learn complex sequence patterns and contextual relationships in DNA sequences, enabling improved performance in tasks such as regulatory element prediction, variant effect prediction, and functional annotation~\cite{consens2023transformers, routhier2022genomics}.
+These models treat DNA sequences analogously to natural language, learning representations that capture both local motifs and long-range dependencies~\cite{dalla2025nucleotide}.
+By training on large-scale genomic datasets, such models can internalize patterns of genuine biological sequences, including characteristic features of repetitive elements, chromatin structure, and sequence composition biases.
 
 Here, we developed ChimeraLM, a genomic language model specifically designed to detect chimeric artifacts introduced by \gls{wga}.
-By leveraging deep learning to capture sequence patterns and contextual information in genomic reads~\cite{dalla2025nucleotide, zhou2023dnabert, nguyen2023hyenadna}, ChimeraLM effectively distinguishes genuine biological sequences from \gls{wga}-induced chimeric artifacts.
-We demonstrate that ChimeraLM achieves superior performance compared to existing methods and substantially improves the reliability of \gls{sv} detection in single-cell genomic studies.
+By leveraging deep learning to capture sequence patterns, structural features, and contextual information in genomic reads~\cite{dalla2025nucleotide, zhou2023dnabert, nguyen2023hyenadna, consens2023transformers}, ChimeraLM effectively distinguishes genuine biological sequences from \gls{wga}-induced chimeric artifacts.
+We demonstrate that ChimeraLM achieves superior performance compared to existing methods and substantially improves the reliability of \gls{sv} detection in single-cell genomic studies, thereby enabling more accurate analysis at single-cell resolution.
 
 \begin{figure}[p]
 	\begin{center}
@@ -234,7 +258,7 @@ We demonstrate that ChimeraLM achieves superior performance compared to existing
 		(a)~Integration of ChimeraLM into single-cell genomic analysis workflows. Single cells are isolated from heterogeneous cellular populations through sorting technologies, followed by DNA extraction and \gls{wga} to generate sufficient material for sequencing. \gls{wga} introduces chimeric artifacts through random hexamers, DNA polymerase extension, and denatured DNA template switching. Sequencing reads from \gls{wga}-amplified samples contain both biological reads (green) and chimeric artifacts (red). ChimeraLM processes these reads to classify them as biological or artificial, enabling clean reads to proceed to \gls{sv} analysis for high-confidence event detection such as deletions.
 		(b) Dataset construction strategy for supervised learning. Training data is generated by comparing \gls{wga} sequencing reads against matched bulk sequencing data from the same biological sample. Bulk data contains only genuine biological sequences (no chimeric artifacts), while \gls{wga} data contains both biological reads and chimeric artifacts. Each \gls{wga} read is aligned against bulk data: reads that successfully match are labeled as ``biological'' (green pathway), while reads that fail to match are labeled as ``chimera artifact'' (red pathway). This comparative approach provides reliable ground truth labels for training ChimeraLM in a supervised learning framework.
 		(c) ChimeraLM neural network architecture. Input DNA sequences are tokenized and processed through a deep learning pipeline optimized for genomic sequence analysis. The architecture employs Hyena operators for efficient long-range dependency modeling, followed by attention pooling to aggregate variable-length sequence features. \gls{mlp} components with residual connections process the pooled features to learn complex patterns distinguishing biological sequences from chimeric artifacts. The final output layer produces binary classification probabilities, predicting whether each input sequence represents a biological read or an artificial chimeric read.
-        (test d) ChimeraLM neural network architecture. Input DNA sequences are tokenized and processed through a deep learning pipeline optimized for genomic sequence analysis. The architecture employs Hyena operators for efficient long-range dependency modeling, followed by attention pooling to aggregate variable-length sequence features. \gls{mlp} components with residual connections process the pooled features to learn complex patterns distinguishing biological sequences from chimeric artifacts. The final output layer produces binary classification probabilities, predicting whether each input sequence represents a biological read or an artificial chimeric read.} \label{fig:figure1}
+        (d) Highlight of attention pooling.  } \label{fig:figure1}
 \end{figure}
 
 \section*{Results}\label{sec:results}
@@ -422,7 +446,7 @@ The consistency across both datasets validates ChimeraLM's ability to distinguis
 To investigate whether ChimeraLM can capture biologically meaningful features for chimeric artifact detection, we examined the attention weight distributions from the model's pooling mechanism.
 Attention weights indicate which sequence regions contribute most strongly to individual classification decisions, providing potential insight into learned patterns.
 
-We present representative examples where ChimeraLM's attention mechanism shows focused activity at chimeric junction sites (Fig.~\ref{fig:figure4} and Extended Data Fig.~\ref{fig:sf3}).
+We present representative examples where ChimeraLM's attention mechanism shows focused activity at chimeric junction sites (Fig.~\ref{fig:figure4}).
 In these chimeric reads, the attention profiles exhibited predominantly low baseline weights with pronounced peaks coinciding with chimeric junctions where reads transition between reverse-complemented and forward-oriented sequences.
 These junctions represent artificial joining points where DNA fragments from different genomic loci were ligated during \gls{wga}.
 
@@ -817,7 +841,7 @@ The server was also configured with two NVIDIA A100 \glspl{gpu}, each with 80 GB
 \subsection*{Software and reproducibility}
 
 All analyses were conducted using Python 3.10 with PyTorch 2.0~\cite{paszke2019pytorch} and PyTorch Lightning 2.0~\cite{Falcon_PyTorch_Lightning_2019}.
-Key dependencies include NumPy~\cite{harris2020array} for numerical computing, Pandas~\cite{mckinney2010data} for data manipulation, and Scikit-learn~\cite{pedregosa2011scikit} for machine learning utilities.
+Key dependencies include NumPy~\cite{harris2020array} for numerical computing, Pandas~\cite{mckinney-proc-scipy-2010,reback2020pandas} for data manipulation, and Scikit-learn~\cite{pedregosa2011scikit} for machine learning utilities.
 The HyenaDNA model~\cite{nguyen2023hyenadna} was obtained from the official repository and adapted for chimeric detection.
 
 Random seeds were fixed (seed=12345) for all stochastic operations including data shuffling, weight initialization, and dropout to ensure reproducibility of results.
@@ -839,6 +863,26 @@ Computational workflows were managed using configuration files (Hydra framework~
 \renewcommand{\tablename}{Extended Data Table}
 \setcounter{figure}{0}
 \setcounter{table}{0}
+
+\begin{table}[!t]
+\centering
+\caption{Sequencing and alignment statistics}
+\label{tab:seq_stats}
+\small
+\setlength{\tabcolsep}{3pt} % Reduce column spacing (default is 6pt)
+\begin{tabular}{@{}llcccccccc@{}}
+\toprule
+\textbf{Sample} & \textbf{Platform} & \textbf{Reads} & \textbf{Total} & \textbf{Total bases} & \textbf{Fraction} & \textbf{Mean} & \textbf{Mean} & \textbf{Average}\\
+ & & ($\times 10^6$) & \textbf{bases} & \textbf{aligned} & \textbf{aligned} & \textbf{length} & \textbf{quality} & \textbf{identity}  \\
+ & & & (Gb) & (Gb) & & (bp) & (Q) & (\%) \\
+\midrule
+\gls{wga} & MinION & 9.11 & 14.6 & 10.4 & 0.7 & 1,603 & 14.3 & 97.6 \\
+\gls{wga} & PromethION & 44.69 & 128.2 & 69.2 & 0.5 & 2,869 & 14.5 & 96.1 \\
+Bulk & MinION & 0.97 & 8.1 & 7.1 & 0.9 & 8,310 & 17.2 & 97.3 \\
+Bulk & PromethION & 8.00 & 69.9 & 62.4 & 0.9 & 8,732 & 18.5 & 97.7 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \begin{figure}[!ht]
 	\begin{center}
