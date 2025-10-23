@@ -116,6 +116,8 @@
 \newacronym{sa}{SA}{Supplementary Alignment}
 \newacronym{lianti}{LIANTI}{Linear Amplification via Transposon Insertion}
 \newacronym{doppcr}{DOP-PCR}{termed Degenerate Oligonucleotide-Primed PCR}
+\newacronym{pta}{PTA}{Primary Template-directed Amplification}
+\newacronym{dmda}{dMDA}{droplet-based MDA}
 
 
 \newacronym{ide}{IDE}{Integrated Development Environment}
@@ -204,16 +206,17 @@
 
 Single-cell genomics has revolutionized our understanding of cellular heterogeneity and development by enabling the characterization of individual cells rather than bulk populations~\cite{kalef2024single, sun2024mapping, navin2011tumour}.
 This approach has proven instrumental in uncovering rare cell types, tracking developmental trajectories, and identifying somatic mutations that drive disease progression.
-However, the limited DNA content in a single cell—typically only a few picograms—poses significant technical challenges for comprehensive genomic analysis~\cite{leung2016highly, gawad2016single}.
+However, the limited DNA content in a single cell—typically only a few picograms—poses significant technical challenges for comprehensive genomic analysis~\cite{leung2016highly, gawad2016single, chen2017singlecell}.
 
-To overcome this limitation, \gls{wga} has become essential for single-cell genomic studies~\cite{zong2012genome, huang2015single, dean2002comprehensive}.
+To overcome this limitation, \gls{wga} has become essential for single-cell genomic studies~\cite{zong2012genome, huang2015single, dean2002comprehensive, chen2017singlecell}.
 Various \gls{wga} techniques, including \gls{mda}, \gls{malbac}, \gls{doppcr}, \gls{lianti}  and other emerging methods, can amplify the entire genome from a single cell by several orders of magnitude, generating sufficient DNA material for high-coverage sequencing~\cite{de2014quantitative, biezuner2021comparison,fu2015uniform, agyabeng2025evaluating, telenius1992degenerate, leung2012programmable, chen2017singlecell}.
-This amplification enables the depth and breadth of coverage necessary for reliable variant calling, copy number analysis, and \gls{sv} detection.
+This amplification enables the depth and breadth of coverage necessary for reliable variant calling, copy number analysis, and \gls{sv} detection~\cite{macaulay2014single}.
 Accurate single-cell genomics is particularly critical for studying somatic mosaicism in development and disease, tracking clonal evolution in cancer, and characterizing rare cell populations---applications where false-positive \glspl{sv} can lead to incorrect biological conclusions about genomic stability and cellular identity.
 
-Despite its critical role, \gls{wga} introduces systematic artifacts that significantly impact downstream analyses~\cite{lu2023chimera, lu2023exploration,pinard2006assessment}.
-Among the most problematic are chimeric sequences—artificial DNA constructs formed when fragments from different genomic loci are erroneously joined during amplification~\cite{lu2023chimera, lu2023exploration, agyabeng2025evaluating}.
-These chimeric artifacts manifest as false-positive \glspl{sv} that do not exist in the original cell~\cite{lu2023chimera}, posing substantial challenges for accurate \gls{sv} detection and potentially leading to misinterpretation of genomic rearrangements and their biological significance.
+Despite its critical role, \gls{wga} introduces systematic artifacts that significantly impact downstream analyses~\cite{lu2023chimera, lu2023exploration,pinard2006assessment, lasken2007mechanism, chen2017singlecell}.
+Among the most problematic are chimeric sequences—artificial DNA constructs  formed through template switching, where the Phi29 polymerase dissociates from one template and reinitiates on another during amplification~\cite{lu2023chimera, lu2023exploration, agyabeng2025evaluating}.
+These chimeric artifacts manifest as false-positive \glspl{sv} that do not exist in the original cell~\cite{lu2023chimera}, posing substantial challenges for accurate \gls{sv} detection and potentially leading to misinterpretation of genomic rearrangements and their biological significance~\cite{macaulay2014single}.
+Recent innovations in \gls{wga} methodology have attempted to mitigate these artifacts, including \gls{dmda} and \gls{pta}, which employ novel reaction conditions to suppress chimera formation~\cite{gonzalez-pena2021accurate, dippenaar2024droplet}. However, these methods require specialized equipment and have not been widely adopted for single-cell studies.
 
 Current computational approaches for identifying \gls{wga}-induced artifacts rely primarily on coverage-based metrics and read-pair orientation patterns~\cite{kiguchi2021long, lu2023exploration}.
 However, these methods often fail to distinguish genuine \glspl{sv} from amplification artifacts, particularly when chimeric sequences exhibit complex rearrangement patterns or occur in repetitive genomic regions~\cite{kosugi2019comprehensive, mahmoud2019structural}.
