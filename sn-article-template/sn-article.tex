@@ -203,10 +203,10 @@ However, the limited DNA content in a single cell—typically only 6-7 picograms
 
 To overcome this limitation, \gls{wga} has become essential for single-cell genomic studies~\cite{zong2012genome,huang2015single,dean2002comprehensive, chen2017singlecell,macaulay2014single}.
 Various \gls{wga} techniques have been developed, each with distinct amplification mechanisms and characteristic error profiles.
-\gls{mda}, introduced by Dean et al.\cite{dean2002comprehensive}, utilizes the highly processive Phi29 DNA polymerase to achieve isothermal amplification with products exceeding 10 kb, though it suffers from pronounced amplification bias and chimera formation\cite{lasken2007mechanism,pinard2006assessment}.
-\gls{doppcr}, pioneered by Telenius et al.\cite{telenius1992degenerate}, employs thermocycling with degenerate primers to achieve more uniform coverage but generates shorter amplicons.
-\gls{malbac} combines quasi-linear preamplification with exponential amplification to reduce bias\cite{zong2012genome}, while \gls{lianti} uses transposon insertion to create defined amplification origins, significantly improving uniformity and reducing artifacts~\cite{chen2017singlecell}.
-More recently, \gls{pta}\cite{gonzalez-pena2021accurate} and \gls{dmda}\cite{dippenaar2024droplet} have emerged as promising alternatives that modify reaction conditions to suppress chimera formation, though these methods require specialized equipment and protocols that have limited their widespread adoption.
+\gls{mda}, introduced by Dean et al.~\cite{dean2002comprehensive}, utilizes the highly processive Phi29 DNA polymerase to achieve isothermal amplification with products exceeding 10 kb, though it suffers from pronounced amplification bias and chimera formation~\cite{lasken2007mechanism,pinard2006assessment}.
+\gls{doppcr}, pioneered by Telenius et al.~\cite{telenius1992degenerate}, employs thermocycling with degenerate primers to achieve more uniform coverage but generates shorter amplicons.
+\gls{malbac} combines quasi-linear preamplification with exponential amplification to reduce bias~\cite{zong2012genome}, while \gls{lianti} uses transposon insertion to create defined amplification origins, significantly improving uniformity and reducing artifacts~\cite{chen2017singlecell}.
+More recently, \gls{pta}~\cite{gonzalez-pena2021accurate} and \gls{dmda}~\cite{dippenaar2024droplet} have emerged as promising alternatives that modify reaction conditions to suppress chimera formation, though these methods require specialized equipment and protocols that have limited their widespread adoption.
 These amplification methods can increase DNA content by several orders of magnitude (typically 1,000- to 10,000-fold), generating sufficient material for high-coverage sequencing necessary for reliable variant calling, copy number analysis, and \gls{sv} detection~\cite{macaulay2014single,de2014quantitative, biezuner2021comparison,fu2015uniform,agyabeng2025evaluating,dean2001rapid}.
 
 Accurate single-cell genomics is particularly critical for multiple applications where false-positive \glspl{sv} can lead to incorrect biological conclusions.
@@ -385,19 +385,19 @@ Our results highlight that nanopore-based single-cell genomics requires dedicate
 
 Accurate \gls{sv} detection is essential for understanding genomic diversity and disease mechanisms in single cells.
 However, \gls{wga}-induced chimeric artifacts can be misidentified as genuine \glspl{sv}, leading to incorrect biological conclusions.
-To quantify ChimeraLM's impact on downstream SV detection accuracy, we compared variant calls from unfiltered \gls{wga} data versus ChimeraLM-filtered data against two independent reference standards.
+To quantify ChimeraLM's impact on downstream \gls{sv} detection accuracy, we compared variant calls from unfiltered \gls{wga} data versus ChimeraLM-filtered data against two independent reference standards.
 
-We first constructed a high-confidence gold standard SV dataset by integrating multiple sequencing platforms and detection algorithms (Fig.~\ref{fig:figure3}a).
-PC3 bulk DNA was sequenced using long-read (Nanopore PromethION and MinION) and short-read (Illumina HiSeq) technologies (Extended Table~\ref{tab:seq_stats}).
+We first constructed a high-confidence gold standard \gls{sv} dataset by integrating multiple sequencing platforms and detection algorithms (Fig.~\ref{fig:figure3}a).
+PC3 bulk DNA was sequenced using long-read (\gls{ont} PromethION and MinION) and short-read (Illumina HiSeq) technologies (Extended Table~\ref{tab:seq_stats}).
 \glspl{sv} detected by $\geq$2 calling algorithms on the same platform and supported by both long-read and short-read data were designated as gold standard events.
 This multi-platform consensus approach ensures high specificity, as true \glspl{sv} should be detectable across different sequencing technologies.
 
 When comparing \gls{wga} samples against the gold standard, unfiltered data showed extensive false-positive \gls{sv} calls (Fig.~\ref{fig:figure3}b,c).
-On PromethION, raw \gls{wga} data produced 3.6 million SV calls, of which only 8,815 (0.24\%) matched gold standard events—meaning 99.76\% of calls were likely artifacts.
+On PromethION, raw \gls{wga} data produced 3.6 million \gls{sv} calls, of which only 8,815 (0.24\%) matched gold standard events—meaning 99.76\% of calls were likely artifacts.
 ChimeraLM filtering reduced total calls to 305,570 while retaining 8,067 gold standard events, increasing the validation rate to 2.64\% (11-fold improvement) and preserving 91.5\% of true variants.
 MinION data showed similar results: \gls{wga} produced 451,390 calls with 1.59\% validation rate, while ChimeraLM-filtered data yielded 38,432 calls with a 16.3\% validation rate (10-fold improvement) and 87.2\% true variant retention.
 
-To complement the stringent gold standard validation, we also compared SV calls against long-read bulk sequencing from the same platform (Fig.~\ref{fig:figure3}d,e).
+To complement the stringent gold standard validation, we also compared \gls{sv} calls against long-read bulk sequencing from the same platform (Fig.~\ref{fig:figure3}d,e).
 This platform-matched validation captures true \glspl{sv} that may be detectable specifically in long-read data but missed by short-read sequencing, providing a more inclusive reference for evaluating recall.
 On PromethION bulk validation, ChimeraLM filtering increased the validation rate from 0.38\% to 3.24\% (8.5-fold improvement) while retaining 71.9\% of bulk-supported events.
 MinION bulk validation showed similar improvements, with validation rates increasing from 1.25\% to 12.79\% (10-fold improvement) and 87.1\% retention of bulk-supported events.
@@ -411,13 +411,12 @@ The high retention of true variants (72-92\% depending on validation stringency)
 We compared the distribution of \gls{sv} types across bulk, unfiltered \gls{wga}, and ChimeraLM-filtered samples to assess whether artifact removal normalizes \gls{sv} profiles (Fig.~\ref{fig:figure3}f,g).
 Bulk sequencing exhibited relatively balanced distributions across \glspl{del}, \glspl{dup}, \glspl{ins}, \glspl{inv}, and \glspl{tra}.
 In contrast, unfiltered \gls{wga} data showed dramatically skewed distributions dominated by \glspl{inv} on both PromethION and MinION platforms.
-This disproportionate \gls{inv} enrichment is consistent with their artifactial origin: chimeric reads created by template switching during \gls{wga} produce alignment patterns that mimic genuine \glspl{inv}~\cite{lu2023chimera, agyabeng2025evaluating}.
+This disproportionate \gls{inv} enrichment is consistent with their artificial origin: chimeric reads created by template switching during \gls{wga} produce alignment patterns that mimic genuine \glspl{inv}~\cite{lu2023chimera, agyabeng2025evaluating}.
 
 ChimeraLM filtering substantially normalized these distributions toward bulk profiles.
 The overwhelming excess of \glspl{inv} was dramatically reduced on both platforms, while other \gls{sv} types were maintained at levels consistent with bulk sequencing.
 This normalization occurred through selective removal of artifact-supported \glspl{inv} rather than indiscriminate elimination of all \gls{inv} calls.
 The restoration of biologically representative \gls{sv} type distributions enables accurate characterization of \gls{sv} in single cells without the confounding effects of amplification artifacts.
-
 
 \subsection*{Deep learning classification reveals chimeric artifact-associated structural variants}
 
@@ -439,7 +438,6 @@ ChimeraLM's ability to identify and remove these specific artifacts represents a
 		(c,f)~Proposed chimera formation mechanisms. Step 1: Original DNA fragments from distant genomic loci exist in forward orientation. Step 2: During \gls{wga}, one or both fragments may undergo random reverse-complementation. Step 3: Template switching joins the fragments with discordant orientations, creating chimeric artifacts. The two examples illustrate different orientation patterns (forward-to-reverse vs reverse-to-forward transitions) arising from random strand selection during amplification.
 	}\label{fig:figure4}
 \end{figure}
-
 
 \subsection*{ChimeraLM demonstrates capacity to learn biologically relevant sequence features}
 
@@ -537,302 +535,169 @@ This approach leverages the standard BAM format specification to reliably identi
 
 \subsection*{Training data construction}
 
-\paragraph{Paired sequencing dataset generation}
-Training data for ChimeraLM was constructed using a novel comparative approach that leverages paired \gls{wga} and bulk sequencing datasets from identical biological samples (PC3 cell line).
-This methodology exploits the fundamental difference between amplified and non-amplified samples to establish reliable ground truth labels for supervised learning.
-Bulk sequencing data serves as a reference standard containing only genuine biological sequences, while \gls{wga} data contains both authentic genomic content and amplification-induced chimeric artifacts.
-Sample preparation involved processing PC3 cell line to generate matched \gls{wga} and bulk sequencing datasets.
+\paragraph{Training data generation}
+We generated training data from PC3 cells using \gls{wga} sequencing on the PromethION P2 platform (\gls{ont}) and three independent bulk sequencing datasets: bulk sequenced on PromethION P2, bulk sequenced on MinION Mk1c (\gls{ont}), and bulk sequenced on PacBio.
+\gls{wga} data sequenced on MinION Mk1c was reserved as a completely independent test set.
+Bulk sequencing from non-amplified genomic DNA serves as reference data containing only genuine biological sequences, while \gls{wga} sequencing from amplified DNA contains both authentic genomic sequences and amplification-induced chimeric artifacts.
 
-\paragraph{Ground truth labeling methodology}
-The core innovation of our training data construction lies in the comparative labeling strategy that automatically generates binary classification labels.
-Each chimeric read from the \gls{wga} dataset was systematically compared against the corresponding bulk sequencing data through sequence alignment analysis to determine its biological authenticity.
+\paragraph{Ground truth labeling}
+We first labeled chimeric reads from \gls{wga} PromethION P2 data by comparing them against chimeric reads from all three bulk datasets.
+For each \gls{wga} chimeric read, we extracted all alignment segments (defined by start-end positions on the reference genome) and compared them against alignment segments from bulk chimeric reads.
+A \gls{wga} read was labeled as biological if all its alignment segments matched corresponding segments from at least one bulk chimeric read within a 1~kb position threshold, indicating the chimeric structure exists in non-amplified DNA.
+\gls{wga} reads whose alignment segment patterns did not match any bulk chimeric reads across all three datasets were labeled as artificial chimeras generated during amplification.
+To augment the biological class, we subsampled chimeric reads from all three bulk datasets and labeled them as biological, as chimeric reads in non-amplified bulk DNA represent genuine biological events (e.g., true \glspl{sv}).
+The final training dataset combined the labeled \gls{wga} PromethION P2 reads with the subsampled bulk chimeric reads.
 
-Chimeric reads from \gls{wga} data were compared against the bulk sequencing dataset to identify chimera present in both datasets.
-\gls{wga} reads that successfully aligned to bulk sequences were classified as biological, indicating they represent authentic genomic content preserved through the amplification process.
-Conversely, \gls{wga} reads that failed to align to any chimeric sequences in the bulk dataset were labeled as artificial chimeric artifacts, representing spurious sequences generated during the amplification process.
-The comparison-based classification approach ensures that training labels reflect objective evidence of sequence authenticity.
-This methodology captures the full spectrum of naturally occurring chimeric artifacts while providing reliable positive examples of biological sequences that successfully traverse the amplification process.
-
-\paragraph{Dataset partitioning and stratification}
-The complete labeled dataset was partitioned into training, validation, and test sets using stratified sampling to maintain balanced representation of biological and artificial sequences across all data splits.
-The training set comprised 70\% of the total data and was used for model parameter optimization during supervised learning.
-The validation set contained 20\% of the data and served for hyperparameter tuning, model selection, and monitoring training progress.
-The remaining 10\% was reserved as a held-out test set for final performance evaluation and remained completely isolated from the training process.
-
-Stratification ensured that each data partition maintained similar proportions of biological and artificial sequences, preventing training bias that could arise from imbalanced class distributions. Random sampling within strata was employed to minimize systematic biases while maintaining statistical representativeness of the overall dataset characteristics.
+\paragraph{Dataset partitioning and cross-platform validation}
+The combined labeled dataset was partitioned into training (70\%), validation (20\%), and test (10\%) sets using stratified random sampling.
+The training set was used for model parameter optimization, the validation set for hyperparameter tuning and monitoring training progress, and the test set for final performance evaluation.
+The \gls{wga} MinION Mk1c dataset served as a completely independent test set for evaluating cross-platform generalization, as it was sequenced on a different nanopore platform and never exposed to the model during development.
+This design tests whether ChimeraLM learns generalizable sequence features of \gls{wga}-induced chimeric artifacts rather than platform-specific technical signatures.
 
 \subsection*{Model architecture}
 
-\paragraph{Biological rationale for deep learning approach}
+\paragraph{Backbone encoder}
+ChimeraLM employs the pre-trained HyenaDNA model~\cite{nguyen2023hyenadna} as its backbone encoder.
+This model was pre-trained on large-scale genomic data and provides robust sequence representations.
+DNA sequences are tokenized at single-nucleotide resolution, with each base (A, C, G, T, N) mapped to a unique integer token (7, 8, 9, 10, 11, respectively).
+Special tokens include [CLS]=0, [PAD]=4, and others for sequence processing.
+Input sequences are truncated at 32,768 bp or padded to enable batch processing.
 
-Traditional bioinformatics methods for chimeric detection rely on alignment metrics, coverage patterns, and mate-pair orientation---features that may overlap between genuine structural variants and \gls{wga} artifacts.
-Deep learning enables ChimeraLM to integrate multiple sequence-level features simultaneously, including nucleotide composition, k-mer patterns, and positional context, to distinguish artifacts from biology.
-The attention mechanism allows the model to focus on chimeric junctions where sequence orientation changes abruptly, a hallmark of template-switching artifacts.
-This data-driven approach discovers patterns that may not be obvious to rule-based algorithms, particularly for complex multi-fragment chimeras.
-
-ChimeraLM uses a pre-trained HyenaDNA model (hyenadna-small-32k-seqlen) which provides robust genomic sequence representations learned from large-scale genomic data.
-The backbone model handles DNA sequence tokenization using single base pair resolution with a maximum sequence length of 32,768 base pairs, converting nucleotide sequences into token representations.
-
-\paragraph{Tokenization}
-The tokenizer employs character-level encoding where each nucleotide is mapped to a unique token ID.
-For a DNA sequence $S = (s_1, s_2, \ldots, s_L)$ where $s_i \in \{\text{A}, \text{C}, \text{G}, \text{T}, \text{N}\}$ and $L$ is the sequence length, the tokenization function $\tau$ maps each nucleotide to an integer token:
+For a tokenized input sequence $\mathbf{x} \in \mathbb{Z}^{L}$, the HyenaDNA backbone generates contextualized hidden representations:
 $$
-	\tau(s_i) = \begin{cases}
-		7  & \text{if } s_i = \text{A}  \\
-		8  & \text{if } s_i = \text{C}  \\
-		9  & \text{if } s_i = \text{G}  \\
-		10 & \text{if } s_i = \text{T}  \\
-		11 & \text{if } s_i = \text{N}  \\
-		6  & \text{otherwise (unknown)}
-	\end{cases}
+\mathbf{H} = \text{HyenaDNA}(\mathbf{x}) \in \mathbb{R}^{L \times 256}
 $$
-Additional special tokens include [CLS]=0, [SEP]=1, [BOS]=2, [MASK]=3, [PAD]=4, and [RESERVED]=5.
-The tokenized sequence is represented as $\mathbf{x} = (\tau(s_1), \tau(s_2), \ldots, \tau(s_L))$, with truncation applied when $L > 32{,}768$ and padding tokens appended when $L < 32{,}768$ to enable batch processing.
+where $\mathbf{H} = (\mathbf{h}_1, \mathbf{h}_2, \ldots, \mathbf{h}_L)$ represents position-wise hidden states with dimension 256. 
+The Hyena operators~\cite{Poli2023HyenaHT} efficiently capture both local sequence motifs and long-range dependencies essential for distinguishing biological sequences from chimeric artifacts.
 
-\paragraph{Backbone encoding}
-Input sequences are processed through the Hyena operators.
-For a tokenized input sequence $\mathbf{x} \in \mathbb{Z}^{L}$, the backbone model generates contextualized hidden representations:
-$$
-	\mathbf{H} = \text{HyenaDNA}(\mathbf{x}) \in \mathbb{R}^{L \times d_{\text{hidden}}}
-$$
-where $\mathbf{H} = (\mathbf{h}_1, \mathbf{h}_2, \ldots, \mathbf{h}_L)$ represents position-wise hidden states with dimension $d_{\text{hidden}} = 256$.
-The backbone generates contextualized hidden representations for each position in the input sequence, capturing both local sequence motifs and long-range dependencies essential for distinguishing biological sequences from chimeric artifacts.
-
-\paragraph{Classification head with attention pooling}
-ChimeraLM employs a binary sequence classifier designed specifically for genomic sequence classification tasks.
-The classification head processes the hidden states through a multi-stage architecture optimized for variable-length sequence classification.
-The classifier implements attention-based pooling to aggregate variable-length sequence representations into fixed-size feature vectors.
-
-The attention pooling mechanism computes position-wise attention weights through a two-layer neural network.
-For hidden states $\mathbf{H} \in \mathbb{R}^{L \times 256}$, attention scores are computed as:
+\paragraph{Attention pooling}
+To aggregate variable-length sequence representations into fixed-size vectors, ChimeraLM implements attention-based pooling. 
+For hidden states $\mathbf{H} \in \mathbb{R}^{L \times 256}$, attention weights are computed through a two-layer network:
 \begin{align*}
-	\mathbf{e}          & = \text{Linear}_{256 \to 256}(\mathbf{H}) \in \mathbb{R}^{L \times 256} \\
-	\mathbf{e}'         & = \text{GELU}(\mathbf{e}) \in \mathbb{R}^{L \times 256}                 \\
-	\mathbf{s}          & = \text{Linear}_{256 \to 1}(\mathbf{e}') \in \mathbb{R}^{L \times 1}    \\
-	\boldsymbol{\alpha} & = \text{softmax}(\mathbf{s}) \in \mathbb{R}^{L \times 1}
+\mathbf{e} &= \text{GELU}(\text{Linear}_{256 \to 256}(\mathbf{H})) \in \mathbb{R}^{L \times 256} \\
+\mathbf{s} &= \text{Linear}_{256 \to 1}(\mathbf{e}) \in \mathbb{R}^{L \times 1} \\
+\boldsymbol{\alpha} &= \text{softmax}(\mathbf{s}) \in \mathbb{R}^{L \times 1}
 \end{align*}
-where the first linear layer projects from dimension 256 to 256, followed by \gls{gelu} activation, and a second linear layer projects to a single attention score per position.
+The pooled representation is the weighted sum of hidden states:
+$$
+\mathbf{h}_{\text{pooled}} = \sum_{i=1}^{L} \alpha_i \mathbf{h}_i \in \mathbb{R}^{256}
+$$
+This mechanism assigns learned importance weights to each sequence position, enabling the model to focus on informative regions while accommodating natural variability in read lengths.
 
-When attention masks $\mathbf{m} \in \{0,1\}^L$ are provided for variable-length sequences (to handle padding), the attention weights are masked and renormalized:
+\paragraph{Classification head}
+The pooled representation is processed through a \gls{mlp} with residual connections.
+The first layer expands dimensionality:
 $$
-	\boldsymbol{\alpha}_{\text{masked}} = \frac{\boldsymbol{\alpha} \odot \mathbf{m}}{\sum_{i=1}^{L} (\alpha_i \cdot m_i) + \epsilon}
+\mathbf{f}_1 = \text{Dropout}_{0.1}(\text{GELU}(\text{Linear}_{256 \to 512}(\mathbf{h}_{\text{pooled}}))) \in \mathbb{R}^{512}
 $$
-where $\odot$ denotes element-wise multiplication and $\epsilon = 10^{-9}$ ensures numerical stability.
+Subsequent residual blocks with input $\mathbf{f}_{\text{in}} \in \mathbb{R}^{512}$ compute:
+$$
+\mathbf{f}_{\text{out}} = \text{Dropout}_{0.1}(\text{Linear}_{512 \to 512}(\text{GELU}(\text{Linear}_{512 \to 512}(\mathbf{f}_{\text{in}}))))) + \mathbf{f}_{\text{in}}
+$$
+where the skip connection enables stable gradient flow during training.
+The final layer produces binary classification logits:
+$$
+\mathbf{z} = [z_0, z_1] = \text{Linear}_{512 \to 2}(\mathbf{f}_{\text{final}}) \in \mathbb{R}^{2}
+$$
+where $z_0$ and $z_1$ represent logits for biological and artificial chimeric classes, respectively. During inference, the predicted class is $\hat{y} = \argmax_{i \in \{0,1\}} z_i$.
 
-The pooled representation is computed as the weighted sum of hidden states:
-$$
-	\mathbf{h}_{\text{pooled}} = \sum_{i=1}^{L} \alpha_i \mathbf{h}_i \in \mathbb{R}^{256}
-$$
-This approach accommodates the natural variability in sequencing read lengths without introducing computational inefficiency or artificial sequence information.
+\paragraph{Model summary}
+The complete ChimeraLM pipeline processes DNA sequences through: (1) single-nucleotide tokenization, (2) HyenaDNA backbone encoding to generate contextualized representations, (3) attention pooling to aggregate position-specific features, (4) \gls{mlp} layers with residual connections to learn classification features, and (5) binary classification output. 
+The entire model is trained end-to-end using labeled \gls{wga} and bulk sequencing data.
 
-\paragraph{Multi-layer perceptron with residual connections}
-The pooled sequence representation is processed through a \gls{mlp} with residual connections.
-For the pooled representation $\mathbf{h}_{\text{pooled}} \in \mathbb{R}^{256}$, the first layer performs dimensionality expansion:
-$$
-	\mathbf{f}_1 = \text{Dropout}_{0.1}(\text{GELU}(\text{Linear}_{256 \to 512}(\mathbf{h}_{\text{pooled}}))) \in \mathbb{R}^{512}
-$$
-
-For subsequent layers when dimensions match, residual blocks are employed.
-A residual block $\mathcal{R}$ with input $\mathbf{f}_{\text{in}} \in \mathbb{R}^{512}$ computes:
-\begin{align*}
-	\mathbf{z}_1            & = \text{Linear}_{512 \to 512}(\mathbf{f}_{\text{in}})         \\
-	\mathbf{z}_2            & = \text{Dropout}_{0.1}(\text{GELU}(\mathbf{z}_1))             \\
-	\mathbf{z}_3            & = \text{Linear}_{512 \to 512}(\mathbf{z}_2)                   \\
-	\mathbf{f}_{\text{out}} & = \text{Dropout}_{0.1}(\mathbf{z}_3) + \mathbf{f}_{\text{in}}
-\end{align*}
-where the final addition represents the skip connection that adds the input to the transformed output.
-This residual design enables stable gradient flow during training and improved representation learning for complex genomic patterns.
-
-\paragraph{Output layer and classification}
-The final classification layer maps the processed features to binary classification logits.
-For the final feature representation $\mathbf{f}_{\text{final}} \in \mathbb{R}^{512}$ from the \gls{mlp}, the output logits are computed as:
-$$
-	\mathbf{z} = [z_0, z_1] = \text{Linear}_{512 \to 2}(\mathbf{f}_{\text{final}}) \in \mathbb{R}^{2}
-$$
-where $z_0$ represents the logit for the ``biological'' class and $z_1$ represents the logit for the ``artificial chimeric'' class.
-
-The model outputs two logits rather than a single probability, enabling the use of cross-entropy loss during training.
-During inference, classification predictions are made by selecting the class with the highest logit:
-$$
-	\hat{y} = \argmax_{i \in \{0,1\}} z_i
-$$
-Equivalently, after applying softmax, the predicted class corresponds to $\hat{y} = 1$ (artificial chimeric) if $z_1 > z_0$, otherwise $\hat{y} = 0$ (biological).
-
-\paragraph{Complete model architecture}
-The complete ChimeraLM architecture can be summarized as a composition of functions:
-$$
-	\hat{y} = \argmax(\text{Linear}_{512 \to 2}(\mathcal{R}(\text{MLP}(\text{AttentionPool}(\text{HyenaDNA}(\tau(S)))))))
-$$
-where $\tau$ denotes tokenization, HyenaDNA is the pre-trained backbone encoder, AttentionPool performs attention-based pooling, MLP is the first feedforward layer with expansion, $\mathcal{R}$ represents residual blocks, and the final linear layer produces binary classification logits.
 
 \subsection*{Model training and optimization}
 
-\paragraph{Training data preparation}
-ChimeraLM was trained using the paired \gls{wga} and bulk sequencing dataset constructed from PromethION P2 platform data.
-The tokenizer was initialized from the pre-trained HyenaDNA model (hyenadna-small-32k-seqlen) using the Hugging Face transformers library, loading the pre-configured tokenizer with maximum sequence length of 32,768 bp, automatic truncation, and padding enabled.
-This approach ensures that input sequences are processed using the same tokenization scheme employed during the backbone model's original training, enabling effective transfer learning for the chimeric detection task.
-Sequences longer than the maximum length are truncated, while shorter sequences are padded to enable efficient batch processing.
+\paragraph{Training configuration}
+ChimeraLM was trained using PyTorch~\cite{paszke2019pytorch} and PyTorch Lightning~\cite{Falcon_PyTorch_Lightning_2019} frameworks.
+Input sequences were tokenized using the tokenizer with maximum sequence length of 32,768 bp.
+Sequences longer than this threshold were truncated; shorter sequences were padded to enable batch processing. 
+Training employed mixed-precision computation (bf16) to accelerate training while maintaining numerical stability.
 
-\paragraph{Model training framework and optimization}
-Model training was implemented within PyTorch~\cite{paszke2019pytorch} and PyTorch Lightning framework~\cite{Falcon_PyTorch_Lightning_2019}, providing a standardized interface for supervised classification tasks with automatic handling of training loops, validation procedures, and model checkpointing.
-The training process employed mixed-precision computation using bf16-mixed precision to accelerate training while maintaining numerical stability for gradient computation.
+\paragraph{Optimization procedure}
+We used the AdamW optimizer~\cite{adamw} with learning rate $1 \times 10^{-4}$ and weight decay 0.01.
+A ReduceLROnPlateau scheduler dynamically adjusted the learning rate based on validation loss, reducing it by a factor of 0.1 when no improvement occurred for 10 consecutive epochs.
+Early stopping with patience of 10 epochs prevented overfitting by terminating training when validation performance plateaued. 
+A fixed random seed (12345) ensured reproducibility across training runs.
 
-The optimization procedure utilized the AdamW optimizer~\cite{adamw}, an extension of the Adam optimizer~\cite{kingma2014adam} that incorporates decoupled weight decay regularization.
-The optimizer was configured with a learning rate of $1\times10^{-4}$ and weight decay coefficient of 0.01.
-The AdamW optimizer updates model parameters $\theta$ according to the following formulation:
+The training objective used cross-entropy loss for binary classification. For a training example with true class label $y \in \{0,1\}$ and model logits $z = [z_0, z_1]$, the loss is:
 $$
-	\theta_{t+1} = \theta_t - \alpha \left( \frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon} + \lambda \theta_t \right)
+\mathcal{L} = -\log\left(\frac{\exp(z_y)}{\exp(z_0) + \exp(z_1)}\right)
 $$
-where $\alpha$ represents the learning rate, $\hat{m}_t$ and $\hat{v}_t$ are bias-corrected first and second moment estimates, $\epsilon$ is a small constant for numerical stability, and $\lambda$ denotes the weight decay coefficient.
-The decoupled weight decay term $\lambda \theta_t$ provides regularization that is independent of the gradient-based updates.
+where $z_0$ and $z_1$ represent logits for biological and artificial chimeric classes.
 
-\paragraph{Learning rate scheduling}
-A learning rate scheduler (ReduceLROnPlateau) was employed to dynamically adjust the learning rate during training based on validation loss performance.
-The scheduler monitors validation loss $\mathcal{L}_{\text{val}}$ and reduces the learning rate by a factor of 0.1 when no improvement is observed for 10 consecutive epochs:
-$$
-	\alpha_{t+1} = \begin{cases}
-		0.1 \cdot \alpha_t & \text{if } \min(\mathcal{L}_{\text{val}}^{t-10}, \ldots, \mathcal{L}_{\text{val}}^{t}) \geq \mathcal{L}_{\text{val}}^{t-11} \\
-		\alpha_t           & \text{otherwise}
-	\end{cases}
-$$
-where $\alpha_t$ denotes the learning rate at epoch $t$.
-This adaptive learning rate adjustment enables fine-grained optimization as training progresses, allowing the model to escape plateaus and achieve better convergence.
 
-Early stopping was implemented with a patience of 10 epochs to prevent over-fitting and automatically terminate training when validation performance ceased to improve.
-This approach ensures optimal model generalization by identifying the point of best validation performance rather than training to completion.
-The training process used a fixed random seed of 12345 to ensure reproducibility across multiple training runs and facilitate comparison of different model configurations.
+\paragraph{Training implementation}
+Training used batch size of 16 sequences with 30 parallel data loading workers.
+\gls{gpu} acceleration was employed for efficient processing, with training typically requiring 96-120 hours depending on dataset size.
+Model checkpointing saved the best-performing model based on validation metrics.
+Configuration management used Hydra~\cite{Yadan2019Hydra} to enable reproducible experimentation.
 
-\paragraph{Loss function and objective formulation}
-The training objective employed cross-entropy loss for the binary classification task, providing probabilistically grounded optimization that encourages the model to produce well-calibrated probability estimates.
-For a training example with true class label $y \in \{0,1\}$ and model output logits $z = [z_0, z_1]$, the cross-entropy loss is computed as:
-$$
-	\mathcal{L} = -\log(\textrm{softmax}(z_y)) = -\log\left(\frac{\exp(z_y)}{\exp(z_0) + \exp(z_1)}\right)
-$$
-where the softmax function converts logits to normalized probability distributions over the two classes (biological and artificial).
-The cross-entropy formulation provides strong gradients for misclassified examples while allowing confident predictions to contribute minimal loss, enabling efficient learning of the decision boundary between biological sequences and chimeric artifacts.
-
-\paragraph{Data loading and computational configuration}
-Training employed a batch size of 16 sequences per batch, balancing computational efficiency with memory constraints and gradient stability.
-Data loading was optimized using 30 parallel workers to minimize I/O bottlenecks and ensure continuous data supply to the \gls{gpu} during training.
-
-The training infrastructure utilized \gls{gpu} acceleration to enable efficient processing of the large-scale genomic sequence datasets.
-Mixed-precision training with brain floating-point 16-bit (bf16) format was employed to reduce memory requirements and accelerate computation while maintaining numerical precision sufficient for stable gradient computation and model convergence.
-
-\paragraph{Model validation and evaluation}
-Model performance was continuously monitored throughout training using the validation dataset.
-The model evaluation metrics included accuracy, precision, recall and the F1 score, calculated using the following equations:
+\paragraph{Model evaluation}
+Performance was monitored using accuracy, precision, recall, and F1 score on the validation set after each epoch:
 \begin{align*}
-	\textrm{Precision} & = \frac{\textrm{TP}}{\textrm{TP}+\textrm{FP}}                                                     \\
-	\textrm{Recall}    & = \frac{\textrm{TP}}{\textrm{TP}+\textrm{FN}}                                                     \\
-	\textrm{F1}        & = 2 \times \frac{\textrm{Precision} \times \textrm{Recall}}{\textrm{Precision} + \textrm{Recall}} \\
-	\textrm{Accuracy}  & = \frac{\textrm{TP} + \textrm{TN}}{\textrm{TP} + \textrm{TN} + \textrm{FP} + \textrm{FN}}
+\text{Precision} &= \frac{\text{TP}}{\text{TP}+\text{FP}}, \quad
+\text{Recall} = \frac{\text{TP}}{\text{TP}+\text{FN}} \\
+\text{F1} &= \frac{2 \times \text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}, \quad
+\text{Accuracy} = \frac{\text{TP} + \text{TN}}{\text{TP} + \text{TN} + \text{FP} + \text{FN}}
 \end{align*}
-where TP (true positives) represents chimeric reads correctly classified as artificial, TN (true negatives) represents biological reads correctly classified as biological, FP (false positives) represents biological reads incorrectly classified as artificial, and FN (false negatives) represents chimeric reads incorrectly classified as biological.
-Validation metrics were computed at the end of each epoch to track model improvement and trigger early stopping when performance plateaued.
-The validation process used the same data preprocessing and tokenization procedures as training to ensure consistent evaluation conditions.
-
-The final model selection was based on optimal validation performance as determined by the early stopping callback.
-This approach ensures that the reported model represents the configuration with the best generalization performance rather than the final training epoch, preventing overfitting and providing realistic performance estimates for unseen data.
-
-\paragraph{Training infrastructure and implementation}
-The training process was managed using Hydra~\cite{Yadan2019Hydra} configuration framework to enable reproducible experimentation and systematic hyperparameter management.
-Default callbacks were employed for standard training monitoring, including metrics logging, model checkpointing, and training progress tracking.
-The configuration system allowed for systematic exploration of hyperparameters while maintaining experimental reproducibility and version control.
-
-All training experiments were conducted using consistent hardware configurations and software environments to ensure reliable performance comparisons.
-The model training process typically required 24-48 hours depending on dataset size and convergence characteristics, with automatic checkpointing enabled to prevent loss of progress due to hardware failures or interruptions.
+where TP (true positives) are chimeric reads correctly classified as artificial, TN (true negatives) are biological reads correctly classified as biological, FP (false positives) are biological reads misclassified as artificial, and FN (false negatives) are chimeric reads misclassified as biological. Final model selection was based on best validation performance as determined by early stopping.
 
 \subsection*{Model inference and application}
 
 \paragraph{Inference pipeline}
-For applying ChimeraLM to new \gls{wga} sequencing datasets, the model takes a BAM file as input.
-Chimeric reads are first identified using the same SA tag-based filtering criteria described in the data processing section: reads must contain the SA tag and must not be unmapped, secondary, or supplementary alignments.
-Identified chimeric reads are extracted with their sequence information (read ID and DNA sequence).
-Each read sequence is tokenized using the HyenaDNA tokenizer with single base pair resolution, applying truncation for sequences exceeding 32,768 bp and padding for shorter sequences to enable batch processing.
-The trained ChimeraLM model processes sequences in batches, generating two logits $[z_0, z_1]$ for each read, where $z_0$ corresponds to the ``biological'' class and $z_1$ corresponds to the ``artificial chimeric'' class.
+To apply ChimeraLM to new \gls{wga} sequencing data, the model takes a BAM file as input.
+Chimeric reads are identified using \gls{sa} tags and filtered to exclude unmapped, secondary, or supplementary alignments.
+Each chimeric read sequence is tokenized using the tokenizer (maximum length 32,768 bp, with truncation or padding as needed).
+The trained model processes sequences in batches, generating two logits $[z_0, z_1]$ for each read corresponding to biological and artificial chimeric classes.
+Classification is determined by $\hat{y} = \argmax(z_0, z_1)$.
+ChimeraLM outputs a filtered BAM file containing only reads classified as biological, which can be directly used for downstream analyses including \gls{sv} calling.
 
-\paragraph{Classification decision}
-The final classification is determined by applying the softmax function to convert logits to probabilities:
-$$
-	p_i = \frac{\exp(z_i)}{\exp(z_0) + \exp(z_1)}, \quad i \in \{0, 1\}
-$$
-The predicted class is the one with the higher probability. If $p_1 > p_0$ (i.e.,\ $z_1 > z_0$), the read is classified as ``artificial chimeric''; otherwise, it is classified as ``biological.''
+\subsection*{Performance evaluation}
 
-\paragraph{Output filtering}
-ChimeraLM outputs a filtered BAM file containing only reads classified as ``biological,'' effectively removing chimeric artifacts from the dataset.
-The filtered BAM file retains all original alignment information and can be directly used for downstream genomic analyses, including structural variant calling.
-Reads classified as ``artificial chimeric'' are excluded from the output file.
-
-\subsection*{Test set evaluation}
-
-Final model performance was evaluated on the held-out test set that remained completely isolated from the training process.
-The test set evaluation provides an unbiased estimate of ChimeraLM's generalization performance on previously unseen data.
-For the binary classification task, true positives (TP) represent chimeric reads correctly classified as artificial, true negatives (TN) represent biological reads correctly classified as biological, false positives (FP) represent biological reads incorrectly classified as artificial, and false negatives (FN) represent chimeric reads incorrectly classified as biological.
-All metrics (Precision, Recall, F1 score, Accuracy) were computed using the same formulations as described in the Model validation and evaluation section.
-
-\subsection*{SV evaluation}
+\paragraph{Test set evaluation}
+Final model performance was evaluated on the held-out test set and the independent MinION Mk1c dataset. Metrics (precision, recall, F1 score, accuracy) were computed as described in the training section, where true positives represent chimeric reads correctly classified as artificial and true negatives represent biological reads correctly classified as biological.
 
 \paragraph{SV calling}
-Multiple \gls{sv} calling tools were employed to ensure comprehensive detection of structural variants across different sequencing platforms.
-For long-read sequencing data (\gls{ont} PromethION P2 and MinION Mk1c), we used Sniffles2~\cite{Sedlazeck2018, Smolka2024}, DeBreak~\cite{chen2023deciphering}, SVIM~\cite{heller2019svim}, and cuteSV~\cite{jiang2020longreadbased}.
-For short-read sequencing data (Illumina HiSeq), we used Manta~\cite{chen2016manta}, DELLY~\cite{rausch2012delly}, and SvABA~\cite{wala2018svaba}.
-Each tool was run with default parameters optimized for their respective sequencing technologies.
+\glspl{sv} were called using multiple tools to ensure comprehensive detection.
+For long-read data (\gls{ont} PromethION P2 and MinION Mk1c), we used Sniffles2~\cite{Sedlazeck2018, Smolka2024}, DeBreak~\cite{chen2023deciphering}, SVIM~\cite{heller2019svim}, and cuteSV~\cite{jiang2020longreadbased}. For short-read data (Illumina HiSeq), we used Manta~\cite{chen2016manta}, DELLY~\cite{rausch2012delly}, and SvABA~\cite{wala2018svaba}.
+All tools were run with default parameters.
 
-\paragraph{Construction of gold-standard SV dataset}
-To construct a high-confidence gold-standard \gls{sv} dataset, we integrated \gls{sv} calls from both long-read and short-read sequencing platforms using bulk sequencing data from the PC3 cell line (Fig.~\ref{fig:figure3}a).
-This multi-platform, multi-caller approach ensures robust identification of genuine structural variants while minimizing false positives.
+\paragraph{Gold standard SV dataset construction}
+We constructed a high-confidence gold standard \gls{sv} dataset from bulk PC3 sequencing to evaluate ChimeraLM's impact on \gls{sv} detection accuracy (Fig.~\ref{fig:figure3}a).
+For each sequencing platform (long-read and short-read), \gls{sv} events detected by $\geq$2 independent callers were retained.
+Events supported by $\geq$2 sequencing platforms were designated as gold standard \glspl{sv}.
+This multi-platform, multi-caller approach ensures robust identification of genuine \glspl{sv} while minimizing false positives.
 
-For each sequencing platform, \gls{sv} events were filtered to retain only those detected by $\geq$2 independent \gls{sv} callers, reducing platform-specific false positives.
-Subsequently, \gls{sv} events supported by $\geq$2 sequencing datasets (requiring support from both long-read and short-read platforms) were retained as high-confidence events.
-This stringent filtering strategy ensures that the gold-standard dataset contains only structural variants with strong multi-platform evidence, providing a reliable reference for evaluating ChimeraLM's impact on \gls{sv} detection accuracy.
+\paragraph{SV validation analysis}
+To assess ChimeraLM's impact on \gls{sv} calling accuracy, we compared \gls{sv} calls from unfiltered \gls{wga} data and ChimeraLM-filtered \gls{wga} data against two references: (1) the stringent multi-platform gold standard dataset, and (2) platform-matched long-read bulk sequencing data. \glspl{sv} were considered supported if they matched reference \glspl{sv} within specified breakpoint tolerances. Validation rates were calculated as the proportion of called \glspl{sv} supported by the reference dataset.
+This dual validation strategy assesses both high-confidence multi-platform \glspl{sv} and platform-specific true variants.
 
-The resulting gold-standard dataset represents high-confidence structural variants that can be reliably detected across different sequencing technologies and calling algorithms, serving as ground truth for assessing the biological relevance of \gls{sv} calls in \gls{wga} samples before and after ChimeraLM filtering.
 
 \subsection*{Benchmarking against existing methods}
 
-ChimeraLM was benchmarked against two existing computational methods for chimeric artifact detection: SACRA~\cite{kiguchi2021longread} and 3rd-ChimeraMiner~\cite{lu2023exploration}.
-Both tools were run on the same \gls{wga} datasets (PromethION P2 and MinION Mk1c) using default parameters as recommended in their respective documentation.
-Performance was evaluated by comparing the percentage reduction in chimeric reads achieved by each method relative to unprocessed \gls{wga} data.
-Chimeric reads were identified using alignment-based criteria, and reduction rates were calculated as the proportion of chimeric reads successfully removed by each method.
+ChimeraLM was compared to two existing computational methods for detecting amplification-induced chimeric artifacts: SACRA~\cite{kiguchi2021long} (version X.X) and 3rd-ChimeraMiner~\cite{lu2023exploration} (version X.X).
+Both tools were applied to \gls{wga} data from PromethION P2 and MinION Mk1c platforms using default parameters as recommended in their documentation.
+Performance was evaluated by measuring the percentage reduction in chimeric reads relative to unprocessed \gls{wga} data.
+Chimeric reads were identified using \gls{wga} tag-based alignment criteria (reads with \gls{sa} tags indicating split alignments), and reduction rates were calculated as the proportion of chimeric reads removed by each method.
+
 
 \subsection*{Attention weight analysis}
 
-To investigate the interpretability of ChimeraLM's decision-making process, we analyzed attention weights from the attention pooling mechanism for representative chimeric reads.
+To investigate ChimeraLM's interpretability, we analyzed attention weights from the pooling mechanism for representative chimeric reads.
 Attention weights indicate the relative importance assigned to each sequence position during classification.
-For selected chimeric reads, we extracted per-position attention weights and visualized them alongside read alignments to reference genome coordinates.
+For selected reads, we extracted per-position attention weights and visualized them alongside read alignments to identify whether the model focuses on mechanistically relevant regions.
 
-Chimeric junction positions were identified from alignment data, and a window region of $\pm$50 bp surrounding each junction was defined.
-Attention weights within the junction window were compared to background regions using the Wilcoxon rank-sum test.
-Statistical significance was assessed at $p < 0.001$ threshold to identify cases where the model exhibited significantly elevated attention at chimeric junctions.
+Chimeric junction positions were identified from alignment data (defined by breakpoints in SA tags).
+A window of $\pm$50 bp surrounding each junction was designated as the junction region. Attention weights within junction region were compared to non-junction regions using the Wilcoxon rank-sum test~\cite{2020SciPy-NMeth}, with statistical significance assessed at $p < 0.001$.
 
-\subsection*{Statistical analysis}
+\subsection*{Data visualization}
+Figures were generated using Python with Matplotlib~\cite{Hunter2007} and Seaborn~\cite{Waskom2021}.
 
-Statistical comparisons were performed using non-parametric tests implemented in Python's SciPy library~\cite{2020SciPy-NMeth}.
-The Wilcoxon rank-sum test (Mann-Whitney U test) was used to compare attention weight distributions between junction windows and background regions, as attention weights do not follow normal distributions.
-All statistical tests were two-sided, and $p$-values less than 0.001 were considered statistically significant.
+\subsection*{Computing resources}
+Computations were performed on a \gls{hpc} server with 64-core Intel Xeon Gold 6338 CPU, 256 GB RAM, and two NVIDIA A100 \glspl{gpu} (80 GB memory each).
 
-\subsection*{Figure plotting and visualization}
 
-All figures were created using Python with libraries including Matplotlib~\cite{Hunter2007} and Seaborn~\cite{Waskom2021}.
-Genomic alignment visualizations were generated using custom scripts to illustrate read-to-reference mappings, orientation patterns, and chimeric junction positions.
-Statistical plots including box plots, bar charts, and pie charts were generated with standard plotting functions, with colors selected to ensure accessibility and clarity.
-
-\subsection*{Computing resource}
-
-All computations were performed on a \gls{hpc} server equipped with a 64-core Intel(R) Xeon(R) Gold 6338 CPU and 256 GB of RAM.
-The server was also configured with two NVIDIA A100 \glspl{gpu}, each with 80 GB of memory, enabling efficient processing of both CPU-intensive tasks and \gls{gpu}-accelerated deep learning workloads.
-
-\subsection*{Software and reproducibility}
-
-All analyses were conducted using Python 3.10 with PyTorch 2.0~\cite{paszke2019pytorch} and PyTorch Lightning 2.0~\cite{Falcon_PyTorch_Lightning_2019}.
-Key dependencies include NumPy~\cite{harris2020array} for numerical computing, Pandas~\cite{mckinney-proc-scipy-2010,reback2020pandas} for data manipulation, and Scikit-learn~\cite{pedregosa2011scikit} for machine learning utilities.
-The HyenaDNA model~\cite{nguyen2023hyenadna} was obtained from the official repository and adapted for chimeric detection.
-
-Random seeds were fixed (seed=12345) for all stochastic operations including data shuffling, weight initialization, and dropout to ensure reproducibility of results.
-Model checkpoints were saved at the end of each training epoch, and the best-performing model based on validation metrics was selected for final evaluation.
-
-All custom scripts for data processing, model training, and evaluation are documented with inline comments and structured to facilitate replication of the reported results.
-Computational workflows were managed using configuration files (Hydra framework~\cite{Yadan2019Hydra}) to enable systematic tracking of experimental parameters and ensure reproducible execution across different computing environments.
 
 \backmatter
 
@@ -848,9 +713,9 @@ Computational workflows were managed using configuration files (Hydra framework~
 \setcounter{figure}{0}
 \setcounter{table}{0}
 
-\begin{table}[!t]
+\begin{table}[!ht]
 \centering
-\caption{Sequencing and alignment statistics}
+\caption{Sequencing and alignment statistics of PC3}
 \label{tab:seq_stats}
 \small
 \setlength{\tabcolsep}{3pt} % Reduce column spacing (default is 6pt)
@@ -906,7 +771,7 @@ RY supervised this work.
 \bmhead{Code Availability}
 
 ChimeraLM, implemented in Python, is open source and available on GitHub (\url{https://github.com/ylab-hi/ChimeraLM}) under the Apache License, Version 2.0.
-The package can be installed via PyPI (\url{https://pypi.org/project/chimeralm/}) using pip, with wheel distributions provided for Windows, Linux, and macOS to ensure easy cross-platform installation.
+The package can be installed via PyPI (\url{https://pypi.org/project/chimeralm}) using pip, with wheel distributions provided for Windows, Linux, and macOS to ensure easy cross-platform installation.
 An interactive demo is available on Hugging Face (\url{https://huggingface.co/spaces/yangliz5/chimeralm}), allowing users to test ChimeraLM's functionality without local installation.
 For large-scale analyses, we recommend using ChimeraLM on systems with \gls{gpu} acceleration. Detailed system requirements and optimization guidelines are available in the repository's documentation.
 
