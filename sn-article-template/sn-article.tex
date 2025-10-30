@@ -187,7 +187,7 @@
 \affil[1]{\orgdiv{Department of Urology}, \orgname{Northwestern University Feinberg School of Medicine}, \orgaddress{\street{303 E Superior St}, \city{Chicago}, \postcode{60611}, \state{IL}, \country{USA}}}
 \affil[2]{\orgdiv{Robert H. Lurie Comprehensive Cancer Center}, \orgname{Northwestern University Feinberg School of Medicine}, \orgaddress{\street{675 N St Clair St}, \city{Chicago}, \postcode{60611}, \state{IL}, \country{USA}}}
 
-\abstract{Single-cell genomic analysis relies on \gls{wga} to generate sufficient DNA for sequencing, but this process introduces chimeric artifacts that manifest as false-positive \glspl{sv} and compromise downstream interpretation. Here we present ChimeraLM, a genomic language model that identifies and removes \gls{wga}-induced chimeric reads from long-read sequencing data. ChimeraLM uses model architecture with Hyena operators to analyze DNA sequences at single-nucleotide resolution. When applied to nanopore sequencing data from \gls{wga}-amplified cells, ChimeraLM reduces chimeric read content by approximately 90\% while retaining 87-92\% of true \glspl{sv}. This filtering improves \gls{sv} validation rates 10-16 fold and normalizes \gls{sv} type distributions toward bulk sequencing profiles, eliminating the characteristic false-positive \gls{inv} bias in unprocessed \gls{wga} data. Attention weight analysis reveals that ChimeraLM can focus on chimeric junction regions, learning biologically interpretable sequence features. ChimeraLM addresses a fundamental bottleneck in single-cell genomics, enabling more confident detection of chromosomal instability and \gls{sv} in applications across cancer biology, developmental biology, and neuroscience. The software is available at \url{https://github.com/ylab-hi/ChimeraLM}.}
+\abstract{Single-cell genomic analysis relies on \gls{wga} to generate sufficient DNA for sequencing, but this process introduces chimeric artifacts that manifest as false-positive \glspl{sv} and compromise downstream interpretation. Here we present ChimeraLM, a genomic language model that identifies and removes \gls{wga}-induced chimeric reads from long-read sequencing data. ChimeraLM uses a model architecture with Hyena operators to analyze DNA sequences at single-nucleotide resolution. When applied to nanopore sequencing data from \gls{wga}-amplified cells, ChimeraLM reduces chimeric read content by approximately 90\% while retaining 87-92\% of true \glspl{sv}. This filtering improves \gls{sv} validation rates 10-16 fold and normalizes \gls{sv} type distributions toward bulk sequencing profiles, eliminating the characteristic false-positive \gls{inv} bias in unprocessed \gls{wga} data. Attention weight analysis reveals that ChimeraLM can focus on chimeric junction regions, learning biologically interpretable sequence features. ChimeraLM addresses a fundamental bottleneck in single-cell genomics, enabling more confident detection of chromosomal instability and \gls{sv} in applications across cancer biology, developmental biology, and neuroscience. The software is available at \url{https://github.com/ylab-hi/ChimeraLM}.}
 \keywords{Whole Genome Amplification, Single Cell, Genomic Language Model, Structural Variation}
 
 \maketitle
@@ -201,10 +201,10 @@ However, the limited DNA content in a single cell—typically only 6-7 picograms
 
 To overcome this limitation, \gls{wga} has become essential for single-cell genomic studies~\cite{zong2012genome,huang2015single,dean2002comprehensive, chen2017singlecell,macaulay2014single}.
 Various \gls{wga} techniques have been developed, each with distinct amplification mechanisms and characteristic error profiles.
-\gls{mda}, introduced by Dean et al.~\cite{dean2002comprehensive}, utilizes the highly processive Phi29 DNA polymerase to achieve isothermal amplification with products exceeding 10 kb, though it suffers from pronounced amplification bias and chimera formation~\cite{lasken2007mechanism,pinard2006assessment}.
+\gls{mda}, introduced by Dean et al.~\cite{dean2002comprehensive}, utilizes the highly processive $\Phi29$ DNA polymerase to achieve isothermal amplification with products exceeding 10 kb, though it suffers from pronounced amplification bias and chimera formation~\cite{lasken2007mechanism,pinard2006assessment}.
 \gls{doppcr}, pioneered by Telenius et al.~\cite{telenius1992degenerate}, employs thermocycling with degenerate primers to achieve more uniform coverage but generates shorter amplicons.
 \gls{malbac} combines quasi-linear preamplification with exponential amplification to reduce bias~\cite{zong2012genome}, while \gls{lianti} uses transposon insertion to create defined amplification origins, significantly improving uniformity and reducing artifacts~\cite{chen2017singlecell}.
-More recently, \gls{pta}~\cite{gonzalez-pena2021accurate} and \gls{dmda}~\cite{dippenaar2024droplet} have emerged as promising alternatives that modify reaction conditions to suppress chimera formation, though these methods require specialized equipment and protocols that have limited their widespread adoption.
+More recently, \gls{pta}~\cite{gonzalez-pena2021accurate} and \gls{dmda}~\cite{hard2023longread,  dippenaar2024droplet} have emerged as promising alternatives that modify reaction conditions to suppress chimera formation, though these methods require specialized equipment and protocols that have limited their widespread adoption.
 These amplification methods can increase DNA content by several orders of magnitude (typically 1,000- to 10,000-fold), generating sufficient material for high-coverage sequencing necessary for reliable variant calling, copy number analysis, and \gls{sv} detection~\cite{macaulay2014single,de2014quantitative, biezuner2021comparison,fu2015uniform,agyabeng2025evaluating,dean2001rapid}.
 
 Accurate single-cell genomics is particularly critical for multiple applications where false-positive \glspl{sv} can lead to incorrect biological conclusions.
@@ -215,7 +215,7 @@ However, false-positive \glspl{sv} introduced during amplification can confound 
 
 Despite its critical role, \gls{wga} introduces systematic artifacts that significantly impact downstream analyses~\cite{lu2023chimera,lu2023exploration, pinard2006assessment,lasken2007mechanism,chen2017singlecell}.
 Among the most problematic are chimeric sequences—artificial DNA constructs formed through template switching during amplification.
-During \gls{mda}, the highly processive Phi29 polymerase can dissociate from one genomic template and reinitiate synthesis on a spatially proximate but genomically distant template~\cite{lasken2007mechanism,lu2023chimera}.
+During \gls{mda}, the highly processive $\Phi29$ polymerase can dissociate from one genomic template and reinitiate synthesis on a spatially proximate but genomically distant template~\cite{lasken2007mechanism,lu2023chimera}.
 This phenomenon is exacerbated by the branching nature of \gls{mda}, where multiple DNA synthesis reactions occur simultaneously in a densely packed reaction environment, increasing the probability of illegitimate template switching~\cite{lasken2007mechanism}.
 Lasken and Stockwell~\cite{lasken2007mechanism} demonstrated that chimera formation occurs through both strand displacement and branch migration mechanisms, with chimeric junctions often occurring at sites of microhomology.
 These chimeric artifacts manifest as apparent \glspl{sv}—including deletions, insertions, inversions, and translocations—that do not exist in the original cell~\cite{lu2023chimera,agyabeng2025evaluating}, posing substantial challenges for accurate \gls{sv} detection in single-cell studies.
@@ -629,10 +629,12 @@ We used four datasets: bulk MinION Mk1c, bulk PromethION P2, the CCLE Illumina W
 Within each dataset, \gls{sv} events supported by at least two independent callers were retained.
 Variants supported by two or more datasets were designated as gold standard \glspl{sv} for benchmarking.
 
-\paragraph{SV validation analysis}
-To assess ChimeraLM's impact on \gls{sv} calling accuracy, we compared \gls{sv} calls from unfiltered \gls{wga} data and ChimeraLM-filtered \gls{wga} data against two references: (1) the stringent multi-platform gold standard dataset, and (2) platform-matched long-read bulk sequencing data. \glspl{sv} were considered supported if they matched reference \glspl{sv} within specified breakpoint tolerances. Validation rates were calculated as the proportion of called \glspl{sv} supported by the reference dataset.
-This dual validation strategy assesses both high-confidence multi-platform \glspl{sv} and platform-specific true variants.
-
+\paragraph{SV benchmarking analysis}
+To assess the impact of ChimeraLM on \gls{sv} calling accuracy, we compared \gls{sv} calls from unfiltered \gls{wga} data and ChimeraLM-filtered \gls{wga} data against two references: (1) the stringent multi-platform gold standard dataset, and (2) platform-matched long-read bulk sequencing data.
+Benchmarking was performed using Truvari v4.2.2~\textcolor{red}{[ref]} with default parameters.
+\glspl{sv} were considered supported if they matched reference variants within the defined breakpoint tolerance.
+Validation rates were calculated as the proportion of called \glspl{sv} supported by the reference.
+This dual benchmarking strategy quantifies both improvements in detecting high-confidence multi-platform \glspl{sv} and the retention of platform-specific true variants.
 
 \subsection*{Benchmarking against existing methods}
 
