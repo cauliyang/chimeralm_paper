@@ -27,7 +27,7 @@
 %%Note: the following reference styles support Namedate and Numbered referencing. By default the style follows the most common style. To switch between the options you can add or remove �Numbered� in the optional parenthesis.
 %%The option is available for: sn-basic.bst, sn-chicago.bst%
 
-\documentclass[pdflatex,sn-nature]{sn-jnl}% Style for submissions to Nature Portfolio journals
+\documentclass[pdflatex,sn-nature,lineno]{sn-jnl}% Style for submissions to Nature Portfolio journals
 %\documentclass[pdflatex,sn-basic]{sn-jnl}% Basic Springer Nature Reference Style/Chemistry Reference Style
 %\documentclass[pdflatex,sn-mathphys-num]{sn-jnl}% Math and Physical Sciences Numbered Reference Style
 %\documentclass[pdflatex,sn-mathphys-ay]{sn-jnl}% Math and Physical Sciences Author Year Reference Style
@@ -609,9 +609,7 @@ ChimeraLM outputs a filtered BAM file containing only reads classified as biolog
 Final model performance was evaluated on the held-out test set and the independent MinION Mk1c dataset. Metrics (precision, recall, F1 score, accuracy) were computed as described in the training section, where true positives represent chimeric reads correctly classified as artificial and true negatives represent biological reads correctly classified as biological.
 
 \paragraph{SV calling}
-\glspl{sv} were called using multiple tools to ensure comprehensive detection.
-For long-read data (\gls{ont} PromethION P2 and MinION Mk1c), we used Sniffles2~\cite{Sedlazeck2018, Smolka2024}, DeBreak~\cite{chen2023deciphering}, SVIM~\cite{heller2019svim}, and cuteSV~\cite{jiang2020longreadbased}. For short-read data (Illumina HiSeq), we used Manta~\cite{chen2016manta}, DELLY~\cite{rausch2012delly}, and SvABA~\cite{wala2018svaba}.
-All tools were run with default parameters.
+\glspl{sv} were called using multiple tools to ensure comprehensive detection. For long-read data (ONT PromethION P2 and MinION Mk1c), we used Sniffles v2.5~\cite{Sedlazeck2018, Smolka2024}, DeBreak v1.2~\cite{chen2023deciphering}, SVIM v2.0.0~\cite{heller2019svim}, and cuteSV v2.1.1~\cite{jiang2020longreadbased}. For short-read data of the PC3 cell line, we used both the CCLE Illumina whole-genome sequencing dataset and the PRJNA361315 Illumina WGS dataset, processed with Manta v1.6.0~\cite{chen2016manta}, DELLY v1.5.0~\cite{rausch2012delly}, and SvABA v1.1.0~\cite{wala2018svaba}. All tools were executed with default recommended parameters.
 
 \paragraph{Gold standard SV dataset construction}
 We constructed a high-confidence gold standard \gls{sv} dataset from bulk PC3 sequencing to evaluate ChimeraLM's impact on \gls{sv} detection accuracy (Fig.~\ref{fig:figure3}a).
@@ -646,8 +644,6 @@ Figures were generated using Python with Matplotlib~\cite{Hunter2007} and Seabor
 
 \subsection*{Computing resources}
 Computations were performed on a \gls{hpc} server with 64-core Intel Xeon Gold 6338 CPU, 256 GB RAM, and two NVIDIA A100 \glspl{gpu} (80 GB memory each).
-
-
 
 \backmatter
 
