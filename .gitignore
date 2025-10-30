@@ -516,7 +516,7 @@ poetry.toml
 pyrightconfig.json
 CLAUDE.md
 
+.vscode
 ./figures/data/
 figures/data/prediction_and_chimeric/
 # End of https://www.toptal.com/developers/gitignore/api/latex,python,macos
-sn-article.pdf

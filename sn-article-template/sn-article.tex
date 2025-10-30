@@ -187,7 +187,7 @@
 \affil[1]{\orgdiv{Department of Urology}, \orgname{Northwestern University Feinberg School of Medicine}, \orgaddress{\street{303 E Superior St}, \city{Chicago}, \postcode{60611}, \state{IL}, \country{USA}}}
 \affil[2]{\orgdiv{Robert H. Lurie Comprehensive Cancer Center}, \orgname{Northwestern University Feinberg School of Medicine}, \orgaddress{\street{675 N St Clair St}, \city{Chicago}, \postcode{60611}, \state{IL}, \country{USA}}}
 
-\abstract{Single-cell genomic analysis relies on \gls{wga} to generate sufficient DNA for sequencing, but this process introduces chimeric artifacts that manifest as false-positive \glspl{sv} and compromise downstream interpretation. Here we present ChimeraLM, a genomic language model that identifies and removes \gls{wga}-induced chimeric reads from long-read sequencing data. ChimeraLM uses a model architecture with Hyena operators to analyze DNA sequences at single-nucleotide resolution. When applied to nanopore sequencing data from \gls{wga}-amplified cells, ChimeraLM reduces chimeric read content by approximately 90\% while retaining 87-92\% of true \glspl{sv}. This filtering improves \gls{sv} validation rates 10-16 fold and normalizes \gls{sv} type distributions toward bulk sequencing profiles, eliminating the characteristic false-positive \gls{inv} bias in unprocessed \gls{wga} data. Attention weight analysis reveals that ChimeraLM can focus on chimeric junction regions, learning biologically interpretable sequence features. ChimeraLM addresses a fundamental bottleneck in single-cell genomics, enabling more confident detection of chromosomal instability and \gls{sv} in applications across cancer biology, developmental biology, and neuroscience. The software is available at \url{https://github.com/ylab-hi/ChimeraLM}.}
+\abstract{Single-cell genomic analysis relies on \gls{wga} to generate sufficient DNA for sequencing, but this process introduces chimeric artifacts that manifest as false-positive \glspl{sv} and compromise downstream interpretation. Here we present ChimeraLM, a genomic language model that identifies and removes \gls{wga}-induced chimeric reads from long-read sequencing data. ChimeraLM uses a model architecture based on Hyena operators to analyze DNA sequences at single-nucleotide resolution, learning generalizable sequence features that distinguish genuine biological sequences from amplification-induced artifacts. When applied to nanopore sequencing data from \gls{wga}-amplified cells, ChimeraLM reduces chimeric read content by approximately 90\% while retaining 87-92\% of true \glspl{sv}. This filtering improves \gls{sv} validation rates 10-16 fold and normalizes \gls{sv} type distributions toward bulk sequencing profiles, eliminating the characteristic false-positive \gls{inv} bias in unprocessed \gls{wga} data. Attention weight analysis reveals that ChimeraLM can focus on chimeric junction regions, learning biologically interpretable sequence features. ChimeraLM addresses a fundamental bottleneck in single-cell genomics, enabling more confident detection of chromosomal instability and \gls{sv} in applications across cancer biology, developmental biology, and neuroscience. The software is available at \url{https://github.com/ylab-hi/ChimeraLM}.}
 \keywords{Whole Genome Amplification, Single Cell, Genomic Language Model, Structural Variation}
 
 \maketitle
@@ -217,7 +217,7 @@ Despite its critical role, \gls{wga} introduces systematic artifacts that signif
 Among the most problematic are chimeric sequences—artificial DNA constructs formed through template switching during amplification.
 During \gls{mda}, the highly processive phi29 polymerase can dissociate from one genomic template and reinitiate synthesis on a spatially proximate but genomically distant template~\cite{lasken2007mechanism,lu2023chimera}.
 This phenomenon is exacerbated by the branching nature of \gls{mda}, where multiple DNA synthesis reactions occur simultaneously in a densely packed reaction environment, increasing the probability of illegitimate template switching~\cite{lasken2007mechanism}.
-Critically, even with \gls{wga} technological advances, chimeric artifacts remain highly prevalent in single-cell long-read sequencing data~\cite{hard2023longread,dippenaar2024droplet,gonzalez-pena2021accurate}.
+Critically, even with \gls{wga} technological advances, chimeric artifacts remain highly prevalent in single-cell long-read sequencing data~\cite{hard2023longread,gonzalez-pena2021accurate}.
 Lasken and Stockwell~\cite{lasken2007mechanism} demonstrated that chimera formation occurs through both strand displacement and branch migration mechanisms, with chimeric junctions often occurring at sites of microhomology.
 These chimeric artifacts manifest as apparent \glspl{sv}—including deletions, insertions, inversions, and translocations—that do not exist in the original cell~\cite{lu2023chimera,agyabeng2025evaluating}, posing substantial challenges for accurate \gls{sv} detection in single-cell studies.
 Early work by Pinard et al.~\cite{pinard2006assessment} documented significant amplification bias and the presence of chimeric products in \gls{mda}, demonstrating that certain genomic regions can be over- or under-represented by orders of magnitude.
@@ -299,7 +299,7 @@ This end-to-end architecture enables ChimeraLM to learn directly from raw sequen
 	\end{center}
     \caption{{\bf ChimeraLM accurately identifies and removes \gls{wga}-induced chimeric artifacts.}
 	(a)~Classification performance on held-out test data.
-    ChimeraLM achieves high recall (0.95) in identifying chimeric reads while maintaining acceptable precision (0.70), yielding an F1 score of 0.81 for binary classification of biological versus artifactual sequences.
+    ChimeraLM achieves high recall (0.95) in identifying chimeric reads while maintaining acceptable precision (0.70), yielding an F1 score of 0.81 for binary classification of biological versus artificial sequences.
 	(b)~Chimeric read reduction across sequencing platforms.
     Stacked bars show the proportion of chimeric (dark teal) and non-chimeric (light teal) reads in bulk sequencing, \gls{wga}-amplified samples, and ChimeraLM-filtered \gls{wga} samples.
     Data from PC3 cell line sequenced on PromethION (left) and MinION (right) platforms demonstrate that ChimeraLM reduces chimeric read frequencies from 46.0\% to 4.9\% (PromethION) and from 23.0\% to 1.5\% (MinION), approaching bulk levels (2.3\% and 2.5\%, respectively).
@@ -403,7 +403,7 @@ The restoration of biologically representative \gls{sv} type distributions enabl
 	\begin{center}
 		\includegraphics[width=\textwidth]{final_figures/figure4}
 	\end{center}
-	\caption{{\bf ChimeraLM attention weights localize to chimeric junction regions.}
+	\caption{{\bf ChimeraLM attention weights can localize to chimeric junction regions in representative examples.}
 		(a,d)~Attention weight profiles for two representative chimeric reads. Upper panels show attention weights per sequence position (blue line) and mean attention (dashed line). Red vertical lines mark chimeric junction positions, with pink shading indicating junction windows ($\pm$50~bp). Purple arrows show reported \gls{sv} breakpoints. Lower panels illustrate read alignments: reads (top bars) show orientation transitions at junctions (green = forward, red = reverse-complemented, arrows indicate strand), while reference genome (bottom bars) maintains continuous forward orientation. Gray regions connect aligned segments.
 		(b,e)~Quantitative attention analysis. Box plots show significantly elevated attention weights in junction region versus non-junction regions for both examples ($p = 5.3 \times 10^{-14}$ and $p = 6.8 \times 10^{-15}$, respectively; Wilcoxon rank-sum test).
 		(c,f)~Proposed chimera formation mechanisms. Step 1: Original DNA fragments from distant genomic loci exist in forward orientation. Step 2: During \gls{wga}, one or both fragments may undergo random reverse-complementation. Step 3: Template switching joins the fragments with discordant orientations, creating chimeric artifacts. The two examples illustrate different orientation patterns (forward-to-reverse vs reverse-to-forward transitions) arising from random strand selection during amplification.
@@ -439,7 +439,7 @@ ChimeraLM thus serves dual purposes: removing artifacts to improve data quality 
 \gls{wga} has enabled genomic analysis from single cells but introduces chimeric artifacts that compromise structural variant detection. ChimeraLM addresses this challenge through sequence-level classification of biological versus artificial reads, substantially improving \gls{sv} calling accuracy before downstream analysis. This upstream filtering approach—removing problematic sequences at the read level rather than attempting to correct errors after variant calling—provides a practical solution for single-cell genomics laboratories.
 
 Our results demonstrate several key advantages of ChimeraLM for long-read single-cell sequencing data. First, the method achieves approximately 90\% reduction in chimeric reads across different nanopore sequencing platforms while retaining 87-92\% of true \glspl{sv}.
-Second, ChimeraLM reduces false-positive \gls{sv} calls by 8-16 fold, enabling researchers to focus on biologically relevant variants without manual filtering of thousands of artificial calls. Third, the approach works across PromethION and MinION platforms without platform-specific retraining, indicating that the model learns generalizable sequence features of \gls{wga}-induced chimeras. Fourth, the training strategy requires only bulk sequencing from the same cell line rather than matched bulk-\gls{wga} pairs, making the approach practical for routine application.
+Second, ChimeraLM reduces false-positive \gls{sv} calls by 8-16 fold, enabling researchers to focus on biologically relevant variants without manual filtering of thousands of artificial calls. Third, the approach works across PromethION and MinION platforms without platform-specific retraining, indicating that the model learns generalizable sequence features of \gls{wga}-induced chimeras.
 
 ChimeraLM's effectiveness reflects the ability of deep learning models to capture complex sequence patterns that are difficult to encode in rule-based filters. Traditional quality control approaches rely on predefined criteria such as mapping quality or read depth~\cite{kiguchi2021longread, lu2023exploration}, which may not effectively distinguish chimeric artifacts from biological sequences. By learning directly from data, ChimeraLM discovers subtle compositional and structural features that distinguish authentic genomic sequences from amplification artifacts. The attention weight analysis provides evidence that the model can identify mechanistically relevant features such as orientation discontinuities at chimeric junctions, though the heterogeneity in attention patterns across reads suggests the model uses multiple complementary features for classification.
 
@@ -485,7 +485,9 @@ From the monoclonal population, two types of DNA samples were prepared: a bulk (
 Sequencing libraries were prepared using the \gls{ont} Ligation Sequencing Kit~V14 (SQK-LSK114) and sequenced on MinION~Mk1C or PromethION~P2~Solo devices with R10.4.1 flow cells according to the manufacturer's genomic DNA workflow. Because all single-cell samples originated from the same monoclonal lineage, observed differences between amplified and bulk data primarily reflect MDA-induced artifacts rather than biological variation, providing a controlled experimental setting for downstream analyses.
 
 \paragraph{Basecalling and read processing}
-Raw signal files (POD5) were basecalled using Dorado~v0.5.0 with the high-accuracy model \texttt{dna\_r10.4.1\_e8.2\_400bps\_hac@v4.3.0}~\cite{dorado2023}. Reads with mean quality $< 10$ or length $< 500$~bp were removed. Residual adapters and concatemers were trimmed using Cutadapt~v4.0~\cite{martin2011cutadapt} in two-pass error-tolerant mode. Cleaned reads were aligned to the GRCh38.p13 reference genome using minimap2~v2.26 (\texttt{map-ont} preset)~\cite{li2018minimap2}. Resulting BAM files were sorted and indexed with SAMtools~v1.16~\cite{danecek2021twelve}. All samples were processed under identical parameters to ensure consistency across datasets.
+Raw signal files (POD5) were basecalled using Dorado~v0.5.0 with the high-accuracy model \texttt{dna\_r10.4.1\_e8.2\_400bps\_hac@v4.3.0}~\cite{dorado2023}. Reads with mean quality $< 10$ or length $< 500$~bp were removed. Residual adapters and concatemers were trimmed using Cutadapt~v4.0~\cite{martin2011cutadapt} in two-pass error-tolerant mode. Cleaned reads were aligned to the GRCh38.p13 reference genome using minimap2~v2.26 (\texttt{map-ont} preset)~\cite{li2018minimap2}. Resulting BAM files were sorted and indexed with SAMtools~v1.16~\cite{danecek2021twelve}.
+Read length and mapping statistics were calculated using NanoPlot~v1.46.1~\cite{decoster2023nanopack2}.
+All samples were processed under identical parameters to ensure consistency across datasets.
 
 \paragraph{Chimeric read identification}
 Chimeric reads were identified based on the presence of supplementary alignments in BAM files using the \gls{sa} tag.
@@ -526,9 +528,9 @@ Special tokens include [CLS]=0, [PAD]=4, and others for sequence processing.
 Input sequences are truncated at 32,768 bp or padded to enable batch processing.
 
 For a tokenized input sequence $\mathbf{x} \in \mathbb{Z}^{L}$, the HyenaDNA backbone generates contextualized hidden representations:
-$$
+\[
 \mathbf{H} = \text{HyenaDNA}(\mathbf{x}) \in \mathbb{R}^{L \times 256}
-$$
+\]
 where $\mathbf{H} = (\mathbf{h}_1, \mathbf{h}_2, \ldots, \mathbf{h}_L)$ represents position-wise hidden states with dimension 256. 
 The Hyena operators~\cite{Poli2023HyenaHT} efficiently capture both local sequence motifs and long-range dependencies essential for distinguishing biological sequences from chimeric artifacts.
 
@@ -541,26 +543,26 @@ For hidden states $\mathbf{H} \in \mathbb{R}^{L \times 256}$, attention weights 
 \boldsymbol{\alpha} &= \text{softmax}(\mathbf{s}) \in \mathbb{R}^{L \times 1}
 \end{align*}
 The pooled representation is the weighted sum of hidden states:
-$$
+\[
 \mathbf{h}_{\text{pooled}} = \sum_{i=1}^{L} \alpha_i \mathbf{h}_i \in \mathbb{R}^{256}
-$$
+\]
 This mechanism assigns learned importance weights to each sequence position, enabling the model to focus on informative regions while accommodating natural variability in read lengths.
 
 \paragraph{Classification head}
 The pooled representation is processed through a \gls{mlp} with residual connections.
 The first layer expands dimensionality:
-$$
+\[
 \mathbf{f}_1 = \text{Dropout}_{0.1}(\text{GELU}(\text{Linear}_{256 \to 512}(\mathbf{h}_{\text{pooled}}))) \in \mathbb{R}^{512}
-$$
+\]
 Subsequent residual blocks with input $\mathbf{f}_{\text{in}} \in \mathbb{R}^{512}$ compute:
-$$
+\[
 \mathbf{f}_{\text{out}} = \text{Dropout}_{0.1}(\text{Linear}_{512 \to 512}(\text{GELU}(\text{Linear}_{512 \to 512}(\mathbf{f}_{\text{in}}))))) + \mathbf{f}_{\text{in}}
-$$
+\]
 where the skip connection enables stable gradient flow during training.
 The final layer produces binary classification logits:
-$$
+\[
 \mathbf{z} = [z_0, z_1] = \text{Linear}_{512 \to 2}(\mathbf{f}_{\text{final}}) \in \mathbb{R}^{2}
-$$
+\]
 where $z_0$ and $z_1$ represent logits for biological and artificial chimeric classes, respectively. During inference, the predicted class is $\hat{y} = \argmax_{i \in \{0,1\}} z_i$.
 
 \paragraph{Model summary}
@@ -583,9 +585,9 @@ Early stopping with patience of 10 epochs prevented overfitting by terminating t
 A fixed random seed (12345) ensured reproducibility across training runs.
 
 The training objective used cross-entropy loss for binary classification. For a training example with true class label $y \in \{0,1\}$ and model logits $z = [z_0, z_1]$, the loss is:
-$$
+\[
 \mathcal{L} = -\log\left(\frac{\exp(z_y)}{\exp(z_0) + \exp(z_1)}\right)
-$$
+\]
 where $z_0$ and $z_1$ represent logits for biological and artificial chimeric classes.
 
 
@@ -638,7 +640,7 @@ Validation rates were calculated as the proportion of called \glspl{sv} supporte
 This dual benchmarking strategy quantifies both improvements in detecting high-confidence multi-platform \glspl{sv} and the retention of platform-specific true variants.
 
 \subsection*{Benchmarking against existing methods}
-ChimeraLM was compared to two existing computational methods for detecting amplification-induced chimeric artifacts: SACRA~\cite{kiguchi2021longread} (GitHub, accessed on Sept~16,~2025, commit~9a2607e) and 3rd-ChimeraMiner~\cite{lu2023exploration} (GitHub, accessed on Sept~16,~2025, commit~04b5233).
+ChimeraLM was compared to two existing computational methods for detecting amplification-induced chimeric artifacts: SACRA~\cite{kiguchi2021longread} (GitHub commit~9a2607e) and 3rd-ChimeraMiner~\cite{lu2023exploration} (GitHub commit~04b5233).
 Both tools were applied to \gls{wga} data from PromethION P2 and MinION Mk1c platforms using default parameters as recommended in their documentation.
 Performance was evaluated by measuring the percentage reduction in chimeric reads relative to unprocessed \gls{wga} data.
 Chimeric reads were identified using \gls{wga} tag-based alignment criteria (reads with \gls{sa} tags indicating split alignments), and reduction rates were calculated as the proportion of chimeric reads removed by each method.
