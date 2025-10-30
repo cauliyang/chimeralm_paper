@@ -624,21 +624,20 @@ Final model performance was evaluated on the held-out test set and the independe
 
 \paragraph{Gold standard SV dataset construction}
 A high-confidence gold standard \gls{sv} dataset was generated from bulk PC3 sequencing data to evaluate the impact of ChimeraLM on \gls{sv} detection accuracy (Fig.~\ref{fig:figure3}a).
-All \gls{sv} comparison and breakpoint correction were performed using OctopuSV v0.2.3~\textcolor{red}{[ref]}.
+All \gls{sv} comparison and breakpoint correction were performed using OctopuSV v0.2.3~\cite{guo2025octopusv}.
 We used four datasets: bulk MinION Mk1c, bulk PromethION P2, the CCLE Illumina WGS dataset, and the PRJNA361315 Illumina WGS dataset.
 Within each dataset, \gls{sv} events supported by at least two independent callers were retained.
 Variants supported by two or more datasets were designated as gold standard \glspl{sv} for benchmarking.
 
 \paragraph{SV benchmarking analysis}
 To assess the impact of ChimeraLM on \gls{sv} calling accuracy, we compared \gls{sv} calls from unfiltered \gls{wga} data and ChimeraLM-filtered \gls{wga} data against two references: (1) the stringent multi-platform gold standard dataset, and (2) platform-matched long-read bulk sequencing data.
-Benchmarking was performed using Truvari v4.2.2~\textcolor{red}{[ref]} with default parameters.
+Benchmarking was performed using Truvari v4.2.2~\cite{english2022truvari} with default parameters.
 \glspl{sv} were considered supported if they matched reference variants within the defined breakpoint tolerance.
 Validation rates were calculated as the proportion of called \glspl{sv} supported by the reference.
 This dual benchmarking strategy quantifies both improvements in detecting high-confidence multi-platform \glspl{sv} and the retention of platform-specific true variants.
 
 \subsection*{Benchmarking against existing methods}
-
-ChimeraLM was compared to two existing computational methods for detecting amplification-induced chimeric artifacts: SACRA~\cite{kiguchi2021longread} (version X.X) and 3rd-ChimeraMiner~\cite{lu2023exploration} (version X.X).
+ChimeraLM was compared to two existing computational methods for detecting amplification-induced chimeric artifacts: SACRA~\cite{kiguchi2021longread} (GitHub, accessed on Sept~16,~2025, commit~9a2607e) and 3rd-ChimeraMiner~\cite{lu2023exploration} (GitHub, accessed on Sept~16,~2025, commit~04b5233).
 Both tools were applied to \gls{wga} data from PromethION P2 and MinION Mk1c platforms using default parameters as recommended in their documentation.
 Performance was evaluated by measuring the percentage reduction in chimeric reads relative to unprocessed \gls{wga} data.
 Chimeric reads were identified using \gls{wga} tag-based alignment criteria (reads with \gls{sa} tags indicating split alignments), and reduction rates were calculated as the proportion of chimeric reads removed by each method.
