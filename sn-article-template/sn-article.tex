@@ -441,12 +441,6 @@ The attention weight analysis provides evidence that the model can identify mech
 The improved reliability of \gls{sv} detection has practical implications for single-cell genomics applications. Studies of chromosomal instability, clonal evolution, and \gls{sv} burden in individual cells have been limited by high false-positive rates in \gls{wga} data~\cite{kosugi2019comprehensive, mahmoud2019structural}.
 ChimeraLM enables more confident identification of genuine \glspl{sv}, supporting applications in cancer genomics, developmental biology, and aging research where single-cell resolution is essential for understanding cellular heterogeneity.
 
-% Several limitations warrant consideration.
-% ChimeraLM was trained and validated on PC3 cell line data using \gls{mda}-based \gls{wga} and nanopore sequencing. 
-% Performance on other cell types and \gls{wga} chemistries (\gls{malbac}, \gls{lianti} and other \gls{mda} variants) remains to be systematically evaluated. 
-% Amplification biases may vary across genomic backgrounds with different chromatin states or DNA accessibility, potentially affecting model generalization. 
-% The requirement for bulk sequencing data to generate training labels limits immediate applicability to samples where bulk material is unavailable, though transfer learning from existing trained models may address this constraint.
-
 ChimeraLM currently processes reads independently without considering genomic context or supporting read depth.
 Integrating additional features such as local coverage, mate-pair information, or phasing data could improve classification accuracy.
 The model requires \gls{gpu} resources for efficient processing of large datasets (millions of reads), though \gls{cpu} inference remains feasible for smaller studies.
@@ -485,7 +479,7 @@ All samples were processed under identical parameters to ensure consistency acro
 \paragraph{Chimeric read identification}
 Chimeric reads were identified based on the presence of supplementary alignments in BAM files using the \gls{sa} tag.
 The \gls{sa} tag indicates that a read has additional alignments beyond the primary alignment, which is characteristic of chimeric sequences that map to multiple distant genomic locations.
-To ensure accurate identification, we applied stringent filtering criteria: reads were classified as chimeric only if they (1) contained the \gls{sa} tag, (2) were not unmapped, (3) were not secondary alignments, and (4) were not supplementary alignments themselves.
+To ensure accurate identification, we applied stringent filtering criteria: reads were classified as chimeric only if they (1) were not unmapped, (2) contained the \gls{sa} tag, (3) were not secondary alignments, and (4) were not supplementary alignments themselves.
 This filtering approach ensures that only primary alignments with supplementary mapping evidence are considered chimeric, avoiding double-counting of the same chimeric event and excluding low-quality or ambiguous alignments.
 Reads without the \gls{sa} tag (single continuous alignments) were classified as non-chimeric.
 This approach leverages the standard BAM format specification to reliably identify reads with complex alignment patterns.
@@ -562,7 +556,6 @@ where $z_0$ and $z_1$ represent logits for biological and artificial chimeric cl
 The complete ChimeraLM pipeline processes DNA sequences through: (1) single-nucleotide tokenization, (2) HyenaDNA backbone encoding to generate contextualized representations, (3) attention pooling to aggregate position-specific features, (4) \gls{mlp} layers with residual connections to learn classification features, and (5) binary classification output. 
 The entire model is trained end-to-end using labeled \gls{wga} and bulk sequencing data.
 
-
 \subsection*{Model training and optimization}
 
 \paragraph{Training configuration}
@@ -582,7 +575,6 @@ The training objective used cross-entropy loss for binary classification. For a 
 \mathcal{L} = -\log\left(\frac{\exp(z_y)}{\exp(z_0) + \exp(z_1)}\right)
 \]
 where $z_0$ and $z_1$ represent logits for biological and artificial chimeric classes.
-
 
 \paragraph{Training implementation}
 Training used batch size of 16 sequences with 30 parallel data loading workers.
@@ -638,14 +630,13 @@ Both tools were applied to \gls{wga} data from PromethION P2 and MinION Mk1c pla
 Performance was evaluated by measuring the percentage reduction in chimeric reads relative to unprocessed \gls{wga} data.
 Chimeric reads were identified using \gls{wga} tag-based alignment criteria (reads with \gls{sa} tags indicating split alignments), and reduction rates were calculated as the proportion of chimeric reads removed by each method.
 
-
 \subsection*{Attention weight analysis}
 
 To investigate ChimeraLM's interpretability, we analyzed attention weights from the pooling mechanism for representative chimeric reads.
 Attention weights indicate the relative importance assigned to each sequence position during classification.
 For selected reads, we extracted per-position attention weights and visualized them alongside read alignments to identify whether the model focuses on mechanistically relevant regions.
 
-Chimeric junction positions were identified from alignment data (defined by breakpoints in SA tags).
+Chimeric junction positions were identified from alignment data (defined by breakpoints in \gls{sa} tags).
 A window of $\pm$50 bp surrounding each junction was designated as the junction region. Attention weights within junction region were compared to non-junction regions using the Wilcoxon rank-sum test~\cite{2020SciPy-NMeth}, with statistical significance assessed at $p < 0.001$.
 
 \subsection*{Data visualization}
