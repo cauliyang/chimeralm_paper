@@ -241,7 +241,7 @@ We demonstrate that ChimeraLM achieves superior performance compared to existing
 		(b)~Ground truth label generation for supervised learning. Chimeric reads from \gls{wga} data are compared against all chimeric reads from bulk sequencing data of the same cell line. Reads that match bulk data are labeled as biological (green pathway), while non-matching reads are labeled as chimera artifacts (red pathway). This provides reliable training labels.
 		(c)~ChimeraLM architecture. Input DNA sequences (batch size $B$, sequence length $L$) are tokenized and encoded into hidden states $\mathbf{H} \in \mathbb{R}^{L \times 256}$ through a backbone encoder (HyenaDNA~\cite{nguyen2023hyenadna}). Hyena operators capture long-range dependencies in genomic sequences. Attention pooling aggregates position-specific features using learned weights. Residual and \gls{mlp} layers process pooled features, and a softmax layer outputs binary classification probabilities for biological versus artificial reads.
 		(d)~Attention pooling mechanism detail. The backbone encoder (HyenaDNA) transforms input sequences into hidden state $\mathbf{H} \in \mathbb{R}^{L \times 256}$. Attention weights $\boldsymbol{\alpha} \in \mathbb{R}^{L \times 1}$ are computed through linear layers, GELU activation, and softmax normalization, assigning importance scores to each nucleotide position. The weighted sum $\mathbf{h}_{\text{pooled}} = \sum_{i=1}^{L} \alpha_i \mathbf{h}_i$ produces the pooled output $\mathbf{h}_{\text{pooled}} \in \mathbb{R}^{256}$, compressing variable-length sequences into fixed-dimensional representations.
-		Created with BioRender.com.} 
+		Created with BioRender.com.}
 	\label{fig:figure1}
 \end{figure}
 
@@ -337,7 +337,7 @@ This cross-platform generalization, combined with the high recall on the interna
 % For typical single-cell \gls{wga} samples with 20-30× coverage, the loss of 30\% of reads in chimera-dense regions maintains sufficient depth (14-21×) for reliable variant calling, while removal of 95\% of chimeric artifacts substantially improves variant detection accuracy.
 
 % \subsection*{ChimeraLM dramatically outperforms existing chimera detection methods on long-read WGA data}
-% P2 92 
+% P2 92
 % mk1c 91
 
 
@@ -491,11 +491,11 @@ For a tokenized input sequence $\mathbf{x} \in \mathbb{Z}^{L}$, the HyenaDNA bac
 \[
 \mathbf{H} = \text{HyenaDNA}(\mathbf{x}) \in \mathbb{R}^{L \times 256}
 \]
-where $\mathbf{H} = (\mathbf{h}_1, \mathbf{h}_2, \ldots, \mathbf{h}_L)$ represents position-wise hidden states with dimension 256. 
+where $\mathbf{H} = (\mathbf{h}_1, \mathbf{h}_2, \ldots, \mathbf{h}_L)$ represents position-wise hidden states with dimension 256.
 The Hyena operators~\cite{Poli2023HyenaHT} efficiently capture both local sequence motifs and long-range dependencies essential for distinguishing biological sequences from chimeric artifacts.
 
 \paragraph{Attention pooling}
-To aggregate variable-length sequence representations into fixed-size vectors, ChimeraLM implements attention-based pooling. 
+To aggregate variable-length sequence representations into fixed-size vectors, ChimeraLM implements attention-based pooling.
 For hidden states $\mathbf{H} \in \mathbb{R}^{L \times 256}$, attention weights are computed through a two-layer network:
 \begin{align*}
 \mathbf{e} &= \text{GELU}(\text{Linear}_{256 \to 256}(\mathbf{H})) \in \mathbb{R}^{L \times 256} \\
@@ -526,7 +526,7 @@ The final layer produces binary classification logits:
 where $z_0$ and $z_1$ represent logits for biological and artificial chimeric classes, respectively. During inference, the predicted class is $\hat{y} = \argmax_{i \in \{0,1\}} z_i$.
 
 \paragraph{Model summary}
-The complete ChimeraLM pipeline processes DNA sequences through: (1) single-nucleotide tokenization, (2) HyenaDNA backbone encoding to generate contextualized representations, (3) attention pooling to aggregate position-specific features, (4) \gls{mlp} layers with residual connections to learn classification features, and (5) binary classification output. 
+The complete ChimeraLM pipeline processes DNA sequences through: (1) single-nucleotide tokenization, (2) HyenaDNA backbone encoding to generate contextualized representations, (3) attention pooling to aggregate position-specific features, (4) \gls{mlp} layers with residual connections to learn classification features, and (5) binary classification output.
 The entire model is trained end-to-end using labeled \gls{wga} and bulk sequencing data.
 
 \subsection*{Model training and optimization}
@@ -534,13 +534,13 @@ The entire model is trained end-to-end using labeled \gls{wga} and bulk sequenci
 \paragraph{Training configuration}
 ChimeraLM was trained using PyTorch~\cite{paszke2019pytorch} and PyTorch Lightning~\cite{Falcon_PyTorch_Lightning_2019} frameworks.
 Input sequences were tokenized using the tokenizer with maximum sequence length of 32,768 bp.
-Sequences longer than this threshold were truncated; shorter sequences were padded to enable batch processing. 
+Sequences longer than this threshold were truncated; shorter sequences were padded to enable batch processing.
 Training employed mixed-precision computation (bf16) to accelerate training while maintaining numerical stability.
 
 \paragraph{Optimization procedure}
 We used the AdamW optimizer~\cite{adamw} with learning rate $1 \times 10^{-4}$ and weight decay 0.01.
 A ReduceLROnPlateau scheduler dynamically adjusted the learning rate based on validation loss, reducing it by a factor of 0.1 when no improvement occurred for 10 consecutive epochs.
-Early stopping with patience of 10 epochs prevented overfitting by terminating training when validation performance plateaued. 
+Early stopping with patience of 10 epochs prevented overfitting by terminating training when validation performance plateaued.
 A fixed random seed (12345) ensured reproducibility across training runs.
 
 The training objective used cross-entropy loss for binary classification. For a training example with true class label $y \in \{0,1\}$ and model logits $z = [z_0, z_1]$, the loss is:
