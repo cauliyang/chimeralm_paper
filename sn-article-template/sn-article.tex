@@ -231,11 +231,11 @@ We demonstrate that ChimeraLM achieves superior performance compared to existing
 		\includegraphics[width=\textwidth]{final_figures/figure1}
 	\end{center}
 	\caption{{\bf ChimeraLM workflow and architecture for detecting \gls{wga} artifacts in single-cell sequencing.}
-		(a)~Single-cell genomic workflow and ChimeraLM integration. Single cells are isolated, followed by DNA extraction and \gls{wga} for genome amplification. \gls{wga} generates chimeric artifacts (red) through template switching during amplification, alongside biological reads (green). After nanopore sequencing, ChimeraLM classifies chimeric reads as biological or artificial, enabling downstream \gls{sv} detection on clean reads.
-		(b)~Ground truth label generation for supervised learning. Chimeric reads from \gls{wga} data are compared against all chimeric reads from bulk sequencing data of the same cell line. Reads that match bulk data are labeled as biological (green pathway), while non-matching reads are labeled as chimera artifacts (red pathway). This provides reliable training labels.
-		(c)~ChimeraLM architecture. Input DNA sequences (batch size $B$, sequence length $L$) are tokenized and encoded into hidden states $\mathbf{H} \in \mathbb{R}^{L \times 256}$ through a backbone encoder (HyenaDNA~\cite{nguyen2023hyenadna}). Hyena operators capture long-range dependencies in genomic sequences. Attention pooling aggregates position-specific features using learned weights. Residual and \gls{mlp} layers process pooled features, and a softmax layer outputs binary classification probabilities for biological versus artificial reads.
-		(d)~Attention pooling mechanism detail. The backbone encoder (HyenaDNA) transforms input sequences into hidden state $\mathbf{H} \in \mathbb{R}^{L \times 256}$. Attention weights $\boldsymbol{\alpha} \in \mathbb{R}^{L \times 1}$ are computed through linear layers, GELU activation, and softmax normalization, assigning importance scores to each nucleotide position. The weighted sum $\mathbf{h}_{\text{pooled}} = \sum_{i=1}^{L} \alpha_i \mathbf{h}_i$ produces the pooled output $\mathbf{h}_{\text{pooled}} \in \mathbb{R}^{256}$, compressing variable-length sequences into fixed-dimensional representations.
-		Created with BioRender.com.}
+	(a)~Single-cell genomic workflow and ChimeraLM integration. Single cells are isolated, followed by DNA extraction and \gls{wga} for genome amplification. \gls{wga} generates chimeric artifacts (red) through template switching during amplification, alongside biological reads (green). After nanopore sequencing, ChimeraLM classifies chimeric reads as biological or artificial, enabling downstream \gls{sv} detection on clean reads.
+	(b)~Ground truth label generation for supervised learning. Chimeric reads from \gls{wga} data are compared against all chimeric reads from bulk sequencing data of the same cell line. Reads that match bulk data are labeled as biological (green pathway), while non-matching reads are labeled as chimera artifacts (red pathway). This provides reliable training labels.
+	(c)~ChimeraLM architecture. Input DNA sequences (batch size $B$, sequence length $L$) are tokenized and encoded into hidden states $\mathbf{H} \in \mathbb{R}^{L \times 256}$ through a backbone encoder (HyenaDNA~\cite{nguyen2023hyenadna}). Hyena operators capture long-range dependencies in genomic sequences. Attention pooling aggregates position-specific features using learned weights. Residual and \gls{mlp} layers process pooled features, and a softmax layer outputs binary classification probabilities for biological versus artificial reads.
+	(d)~Attention pooling mechanism detail. The backbone encoder (HyenaDNA) transforms input sequences into hidden state $\mathbf{H} \in \mathbb{R}^{L \times 256}$. Attention weights $\boldsymbol{\alpha} \in \mathbb{R}^{L \times 1}$ are computed through linear layers, GELU activation, and softmax normalization, assigning importance scores to each nucleotide position. The weighted sum $\mathbf{h}_{\text{pooled}} = \sum_{i=1}^{L} \alpha_i \mathbf{h}_i$ produces the pooled output $\mathbf{h}_{\text{pooled}} \in \mathbb{R}^{256}$, compressing variable-length sequences into fixed-dimensional representations.
+	Created with BioRender.com.}
 	\label{fig:figure1}
 \end{figure}
 
@@ -290,14 +290,14 @@ This end-to-end architecture enables ChimeraLM to learn directly from raw sequen
 	\begin{center}
 		\includegraphics[width=0.95\textwidth]{final_figures/figure2}
 	\end{center}
-    \caption{{\bf ChimeraLM accurately identifies and removes \gls{wga}-induced chimeric artifacts.}
-	(a)~Classification performance on held-out test data.
-    ChimeraLM achieves high recall (0.95) in identifying chimera artifacts while maintaining acceptable precision (0.70), yielding an F1 score of 0.81 for binary classification of biological versus artificial sequences.
-	(b)~Chimeric read reduction across sequencing platforms.
-    Stacked bars show the proportion of chimeric (dark teal) and non-chimeric (light teal) reads in bulk sequencing, \gls{wga}-amplified samples, and ChimeraLM-filtered \gls{wga} samples.
-    Data from PC3 cell line sequenced on PromethION (left) and MinION (right) platforms demonstrate that ChimeraLM reduces chimeric read frequencies from 46.0\% to 4.9\% (PromethION) and from 23.0\% to 1.5\% (MinION), approaching bulk levels (2.3\% and 2.5\%, respectively).
-	(c,d)~Benchmarking against existing methods.
-    ChimeraLM achieves approximately 90\% reduction in chimeric reads on both PromethION (c) and MinION (d) platforms, whereas existing computational tools SACRA and 3rd-ChimeraMiner show no detectable reduction in chimeric content.}\label{fig:figure2}
+	\caption{{\bf ChimeraLM accurately identifies and removes \gls{wga}-induced chimeric artifacts.}
+		(a)~Classification performance on held-out test data.
+		ChimeraLM achieves high recall (0.95) in identifying chimera artifacts while maintaining acceptable precision (0.70), yielding an F1 score of 0.81 for binary classification of biological versus artificial sequences.
+		(b)~Chimeric read reduction across sequencing platforms.
+		Stacked bars show the proportion of chimeric (dark teal) and non-chimeric (light teal) reads in bulk sequencing, \gls{wga}-amplified samples, and ChimeraLM-filtered \gls{wga} samples.
+		Data from PC3 cell line sequenced on PromethION (left) and MinION (right) platforms demonstrate that ChimeraLM reduces chimeric read frequencies from 46.0\% to 4.9\% (PromethION) and from 23.0\% to 1.5\% (MinION), approaching bulk levels (2.3\% and 2.5\%, respectively).
+		(c,d)~Benchmarking against existing methods.
+		ChimeraLM achieves approximately 90\% reduction in chimeric reads on both PromethION (c) and MinION (d) platforms, whereas existing computational tools SACRA and 3rd-ChimeraMiner show no detectable reduction in chimeric content.}\label{fig:figure2}
 \end{figure}
 
 \subsection*{ChimeraLM achieves high accuracy and reduces artifacts to near-bulk levels across platforms}
@@ -434,7 +434,6 @@ Architectural innovations such as the Hyena operator for efficient long-range mo
 ChimeraLM thus provides a practical and interpretable framework for improving long-read single-cell genomic data quality.
 By removing \gls{wga}-induced chimeric artifacts at the read level and revealing the mechanistic features that drive them, the method not only enhances \gls{sv} detection reliability but also deepens understanding of amplification-induced bias in single-cell genomics.
 
-
 \section*{Methods}\label{sec:methods}
 
 \subsection*{Cell culture, single-clone preparation, and nanopore sequencing}
@@ -487,7 +486,7 @@ Input sequences are truncated at 32,768 bp or padded to enable batch processing.
 
 For a tokenized input sequence $\mathbf{x} \in \mathbb{Z}^{L}$, the HyenaDNA backbone generates contextualized hidden representations:
 \[
-\mathbf{H} = \text{HyenaDNA}(\mathbf{x}) \in \mathbb{R}^{L \times 256}
+	\mathbf{H} = \text{HyenaDNA}(\mathbf{x}) \in \mathbb{R}^{L \times 256}
 \]
 where $\mathbf{H} = (\mathbf{h}_1, \mathbf{h}_2, \ldots, \mathbf{h}_L)$ represents position-wise hidden states with dimension 256.
 The Hyena operators~\cite{Poli2023HyenaHT} efficiently capture both local sequence motifs and long-range dependencies essential for distinguishing biological sequences from chimeric artifacts.
@@ -496,13 +495,13 @@ The Hyena operators~\cite{Poli2023HyenaHT} efficiently capture both local sequen
 To aggregate variable-length sequence representations into fixed-size vectors, ChimeraLM implements attention-based pooling.
 For hidden states $\mathbf{H} \in \mathbb{R}^{L \times 256}$, attention weights are computed through a two-layer network:
 \begin{align*}
-\mathbf{e} &= \text{GELU}(\text{Linear}_{256 \to 256}(\mathbf{H})) \in \mathbb{R}^{L \times 256} \\
-\mathbf{s} &= \text{Linear}_{256 \to 1}(\mathbf{e}) \in \mathbb{R}^{L \times 1} \\
-\boldsymbol{\alpha} &= \text{softmax}(\mathbf{s}) \in \mathbb{R}^{L \times 1}
+	\mathbf{e}          & = \text{GELU}(\text{Linear}_{256 \to 256}(\mathbf{H})) \in \mathbb{R}^{L \times 256} \\
+	\mathbf{s}          & = \text{Linear}_{256 \to 1}(\mathbf{e}) \in \mathbb{R}^{L \times 1}                  \\
+	\boldsymbol{\alpha} & = \text{softmax}(\mathbf{s}) \in \mathbb{R}^{L \times 1}
 \end{align*}
 The pooled representation is the weighted sum of hidden states:
 \[
-\mathbf{h}_{\text{pooled}} = \sum_{i=1}^{L} \alpha_i \mathbf{h}_i \in \mathbb{R}^{256}
+	\mathbf{h}_{\text{pooled}} = \sum_{i=1}^{L} \alpha_i \mathbf{h}_i \in \mathbb{R}^{256}
 \]
 This mechanism assigns learned importance weights to each sequence position, enabling the model to focus on informative regions while accommodating natural variability in read lengths.
 
@@ -510,16 +509,16 @@ This mechanism assigns learned importance weights to each sequence position, ena
 The pooled representation is processed through a \gls{mlp} with residual connections.
 The first layer expands dimensionality:
 \[
-\mathbf{f}_1 = \text{Dropout}_{0.1}(\text{GELU}(\text{Linear}_{256 \to 512}(\mathbf{h}_{\text{pooled}}))) \in \mathbb{R}^{512}
+	\mathbf{f}_1 = \text{Dropout}_{0.1}(\text{GELU}(\text{Linear}_{256 \to 512}(\mathbf{h}_{\text{pooled}}))) \in \mathbb{R}^{512}
 \]
 Subsequent residual blocks with input $\mathbf{f}_{\text{in}} \in \mathbb{R}^{512}$ compute:
 \[
-\mathbf{f}_{\text{out}} = \text{Dropout}_{0.1}(\text{Linear}_{512 \to 512}(\text{GELU}(\text{Linear}_{512 \to 512}(\mathbf{f}_{\text{in}}))))) + \mathbf{f}_{\text{in}}
+	\mathbf{f}_{\text{out}} = \text{Dropout}_{0.1}(\text{Linear}_{512 \to 512}(\text{GELU}(\text{Linear}_{512 \to 512}(\mathbf{f}_{\text{in}}))))) + \mathbf{f}_{\text{in}}
 \]
 where the skip connection enables stable gradient flow during training.
 The final layer produces binary classification logits:
 \[
-\mathbf{z} = [z_0, z_1] = \text{Linear}_{512 \to 2}(\mathbf{f}_{\text{final}}) \in \mathbb{R}^{2}
+	\mathbf{z} = [z_0, z_1] = \text{Linear}_{512 \to 2}(\mathbf{f}_{\text{final}}) \in \mathbb{R}^{2}
 \]
 where $z_0$ and $z_1$ represent logits for biological and artificial chimeric classes, respectively. During inference, the predicted class is $\hat{y} = \argmax_{i \in \{0,1\}} z_i$.
 
@@ -543,7 +542,7 @@ A fixed random seed (12345) ensured reproducibility across training runs.
 
 The training objective used cross-entropy loss for binary classification. For a training example with true class label $y \in \{0,1\}$ and model logits $z = [z_0, z_1]$, the loss is:
 \[
-\mathcal{L} = -\log\left(\frac{\exp(z_y)}{\exp(z_0) + \exp(z_1)}\right)
+	\mathcal{L} = -\log\left(\frac{\exp(z_y)}{\exp(z_0) + \exp(z_1)}\right)
 \]
 where $z_0$ and $z_1$ represent logits for biological and artificial chimeric classes.
 
@@ -556,10 +555,10 @@ Configuration management used Hydra~\cite{Yadan2019Hydra} to enable reproducible
 \paragraph{Model evaluation}
 Performance was monitored using accuracy, precision, recall, and F1 score on the validation set after each epoch:
 \begin{align*}
-\text{Precision} &= \frac{\text{TP}}{\text{TP}+\text{FP}}, \quad
-\text{Recall} = \frac{\text{TP}}{\text{TP}+\text{FN}} \\
-\text{F1} &= \frac{2 \times \text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}, \quad
-\text{Accuracy} = \frac{\text{TP} + \text{TN}}{\text{TP} + \text{TN} + \text{FP} + \text{FN}}
+	\text{Precision} & = \frac{\text{TP}}{\text{TP}+\text{FP}}, \quad
+	\text{Recall} = \frac{\text{TP}}{\text{TP}+\text{FN}}                                                               \\
+	\text{F1}        & = \frac{2 \times \text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}, \quad
+	\text{Accuracy} = \frac{\text{TP} + \text{TN}}{\text{TP} + \text{TN} + \text{FP} + \text{FN}}
 \end{align*}
 where TP (true positives) are chimeric reads correctly classified as artificial, TN (true negatives) are biological reads correctly classified as biological, FP (false positives) are biological reads misclassified as artificial, and FN (false negatives) are chimeric reads misclassified as biological. Final model selection was based on best validation performance as determined by early stopping.
 
@@ -631,23 +630,23 @@ Computations were performed on a \gls{hpc} server with 64-core Intel Xeon Gold 6
 \setcounter{table}{0}
 
 \begin{table}[!ht]
-\centering
-\caption{Sequencing and alignment statistics of PC3}
-\label{tab:seq_stats}
-\small
-\setlength{\tabcolsep}{3pt} % Reduce column spacing (default is 6pt)
-\begin{tabular}{@{}llcccccccc@{}}
-\toprule
-\textbf{Sample} & \textbf{Platform} & \textbf{Reads} & \textbf{Total} & \textbf{Total bases} & \textbf{Fraction} & \textbf{Mean} & \textbf{Mean} & \textbf{Average}\\
- & & ($\times 10^6$) & \textbf{bases} & \textbf{aligned} & \textbf{aligned} & \textbf{length} & \textbf{quality} & \textbf{identity}  \\
- & & & (Gb) & (Gb) & & (bp) & (Q) & (\%) \\
-\midrule
-\gls{wga} & MinION & 9.11 & 14.6 & 10.4 & 0.7 & 1,603 & 14.3 & 97.6 \\
-\gls{wga} & PromethION & 44.69 & 128.2 & 69.2 & 0.5 & 2,869 & 14.5 & 96.1 \\
-Bulk & MinION & 0.97 & 8.1 & 7.1 & 0.9 & 8,310 & 17.2 & 97.3 \\
-Bulk & PromethION & 8.00 & 69.9 & 62.4 & 0.9 & 8,732 & 18.5 & 97.7 \\
-\bottomrule
-\end{tabular}
+	\centering
+	\caption{Sequencing and alignment statistics of PC3}
+	\label{tab:seq_stats}
+	\small
+	\setlength{\tabcolsep}{3pt} % Reduce column spacing (default is 6pt)
+	\begin{tabular}{@{}llcccccccc@{}}
+		\toprule
+		\textbf{Sample} & \textbf{Platform} & \textbf{Reads}  & \textbf{Total} & \textbf{Total bases} & \textbf{Fraction} & \textbf{Mean}   & \textbf{Mean}    & \textbf{Average}  \\
+		                &                   & ($\times 10^6$) & \textbf{bases} & \textbf{aligned}     & \textbf{aligned}  & \textbf{length} & \textbf{quality} & \textbf{identity} \\
+		                &                   &                 & (Gb)           & (Gb)                 &                   & (bp)            & (Q)              & (\%)              \\
+		\midrule
+		\gls{wga}       & MinION            & 9.11            & 14.6           & 10.4                 & 0.7               & 1,603           & 14.3             & 97.6              \\
+		\gls{wga}       & PromethION        & 44.69           & 128.2          & 69.2                 & 0.5               & 2,869           & 14.5             & 96.1              \\
+		Bulk            & MinION            & 0.97            & 8.1            & 7.1                  & 0.9               & 8,310           & 17.2             & 97.3              \\
+		Bulk            & PromethION        & 8.00            & 69.9           & 62.4                 & 0.9               & 8,732           & 18.5             & 97.7              \\
+		\bottomrule
+	\end{tabular}
 \end{table}
 
 \begin{figure}[!ht]
@@ -656,9 +655,9 @@ Bulk & PromethION & 8.00 & 69.9 & 62.4 & 0.9 & 8,732 & 18.5 & 97.7 \\
 	\end{center}
 	\caption{{\bf Distribution of chimeric read matches between \gls{wga} and bulk sequencing datasets.}
 		Bar chart showing the number of chimeric reads (y-axis, log scale) grouped by how many bulk datasets (x-axis) contained matching chimeric structures when comparing \gls{wga} PromethION reads against bulk sequencing data.
-``Match 0'' indicates reads with no matches in any bulk dataset (classified as artificial chimeras,  $\sim$10$^7$ reads), whereas ``Match 1–3'' indicate reads with matches in one, two, or all three bulk datasets (classified as biological reads, $\sim$10$^5$ reads each).
-Symbols below the bars represent the number of bulk datasets with a match (0 of 3 – 3 of 3).
-This matching scheme forms the basis for ground-truth labeling in supervised training.}\label{fig:data_construction}
+		``Match 0'' indicates reads with no matches in any bulk dataset (classified as artificial chimeras,  $\sim$10$^7$ reads), whereas ``Match 1–3'' indicate reads with matches in one, two, or all three bulk datasets (classified as biological reads, $\sim$10$^5$ reads each).
+		Symbols below the bars represent the number of bulk datasets with a match (0 of 3 – 3 of 3).
+		This matching scheme forms the basis for ground-truth labeling in supervised training.}\label{fig:data_construction}
 \end{figure}
 
 
