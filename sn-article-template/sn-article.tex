@@ -190,7 +190,7 @@
 Single-cell genomics has revolutionized our understanding of cellular heterogeneity by enabling characterization of individual cells rather than bulk populations~\cite{kalef2024single,sun2024mapping,navin2011tumour,macaulay2014single}.
 This approach has proven instrumental in uncovering rare cell types~\cite{macaulay2014single}, tracking developmental trajectories~\cite{navin2011tumour}, and elucidating tumor evolution through clonal architecture analysis.
 However, the limited DNA content in a single cell—typically only 6-7 picograms containing approximately two copies of the 3-billion-base-pair human genome—poses significant technical challenges for comprehensive genomic analysis~\cite{leung2016highly,gawad2016single,chen2017singlecell}.
-To overcome this limitation, whole-genome amplification (\gls{wga}) has become essential for single-cell genomic studies~\cite{zong2012genome,huang2015single,dean2002comprehensive,chen2017singlecell,macaulay2014single}.
+To overcome this limitation, \gls{wga} has become essential for single-cell genomic studies~\cite{zong2012genome,huang2015single,dean2002comprehensive,chen2017singlecell,macaulay2014single}.
 Various \gls{wga} techniques have been developed, each with distinct amplification mechanisms and characteristic error profiles.
 \gls{mda}, introduced by Dean et al.~\cite{dean2002comprehensive}, utilizes the highly processive phi29 DNA polymerase to achieve isothermal amplification with products exceeding 10 kb, though it suffers from pronounced amplification bias and chimera formation~\cite{lasken2007mechanism,pinard2006assessment}.
 \gls{doppcr}, pioneered by Telenius et al.~\cite{telenius1992degenerate}, employs thermocycling with degenerate primers to achieve more uniform coverage but generates shorter amplicons.
@@ -261,7 +261,7 @@ Chimeric reads from the PC3 \gls{wga} PromethION dataset were systematically com
 \gls{wga} reads whose chimeric structures were absent from all three bulk datasets were labeled artificial.
 Conversely, \gls{wga} reads with structures validated in one or more bulk datasets were labeled biological.
 
-Application of this labeling strategy to the PC3 \gls{wga} data (Extended Table~\ref{tab:seq_stats}) quantified the read distribution across these categories (Extended Data Fig.~\ref{fig:sf1}).
+Application of this labeling strategy to the PC3 \gls{wga} data (Extended Table~\ref{tab:seq_stats}) quantified the read distribution across these categories (Extended Data Fig.~\ref{fig:data_construction}).
 We identified 12,670,396 chimeric reads with zero matches in the bulk reference, which were classified as artificial.
 Conversely, we identified a total of 293,180 reads validated as biological.
 This biological set was composed of reads matching one (Match 1: 101,094 reads), two (Match 2: 190,309 reads), or all three (Match 3: 1,777 reads) of the bulk reference datasets.
@@ -652,13 +652,13 @@ Bulk & PromethION & 8.00 & 69.9 & 62.4 & 0.9 & 8,732 & 18.5 & 97.7 \\
 
 \begin{figure}[!ht]
 	\begin{center}
-		\includegraphics[width=0.8\textwidth]{final_figures/sf1}
+		\includegraphics[width=0.9\textwidth]{final_figures/sf1}
 	\end{center}
 	\caption{{\bf Distribution of chimeric read matches between \gls{wga} and bulk sequencing datasets.}
 		Bar chart showing the number of chimeric reads (y-axis, log scale) grouped by how many bulk datasets (x-axis) contained matching chimeric structures when comparing \gls{wga} PromethION reads against bulk sequencing data.
 ``Match 0'' indicates reads with no matches in any bulk dataset (classified as artificial chimeras,  $\sim$10$^7$ reads), whereas ``Match 1–3'' indicate reads with matches in one, two, or all three bulk datasets (classified as biological reads, $\sim$10$^5$ reads each).
 Symbols below the bars represent the number of bulk datasets with a match (0 of 3 – 3 of 3).
-This matching scheme forms the basis for ground-truth labeling in supervised training.}\label{fig:sf1}
+This matching scheme forms the basis for ground-truth labeling in supervised training.}\label{fig:data_construction}
 \end{figure}
 
 
