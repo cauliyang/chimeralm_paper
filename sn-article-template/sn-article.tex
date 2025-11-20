@@ -180,7 +180,7 @@
 \affil[1]{\orgdiv{Department of Urology}, \orgname{Northwestern University Feinberg School of Medicine}, \orgaddress{\street{303 E Superior St}, \city{Chicago}, \postcode{60611}, \state{IL}, \country{USA}}}
 \affil[2]{\orgdiv{Robert H. Lurie Comprehensive Cancer Center}, \orgname{Northwestern University Feinberg School of Medicine}, \orgaddress{\street{675 N St Clair St}, \city{Chicago}, \postcode{60611}, \state{IL}, \country{USA}}}
 
-\abstract{Single-cell genomics enables unprecedented insights into cellular heterogeneity across cancer, development, and neuroscience, but faces a fundamental challenge: \gls{wga} introduces chimeric artifacts that generate false \glspl{sv}, undermining biological interpretations. Current computational methods fail to distinguish these amplification-induced artifacts from genuine genomic rearrangements. Here we present ChimeraLM, a genomic language model that resolves this bottleneck by learning sequence-level features that discriminate authentic biological sequences from \gls{wga} artifacts. Built on Hyena operators for efficient long-range modeling, ChimeraLM analyzes nanopore sequencing reads at single-nucleotide resolution, achieving 95\% recall with 70\% precision on held-out test data. When applied to \gls{wga}-amplified cells, ChimeraLM reduces chimeric read content by $\sim$90\% (from 46\% to 4.9\% on PromethION, 23\% to 1.5\% on MinION) while preserving 87--92\% of true \glspl{sv}. This filtering improves \gls{sv} validation rates 10--16 fold and eliminates the characteristic false-positive \gls{inv} bias inherent to unprocessed \gls{wga} data, restoring \gls{sv} type distributions to bulk-like profiles. Attention weight visualization reveals that ChimeraLM focuses on chimeric junction regions with single-base precision, learning biologically interpretable features of template-switching events. By enabling confident detection of chromosomal instability and structural variation at single-cell resolution, ChimeraLM addresses a fundamental data quality barrier across applications in cancer genomics, developmental biology, and precision medicine. The model is available at \url{https://github.com/ylab-hi/ChimeraLM}.}
+\abstract{Single-cell genomics enables unprecedented cellular heterogeneity insights but faces a fundamental challenge: \gls{wga} introduces chimeric artifacts that generate false \glspl{sv}, undermining biological interpretations. Current computational methods cannot distinguish amplification-induced artifacts from genuine rearrangements. Here we present ChimeraLM, a genomic language model that learns sequence-level features discriminating biological sequences from \gls{wga} artifacts. Validated on nanopore data, ChimeraLM achieves 95\% recall with 70\% precision and reduces chimeric content by $\sim$90\% while preserving 87--92\% of true \glspl{sv}. This improves \gls{sv} validation rates 10--16 fold and eliminates false-positive \gls{inv} bias, restoring \gls{sv} distributions to bulk-like profiles. Attention visualization reveals ChimeraLM focuses on junction regions with single-base precision, learning interpretable features applicable across sequencing technologies. By enabling confident \gls{sv} detection at single-cell resolution, ChimeraLM addresses a fundamental data quality barrier in cancer genomics, developmental biology, and precision medicine. Available at \url{https://github.com/ylab-hi/ChimeraLM}.}
 \keywords{Whole Genome Amplification, Single Cell, Genomic Language Model, Structural Variation}
 
 \maketitle
@@ -207,7 +207,7 @@ However, false-positive \glspl{sv} introduced during amplification can confound 
 Despite its critical role, \gls{wga} introduces systematic artifacts that significantly impact downstream analyses~\cite{lu2023chimera,lu2023exploration, pinard2006assessment,lasken2007mechanism,chen2017singlecell}.
 Chief among these are chimeric sequences---artificial DNA constructs formed through template switching during amplification.
 During \gls{mda}, the highly processive phi29 polymerase can dissociate from one genomic template and reinitiate synthesis on another, creating chimeric molecules that join DNA fragments from distant genomic loci into single amplified products~\cite{lasken2007mechanism}.
-These artifacts are particularly problematic for long-read sequencing technologies, where chimeric reads can span tens of kilobases and produce convincing---but false---evidence for genomic rearrangements.
+These artifacts are particularly problematic for long-read sequencing technologies, where chimeric reads can span tens of kilobases and generate false-positive \glspl{sv} that are indistinguishable from genuine genomic rearrangements by current computational methods.
 
 Current computational tools to detect \glspl{sv} from long-read data, including
 Sniffles2~\cite{Sedlazeck2018,Smolka2024}, DeBreak~\cite{chen2023deciphering}, SVIM~\cite{heller2019svim}, and cuteSV~\cite{jiang2020longreadbased}.
@@ -223,7 +223,8 @@ Recent genomic language models have shown the ability to learn complex sequence 
 These models treat DNA sequences analogously to natural language, learning representations that capture both local motifs and long-range dependencies~\cite{dalla2025nucleotide}.
 By training on large-scale genomic datasets, such models can internalize patterns of genuine biological sequences, including characteristic features of repetitive elements, chromatin structure, and sequence composition biases.
 
-Here, we developed ChimeraLM, a genomic language model specifically designed to detect chimeric artifacts introduced by \gls{wga}.
+Here, we developed ChimeraLM, a platform-agnostic genomic language model specifically designed to detect chimeric artifacts introduced by \gls{wga}.
+Unlike existing heuristic methods that rely on platform-specific coverage or orientation patterns, ChimeraLM learns sequence-level features that are universal across sequencing technologies.
 By leveraging deep learning to capture sequence patterns, structural features, and contextual information in genomic reads~\cite{dalla2025nucleotide,zhou2023dnabert,nguyen2023hyenadna,consens2023transformers,li2024deepchopper}, ChimeraLM effectively distinguishes genuine biological sequences from \gls{wga}-induced chimeric artifacts.
 We demonstrate that ChimeraLM achieves superior performance compared to existing methods and substantially improves the reliability of \gls{sv} detection in single-cell genomic studies, thereby enabling accurate SV analysis at single-cell resolution.
 
@@ -318,9 +319,10 @@ We then benchmarked ChimeraLM against existing computational tools for detecting
 When applied to the same PromethION and MinION \gls{wga} data, ChimeraLM achieved an approximately 90\% reduction in chimeric reads on both platforms.
 In stark contrast, neither SACRA nor 3rd-ChimeraMiner showed any detectable reduction in chimeric content (0\% reduction).
 
-Together, these results demonstrate a robust and generalizable performance.
-The strong filtering on the MinION dataset (Fig.~\ref{fig:figure2}b) is particularly noteworthy, as this dataset served as a completely independent test set; the model was trained exclusively on PromethION data.
-This cross-platform generalization, combined with the high recall on the internal test set (Fig.~\ref{fig:figure2}a) and the clear superiority over existing tools (Fig.~\ref{fig:figure2}c,d), indicates that ChimeraLM learns fundamental, generalizable sequence features of \gls{wga}-induced artifacts rather than platform-specific signatures.
+Together, these results demonstrate robust and platform-agnostic performance.
+The strong filtering on the MinION dataset (Fig.~\ref{fig:figure2}b) is particularly noteworthy, as this platform served as a completely independent test set---the model was trained exclusively on PromethION data yet generalized effectively to MinION.
+This cross-platform generalization, combined with the high recall on the internal test set (Fig.~\ref{fig:figure2}a) and clear superiority over existing tools (Fig.~\ref{fig:figure2}c,d), confirms that ChimeraLM learns universal sequence-level features of \gls{wga}-induced artifacts rather than platform-specific technical signatures.
+This design principle---learning from DNA sequence patterns that are invariant across sequencing technologies---suggests ChimeraLM's applicability extends beyond nanopore platforms to other long-read and short-read sequencing technologies.
 
 % \subsection*{ChimeraLM dramatically outperforms existing chimera detection methods on long-read WGA data}
 % P2 92
@@ -404,8 +406,8 @@ Moreover, ChimeraLM performs consistently across PromethION and MinION without p
 These results underscore the model’s robustness across diverse datasets and sequencing conditions.
 
 ChimeraLM's effectiveness reflects the ability of deep learning models to capture complex sequence patterns that are difficult to encode in rule-based filters.
-Traditional quality control methods rely on predefined metrics such as mapping quality or read depth~\cite{kiguchi2021longread, lu2023exploration}, which may not effectively distinguish chimeric artifacts from biological reads.
-By learning directly from data, ChimeraLM discovers subtle compositional and structural features that differentiate authentic genomic sequences from amplification artifacts.
+Traditional quality control methods rely on predefined metrics such as mapping quality or read depth~\cite{kiguchi2021longread,lu2023exploration}, which may not effectively distinguish chimeric artifacts from biological reads.
+By learning directly from sequence data, ChimeraLM discovers subtle compositional and structural features that differentiate authentic genomic sequences from amplification artifacts.
 Furthermore, the model offers interpretability through attention visualization, allowing researchers to examine which sequence regions drive classification.
 Attention weights can concentrate sharply at junctions where template switching joins DNA fragments from distinct loci, matching the known mechanism of chimera formation.
 Some reads show more diffuse attention distributions, suggesting that ChimeraLM integrates multiple complementary cues---such as junction orientation, compositional biases, and local sequence context---to classify diverse artifact types.
@@ -417,11 +419,13 @@ ChimeraLM enables more confident identification of genuine \glspl{sv}, supportin
 Although the current model processes reads independently, integrating additional contextual features---such as coverage, mate-pair, or phasing information---could further enhance accuracy.
 \gls{gpu} resources are recommended for large-scale datasets, while \gls{cpu} inference remains feasible for smaller studies; runtime optimization and model compression may improve accessibility for broader use.
 
-Future work should prioritize validation across diverse biological contexts in long-read single-cell sequencing.
-Testing on multiple cell types (primary, stem, or immune cells) and \gls{wga} protocols will establish generalizability.
-The interpretability of attention-based models could also be leveraged to investigate mechanisms of chimera formation: large-scale analysis of attention patterns may reveal recurrent sequence motifs or genomic contexts associated with template switching, guiding the development of improved amplification protocols.
+Future work should prioritize validation across diverse biological and technical contexts.
+First, testing on multiple cell types (primary, stem, or immune cells) and \gls{wga} protocols (\gls{malbac}, \gls{lianti}, \gls{pta}) will establish biological generalizability.
+Second, validation on additional sequencing platforms---including PacBio HiFi, Illumina linked-reads, and emerging long-read technologies---will confirm the platform-agnostic design principle.
+The sequence-level approach suggests ChimeraLM should transfer effectively to any platform, though platform-specific fine-tuning may optimize performance.
+Third, the interpretability of attention-based models could be leveraged to investigate mechanisms of chimera formation: large-scale analysis of attention patterns may reveal recurrent sequence motifs or genomic contexts associated with template switching, guiding the development of improved amplification protocols.
 More broadly, ChimeraLM illustrates the potential of \glspl{glm} for data quality control applications~\cite{nguyen2023hyenadna}.
-Architectural innovations such as the Hyena operator for efficient long-range modeling~\cite{Poli2023HyenaHT} may have utility beyond chimera detection, addressing challenges such as contamination, adapter artifacts, and systematic sequencing errors.
+Architectural innovations such as the Hyena operator for efficient long-range modeling~\cite{Poli2023HyenaHT} may have utility beyond chimera detection, addressing challenges such as contamination, adapter artifacts, and systematic sequencing errors across multiple platforms.
 
 Looking ahead, ChimeraLM's framework could extend beyond single-cell genomics to address quality control challenges in other amplification-dependent technologies, including cell-free DNA analysis, ancient DNA studies, and metagenomic sequencing from low-biomass samples.
 The model's interpretability through attention visualization also opens opportunities for mechanistic studies of polymerase fidelity and template-switching dynamics across different amplification protocols.
