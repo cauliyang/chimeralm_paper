@@ -180,7 +180,7 @@
 \affil[1]{\orgdiv{Department of Urology}, \orgname{Northwestern University Feinberg School of Medicine}, \orgaddress{\street{303 E Superior St}, \city{Chicago}, \postcode{60611}, \state{IL}, \country{USA}}}
 \affil[2]{\orgdiv{Robert H. Lurie Comprehensive Cancer Center}, \orgname{Northwestern University Feinberg School of Medicine}, \orgaddress{\street{675 N St Clair St}, \city{Chicago}, \postcode{60611}, \state{IL}, \country{USA}}}
 
-\abstract{Single-cell genomics enables unprecedented cellular heterogeneity insights but faces a fundamental challenge: \gls{wga} introduces chimeric artifacts that generate false \glspl{sv}, undermining biological interpretations. Current computational methods cannot distinguish amplification-induced artifacts from genuine rearrangements. Here we present ChimeraLM, a genomic language model that learns sequence-level features discriminating biological sequences from \gls{wga} artifacts. Validated on nanopore data, ChimeraLM achieves 95\% recall with 70\% precision and reduces chimeric content by $\sim$90\% while preserving 87--92\% of true \glspl{sv}. This improves \gls{sv} validation rates 10--16 fold and eliminates false-positive \gls{inv} bias, restoring \gls{sv} distributions to bulk-like profiles. Attention visualization reveals ChimeraLM focuses on junction regions with single-base precision, learning interpretable features applicable across sequencing technologies. By enabling confident \gls{sv} detection at single-cell resolution, ChimeraLM addresses a fundamental data quality barrier in cancer genomics, developmental biology, and precision medicine. Available at \url{https://github.com/ylab-hi/ChimeraLM}.}
+\abstract{Single-cell genomics enables unprecedented cellular heterogeneity insights but faces a fundamental challenge: \gls{wga} introduces chimeric artifacts that generate false \glspl{sv}, undermining biological interpretations. Current computational methods cannot distinguish amplification-induced artifacts from genuine rearrangements. Here we present ChimeraLM, a genomic language model that learns sequence-level features discriminating biological sequences from \gls{wga} artifacts. Validated on nanopore data, ChimeraLM achieves 95\% recall with 70\% precision and reduces chimeric content by $\sim$90\% while preserving 72--92\% of true \glspl{sv}. This improves \gls{sv} validation rates 8--11 fold and eliminates false-positive \gls{inv} bias, restoring \gls{sv} distributions to bulk-like profiles. Attention visualization reveals ChimeraLM focuses on junction regions with single-base precision, learning interpretable features applicable across sequencing technologies. By enabling confident \gls{sv} detection at single-cell resolution, ChimeraLM addresses a fundamental data quality barrier in cancer genomics, developmental biology, and precision medicine. Available at \url{https://github.com/ylab-hi/ChimeraLM}.}
 \keywords{Whole Genome Amplification, Single Cell, Genomic Language Model, Structural Variation}
 
 \maketitle
@@ -205,7 +205,7 @@ For CRISPR-based genome editing, single-cell analysis with reliable \gls{sv} det
 However, false-positive \glspl{sv} introduced during amplification can confound these analyses, leading to misinterpretation of genomic rearrangements and their biological significance~\cite{macaulay2014single,lu2023chimera}.
 
 Despite its critical role, \gls{wga} introduces systematic artifacts that significantly impact downstream analyses~\cite{lu2023chimera,lu2023exploration, pinard2006assessment,lasken2007mechanism,chen2017singlecell}.
-Chief among these are chimeric sequences---artificial DNA constructs formed through template switching during amplification.
+Chief among these are chimeric sequences---artificial DNA constructs formed through template switching during amplification, which can comprise 42--76\% of long-read sequencing data~\cite{lu2023chimera}.
 During \gls{mda}, the highly processive phi29 polymerase can dissociate from one genomic template and reinitiate synthesis on another, creating chimeric molecules that join DNA fragments from distant genomic loci into single amplified products~\cite{lasken2007mechanism}.
 These artifacts are particularly problematic for long-read sequencing technologies, where chimeric reads can span tens of kilobases and generate false-positive \glspl{sv} that are indistinguishable from genuine genomic rearrangements by current computational methods.
 
@@ -355,7 +355,7 @@ This reference captures true \glspl{sv} that may be missed by short-read data, p
 Under this benchmark, ChimeraLM increased validation rates from 0.38\% to 3.24\% on PromethION (8.5-fold improvement) and from 1.25\% to 12.79\% on MinION (10-fold improvement), while retaining 71.9\% and 87.1\% of bulk-supported events, respectively.
 The consistent improvements across independent datasets demonstrate that ChimeraLM effectively suppresses \gls{wga}-induced artifacts without sacrificing detection of genuine \glspl{sv}.
 
-Together, these analyses demonstrate that ChimeraLM reduces false-positive \gls{sv} calls by 8–16 fold while preserving 72–92\% of true variants, resulting in a substantial enhancement of the signal-to-noise ratio in single-cell \gls{sv} discovery. By restoring near-bulk specificity and maintaining robust sensitivity, ChimeraLM enables more accurate and interpretable downstream genomic analyses.
+Together, these analyses demonstrate that ChimeraLM reduces false-positive \gls{sv} calls by 8–11 fold while preserving 72–92\% of true variants, resulting in a substantial enhancement of the signal-to-noise ratio in single-cell \gls{sv} discovery. By restoring near-bulk specificity and maintaining robust sensitivity, ChimeraLM enables more accurate and interpretable downstream genomic analyses.
 
 \subsection*{ChimeraLM restores unbiased SV-type distributions and characterizes artifact composition}
 
@@ -400,8 +400,8 @@ ChimeraLM addresses this challenge through sequence-level classification of biol
 This upstream filtering strategy---removing problematic sequences at the read level rather than correcting errors post hoc---provides a practical solution for single-cell genomics laboratories.
 
 Our results demonstrate several key advantages of ChimeraLM for long-read single-cell sequencing.
-The method achieves approximately 90\% reduction in chimeric reads across nanopore platforms while retaining 87--92\% of true \glspl{sv}.
-It reduces false-positive \gls{sv} calls by 8--16 fold, enabling researchers to focus on biologically relevant variants without manually filtering thousands of artifacts.
+The method achieves approximately 90\% reduction in chimeric reads across nanopore platforms while retaining 72--92\% of true \glspl{sv}.
+It reduces false-positive \gls{sv} calls by 8--11 fold, enabling researchers to focus on biologically relevant variants without manually filtering thousands of artifacts.
 Moreover, ChimeraLM performs consistently across PromethION and MinION without platform-specific retraining, indicating that it captures generalizable sequence features of \gls{wga}-induced chimeras.
 These results underscore the model’s robustness across diverse datasets and sequencing conditions.
 
