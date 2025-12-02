@@ -249,7 +249,7 @@ In downstream analysis, these artifacts can mimic \gls{sv}  and confound variant
 To address this challenge, we developed ChimeraLM, a \gls{glm} designed to integrate directly into this analysis pipeline and distinguish biological reads from amplification-induced artifacts.
 
 ChimeraLM functions as a pre-processing filter, operating after read alignment but before \gls{sv} detection.
-It evaluates each chimeric read—sequences with multiple alignments to distant genomic locations—and classifies it as either biological (genuine) or artificial (\gls{wga}-induced).
+It evaluates each chimeric read---sequences with multiple alignments to distant genomic locations---and classifies it as either biological (genuine) or artificial (\gls{wga}-induced).
 This binary decision enables the retention of authentic genomic sequences while removing amplification artifacts prior to variant calling.
 The resulting high-confidence biological reads are then passed to conventional \gls{sv} detection algorithms for accurate identification of genomic rearrangements.
 
@@ -260,7 +260,7 @@ Chimeric reads from the PC3 \gls{wga} PromethION dataset were systematically com
 \gls{wga} reads whose chimeric structures were absent from all three bulk datasets were labeled artificial.
 Conversely, \gls{wga} reads with structures validated in one or more bulk datasets were labeled biological.
 
-Application of this labeling strategy to the PC3 \gls{wga} data (Extended Data Table~\ref{tab:seq_stats}) quantified the read distribution across these categories (Extended Data Fig.~\ref{fig:data_construction}b).
+Application of this labeling strategy to the PC3 \gls{wga} PromethION data (Extended Data Table~\ref{tab:seq_stats}) quantified the read distribution across these categories (Extended Data Fig.~\ref{fig:data_construction}b).
 We identified 12,670,396 chimeric reads with zero matches in the bulk reference, which were classified as artificial.
 Conversely, we identified a total of 293,180 reads validated as biological.
 This biological set was composed of reads matching one (Match 1: 101,094 reads), two (Match 2: 190,309 reads), or all three (Match 3: 1,777 reads) of the bulk reference datasets.
@@ -272,14 +272,14 @@ The architecture of ChimeraLM (Fig.~\ref{fig:figure1}c) was specifically designe
 This design must address three primary technical challenges: (1) efficiently processing variable-length sequences of many kilobases, (2) simultaneously maintaining single-nucleotide resolution to detect the precise, abrupt compositional changes that define chimeric junctions, and (3) aggregating variable-length sequence representations into a consistent classification output.
 
 ChimeraLM first addresses the need for high resolution by tokenizing input sequences at the single-nucleotide level.
-This base-pair precision is required to preserve the complete sequence information necessary for detecting chimeric junctions—the breakpoints where disparate genomic regions are artificially fused and which often exhibit abrupt compositional changes.
+This base-pair precision is required to preserve the complete sequence information necessary for detecting chimeric junctions---the breakpoints where disparate genomic regions are artificially fused and which often exhibit abrupt compositional changes.
 The architecture's core employs Hyena operators~\cite{Poli2023HyenaHT}, selected specifically to overcome the challenge of processing long DNA sequences.
 Traditional attention mechanisms scale quadratically with sequence length, making them computationally prohibitive for long-read data.
 Hyena operators, by contrast, achieve subquadratic scaling, enabling ChimeraLM to analyze full-length reads without fragmentation and thus preserve the structural context around chimeric junctions.
 To leverage existing genomic knowledge, we initialized the model with weights from HyenaDNA~\cite{nguyen2023hyenadna}, a genomic foundation model pre-trained on diverse DNA sequences.
 
 Finally, to produce a classification, the model employs an attention pooling mechanism to aggregate information across the entire variable-length read (Fig.~\ref{fig:figure1}d).
-This module computes learned, position-specific weights to identify which nucleotides—such as those at the junction boundary—are most informative for the classification decision.
+This module computes learned, position-specific weights to identify which nucleotides---such as those at the junction boundary---are most informative for the classification decision.
 This weighted aggregation produces a fixed-dimensional representation, which is then processed through \gls{mlp} components with residual connections.
 A final softmax layer outputs the probability scores for the biological versus artificial classes (see \hyperref[sec:methods]{Methods}).
 This end-to-end architecture enables ChimeraLM to learn directly from raw sequence data, discovering complex patterns that may not be apparent through rule-based algorithms.
@@ -302,7 +302,7 @@ This end-to-end architecture enables ChimeraLM to learn directly from raw sequen
 
 We first evaluated ChimeraLM’s classification accuracy on the held-out test set (derived from the PromethION training data), which comprised reads with known biological or artificial status (Fig.~\ref{fig:figure2}a).
 The model achieved an F1 score of 0.81, reflecting balanced sensitivity and specificity in artifact detection.
-A recall of 0.95 indicates that 95\% of true chimeric reads were correctly identified—critical for minimizing downstream false-positive structural variant calls—while a precision of 0.70 shows that the majority of reads flagged as chimeric were true artifacts.
+A recall of 0.95 indicates that 95\% of true chimeric reads were correctly identified---critical for minimizing downstream false-positive \gls{sv} calls---while a precision of 0.70 shows that the majority of reads flagged as chimeric were true artifacts.
 These results establish the model’s reliability for identifying amplification-induced artifacts in long-read data.
 
 We next assessed its practical effectiveness on the full PC3 \gls{wga} datasets, comparing performance on the PromethION and MinION platforms (Fig.~\ref{fig:figure2}b).
@@ -323,7 +323,6 @@ This design principle---learning from DNA sequence patterns that are invariant a
 % \subsection*{ChimeraLM dramatically outperforms existing chimera detection methods on long-read WGA data}
 % P2 92
 % mk1c 91
-
 
 \begin{figure}[H]
 	\begin{center}
