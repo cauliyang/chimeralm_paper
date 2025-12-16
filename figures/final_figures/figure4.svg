@@ -24,9 +24,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="0.85822941"
-     inkscape:cx="1694.1857"
-     inkscape:cy="629.20239"
+     inkscape:zoom="2.1301811"
+     inkscape:cx="2000.7689"
+     inkscape:cy="583.04903"
      inkscape:window-width="2466"
      inkscape:window-height="1339"
      inkscape:window-x="0"
@@ -9738,7 +9738,7 @@
        transform="matrix(0.52939121,0,0,-0.44587802,835.90659,326.10042)"
        clip-path="url(#clipPath22-3-9)"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="figure4.png"
+       inkscape:export-filename="figure4.pdf"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" /><rect
        style="fill:url(#linearGradient4);fill-opacity:1;stroke:#999999;stroke-width:0.492545;stroke-dasharray:none;stroke-opacity:0.996078;paint-order:fill markers stroke"
@@ -10046,7 +10046,7 @@
            x="1324.9459"
            y="287.87881" /><text
            xml:space="preserve"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;font-family:'Liberation Sans';-inkscape-font-specification:'Liberation Sans';text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.377953;stroke-dasharray:none;stroke-dashoffset:0"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.6667px;font-family:Arial;-inkscape-font-specification:Arial;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#000000;stroke:none;stroke-width:0.377953;stroke-dasharray:none;stroke-dashoffset:0"
            x="1325.7689"
            y="296.6647"
            id="text104"><tspan
@@ -10078,7 +10078,8 @@
              sodipodi:role="line"
              id="tspan104-8"
              x="1325.7689"
-             y="296.6647">1554 bp</tspan></text></g></g></g><g
+             y="296.6647"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial">1554 bp</tspan></text></g></g></g><g
      id="g1-4"
      inkscape:groupmode="layer"
      inkscape:label="1"
