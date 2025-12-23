@@ -233,24 +233,21 @@ Together, ChimeraLM provides an effective and interpretable filter for \gls{wga}
 
 \subsection*{Overview of ChimeraLM workflow and model architecture}
 
-Single-cell long-read genomics requires \gls{wga} to obtain sufficient DNA for sequencing (Fig.~\ref{fig:figure1}a).
-However, \gls{wga} introduces artifacts that generate chimeric reads composed of segments from distant genomic loci, which can confound \gls{sv} detection.
-ChimeraLM integrates into this workflow as a post-alignment filtering module (Fig.~\ref{fig:figure1}a).
-It evaluates each chimeric read prior to variant calling, predicting whether the sequence reflects a genuine genomic rearrangement or a \gls{wga}-induced artifact.
-This binary classification enables the selective removal of false positives while preserving authentic biological signal.
+ChimeraLM integrates into the single-cell long-read workflow as a post-alignment filtering module (Fig.~\ref{fig:figure1}a).
+After base calling and mapping, \gls{wga} data contain both genuine chimeric reads and \gls{wga}-induced chimeric artifacts.
+ChimeraLM evaluates reads with chimeric alignments prior to variant calling and classifies each as reflecting a genuine genomic event or an \gls{wga}-induced artifact.
+This binary classification enables selective removal of artificial reads while retaining genuine chimeric events for downstream \gls{sv} analysis.
 
-To train and evaluate the model, we constructed a high-confidence labeled dataset using two \gls{wga} datasets generated from the same monoclonal PC3 lineage on independent \gls{ont} platforms.
-The \gls{ont} PromethION \gls{wga} dataset was designated for model training, whereas the \gls{ont} MinION \gls{wga} dataset was reserved exclusively for the generalization test.
-For supervised labeling, chimeric reads from the PromethION \gls{wga} dataset were compared against unamplified bulk DNA sequenced on three long-read platforms (\gls{ont} PromethION, \gls{ont} MinION, and \gls{pb} (see \hyperref[sec:methods]{Methods}; Fig.~\ref{fig:figure1}b; Extended Data Fig.~\ref{fig:data_construction}a)).
-\gls{wga} reads were labeled biological if their chimeric structures were supported by any bulk dataset, and artificial if they were absent from all bulk references.
+To build a supervised training set we generated \gls{wga} long-read sequencing data from PC3 cells on the \gls{ont} PromethION platform and collected three matched bulk long-read datasets from unamplified genomic DNA (\gls{ont} PromethION, \gls{ont} MinION, and \gls{pb}).
+We used the \gls{wga} PromethION dataset to construct bulk-supported labels by matching each \gls{wga} chimeric read to chimeric alignment structures observed in the bulk references (\hyperref[sec:methods]{Methods}; Fig.~\ref{fig:figure1}b; Extended Data Fig.~\ref{fig:data_construction}a): reads with bulk-supported alignment structures were labeled as genuine events, whereas reads with no bulk match were labeled as \gls{wga}-induced artifacts.
+To evaluate cross-platform generalization, we generated an independent \gls{wga} dataset on the MinION platform, which was reserved exclusively for testing (Extended Data Fig.~\ref{fig:data_construction}a).
 
-This labeling procedure yielded two groups of \gls{wga} chimeric reads (Extended Data Fig.~\ref{fig:data_construction}b).
-Most reads, 12,670,396 in total, showed no supporting alignments in any bulk dataset and were classified as artificial.
-The remaining 293,180 reads had at least one matching breakpoint in bulk sequencing, providing evidence that they represent biological rearrangements rather than amplification artifacts.
-To construct the supervised training dataset, we retained all 293,180 biological reads and selected an equal number of artificial reads through random subsampling.
-We further expanded the biological class by adding 178,748 chimeric reads sampled directly from bulk sequencing data, which represent genuine structural rearrangements independent of \gls{wga}-induced artifacts.
-This augmentation ensures that the classifier is exposed to a broader spectrum of true biological chimeric structures.
-The final labeled dataset (765,108 reads) was split into training (70\%), validation (20\%), and test (10\%) sets using stratified sampling.
+This labeling procedure classified 12,963,576 chimeric reads from the \gls{wga} PromethION dataset into two groups based on bulk support (Extended Data Fig.~\ref{fig:data_construction}b). 
+Among these, 12,670,396 reads (97.7\%) showed no matching alignment structures in any bulk dataset and were labeled as \gls{wga}-induced artifacts.
+The remaining 293,180 reads (2.3\%) had matching structures in at least one bulk dataset, indicating they represent genuine genomic events rather than amplification artifacts, and were labeled as genuine chimeric reads.
+To construct a balanced training dataset, we retained all 293,180 genuine chimeric reads and randomly subsampled an equal number of \gls{wga}-induced artifacts.
+We further added 178,748 chimeric reads sampled from the bulk datasets to the genuine-event set, expanding the diversity of bulk-supported chimeric alignment structures used for training.
+The final labeled dataset comprised 765,108 reads and was split into training (70\%), validation (20\%), and test (10\%) sets using stratified sampling (Extended Data Fig.~\ref{fig:data_construction}a).
 
 Effective classification of \gls{wga} chimeric reads requires a model that can process long, variable-length DNA sequences while retaining single-nucleotide resolution (Fig.~\ref{fig:figure1}c).
 ChimeraLM addresses these challenges through a sequence encoder based on HyenaDNA~\cite{nguyen2023hyenadna}, a genomic foundation model pre-trained on diverse DNA sequences.
@@ -267,8 +264,10 @@ The pooled vector is then processed by \gls{mlp} blocks with residual connection
 		\textbf{(a)}~Classification performance on held-out test data. ChimeraLM achieves recall of 0.95, precision of 0.70, and F1 score of 0.81.
 		\textbf{(b)}~Chimeric read reduction across sequencing platforms. Stacked bars show proportions of chimeric (dark teal) and non-chimeric (light teal) reads in bulk, \gls{wga}, and ChimeraLM-filtered samples. ChimeraLM reduces chimeric read frequencies from 46.0\% to 4.9\% (PromethION) and from 23.0\% to 1.5\% (MinION), approaching bulk levels (2.3\% and 2.5\%, respectively).
 		\textbf{(c,d)}~Benchmarking against existing methods on PromethION (c) and MinION (d).
-		The bar represents the total count of chimeric reads.
-		ChimeraLM achieves approximately 90\% reduction in chimeric reads on both platforms; SACRA and 3rd-ChimeraMiner show no detectable reduction.
+        The gray bar indicates the total number of chimeric read on unfiltered \gls{wga} data.
+		The blue bar represents the total number of chimeric reads remaining after filtering by each method.
+		ChimeraLM achieves approximately 90\% reduction in chimeric reads on both platforms, while 3rd-ChimeraMiner shows no detectable reduction and CADECT shows 8.3\%  and 4.6\% reduction on PromethION and MinION, respectively.
+        SACRA failed to complete due to memory exhaustion ($>500$ GB RAM required).
 	}\label{fig:figure2}
 \end{figure}
 
@@ -640,7 +639,7 @@ Computations were performed on a \gls{hpc} server with 64-core Intel Xeon Gold 6
 	\begin{center}
 		\includegraphics[width=0.9\textwidth]{final_figures/sf1}
 	\end{center}
-	\caption{{\bf Training dataset construction and ground-truth labeling strategy.}
+	\caption{{\bf Training dataset construction and bulk-supported labeling strategy.}
 		\textbf{(a)}~Workflow for generating labeled training data. \gls{wga} PromethION data is compared against three independent bulk sequencing datasets (PromethION, MinION, and PacBio). Reads with no bulk matches (Match 0) are labeled artificial; reads matching one or more bulk datasets (Match 1–3) are labeled biological, along with chimeric reads sampled directly from bulk data. The labeled dataset is split into training (70\%), validation (20\%), and test (10\%) sets. The \gls{wga} MinION dataset is reserved for independent cross-platform evaluation.
 		\textbf{(b)}~Distribution of chimeric read matches. Bar chart shows the number of \gls{wga} PromethION chimeric reads (log scale) by bulk dataset matches. Match 0 reads (${\sim}10^7$) lacking bulk validation are classified as artificial; Match 1–3 reads with bulk support are classified as biological. The substantial imbalance reflects high prevalence of \gls{wga}-induced artifacts.
 	}\label{fig:data_construction}
