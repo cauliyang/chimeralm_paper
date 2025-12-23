@@ -25,15 +25,15 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="0.84773827"
-     inkscape:cx="897.09292"
-     inkscape:cy="412.27347"
+     inkscape:zoom="1.5686554"
+     inkscape:cx="315.87563"
+     inkscape:cy="362.4123"
      inkscape:window-width="2466"
      inkscape:window-height="1339"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="g11"
      showgrid="true"
      showguides="true"><inkscape:grid
        id="grid1"
@@ -2443,7 +2443,7 @@
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="figure 3 "
-     style="display:inline"><g
+     style="display:none"><g
        id="g36"
        transform="matrix(0.1504725,0,0,0.15356071,237.60586,139.61757)"
        style="display:inline" /><g
@@ -8334,7 +8334,7 @@
          transform="matrix(0.31778813,0,0,0.30638634,-2123.5801,241.70186)"><path
            id="path3-20"
            d="m 137.94954,61.64 h 95.25585 v 311.46667 h -95.25585 z"
-           style="fill:#94c9df;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+           style="fill:#cccccc;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
            transform="matrix(1.3333333,0,0,-1.3333333,-33.015185,576)"
            clip-path="url(#clipPath4-753)" /><path
            id="path5-2"
@@ -8557,7 +8557,7 @@
            transform="matrix(0.31124114,0,0,0.31124114,1246.0271,-108.27602)"><path
              id="path3-26"
              d="m 127.29682,61.64 h 96.70519 v 311.46667 h -96.70519 z"
-             style="fill:#94c9df;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+             style="fill:#cccccc;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
              transform="matrix(1.3333333,0,0,-1.3333333,-32.12943,576)"
              clip-path="url(#clipPath4-06)" /><path
              id="path5-10"
