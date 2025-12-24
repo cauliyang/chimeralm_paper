@@ -186,13 +186,13 @@
 \affil[2]{\orgdiv{Robert H. Lurie Comprehensive Cancer Center}, \orgname{Northwestern University Feinberg School of Medicine}, \orgaddress{\street{675 N St Clair St}, \city{Chicago}, \postcode{60611}, \state{IL}, \country{USA}}}
 
 \abstract{Single-cell genomic analysis relies on \gls{wga} to generate sufficient DNA for sequencing, yet this process introduces chimeric artifacts that manifest as false-positive \gls{sv} and compromise downstream analyses.
-Here we present ChimeraLM, an interpretable \gls{glm} that identifies \gls{wga}-induced chimeric artifacts directly from sequence information.
-ChimeraLM is trained on matched \gls{wga} and bulk sequencing from the same sample, using bulk support to label chimeric reads as amplification-induced artifacts or genuine events.
-To capture long-range dependencies in variable-length reads, the model combines Hyena operators with attention pooling.
-Evaluated on matched \gls{wga} and bulk nanopore datasets, ChimeraLM reduced chimeric reads by ${\sim}$90\%, restoring chimeric rates to near-bulk levels, whereas existing methods achieved at most 8\% reduction.
-When applied to \gls{sv} calling, ChimeraLM reduced unsupported calls by 92-93\% while retaining 72–92\% of bulk-supported variants.
-ChimeraLM further normalized \gls{sv}-type distributions toward bulk profiles by suppressing the characteristic \gls{inv} bias observed in unprocessed \gls{wga} data.
-Attention-based interpretation indicates that ChimeraLM concentrates classification evidence at chimeric junctions, demonstrating capacity to learn biologically interpretable features. ChimeraLM provides a general approach for suppressing amplification-induced artifacts, enabling more reliable single-cell \gls{sv} analysis across long-read platforms.}
+	Here we present ChimeraLM, an interpretable \gls{glm} that identifies \gls{wga}-induced chimeric artifacts directly from sequence information.
+	ChimeraLM is trained on matched \gls{wga} and bulk sequencing from the same sample, using bulk support to label chimeric reads as amplification-induced artifacts or genuine events.
+	To capture long-range dependencies in variable-length reads, the model combines Hyena operators with attention pooling.
+	Evaluated on matched \gls{wga} and bulk nanopore datasets, ChimeraLM reduced chimeric reads by ${\sim}$90\%, restoring chimeric rates to near-bulk levels, whereas existing methods achieved at most 8\% reduction.
+	When applied to \gls{sv} calling, ChimeraLM reduced unsupported calls by 92-93\% while retaining 72–92\% of bulk-supported variants.
+	ChimeraLM further normalized \gls{sv}-type distributions toward bulk profiles by suppressing the characteristic \gls{inv} bias observed in unprocessed \gls{wga} data.
+	Attention-based interpretation indicates that ChimeraLM concentrates classification evidence at chimeric junctions, demonstrating capacity to learn biologically interpretable features. ChimeraLM provides a general approach for suppressing amplification-induced artifacts, enabling more reliable single-cell \gls{sv} analysis across long-read platforms.}
 \keywords{Whole Genome Amplification, Single Cell, Genomic Language Model, Structural Variation}
 
 \maketitle
@@ -206,7 +206,7 @@ Single-cell and low-input genomics have transformed our ability to resolve biolo
 However, the limited DNA input (on the order of picograms per cell) makes comprehensive genome-wide profiling technically challenging~\cite{gawad2016single,chen2017singlecell}.
 \Gls{wga} therefore remains a prerequisite for high-coverage sequencing~\cite{macaulay2014single,de2014quantitative,biezuner2021comparison}, yet it introduces systematic errors that compromise genomic fidelity, particularly for \gls{sv} detection~\cite{lu2023chimera,lasken2007mechanism,agyabeng2025evaluating}.
 
- A prominent source of error is amplification-induced chimera formation, in which highly processive polymerases, such as phi29 used in \gls{mda}, switch templates and join discontinuous genomic loci into a single molecule~\cite{dean2002comprehensive,lu2023chimera,lu2023exploration,lasken2007mechanism,agyabeng2025evaluating}.
+A prominent source of error is amplification-induced chimera formation, in which highly processive polymerases, such as phi29 used in \gls{mda}, switch templates and join discontinuous genomic loci into a single molecule~\cite{dean2002comprehensive,lu2023chimera,lu2023exploration,lasken2007mechanism,agyabeng2025evaluating}.
 This problem is particularly consequential for long-read sequencing, which is otherwise well suited for resolving complex \glspl{sv}.
 Chimeric reads can constitute a substantial fraction of \gls{wga} data~\cite{lu2023chimera}, generating alignment patterns that resemble genuine \glspl{tra} and \glspl{inv}~\cite{lasken2007mechanism}.
 Consequently, \gls{sv} callers that rely on alignment-based signals (e.g., split-read and supplementary alignments) and coverage-derived evidence frequently misinterpret amplification artifacts as true rearrangements, inflating false positives and distorting \gls{sv} spectra~\cite{Sedlazeck2018,Smolka2024,chen2023deciphering,heller2019svim,jiang2020longreadbased,gonzalez-pena2021accurate,kosugi2019comprehensive,alkan2011genome, hardLongreadWholegenomeAnalysis2023a}.
@@ -249,7 +249,7 @@ To build a supervised training set we generated \gls{wga} long-read sequencing d
 We used the \gls{wga} PromethION dataset to construct bulk-supported labels by matching each \gls{wga} chimeric read to chimeric alignment structures observed in the bulk references (\hyperref[sec:methods]{Methods}; Fig.~\ref{fig:figure1}b; Extended Data Fig.~\ref{fig:data_construction}a): reads with bulk-supported alignment structures were labeled as genuine events, whereas reads with no bulk match were labeled as \gls{wga}-induced artifacts.
 To evaluate cross-platform generalization, we generated an independent \gls{wga} dataset on the MinION platform, which was reserved exclusively for testing (Extended Data Fig.~\ref{fig:data_construction}a).
 
-This labeling procedure classified 12,963,576 chimeric reads from the \gls{wga} PromethION dataset into two groups (genuine events and \gls{wga}-induced artifacts) based on bulk support (Extended Data Fig.~\ref{fig:data_construction}b). 
+This labeling procedure classified 12,963,576 chimeric reads from the \gls{wga} PromethION dataset into two groups (genuine events and \gls{wga}-induced artifacts) based on bulk support (Extended Data Fig.~\ref{fig:data_construction}b).
 Among these, 12,670,396 reads (97.7\%) showed no matching alignment structures in any bulk dataset and were labeled as \gls{wga}-induced artifacts.
 The remaining 293,180 reads (2.3\%) had matching structures in at least one bulk dataset, indicating they represent genuine genomic events rather than amplification artifacts, and were labeled as genuine chimeric reads.
 To construct a balanced training dataset, we retained all 293,180 genuine chimeric reads and randomly subsampled an equal number of \gls{wga}-induced artifacts.
@@ -271,10 +271,10 @@ The pooled representation is then passed through residual \gls{mlp} blocks, and 
 		\textbf{(a)}~Classification performance on held-out test data. ChimeraLM achieves recall of 0.95, precision of 0.70, and F1 score of 0.81.
 		\textbf{(b)}~Chimeric read reduction across sequencing platforms. Stacked bars show proportions of chimeric (dark teal) and non-chimeric (light teal) reads in bulk, \gls{wga}, and ChimeraLM-filtered samples. ChimeraLM reduces chimeric read frequencies from 46.0\% to 4.9\% (PromethION) and from 23.0\% to 1.5\% (MinION), approaching bulk levels (2.3\% and 2.5\%, respectively).
 		\textbf{(c,d)}~Benchmarking against existing methods on PromethION (c) and MinION (d).
-        The gray bar indicates the total number of chimeric read on unfiltered \gls{wga} data.
+		The gray bar indicates the total number of chimeric read on unfiltered \gls{wga} data.
 		The blue bar represents the total number of chimeric reads remaining after filtering by each method.
 		ChimeraLM achieves approximately 90\% reduction in chimeric reads on both platforms, while 3rd-ChimeraMiner shows no detectable reduction and CADECT shows 8.3\%  and 4.6\% reduction on PromethION and MinION, respectively.
-        SACRA failed to complete due to memory exhaustion ($>500$ GB RAM required).
+		SACRA failed to complete due to memory exhaustion ($>500$ GB RAM required).
 	}\label{fig:figure2}
 \end{figure}
 
