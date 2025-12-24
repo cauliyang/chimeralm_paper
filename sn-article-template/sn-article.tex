@@ -242,7 +242,7 @@ Together, ChimeraLM provides an effective and interpretable filter for \gls{wga}
 
 ChimeraLM integrates into the single-cell long-read workflow as a post-alignment filtering module (Fig.~\ref{fig:figure1}a).
 After base calling and mapping, \gls{wga} data contain both genuine chimeric reads and \gls{wga}-induced chimeric artifacts.
-ChimeraLM evaluates reads with chimeric alignments prior to variant calling and classifies each as reflecting a genuine genomic event or an \gls{wga}-induced artifact.
+ChimeraLM evaluates reads with chimeric alignments prior to variant calling and classifies each as reflecting a genuine genomic event or a \gls{wga}-induced artifact.
 This binary classification enables selective removal of artificial reads while retaining genuine chimeric events for downstream \gls{sv} analysis.
 
 To build a supervised training set we generated \gls{wga} long-read sequencing data from PC3 cells on the \gls{ont} PromethION platform and collected three matched bulk long-read datasets from unamplified genomic DNA (\gls{ont} PromethION, \gls{ont} MinION, and \gls{pb}).
@@ -289,7 +289,7 @@ We next asked whether ChimeraLM filtering could restore chimeric read rates in f
 Bulk sequencing established low baseline chimeric read rates of 2.3\% (PromethION) and 2.5\% (MinION).
 In contrast, \gls{wga} increased the chimeric fraction to 46.0\% and 23.0\%, respectively.
 After ChimeraLM filtering, chimeric content dropped to 4.9\% on PromethION and 1.5\% on MinION, corresponding to 10- to 15-fold reductions, while retaining 15.8 million and 5.6 million reads.
-These post-filtering rates approach the corresponding bulk baselines, indicating effective removal of \gls{wga}-induced artifacts while preserving authentic genuine signal.
+These post-filtering rates approach the corresponding bulk baselines, indicating effective removal of \gls{wga}-induced artifacts while preserving genuine signal.
 
 We compared ChimeraLM against SACRA~\cite{kiguchi2021longread}, 3rd-ChimeraMiner~\cite{lu2023exploration}, and CADECT~\cite{agyabeng2025evaluating}, existing tools for detecting amplification-induced chimeras (Fig.~\ref{fig:figure2}c,d).
 ChimeraLM reduced chimeric reads by ${\sim}90$\% on both platforms, substantially outperforming CADECT(8.3\% and 4.6\% reduction on PromethION and MinION, respectively), while 3rd-ChimeraMiner showed no detectable reduction.
@@ -347,11 +347,11 @@ Together, these results show that ChimeraLM removes the vast majority of unsuppo
 \subsection*{ChimeraLM restores bulk-like SV-type distributions}
 
 Amplification artifacts can distort the apparent spectrum of \glspl{sv}.
-We therefore compared \gls{sv} type compositions across bulk, unfiltered \gls{wga}, and ChimeraLM-filtered datasets on both nanopore platforms (Fig.~\ref{fig:figure3}f; Extend Data Fig.~\ref{fig:minion_sv_distribution}).
+We therefore compared \gls{sv} type compositions across bulk, unfiltered \gls{wga}, and ChimeraLM-filtered datasets on both nanopore platforms (Fig.~\ref{fig:figure3}f; Extended Data Fig.~\ref{fig:minion_sv_distribution}).
 Bulk sequencing showed a balanced mixture of \glspl{del}, \glspl{dup}, \glspl{ins}, \glspl{inv}, and \glspl{tra}.
 In contrast, unfiltered \gls{wga} callsets were strongly enriched for \glspl{inv}. ChimeraLM filtering substantially reduced this excess, shifting the \gls{sv}-type profile toward the bulk composition while leaving other \gls{sv} classes comparatively stable.
 
-To determine which \gls{sv} types were preferentially associated with amplification artifacts, we next examined \gls{sv} calls supported exclusively by reads classified as \gls{wga}-induced artifacts (Fig.~\ref{fig:figure3}g; Extend Data Fig.~\ref{fig:minion_sv_artifact_distribution}).
+To determine which \gls{sv} types were preferentially associated with amplification artifacts, we next examined \gls{sv} calls supported exclusively by reads classified as \gls{wga}-induced artifacts (Fig.~\ref{fig:figure3}g; Extended Data Fig.~\ref{fig:minion_sv_artifact_distribution}).
 These artifact-supported events were dominated by \glspl{inv}, accounting for 88.4\% on PromethION and 92.4\% on MinION.
 The remaining calls included smaller fractions of \glspl{del} (5.1\% and 3.8\%), \glspl{dup} (3.4\% and 2.4\%), and \glspl{ins} (3.0\% and 1.4\%).
 Thus, \gls{wga}-induced artifacts primarily inflate \gls{inv} calls, but also generate false positives across multiple \gls{sv} categories.
@@ -393,18 +393,17 @@ Together, these results suggest that ChimeraLM’s attention peaks provide a mec
 \gls{wga} enables genomic analysis from single cells and other low-input samples, but it also introduces chimeric artifacts that compromise \gls{sv} detection.
 ChimeraLM addresses this challenge by classifying chimeric reads as genuine events or \gls{wga}-induced artifacts directly from read information, and removing artifacts before variant calling, rather than attempting to correct artifact-driven calls post hoc.
 Across \gls{ont} platforms, ChimeraLM improved data quality at the read and variant levels:
-it reduced chimeric reads by \(\sim\)90\% while retaining 72--92\% of bulk-supported \glspl{sv}, and it increased ratio of supported \gls{sv} calls by 8.5--11.0 fold.
+it reduced chimeric reads by \(\sim\)90\% while retaining 72--92\% of bulk-supported \glspl{sv}, and it increased the ratio of supported \gls{sv} calls by 8.5--11.0-fold.
 Notably, performance generalized from PromethION (used for training) to MinION without platform-specific retraining, suggesting that ChimeraLM captures properties shared by \gls{wga}-induced artifacts rather than instrument-specific signatures.
 
 In comparison, existing methods showed limited effectiveness on our \gls{ont} \gls{wga} datasets.
 Two tools originally developed and primarily evaluated on PacBio data (SACRA and 3rd-ChimeraMiner)~\cite{kiguchi2021longread,lu2023exploration} either failed to complete under our evaluation setting (SACRA, $>500$ GB RAM) or showed no detectable reduction (3rd-ChimeraMiner), highlighting poor cross-platform generalization.
-CADECT~\cite{agyabeng2025evaluating} achieved only 8.3\% and 4.6\% reduction on PromethION and MinION, respectively, despite being developed for Nanopore data.
-CADECT uses sliding-window self-alignment to detect concatemers, reads containing tandem duplications with internal sequence similarity.
-This fundamental design limitation explains CADECT's modest performance.
-These results demonstrate that heuristics targeting specific artifact subtypes cannot comprehensively address the diversity of amplification-induced chimeras and highlight the need for learning-based models that capture discriminative sequence patterns without relying on predefined structural assumptions.
+CADECT~\cite{agyabeng2025evaluating}, which was designed for \gls{ont} data, achieved only 8.3\% and 4.6\% reduction on PromethION and MinION, respectively.
+CADECT detects concatemers via sliding-window self-alignment, an effective strategy for repeat-like structures with internal sequence similarity, but it is not designed to capture the broader diversity of \gls{wga}-induced chimeras.
+Together, these comparisons suggest that rule-based or subtype-specific heuristics do not comprehensively address amplification-induced chimeras and motivate learning-based models that can extract discriminative sequence signatures without imposing predefined structural assumptions.
 
-The efficacy of ChimeraLM highlights the utility of deep learning in quality control tasks where conventional metrics (e.g., mapping quality, read depth) provide limited resolution~\cite{lu2023exploration,kiguchi2021longread,li2024deepchopper, agyabeng2025evaluating}.
-By learning directly from sequence data, ChimeraLM discovers subtle compositional and structural features that differentiate authentic sequences from amplification artifacts.
+ChimeraLM also illustrates the value of deep learning for quality-control problems where conventional alignment- and coverage-derived criteria provide limited resolution.~\cite{lu2023exploration,kiguchi2021longread,li2024deepchopper, agyabeng2025evaluating}.
+By learning directly from sequence, ChimeraLM discovers subtle compositional and structural features that separate genuine events from amplification artifacts.
 The model also offers interpretability through attention visualization: attention weights concentrate at junction regions where template switching joins discordant loci, validating the biological relevance of the learned features.
 These methodological advances have direct implications for single-cell genomics, where high false-positive rates in \gls{wga} data have constrained robust characterization of chromosomal instability, clonal evolution, and \gls{sv} burden~\cite{kosugi2019comprehensive,mahmoud2019structural,hardLongreadWholegenomeAnalysis2023a}.
 By improving the signal-to-noise ratio and clarifying \gls{sv}-type spectra that are otherwise distorted by amplification artifacts, ChimeraLM enables more confident identification of genuine \glspl{sv}, supporting studies of cancer evolution, developmental biology, and somatic mosaicism where single-cell resolution is essential~\cite{hoijerAmplificationfreeLongreadSequencing2020, haComprehensiveBenchmarkingGuidelines2023}.
@@ -413,11 +412,10 @@ Several limitations warrant consideration.
 First, the current model processes reads independently; integrating contextual features such as coverage or phasing information may further enhance accuracy.
 Second, regarding computational resources, while \gls{cpu} inference is feasible, \gls{gpu} acceleration is recommended for processing large-scale datasets.
 Finally, future work should extend validation to diverse cell types, sequencing platforms (e.g., PacBio HiFi), and alternative \gls{wga} protocols, including \gls{malbac}~\cite{zong2012genome}, \gls{lianti}~\cite{chen2017singlecell}, \gls{pta}~\cite{gonzalez-pena2021accurate}, and \gls{dmda}~\cite{dippenaar2024droplet}.
-Although the sequence-level approach implies effective transferability, such broad validation is essential to optimize performance across specific amplification chemistries.
+While the sequence-based approach suggests broad applicability, systematic validation across amplification chemistries is needed to assess generalization limits and optimize performance for specific protocols.
 
-Broadly, ChimeraLM illustrates the potential of \glspl{glm} for genomic data quality control.
-With emerging long-context architectures~\cite{nguyen2023hyenadna}, the model's context window could be extended to 1M tokens, enabling analysis of increasingly complex genomic structures.
-This framework could extend to other amplification-dependent technologies, such as cell-free DNA analysis, ancient DNA studies, and metagenomics from low-biomass samples.
+More broadly, ChimeraLM illustrates the potential of \glspl{glm} for data quality control. As long-context architectures continue to advance~\cite{nguyen2023hyenadna}, extending the model's context window to handle megabase-scale inputs could enable artifact detection in more complex genomic structures.
+This framework could extend to other amplification-dependent technologies, such as cell-free DNA analysis, ancient DNA studies, and low-biomass metagenomics.
 Furthermore, attention-based interpretability opens opportunities for studying template-switching dynamics, potentially guiding the development of improved amplification protocols.
 In summary, ChimeraLM provides a practical and interpretable framework for enhancing long-read single-cell genomic fidelity, ensuring that downstream biological insights are derived from genuine \glspl{sv} rather than technical artifacts.
 
@@ -716,7 +714,7 @@ We can access the data at the following link: \url{https://dataview.ncbi.nlm.nih
 
 ChimeraLM, implemented in Python, is open source and available on GitHub (\url{https://github.com/ylab-hi/ChimeraLM}) under the Apache License, Version 2.0.
 The package can be installed via PyPI (\url{https://pypi.org/project/chimeralm}) using pip, with wheel distributions provided for Windows, Linux, and macOS to ensure easy cross-platform installation.
-An interactive demo is available on Hugging Face (\url{https://huggingface.co/spaces/yangliz5/ChimeraLM}), allowing users to test DeepChopper's functionality without local installation.
+An interactive demo is available on Hugging Face (\url{https://huggingface.co/spaces/yangliz5/ChimeraLM}), allowing users to test ChimeraLM's functionality without local installation.
 For large-scale analyses, we recommend using ChimeraLM on systems with \gls{gpu} acceleration. Detailed system requirements and optimization guidelines are available in the repository's documentation (\url{https://ylab-hi.github.io/ChimeraLM/}).
 
 \bmhead{Conflict of interest}
