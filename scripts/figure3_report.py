@@ -17,7 +17,9 @@ def main():
         "mk1c": {"WGA": [445743, 5647], "WGA+ChimeraLM": [33515, 4917]},
     }
 
+    print("Compare with long and short read data")
     cal_unsupported_reduction(data_compared_with_gold)
+    print("Compare with only long read data")
     cal_unsupported_reduction(data_compared_with_bulk)
 
 
