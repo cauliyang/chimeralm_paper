@@ -236,7 +236,7 @@ After ChimeraLM filtering, chimeric content dropped to 4.9\% on PromethION and 1
 These post-filtering rates approach the corresponding bulk baselines, indicating effective removal of \gls{wga}-induced artifacts while preserving genuine signal.
 
 We compared ChimeraLM against SACRA~\cite{kiguchi2021longread}, 3rd-ChimeraMiner~\cite{lu2023exploration}, and CADECT~\cite{agyabeng2025evaluating}, existing tools for detecting amplification-induced chimeras (Fig.~\ref{fig:figure2}c,d).
-ChimeraLM reduced chimeric reads by ${\sim}90$\% on both platforms, substantially outperforming CADECT(8.3\% and 4.6\% reduction on PromethION and MinION, respectively), while 3rd-ChimeraMiner showed no detectable reduction.
+ChimeraLM reduced chimeric reads by ${\sim}90$\% on both platforms, outperforming CADECT (8.3\% and 4.6\% reduction on PromethION and MinION, respectively), while 3rd-ChimeraMiner showed no detectable reduction.
 SACRA could not be evaluated due to out-of-memory errors even with 500 GB RAM.
 
 The MinION results further provide an independent test of model generalization, as this MinION \gls{wga} dataset was not used during training.
@@ -258,7 +258,7 @@ This cross-platform generalization indicates that ChimeraLM captures sequence-le
 	}\label{fig:figure3}
 \end{figure}
 
-\subsection*{ChimeraLM substantially reduces unsupported structural variant calls}
+\subsection*{ChimeraLM reduces unsupported structural variant calls}
 Accurate \gls{sv} detection from single cells is essential for characterizing genomic diversity and disease mechanisms. However, \gls{wga}‑induced chimeric artifacts can be misinterpreted as genuine \gls{sv}s, potentially leading to incorrect biological inferences. To assess the impact of ChimeraLM on \gls{sv} calling, we compared \gls{sv} callsets generated from unfiltered \gls{wga} reads with those obtained after applying ChimeraLM filtering (\gls{wga} + ChimeraLM). Both callsets were evaluated against two complementary bulk‑derived references: (i) a stringent gold‑standard \gls{sv} set derived from bulk PC3 DNA through cross‑dataset consensus, and (ii) platform‑matched long‑read bulk \gls{sv} callsets used as platform‑specific references.
 
 We first constructed a high-confidence gold-standard \gls{sv} set from bulk PC3 DNA by integrating four independent sequencing datasets: \gls{ont} PromethION, \gls{ont} MinION, and two Illumina short-read \gls{wgs} datasets from the Cancer Cell Line Encyclopedia (CCLE Illumina \gls{wgs}~\cite{barretina2012cancer}) and from a previously published study (PRJNA361315 Illumina \gls{wgs}~\cite{seim2017wholegenome}) (Fig.~\ref{fig:figure3}a; Extended Data Table~\ref{tab:seq_stats}).
