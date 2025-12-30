@@ -55,34 +55,12 @@
 \usepackage{algpseudocode}%
 \usepackage{listings}%
 
-% \usepackage{caption}
 \usepackage{standalone}
 \usepackage{tikz}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{geometry}
 \usepackage{textcomp} % using \textquotesingle
 % Minted package for beautiful syntax highlighting
-\usepackage{minted}
-\usemintedstyle{borland}
-\setminted{
-  fontsize=\small,
-  breaklines=true,
-  autogobble,
-  frame=single,
-  framesep=2mm,
-  linenos
-}
-
-% Use bash lexer for TSG code examples (since it handles # comments well)
-\newminted{bash}{
-  fontsize=\small,
-  breaklines=true,
-  autogobble,
-  frame=single,
-  framesep=2mm,
-  linenos
-}
-
 \usetikzlibrary{shadows,shapes,arrows,positioning,fit,backgrounds,decorations.pathreplacing,calc}
 
 \graphicspath{{../figures}}
@@ -132,35 +110,6 @@
 \newacronym{mlp}{MLP}{multilayer perceptron}
 \newacronym{gelu}{GELU}{Gaussian error linear unit}
 
-
-%%%%%=============================================================================%%%%
-%%%%  Remarks: This template is provided to aid authors with the preparation
-%%%%  of original research articles intended for submission to journals published
-%%%%  by Springer Nature. The guidance has been prepared in partnership with
-%%%%  production teams to conform to Springer Nature technical requirements.
-%%%%  Editorial and presentation requirements differ among journal portfolios and
-%%%%  research disciplines. You may find sections in this template are irrelevant
-%%%%  to your work and are empowered to omit any such section if allowed by the
-%%%%  journal you intend to submit to. The submission guidelines and policies
-%%%%  of the journal take precedence. A detailed User Manual is available in the
-%%%%  template package for technical guidance.
-%%%%%=============================================================================%%%%
-
-%% as per the requirement new theorem styles can be included as shown below
-\theoremstyle{thmstyleone}%
-\newtheorem{theorem}{Theorem}%  meant for continuous numbers
-%%\newtheorem{theorem}{Theorem}[section]% meant for sectionwise numbers
-%% optional argument [theorem] produces theorem numbering sequence instead of independent numbers for Proposition
-\newtheorem{proposition}[theorem]{Proposition}%
-%%\newtheorem{proposition}{Proposition}% to get separate numbers for theorem and proposition etc.
-
-\theoremstyle{thmstyletwo}%
-\newtheorem{example}{Example}%
-\newtheorem{remark}{Remark}%
-
-\theoremstyle{thmstylethree}%
-\newtheorem{definition}{Definition}%
-
 \raggedbottom
 %%\unnumbered% uncomment this for unnumbered level heads
 
@@ -189,8 +138,8 @@
 	Here we present ChimeraLM, an interpretable \gls{glm} that identifies \gls{wga}-induced chimera artifacts directly from sequence information.
 	ChimeraLM is trained on matched \gls{wga} and bulk long-read sequencing from the same sample, using bulk support to label chimeric reads as amplification-induced artifacts or genuine genomic events.
 	To capture long-range dependencies in variable-length reads, the model integrates Hyena operators with attention pooling.
-	Evaluated on matched \gls{wga} and bulk nanopore datasets, 
-    ChimeraLM eliminated ${\sim}$90\% of chimeric reads from \gls{wga} data, restoring chimeric read proportion to near-bulk levels, whereas existing approaches achieved at most an 8\% reduction.
+	Evaluated on matched \gls{wga} and bulk nanopore datasets,
+	ChimeraLM eliminated ${\sim}$90\% of chimeric reads from \gls{wga} data, restoring chimeric read proportion to near-bulk levels, whereas existing approaches achieved at most an 8\% reduction.
 	Using high-confidence \gls{sv} call sets derived from matched bulk data as a reference, ChimeraLM removed 92-93\% of unsupported \gls{sv} calls from \gls{wga} datasets while retaining 72–92\% of bulk-supported \gls{sv}s.
 	ChimeraLM further normalized \gls{sv} type distributions toward bulk profiles by suppressing the characteristic inversion bias observed in unprocessed \gls{wga} data.
 	Attention-based interpretation indicates that ChimeraLM concentrates classification evidence at chimeric junctions, demonstrating its ability to learn biologically interpretable features. ChimeraLM provides a general approach for suppressing amplification-induced artifacts, enabling more reliable single-cell \gls{sv} analysis across long-read platforms.}
@@ -277,7 +226,7 @@ The pooled representation is then passed through residual \gls{mlp} blocks, and 
 
 We first benchmarked ChimeraLM using the held-out test split ($10\%$) derived from the bulk-supported labeled dataset (Extended Data Fig.~\ref{fig:data_construction}a).
 This test set consists of chimeric reads labeled as genuine events or \gls{wga}-induced artifacts based on whether their chimeric alignment structures are supported by matched bulk sequencing.
-ChimeraLM achieved an F1 score of 0.81, with 0.95 recall and 0.70 precision (Fig.~\ref{fig:figure2}a). 
+ChimeraLM achieved an F1 score of 0.81, with 0.95 recall and 0.70 precision (Fig.~\ref{fig:figure2}a).
 The high recall indicates that most \gls{wga}-induced artifacts are correctly identified for removal, which is important for limiting downstream false-positive \gls{sv} calls, while the precision confirms that most reads flagged as artifacts are true amplification-induced chimeras rather than genuine genomic events.
 
 We next examined whether applying ChimeraLM filtering would restore chimeric read rates in full PC3 \gls{wga} datasets toward the levels observed in bulk sequencing across both PromethION and MinION platforms (Fig.~\ref{fig:figure2}b).
@@ -294,11 +243,6 @@ The MinION results further provide an independent test of model generalization, 
 ChimeraLM was trained exclusively on PromethION \gls{wga} data, yet achieved comparable chimeric read reduction on MinION.
 This cross-platform generalization indicates that ChimeraLM captures sequence-level features intrinsic to \gls{wga}-induced artifacts rather than platform-specific signatures, supporting its potential applicability to additional long-read and potentially short-read sequencing technologies.
 
-% \subsection*{ChimeraLM dramatically outperforms existing chimera detection methods on long-read WGA data}
-% P2 92
-%
-% mk1c 91
-
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=0.95\textwidth]{final_figures/figure3}
@@ -309,9 +253,8 @@ This cross-platform generalization indicates that ChimeraLM captures sequence-le
 		Bars show \gls{sv} calls supported by the gold standard (dark teal) or unsupported (light teal).
 		\textbf{(d,e)}~\gls{sv} validation against platform-matched long-read bulk sequencing for PromethION (d) and MinION (e), capturing true long-read \glspl{sv} that may not be represented in the multi-platform reference.
 		Bars show \gls{sv} calls supported by the platform-matched long-read bulk data (dark teal) or unsupported (light teal).
-		\textbf{f}~\gls{sv} type distributions for PromethION across bulk, unfiltered \gls{wga}, and \gls{wga}+ChimeraLM.
+		\textbf{f}~\gls{sv} type distributions for PromethION and  MinION across bulk, unfiltered \gls{wga}, and \gls{wga}+ChimeraLM.
 		Unfiltered \gls{wga} shows an excess of \glspl{inv}, which is reduced after ChimeraLM filtering.
-		\textbf{g}~Composition of artifact-supported \glspl{sv} for PromethION. Donut charts summarize \gls{sv} types among events supported exclusively by chimeric reads, representing artificial \glspl{sv} preferentially removed by ChimeraLM.
 	}\label{fig:figure3}
 \end{figure}
 
@@ -336,11 +279,12 @@ Together, these results show that ChimeraLM removes the vast majority of unsuppo
 \subsection*{ChimeraLM mitigates WGA-induced SV type biases}
 
 Amplification artifacts can distort the apparent spectrum of \glspl{sv}.
-We therefore compared \gls{sv} type compositions across bulk, unfiltered \gls{wga}, and ChimeraLM-filtered datasets on both nanopore platforms (Fig.~\ref{fig:figure3}f; Extended Data Fig.~\ref{fig:minion_sv_distribution}).
+We therefore compared \gls{sv} type compositions across bulk, unfiltered \gls{wga}, and ChimeraLM-filtered datasets on both nanopore platforms (Fig.~\ref{fig:figure3}f).
 Bulk sequencing showed a balanced mixture of \glspl{del}, \glspl{dup}, \glspl{ins}, \glspl{inv}, and \glspl{tra}.
-In contrast, unfiltered \gls{wga} callsets were strongly enriched for \glspl{inv}. ChimeraLM filtering substantially reduced this excess, shifting the \gls{sv}-type profile toward the bulk composition while leaving other \gls{sv} classes comparatively stable.
+In contrast, unfiltered \gls{wga} callsets were strongly enriched for \glspl{inv}.
+ChimeraLM filtering reduced this excess, shifting the \gls{sv}-type profile toward the bulk composition while leaving other \gls{sv} classes comparatively stable.
 
-To determine which \gls{sv} types were preferentially associated with amplification artifacts, we next examined \gls{sv} calls supported exclusively by reads classified as \gls{wga}-induced artifacts (Fig.~\ref{fig:figure3}g; Extended Data Fig.~\ref{fig:minion_sv_artifact_distribution}).
+To determine which \gls{sv} types were preferentially associated with amplification artifacts, we next examined \gls{sv} calls supported exclusively by reads classified as \gls{wga}-induced artifacts (Extended Data Fig.~\ref{fig:sv_artifact_distribution}).
 These artifact-supported events were dominated by \glspl{inv}, accounting for 88.4\% on PromethION and 92.4\% on MinION.
 The remaining calls included smaller fractions of \glspl{del} (5.1\% and 3.8\%), \glspl{dup} (3.4\% and 2.4\%), and \glspl{ins} (3.0\% and 1.4\%).
 Thus, \gls{wga}-induced artifacts primarily inflate \gls{inv} calls, but also generate false positives across multiple \gls{sv} categories.
@@ -645,19 +589,10 @@ Computations were performed on a \gls{hpc} server with 64-core Intel Xeon Gold 6
 
 \begin{figure}[!ht]
 	\begin{center}
-		\includegraphics[width=0.9\textwidth]{final_figures/sf2}
+		\includegraphics[width=0.9\textwidth]{final_figures/artifacts_suppoorted_sv}
 	\end{center}
-	\caption{{\bf~\gls{sv} type distributions for MinION across bulk, unfiltered \gls{wga}, and \gls{wga}+ChimeraLM.}
-		Unfiltered \gls{wga} shows an excess of \glspl{inv}, which is reduced after ChimeraLM filtering.}\label{fig:minion_sv_distribution}
-\end{figure}
-
-
-\begin{figure}[!ht]
-	\begin{center}
-		\includegraphics[width=0.9\textwidth]{final_figures/sf3}
-	\end{center}
-	\caption{{\bf Composition of artifact-supported \glspl{sv} for MinION.}
-		Donut charts summarize \gls{sv} types among events supported exclusively by chimeric reads, representing artificial \glspl{sv} preferentially removed by ChimeraLM.}\label{fig:minion_sv_artifact_distribution}
+	\caption{{\bf Composition of artifact-supported \glspl{sv} for PromethION (a) and MinION (b).}
+		Donut charts summarize \gls{sv} types among events supported exclusively by chimeric reads, representing artificial \glspl{sv} preferentially removed by ChimeraLM.}\label{fig:sv_artifact_distribution}
 \end{figure}
 
 
