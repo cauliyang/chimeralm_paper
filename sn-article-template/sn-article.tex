@@ -278,11 +278,18 @@ Together, these results show that ChimeraLM removes the vast majority of unsuppo
 
 \subsection*{ChimeraLM mitigates WGA-induced SV type biases}
 
-Amplification artifacts can profoundly distort the apparent spectrum of \gls{sv}s, complicating biological interpretation. To quantify these effects, we compared \gls{sv}‑type compositions across bulk, unfiltered \gls{wga}, and ChimeraLM‑filtered datasets generated on both \gls{ont} PromethION and MinION platforms (Fig.~\ref{fig:figure3}f). Bulk datasets displayed \gls{sv} profiles dominated by deletions and insertions, whereas \gls{wga} datasets exhibited a striking inflation of inversions, reaching 83.0\% on PromethION and 88.3\% on MinION. This inversion‑heavy signature mirrors previous observations from single‑cell long‑read sequencing using PacBio and droplet‑based \gls{mda}, suggesting that many of these events arise from amplification‑induced chimeras rather than genuine genomic rearrangements.
+Amplification artifacts can profoundly distort the apparent spectrum of \glspl{sv}, complicating biological interpretation.
+To quantify these effects, we compared \gls{sv}‑type compositions across bulk, unfiltered \gls{wga}, and ChimeraLM‑filtered datasets generated on both \gls{ont} PromethION and MinION platforms (Fig.~\ref{fig:figure3}f).
+Bulk datasets displayed \gls{sv} profiles dominated by deletions and insertions, whereas \gls{wga} datasets exhibited a striking inflation of inversions, reaching 83.0\% on PromethION and 88.3\% on MinION.
+This inversion‑heavy signature mirrors previous observations from single‑cell long‑read sequencing using PacBio and droplet‑based \gls{mda}~\cite{hard2023longread}, suggesting that many of these events arise from amplification‑induced chimeras rather than genuine genomic rearrangements.
 
-To directly assess which \gls{sv} types are preferentially associated with amplification artifacts, we examined \gls{sv} calls supported exclusively by reads classified as \gls{wga}‑derived chimeras. These artifact‑supported events were overwhelmingly enriched for inversions, comprising 88.4\% on PromethION and 92.4\% on MinION (Extended Data Fig.~\ref{fig:sv_artifact_distribution}). Smaller fractions of deletions, duplications, and insertions were also present, indicating that \gls{wga} artifacts inflate not only inversion calls but generate false positives across multiple \gls{sv} categories.
+To directly assess which \gls{sv} types are preferentially associated with amplification artifacts, we examined \gls{sv} calls supported exclusively by reads classified as \gls{wga}‑derived chimeras.
+These artifact‑supported events were overwhelmingly enriched for inversions, comprising 88.4\% on PromethION and 92.4\% on MinION (Extended Data Fig.~\ref{fig:sv_artifact_distribution}).
+Smaller fractions of deletions, duplications, and insertions were also present, indicating that \gls{wga} artifacts inflate not only inversion calls but generate false positives across multiple \gls{sv} categories.
 
-Applying ChimeraLM substantially reduced these biases. The inversion fraction decreased from 83.0\% to 60.7\% on PromethION and from 88.3\% to 46.2\% on MinION, while the relative abundance of deletions and insertions increased toward bulk‑like levels (Fig.~\ref{fig:figure3}f). By selectively removing artifact‑supported events, ChimeraLM suppresses the dominant inversion inflation and reduces spurious calls across \gls{sv} types, shifting \gls{sv}‑type distributions toward bulk profiles and improving the accuracy and interpretability of single‑cell \gls{sv} analyses.
+Applying ChimeraLM substantially reduced these biases.
+The inversion fraction decreased from 83.0\% to 60.7\% on PromethION and from 88.3\% to 46.2\% on MinION, while the relative abundance of deletions and insertions increased toward bulk‑like levels (Fig.~\ref{fig:figure3}f).
+By selectively removing artifact‑supported events, ChimeraLM suppresses the dominant inversion inflation and reduces spurious calls across \gls{sv} types, shifting \gls{sv}‑type distributions toward bulk profiles and improving the accuracy and interpretability of single‑cell \gls{sv} analyses~\cite{hard2023longread}.
 
 \begin{figure}[H]
 	\begin{center}
@@ -580,7 +587,6 @@ Computations were performed on a \gls{hpc} server with 64-core Intel Xeon Gold 6
 	}\label{fig:data_construction}
 \end{figure}
 
-
 \begin{figure}[!ht]
 	\begin{center}
 		\includegraphics[width=0.9\textwidth]{final_figures/artifacts_suppoorted_sv}
@@ -636,7 +642,7 @@ For large-scale analyses, we recommend using ChimeraLM on systems with \gls{gpu}
 
 \bmhead{Conflict of interest}
 
-RY has served as an advisor/consultant for Tempus AI, Inc. This relationship is unrelated to and did not influence the research presented in this study.
+The authors declare no competing interests.
 
 % Some journals require declarations to be submitted in a standardised format. Please check the Instructions for Authors of the journal to which you are submitting to see if you need to complete this section. If yes, your manuscript must contain the following sections under the heading `Declarations':
 
