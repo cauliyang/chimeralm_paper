@@ -168,7 +168,7 @@ As a result, low-input long-read sequencing remains difficult to deploy in setti
 To address this challenge, we present ChimeraLM, an interpretable \gls{glm} for identifying and filtering \gls{wga}-induced artifacts at the single-read level.
 Unlike existing approaches that rely on handcrafted rules derived from read alignments or sequence-level~\cite{kiguchi2021longread,lu2023exploration,agyabeng2025evaluating}, ChimeraLM formulates artifact detection as a sequence-modeling task and learns discriminative features directly from raw reads~\cite{li2024deepchopper}.
 Building on advances in DNA foundation models~\cite{nguyen2023hyenadna,dalla2025nucleotide,zhou2023dnabert,consens2023transformers}, it captures latent motifs and structural dependencies that generalize across long-read sequencing platforms provided by \gls{ont}.
-On \gls{ont} \gls{wga} datasets, ChimeraLM reduces chimeric reads by ${\sim}90\%$ while preserving 72--92\% of bulk-supported \glspl{sv}, improving \gls{sv} validation rates by 8.5- to 11.0-fold and restoring bulk-like \gls{sv} type distributions.
+On \gls{ont} \gls{wga} datasets, ChimeraLM reduces chimeric reads by ${\sim}90\%$ while preserving 72--92\% of bulk-supported \glspl{sv}, improving \gls{sv} validation rates by 8.5- to 11.0-fold and mitigating \gls{wga}-induced biases in \gls{sv} type distributions.
 Together, ChimeraLM provides an effective and interpretable filter for \gls{wga} long-read data, enabling robust \gls{sv} discovery in single-cell and low-input genomics.
 
 \section*{Results}\label{sec:results}
@@ -279,7 +279,12 @@ Together, these results show that ChimeraLM removes the vast majority of unsuppo
 \subsection*{ChimeraLM mitigates WGA-induced SV type biases}
 
 Amplification artifacts can distort the apparent spectrum of \glspl{sv}.
-We therefore compared \gls{sv} type compositions across bulk, unfiltered \gls{wga}, and ChimeraLM-filtered datasets on both nanopore platforms (Fig.~\ref{fig:figure3}f).
+We therefore compared \gls{sv} type compositions across bulk, unfiltered \gls{wga}, and ChimeraLM-filtered datasets on both \gls{ont} PromethION and MinION datasets. We observed distinct \gls{sv} type distribution profiles between bulk and \gls{WGA} datasets, where indels are abundant in bulk but inversion is the dominat SV types in WGA. The observation of abundatn inversions in our WGA data is consistent with a previous study, which identified inversions and the most abundant SVs from long-read sequencing single cell genomes in CD8+ T cells using PacBio sequencing and droplet-based multiple displacement amplification approach. The abundat of inversion in WGA data suggest it may serve as the major sou
+
+
+We found INV is the most abundant SV types in both PromethION and MinION WGA datasets, which is consistant with an existing study showing INV is a dominant SV type using pacbio long-read single cell whole genome sequencing data. By applying ChimeraLM filtering, we found that ChimeraLM can significant events to 
+
+(Fig.~\ref{fig:figure3}f).
 Bulk sequencing showed a balanced mixture of \glspl{del}, \glspl{dup}, \glspl{ins}, \glspl{inv}, and \glspl{tra}.
 In contrast, unfiltered \gls{wga} callsets were strongly enriched for \glspl{inv}.
 ChimeraLM filtering reduced this excess, shifting the \gls{sv}-type profile toward the bulk composition while leaving other \gls{sv} classes comparatively stable.
