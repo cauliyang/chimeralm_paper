@@ -59,11 +59,12 @@
 \usepackage{geometry}
 \usepackage{textcomp} % using \textquotesingle
 
-% Revision R1: revised text is marked in blue so reviewers can locate changes.
-% Set \revisedtextfalse to print the clean version.
+% Revision R1: revised text is marked in orange so reviewers can locate changes.
+% Set \revisedtextfalse to print the clean version; change revcolor to adjust the shade.
+\definecolor{revcolor}{RGB}{230,120,0}
 \newif\ifrevisedtext
 \revisedtexttrue
-\newcommand{\chg}[1]{\ifrevisedtext\textcolor{blue}{#1}\else#1\fi}
+\newcommand{\chg}[1]{\ifrevisedtext\textcolor{revcolor}{#1}\else#1\fi}
 
 \graphicspath{{../figures}}
 
