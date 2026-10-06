@@ -59,6 +59,12 @@
 \usepackage{geometry}
 \usepackage{textcomp} % using \textquotesingle
 
+% Revision R1: revised text is marked in blue so reviewers can locate changes.
+% Set \revisedtextfalse to print the clean version.
+\newif\ifrevisedtext
+\revisedtexttrue
+\newcommand{\chg}[1]{\ifrevisedtext\textcolor{blue}{#1}\else#1\fi}
+
 \graphicspath{{../figures}}
 
 \usepackage[acronym, automake, style=index, shortcuts]{glossaries-extra}
@@ -127,7 +133,7 @@
 	ChimeraLM is trained on matched \gls{wga} and bulk long-read sequencing from the same sample, using bulk support to label chimeric reads as amplification-induced artifacts or genuine genomic events.
 	To capture long-range dependencies in variable-length reads, the model integrates Hyena operators with attention pooling.
 	Evaluated on matched \gls{wga} and bulk nanopore datasets, ChimeraLM eliminated ${\sim}$90\% of chimeric reads from \gls{wga} data, restoring chimeric read proportion to near-bulk levels, whereas existing approaches achieved at most an 8\% reduction.
-	Using high-confidence \gls{sv} call sets derived from matched bulk data as a reference, ChimeraLM removed 92-93\% of unsupported \gls{sv} calls from \gls{wga} datasets while retaining 72–92\% of bulk-supported \gls{sv}s.
+	\chg{Benchmarked against a multi-platform gold-standard \gls{sv} set, ChimeraLM removed 91--98\% of unsupported \gls{sv} calls from \gls{wga} datasets while retaining 75--87\% of gold-standard \glspl{sv}; against platform-matched bulk long-read call sets, it removed 91--99\% of unsupported calls while retaining 75--86\% of bulk-supported \glspl{sv}.}
 	ChimeraLM further normalized \gls{sv} type distributions toward bulk profiles by suppressing the characteristic inversion bias observed in unprocessed \gls{wga} data.
 	Attention-based interpretation indicates that ChimeraLM concentrates classification evidence at chimeric junctions, demonstrating its ability to learn biologically interpretable features.
 	ChimeraLM provides a general approach for suppressing amplification-induced artifacts, enabling more reliable single-cell \gls{sv} analysis across long-read platforms.}
@@ -160,7 +166,7 @@ As a result, low-input long-read sequencing remains difficult to deploy in setti
 To address this challenge, we present ChimeraLM, an interpretable \gls{glm} for identifying and filtering \gls{wga}-induced artifacts at the single-read level.
 Unlike existing approaches that rely on handcrafted rules derived from read alignments or sequence-level features~\cite{kiguchi2021longread,lu2023exploration,agyabeng2025evaluating}, ChimeraLM formulates artifact detection as a sequence-modeling task and learns discriminative features directly from raw reads~\cite{li2024deepchopper}.
 Building on advances in DNA foundation models~\cite{nguyen2023hyenadna,dalla2025nucleotide,zhou2023dnabert,consens2023transformers}, it captures latent motifs and structural dependencies that generalize across long-read sequencing platforms provided by \gls{ont}.
-On \gls{ont} \gls{wga} datasets, ChimeraLM reduces chimeric reads by ${\sim}90\%$ while preserving 72--92\% of bulk-supported \glspl{sv}, improving \gls{sv} validation rates by 8.5- to 11.0-fold and mitigating \gls{wga}-induced biases in \gls{sv} type distributions.
+On \gls{ont} \gls{wga} datasets, ChimeraLM reduces chimeric reads by ${\sim}90\%$ \chg{while preserving 75--87\% of gold-standard \glspl{sv} and 75--86\% of platform-matched bulk-supported \glspl{sv}, improving \gls{sv} validation rates by 3.2- to 26.6-fold} and mitigating \gls{wga}-induced biases in \gls{sv} type distributions.
 Together, ChimeraLM provides an effective and interpretable filter for \gls{wga} long-read data, enabling robust \gls{sv} discovery in single-cell and low-input genomics.
 
 \section*{Results}\label{sec:results}
@@ -325,7 +331,7 @@ Together, these results suggest that ChimeraLM’s attention peaks provide a mec
 \gls{wga} enables genomic analysis from single cells and other low-input samples, but it also introduces chimeric artifacts that compromise \gls{sv} detection.
 ChimeraLM addresses this challenge by classifying chimeric reads as genuine events or \gls{wga}-induced artifacts directly from read information, and removing artifacts before variant calling, rather than attempting to correct artifact-driven calls post hoc.
 Across \gls{ont} platforms, ChimeraLM improved data quality at the read and variant levels:
-it reduced chimeric reads by \(\sim\)90\% while retaining 72--92\% of bulk-supported \glspl{sv}, and it increased the ratio of supported \gls{sv} calls by 8.5--11.0-fold.
+it reduced chimeric reads by \(\sim\)90\% \chg{while retaining 75--87\% of gold-standard \glspl{sv} and 75--86\% of platform-matched bulk-supported \glspl{sv}, and it increased the fraction of supported \gls{sv} calls by 3.2- to 26.6-fold}.
 Notably, performance generalized from PromethION (used for training) to MinION without platform-specific retraining, suggesting that ChimeraLM captures properties shared by \gls{wga}-induced artifacts rather than instrument-specific signatures.
 
 In comparison, existing methods showed limited effectiveness on our \gls{ont} \gls{wga} datasets.
