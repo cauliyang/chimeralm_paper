@@ -1,0 +1,140 @@
+{
+  "gpu": "NVIDIA A100 80GB PCIe",
+  "runs": [
+    {
+      "batch": 12,
+      "length": 2048,
+      "sec_per_batch": 0.00793704241514206,
+      "reads_per_sec": 1511.898182263301,
+      "peak_mem_GB": 0.383619072,
+      "model": "hyenadna-small-32k (released ChimeraLM)",
+      "params": 4264195
+    },
+    {
+      "batch": 12,
+      "length": 4096,
+      "sec_per_batch": 0.015246473625302315,
+      "reads_per_sec": 787.0672455095043,
+      "peak_mem_GB": 0.72984576,
+      "model": "hyenadna-small-32k (released ChimeraLM)",
+      "params": 4264195
+    },
+    {
+      "batch": 12,
+      "length": 8192,
+      "sec_per_batch": 0.02987683080136776,
+      "reads_per_sec": 401.6490262899852,
+      "peak_mem_GB": 1.422299136,
+      "model": "hyenadna-small-32k (released ChimeraLM)",
+      "params": 4264195
+    },
+    {
+      "batch": 12,
+      "length": 16384,
+      "sec_per_batch": 0.059855779819190505,
+      "reads_per_sec": 200.48189224581202,
+      "peak_mem_GB": 2.807205888,
+      "model": "hyenadna-small-32k (released ChimeraLM)",
+      "params": 4264195
+    },
+    {
+      "batch": 12,
+      "length": 32768,
+      "sec_per_batch": 0.12452960088849067,
+      "reads_per_sec": 96.36263116867556,
+      "peak_mem_GB": 5.577019392,
+      "model": "hyenadna-small-32k (released ChimeraLM)",
+      "params": 4264195
+    },
+    {
+      "batch": 1,
+      "length": 2048,
+      "sec_per_batch": 0.005212076380848885,
+      "reads_per_sec": 191.86211538924746,
+      "peak_mem_GB": 0.072953856,
+      "model": "hyenadna-small-32k (released ChimeraLM)",
+      "params": 4264195
+    },
+    {
+      "batch": 1,
+      "length": 4096,
+      "sec_per_batch": 0.005062611214816571,
+      "reads_per_sec": 197.52652486395445,
+      "peak_mem_GB": 0.106529792,
+      "model": "hyenadna-small-32k (released ChimeraLM)",
+      "params": 4264195
+    },
+    {
+      "batch": 1,
+      "length": 8192,
+      "sec_per_batch": 0.005073967576026917,
+      "reads_per_sec": 197.08442851009167,
+      "peak_mem_GB": 0.175768576,
+      "model": "hyenadna-small-32k (released ChimeraLM)",
+      "params": 4264195
+    },
+    {
+      "batch": 1,
+      "length": 16384,
+      "sec_per_batch": 0.0070165840908885,
+      "reads_per_sec": 142.51949197025465,
+      "peak_mem_GB": 0.314246144,
+      "model": "hyenadna-small-32k (released ChimeraLM)",
+      "params": 4264195
+    },
+    {
+      "batch": 1,
+      "length": 32768,
+      "sec_per_batch": 0.013785740546882152,
+      "reads_per_sec": 72.53872192061273,
+      "peak_mem_GB": 0.59120128,
+      "model": "hyenadna-small-32k (released ChimeraLM)",
+      "params": 4264195
+    },
+    {
+      "batch": 12,
+      "length": 32768,
+      "sec_per_batch": 0.24554042220115663,
+      "reads_per_sec": 48.8717902023037,
+      "peak_mem_GB": 5.62421248,
+      "model": "hyenadna-medium-160k (untrained head)",
+      "params": 7537155
+    },
+    {
+      "batch": 1,
+      "length": 32768,
+      "sec_per_batch": 0.027166531048715116,
+      "reads_per_sec": 36.80999970908309,
+      "peak_mem_GB": 0.638394368,
+      "model": "hyenadna-medium-160k (untrained head)",
+      "params": 7537155
+    },
+    {
+      "batch": 12,
+      "length": 160000,
+      "sec_per_batch": 1.4570888748392463,
+      "reads_per_sec": 8.235599219247284,
+      "peak_mem_GB": 31.068351488,
+      "model": "hyenadna-medium-160k (untrained head)",
+      "params": 7537155
+    },
+    {
+      "batch": 4,
+      "length": 160000,
+      "sec_per_batch": 0.5017612677067518,
+      "reads_per_sec": 7.971918634297119,
+      "peak_mem_GB": 10.740800512,
+      "model": "hyenadna-medium-160k (untrained head)",
+      "params": 7537155
+    },
+    {
+      "batch": 1,
+      "length": 160000,
+      "sec_per_batch": 0.14344142749905586,
+      "reads_per_sec": 6.971486671844381,
+      "peak_mem_GB": 3.116806144,
+      "model": "hyenadna-medium-160k (untrained head)",
+      "params": 7537155
+    }
+  ]
+}

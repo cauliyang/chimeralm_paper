@@ -446,6 +446,7 @@ This model was pre-trained on large-scale genomic data and provides robust seque
 DNA sequences are tokenized at single-nucleotide resolution, with each base (A, C, G, T, N) mapped to a unique integer token (7, 8, 9, 10, 11, respectively).
 Special tokens include [CLS]=0, [PAD]=4, and others for sequence processing.
 Input sequences are truncated at 32,768 bp or padded to enable batch processing\chg{; reads longer than 32,768 bp are not discarded but are classified from their first 32,768 bp (Extended Data Fig.~\ref{fig:read_length})}.
+\chg{The 32,768-bp limit is the context length of the pre-trained HyenaDNA-small backbone; it exceeds the length of all but 0.009\% of chimeric reads in our data (Extended Data Fig.~\ref{fig:read_length}a), and HyenaDNA backbones pre-trained with 160-kb to 1-Mb contexts can be substituted without changes to the architecture should read lengths increase.}
 
 For a tokenized input sequence $\mathbf{x} \in \mathbb{Z}^{L}$, the HyenaDNA generates contextualized hidden representations:
 \[
@@ -590,6 +591,8 @@ Figures were generated using Python with Matplotlib~\cite{Hunter2007} and Seabor
 
 \subsection*{Computing resources}
 Computations were performed on a \gls{hpc} server with 64-core Intel Xeon Gold 6338 CPU, 256 GB RAM, and two NVIDIA A100 \glspl{gpu} (80 GB memory each).
+\chg{Inference cost scales approximately linearly with input length: on one A100 (bf16, batch size 12) the released model classifies 1,512 reads\,s$^{-1}$ at 2,048 bp, 402 reads\,s$^{-1}$ at 8,192 bp and 96 reads\,s$^{-1}$ at the 32,768-bp limit, with peak \gls{gpu} memory of 0.4, 1.4 and 5.6 GB, respectively.
+For comparison, a HyenaDNA-medium backbone evaluated at its full 160,000-bp context processes 8 reads\,s$^{-1}$ and requires 31 GB at the same batch size.}
 
 \backmatter
 
