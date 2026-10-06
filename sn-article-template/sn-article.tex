@@ -159,9 +159,12 @@ Consequently, \gls{sv} callers that rely on alignment-based signals (e.g., split
 This problem is particularly consequential for \gls{wga}-based long-read sequencing, which is otherwise well suited for resolving complex \glspl{sv} at \chg{single-cell} resolution~\cite{gupta2024Advances,wen2025Singlecell}.
 
 Distinguishing genuine genomic rearrangements from \gls{wga}-induced chimera artifacts remains a major computational challenge.
-Existing quality-control approaches typically rely on handcrafted rules or alignment-derived features, such as read orientation signatures or local coverage deviations~\cite{kiguchi2021longread,lu2023exploration,agyabeng2025evaluating}.
-However, these heuristics are often sensitive to platform- and protocol-specific variation.
-Moreover, they cannot capture sequence-level patterns or long-range dependencies within reads.
+\chg{Existing computational approaches detect amplification chimeras with handcrafted rules applied to alignments.
+SACRA~\cite{kiguchi2021longread}, developed for \gls{pb} reads of \gls{mda}-amplified phage metagenomes, aligns reads against one another, locates positions at which many reads stop aligning while others align through, and splits reads at these candidate junctions.
+3rd-ChimeraMiner~\cite{lu2023exploration}, also developed on \gls{pb} \gls{mda} data, identifies reads with multiple reference alignments and classifies them into chimera categories defined by the orientation and genomic distance of adjacent segments.
+CADECT~\cite{agyabeng2025evaluating}, designed for \gls{ont} \gls{mda} data, cuts each read into sliding windows, aligns the windows against each other and flags reads whose windows align to one another as concatemers.
+Each of these methods therefore targets one structural signature of chimera formation (a junction detectable by read-versus-read alignment, a discordant reference alignment pattern, or an internal repeat), with thresholds tuned to a single platform, and none of them uses the nucleotide content around the junction.
+Because \gls{wga} chimeras are heterogeneous, comprising intra- and inter-molecular joins, inverted and direct configurations, and junctions with or without microhomology~\cite{lasken2007mechanism,lu2023chimera}, signature-specific heuristics are sensitive to platform- and protocol-specific variation and leave the chimera classes they were not designed for untouched; moreover, by construction they cannot capture sequence-level patterns or long-range dependencies within reads.}
 As a result, low-input long-read sequencing remains difficult to deploy in settings where high precision is essential, including somatic mosaicism profiling~\cite{haComprehensiveBenchmarkingGuidelines2023} and validation of CRISPR off-target effects~\cite{hoijerAmplificationfreeLongreadSequencing2020}.
 
 To address this challenge, we present ChimeraLM, an interpretable \gls{glm} for identifying and filtering \gls{wga}-induced artifacts at the single-read level.
