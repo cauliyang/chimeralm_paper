@@ -1,0 +1,80 @@
+set	class	feature	bin	count	pct
+PromethION	unsupported	size	50–100 bp	1298	29.963065558633428
+PromethION	unsupported	size	100–500 bp	1741	40.18928901200369
+PromethION	unsupported	size	500 bp–1 kb	377	8.702677746999077
+PromethION	unsupported	size	1–5 kb	701	16.181902123730378
+PromethION	unsupported	size	5–10 kb	118	2.723915050784857
+PromethION	unsupported	size	10–50 kb	97	2.239150507848569
+PromethION	unsupported	size	>50 kb	0	0.0
+PromethION	unsupported	support	3	1758	40.581717451523545
+PromethION	unsupported	support	4	681	15.720221606648199
+PromethION	unsupported	support	5	390	9.002770083102494
+PromethION	unsupported	support	6–10	739	17.05909510618652
+PromethION	unsupported	support	11–20	393	9.072022160664819
+PromethION	unsupported	support	21–50	304	7.017543859649122
+PromethION	unsupported	support	>50	67	1.5466297322253
+PromethION	unsupported	svtype	DEL	1710	39.473684210526315
+PromethION	unsupported	svtype	INS	1510	34.85687903970452
+PromethION	unsupported	svtype	INV	1039	23.984302862419206
+PromethION	unsupported	svtype	DUP	73	1.6851338873499537
+PromethION	supported	size	50–100 bp	1687	37.57238307349666
+PromethION	supported	size	100–500 bp	2242	49.933184855233854
+PromethION	supported	size	500 bp–1 kb	271	6.035634743875278
+PromethION	supported	size	1–5 kb	251	5.590200445434299
+PromethION	supported	size	5–10 kb	30	0.6681514476614699
+PromethION	supported	size	10–50 kb	9	0.20044543429844097
+PromethION	supported	size	>50 kb	0	0.0
+PromethION	supported	support	3	516	11.492204899777283
+PromethION	supported	support	4	388	8.641425389755012
+PromethION	supported	support	5	309	6.881959910913141
+PromethION	supported	support	6–10	1157	25.76837416481069
+PromethION	supported	support	11–20	1036	23.07349665924276
+PromethION	supported	support	21–50	861	19.175946547884188
+PromethION	supported	support	>50	223	4.966592427616927
+PromethION	supported	svtype	DEL	2258	50.28953229398664
+PromethION	supported	svtype	INS	2221	49.465478841870826
+PromethION	supported	svtype	DUP	10	0.22271714922048996
+PromethION	supported	svtype	INV	1	0.022271714922048998
+PromethION	threshold	support_ge	3	4332	4490.0
+PromethION	threshold	support_ge	5	1893	3586.0
+PromethION	threshold	support_ge	10	853	2309.0
+PromethION	threshold	support_ge	20	399	1161.0
+MinION	unsupported	size	50–100 bp	263	43.399339933993396
+MinION	unsupported	size	100–500 bp	231	38.11881188118812
+MinION	unsupported	size	500 bp–1 kb	33	5.445544554455446
+MinION	unsupported	size	1–5 kb	67	11.056105610561056
+MinION	unsupported	size	5–10 kb	10	1.65016501650165
+MinION	unsupported	size	10–50 kb	2	0.33003300330033003
+MinION	unsupported	size	>50 kb	0	0.0
+MinION	unsupported	support	3	379	62.541254125412536
+MinION	unsupported	support	4	112	18.48184818481848
+MinION	unsupported	support	5	52	8.58085808580858
+MinION	unsupported	support	6–10	52	8.58085808580858
+MinION	unsupported	support	11–20	8	1.3201320132013201
+MinION	unsupported	support	21–50	2	0.33003300330033003
+MinION	unsupported	support	>50	1	0.16501650165016502
+MinION	unsupported	svtype	DEL	268	44.224422442244226
+MinION	unsupported	svtype	INS	228	37.62376237623762
+MinION	unsupported	svtype	INV	100	16.5016501650165
+MinION	unsupported	svtype	DUP	10	1.65016501650165
+MinION	supported	size	50–100 bp	657	45.310344827586206
+MinION	supported	size	100–500 bp	732	50.48275862068966
+MinION	supported	size	500 bp–1 kb	35	2.413793103448276
+MinION	supported	size	1–5 kb	24	1.6551724137931034
+MinION	supported	size	5–10 kb	1	0.06896551724137931
+MinION	supported	size	10–50 kb	1	0.06896551724137931
+MinION	supported	size	>50 kb	0	0.0
+MinION	supported	support	3	603	41.58620689655172
+MinION	supported	support	4	374	25.79310344827586
+MinION	supported	support	5	200	13.793103448275861
+MinION	supported	support	6–10	249	17.17241379310345
+MinION	supported	support	11–20	21	1.4482758620689655
+MinION	supported	support	21–50	2	0.13793103448275862
+MinION	supported	support	>50	1	0.06896551724137931
+MinION	supported	svtype	DEL	840	57.931034482758626
+MinION	supported	svtype	INS	609	42.0
+MinION	supported	svtype	DUP	1	0.06896551724137931
+MinION	threshold	support_ge	3	606	1450.0
+MinION	threshold	support_ge	5	115	473.0
+MinION	threshold	support_ge	10	15	36.0
+MinION	threshold	support_ge	20	3	3.0

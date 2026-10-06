@@ -297,6 +297,12 @@ This analysis provides a platform-specific estimate of recall and reduces bias i
 \chg{ChimeraLM increased validation rates from 2.6\% to 68.6\% on PromethION (26.3-fold) and from 21.1\% to 68.7\% on MinION (3.3-fold), removing 98.9\% and 90.9\% of bulk-unsupported calls while retaining 86.2\% (6,048 of 7,019) and 75.2\% (1,413 of 1,880) of bulk-supported events, respectively (Fig.~\ref{fig:figure3}d,e).
 	Together, these results show that ChimeraLM removes the vast majority of unsupported \gls{sv} calls while preserving most bulk-supported variants across platforms, leaving call sets in which supported \glspl{sv} outnumber unsupported ones.}
 
+\chg{We next characterised the unsupported calls that remain after ChimeraLM filtering (4,332 on PromethION and 606 on MinION relative to the gold standard) and compared them with the supported calls in the same call sets (Extended Data Fig.~\ref{fig:residual_sv}).
+Residual unsupported calls were not dominated by a single class: on PromethION they comprised 39.5\% deletions, 34.9\% insertions, 24.0\% inversions and 1.7\% duplications, were small (median 189 bp; 70.2\% $<$500 bp) and weakly supported (median 4 reads; 65.3\% with $\leq$5 reads), whereas supported calls had a median of 10 supporting reads.
+Inversions were the one diagnostic feature: 1,039 residual unsupported calls were inversions, compared with a single inversion among the 4,490 supported calls (MinION: 100 versus 0).
+In contrast, the residual deletions and insertions resembled supported calls in size, consistent with a mixture of low-support artifacts and genuine variants that are absent from the stringent gold standard (see Extended Data Fig.~\ref{fig:bulk_concordance}).
+Raising the minimum read support further reduces residual calls at a cost in sensitivity: on PromethION, requiring at least five supporting reads removed 56.3\% of residual unsupported calls but also 20.1\% of supported calls (unsupported-to-supported ratio 0.96:1 to 0.53:1), and requiring ten reads removed 80.3\% versus 48.6\%; on the shallower MinION data stricter thresholds removed both classes at similar rates.}
+
 \subsection*{ChimeraLM mitigates WGA-induced SV type biases}
 
 Amplification artifacts can profoundly distort the apparent spectrum of \glspl{sv}, complicating biological interpretation.
@@ -368,6 +374,10 @@ Second, regarding computational resources, while \gls{cpu} inference is feasible
 \chg{Third, the training labels inherit the incompleteness of bulk sequencing: a genuine chimeric read whose structure is absent from all three bulk datasets is labelled as an artifact (Extended Data Fig.~\ref{fig:bulk_concordance}), and the model may consequently remove reads of that kind; this error reduces sensitivity for rare genuine events rather than creating false positives, and its magnitude is bounded by the observed retention of bulk-supported \glspl{sv} (75--87\%).}
 Finally, future work should extend validation to diverse cell types, sequencing platforms (e.g., PacBio HiFi), and alternative \gls{wga} protocols, including \gls{malbac}~\cite{zong2012genome}, \gls{lianti}~\cite{chen2017singlecell}, \gls{pta}~\cite{gonzalez-pena2021accurate}, and \gls{dmda}~\cite{dippenaar2024droplet}.
 While the sequence-based approach suggests broad applicability, systematic validation across amplification chemistries is needed to assess generalization limits and optimize performance for specific protocols.
+
+\chg{ChimeraLM acts on reads, not on calls, and is therefore complementary to, rather than a replacement for, caller-level filtering.
+Our characterisation of the calls that remain unsupported after filtering (Extended Data Fig.~\ref{fig:residual_sv}) suggests two practical steps for users who require higher specificity: inversion calls that lack orthogonal support should be treated with suspicion, because essentially no bulk-supported inversion survived in our \gls{wga} call sets while residual inversions accounted for 17--24\% of unsupported calls; and a moderate read-support threshold (for example, at least five supporting reads) removes more than half of the residual unsupported calls on deeply sequenced samples at a cost of about one fifth of supported calls, whereas stricter thresholds increasingly discard supported calls as well, and on shallow data remove both classes at similar rates.
+Conversely, callers that aggregate evidence across cells or that incorporate coverage and phasing information may recover genuine events that single-cell read-level filtering alone cannot confirm.}
 
 More broadly, ChimeraLM illustrates the potential of \glspl{glm} for data quality control.
 As long-context architectures continue to advance~\cite{nguyen2023hyenadna}, extending the model's context window to handle megabase-scale inputs could enable artifact detection in more complex genomic structures.
@@ -642,6 +652,18 @@ Computations were performed on a \gls{hpc} server with 64-core Intel Xeon Gold 6
 		\chg{\textbf{(a)}~UpSet plot of high-confidence \glspl{sv} (Sniffles2, $\geq$3 supporting reads; merged with OctopuSV) from bulk PromethION P2 (20.8$\times$; 27,110 calls), bulk MinION Mk1c (2.4$\times$; 5,467) and bulk PacBio Sequel~II (38$\times$; 24,655). Of the 32,907 union calls, 20,026 (60.9\%) are detected on at least two platforms and 4,299 (13.1\%) on all three; platform-private calls make up 26.6\%, 17.4\% and 19.2\% of the PromethION, MinION and PacBio call sets, respectively.
 		\textbf{(b)}~Depth titration of the bulk PromethION data (down-sampled to 2.37$\times$, 5$\times$, 10$\times$, 15$\times$ and full 21$\times$): number of PromethION \gls{sv} calls (grey) and the fraction supported by at least one of the other two platforms (teal). The platform-private fraction rises with depth (5.1\% to 26.6\%), showing that deeper sequencing recovers variants absent from the shallower reference sets.}
 	}\label{fig:bulk_concordance}
+\end{figure}
+
+\begin{figure}[!ht]
+	\begin{center}
+		\includegraphics[width=\textwidth]{final_figures/sf_residual_sv}
+	\end{center}
+	\caption{{\bf \chg{Features of structural variant calls that remain unsupported after ChimeraLM filtering.}}
+		\chg{\gls{sv} calls from the \gls{wga} + ChimeraLM call sets (Sniffles2, $\geq$3 supporting reads) benchmarked against the gold standard (Fig.~\ref{fig:figure3}b,c) were split into unsupported (light teal; Truvari false positives) and supported (dark teal; Truvari true positives) calls.
+		\textbf{(a--c)}~PromethION ($n = 4{,}332$ unsupported, $4{,}490$ supported): distribution of \gls{sv} type (a), \gls{sv} size (b) and Sniffles2 read support (c).
+		\textbf{(d--f)}~The same for MinION ($n = 606$ unsupported, $1{,}450$ supported).
+		Numbers above bars give the percentage of calls in each class.}
+	}\label{fig:residual_sv}
 \end{figure}
 
 \begin{figure}[!ht]
