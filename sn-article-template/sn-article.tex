@@ -284,6 +284,9 @@ Both callsets were evaluated against two complementary bulk‑derived references
 We first constructed a high-confidence gold-standard \gls{sv} set from bulk PC3 DNA by integrating four independent sequencing datasets: \gls{ont} PromethION, \gls{ont} MinION, and two Illumina short-read \gls{wgs} datasets from the Cancer Cell Line Encyclopedia (CCLE Illumina \gls{wgs}~\cite{barretina2012cancer}) and from a previously published study (PRJNA361315 Illumina \gls{wgs}~\cite{seim2017wholegenome}) (Fig.~\ref{fig:figure3}a; Extended Data Table~\ref{tab:seq_stats}).
 \glspl{sv} were called separately within each dataset using multiple \gls{sv} callers.
 Events supported by at least two callers within a dataset were retained, and only \glspl{sv} observed in at least two of the four datasets were designated as gold-standard events.
+\chg{The two-of-four rule reflects the composition of the four datasets (Extended Data Fig.~\ref{fig:gold_standard}): of the 123,115 \glspl{sv} in their union, 17,153 were detected in at least two datasets, of which 73.8\% were shared only by the two long-read datasets, 20.1\% had both long- and short-read support and 6.1\% were shared only by the two short-read datasets.
+Because only two datasets are long-read, requiring three of four would demand short-read confirmation and retain just 3,029 events (17.7\% of the two-of-four set; 1,606 or 9.4\% for four of four), systematically excluding insertions and other variants that short reads detect poorly~\cite{Sedlazeck2018}.
+We therefore use the two-of-four set as the gold standard and the platform-matched long-read bulk call sets as a complementary, less stringent reference (Fig.~\ref{fig:figure3}d,e).}
 
 \chg{Call sets were restricted to \glspl{sv} with at least three supporting reads, the Sniffles2 default (\hyperref[sec:methods]{Methods}).
 	Relative to this stringent gold standard, unfiltered \gls{wga} produced a large excess of unsupported \glspl{sv}.
@@ -557,6 +560,7 @@ All \gls{sv} comparisons and breakpoint corrections were performed using OctopuS
 Four bulk datasets were integrated: \gls{ont} MinION Mk1c, \gls{ont} PromethION P2, the CCLE Illumina \gls{wgs} dataset, and the PRJNA361315 Illumina \gls{wgs} dataset.
 \glspl{sv} were called independently within each dataset, and events supported by at least two \gls{sv} callers were retained.
 The remaining calls were then compared across datasets, and \glspl{sv} observed in at least two of the four datasets were designated as gold-standard events for benchmarking.
+\chg{The sensitivity of the gold standard to this threshold was assessed by merging the four caller-consensus call sets with OctopuSV (\texttt{--union --mode sample}) and counting events supported by at least one, two, three or four datasets (Extended Data Fig.~\ref{fig:gold_standard}).}
 
 \paragraph{SV benchmarking analysis}
 To assess the impact of ChimeraLM on \gls{sv} calling accuracy, we compared \gls{sv} calls from unfiltered \gls{wga} data and ChimeraLM-filtered \gls{wga} data against two references: (1) the stringent multi-platform gold standard dataset, and (2) platform-matched long-read bulk sequencing data.
@@ -652,6 +656,15 @@ Computations were performed on a \gls{hpc} server with 64-core Intel Xeon Gold 6
 		\chg{\textbf{(a)}~UpSet plot of high-confidence \glspl{sv} (Sniffles2, $\geq$3 supporting reads; merged with OctopuSV) from bulk PromethION P2 (20.8$\times$; 27,110 calls), bulk MinION Mk1c (2.4$\times$; 5,467) and bulk PacBio Sequel~II (38$\times$; 24,655). Of the 32,907 union calls, 20,026 (60.9\%) are detected on at least two platforms and 4,299 (13.1\%) on all three; platform-private calls make up 26.6\%, 17.4\% and 19.2\% of the PromethION, MinION and PacBio call sets, respectively.
 		\textbf{(b)}~Depth titration of the bulk PromethION data (down-sampled to 2.37$\times$, 5$\times$, 10$\times$, 15$\times$ and full 21$\times$): number of PromethION \gls{sv} calls (grey) and the fraction supported by at least one of the other two platforms (teal). The platform-private fraction rises with depth (5.1\% to 26.6\%), showing that deeper sequencing recovers variants absent from the shallower reference sets.}
 	}\label{fig:bulk_concordance}
+\end{figure}
+
+\begin{figure}[!ht]
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{final_figures/sf_gold_standard_upset}
+	\end{center}
+	\caption{{\bf \chg{Overlap of structural variant calls among the four bulk PC3 datasets used to build the gold standard.}}
+		\chg{UpSet plot of caller-consensus \glspl{sv} ($\geq$2 callers per dataset) from bulk \gls{ont} MinION Mk1c (25,866 calls), bulk \gls{ont} PromethION P2 (105,956), CCLE Illumina \gls{wgs} (5,977) and PRJNA361315 (HiSeq~X) Illumina \gls{wgs} (7,104), merged with OctopuSV. The union contains 123,115 events; 17,153 are supported by $\geq$2 datasets (the gold standard used in Fig.~\ref{fig:figure3}), 3,029 by $\geq$3 and 1,606 by all four. Within the $\geq$2 set, 12,661 events (73.8\%) are shared only by the two long-read datasets, 3,441 (20.1\%) have both long- and short-read support and 1,051 (6.1\%) are shared only by the two short-read datasets.}
+	}\label{fig:gold_standard}
 \end{figure}
 
 \begin{figure}[!ht]
