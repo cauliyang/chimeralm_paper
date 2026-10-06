@@ -135,7 +135,7 @@
 	To capture long-range dependencies in variable-length reads, the model integrates Hyena operators with attention pooling.
 	Evaluated on matched \gls{wga} and bulk nanopore datasets, ChimeraLM eliminated ${\sim}$90\% of chimeric reads from \gls{wga} data, restoring chimeric read proportion to near-bulk levels, whereas existing approaches achieved at most an 8\% reduction.
 	\chg{Benchmarked against a multi-platform gold-standard \gls{sv} set, ChimeraLM removed 91--98\% of unsupported \gls{sv} calls from \gls{wga} datasets while retaining 75--87\% of gold-standard \glspl{sv}; against platform-matched bulk long-read call sets, it removed 91--99\% of unsupported calls while retaining 75--86\% of bulk-supported \glspl{sv}.}
-	ChimeraLM further normalized \gls{sv} type distributions toward bulk profiles by suppressing the characteristic inversion bias observed in unprocessed \gls{wga} data.
+	ChimeraLM further \chg{shifted \gls{sv} type distributions toward bulk profiles by substantially reducing} the characteristic inversion bias observed in unprocessed \gls{wga} data.
 	Attention-based interpretation indicates that ChimeraLM concentrates classification evidence at chimeric junctions, demonstrating its ability to learn biologically interpretable features.
 	ChimeraLM provides a general approach for suppressing amplification-induced artifacts, enabling more reliable single-cell \gls{sv} analysis across long-read platforms.}
 \keywords{Whole Genome Amplification, Single Cell, Genomic Language Model, Structural Variation}
@@ -264,9 +264,9 @@ This cross-platform generalization indicates that ChimeraLM captures sequence-le
 	\caption{{\bf ChimeraLM improves structural variant detection accuracy.}
 		\textbf{(a)}~Construction of a high-confidence \gls{sv} reference dataset from bulk PC3 sequencing. Four bulk datasets were integrated: \gls{ont} MinION Mk1C, \gls{ont} PromethION P2, the CCLE Illumina \gls{wgs} dataset, and the PRJNA361315 Illumina \gls{wgs} dataset. \glspl{sv} were called independently within each dataset using multiple callers, and events supported by $\geq$2 callers per dataset were retained. \glspl{sv} were then compared across datasets, and events observed in $\geq$2 of the four bulk datasets were designated as gold-standard \glspl{sv}.
 		\textbf{(b,c)}~\gls{sv} validation against the gold-standard reference for PromethION (b) and MinION (c).
-		Bars show \gls{sv} calls supported by the gold standard (dark teal) or unsupported (light teal).
+		\chg{Grouped bars show, on a shared logarithmic scale, the number of \gls{sv} calls supported by the gold standard (dark teal) or unsupported (light teal); the unsupported-to-supported ratio is given below each group. Only calls with at least three supporting reads (Sniffles2 default) are included.}
 		\textbf{(d,e)}~\gls{sv} validation against platform-matched long-read bulk sequencing for PromethION (d) and MinION (e), capturing true long-read \glspl{sv} that may not be represented in the multi-platform reference.
-		Bars show \gls{sv} calls supported by the platform-matched long-read bulk data (dark teal) or unsupported (light teal).
+		\chg{Grouped bars show \gls{sv} calls supported by the platform-matched long-read bulk data (dark teal) or unsupported (light teal), as in (b,c).}
 		\textbf{(f)}~Distribution of \gls{sv} types for PromethION and MinION datasets across bulk samples, unfiltered \gls{wga}, and \gls{wga} with ChimeraLM filtering. Unfiltered \gls{wga} exhibits an excess of \gls{inv} events, which is substantially reduced following ChimeraLM filtering. Other \gls{sv} classes, including \gls{tra}, \gls{del}, \gls{dup}, and \gls{ins}, are also shown.
 	}\label{fig:figure3}
 \end{figure}
@@ -280,16 +280,17 @@ We first constructed a high-confidence gold-standard \gls{sv} set from bulk PC3 
 \glspl{sv} were called separately within each dataset using multiple \gls{sv} callers.
 Events supported by at least two callers within a dataset were retained, and only \glspl{sv} observed in at least two of the four datasets were designated as gold-standard events.
 
-Relative to this stringent gold standard, unfiltered \gls{wga} produced a large number of unsupported \glspl{sv}.
-On PromethION, \gls{wga} yielded 3,601,099 \gls{sv} calls, of which only 8,815 (0.24\%) overlapped gold-standard events.
-After ChimeraLM filtering, total calls decreased to 305,570 (a 91.5\% reduction) while retaining 8,067 gold-standard events (91.5\% retention), increasing the validation rate to 2.64\% (11-fold) (Fig.~\ref{fig:figure3}b).
-On MinION, total calls decreased from 451,390 to 38,432 (a 91.5\% reduction), while gold-standard-supported events decreased from 7,193 to 6,269, corresponding to 87.2\% retention.
-The validation rate increased from 1.59\% to 16.3\% (10-fold) (Fig.~\ref{fig:figure3}c).
+\chg{Call sets were restricted to \glspl{sv} with at least three supporting reads, the Sniffles2 default (\hyperref[sec:methods]{Methods}).
+Relative to this stringent gold standard, unfiltered \gls{wga} produced a large excess of unsupported \glspl{sv}.
+On PromethION, \gls{wga} yielded 268,937 \gls{sv} calls, of which only 5,147 (1.9\%) overlapped gold-standard events, an unsupported-to-supported ratio of 51:1.
+After ChimeraLM filtering, total calls decreased to 8,822 (a 96.7\% reduction); unsupported calls fell from 263,790 to 4,332 (98.4\% removed) while 4,490 gold-standard events were retained (87.2\% retention), so that supported calls outnumbered unsupported calls (ratio 0.96:1) and the validation rate rose from 1.9\% to 50.9\% (26.6-fold) (Fig.~\ref{fig:figure3}b).
+On MinION, total calls decreased from 8,917 to 2,056 (76.9\% reduction); unsupported calls fell from 6,977 to 606 (91.3\% removed) while gold-standard-supported events decreased from 1,940 to 1,450 (74.7\% retention), raising the validation rate from 21.8\% to 70.5\% (3.2-fold; ratio 3.6:1 to 0.42:1) (Fig.~\ref{fig:figure3}c).
+The smaller fold change on MinION reflects the lower artifact burden of its call set at this read-support threshold (21.8\% of calls already validated before filtering, versus 1.9\% on PromethION).}
 
 Because the gold standard is intentionally stringent and may exclude true \glspl{sv} detectable only in long-read data, we next performed platform-matched validation using long-read bulk sequencing from the same platform (Fig.~\ref{fig:figure3}d,e).
 This analysis provides a platform-specific estimate of recall and reduces bias introduced by the strict gold-standard definition.
-ChimeraLM increased validation rates from 0.38\% to 3.24\% on PromethION (8.5-fold) and from 1.25\% to 12.79\% on MinION (10-fold), while retaining 71.9\% and 87.1\% of bulk-supported events, respectively.
-Together, these results show that ChimeraLM removes the vast majority of unsupported \gls{sv} calls while preserving the majority of bulk-supported variants across platforms.
+\chg{ChimeraLM increased validation rates from 2.6\% to 68.6\% on PromethION (26.3-fold) and from 21.1\% to 68.7\% on MinION (3.3-fold), removing 98.9\% and 90.9\% of bulk-unsupported calls while retaining 86.2\% (6,048 of 7,019) and 75.2\% (1,413 of 1,880) of bulk-supported events, respectively (Fig.~\ref{fig:figure3}d,e).
+Together, these results show that ChimeraLM removes the vast majority of unsupported \gls{sv} calls while preserving most bulk-supported variants across platforms, leaving call sets in which supported \glspl{sv} outnumber unsupported ones.}
 
 \subsection*{ChimeraLM mitigates WGA-induced SV type biases}
 
@@ -542,6 +543,7 @@ Benchmarking was performed using Truvari v4.2.2~\cite{english2022truvari} with d
 \glspl{sv} were considered supported if they matched reference variants within the defined breakpoint tolerance.
 Validation rates were calculated as the proportion of called \glspl{sv} supported by the reference.
 This dual benchmarking strategy quantifies both improvements in detecting high-confidence multi-platform \glspl{sv} and the retention of platform-specific true variants.
+\chg{For the comparisons in Fig.~\ref{fig:figure3}b--e, calls with fewer than three supporting reads (Sniffles2 \texttt{SUPPORT} $<$ 3) were removed from the \gls{wga} and \gls{wga} + ChimeraLM call sets before benchmarking, matching the Sniffles2 default minimum read support (\texttt{--minsupport 3}); counts of supported and unsupported calls are the Truvari TP and FP counts, respectively.}
 
 \subsection*{Benchmarking against existing methods}
 ChimeraLM was compared to existing computational methods for detecting amplification-induced chimeric artifacts: SACRA~\cite{kiguchi2021longread} (GitHub commit~9a2607e),  3rd-ChimeraMiner~\cite{lu2023exploration} (GitHub commit~04b5233), and CADECT v1.2~\cite{agyabeng2025evaluating}.
