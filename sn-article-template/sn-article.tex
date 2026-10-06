@@ -275,7 +275,7 @@ This cross-platform generalization indicates that ChimeraLM captures sequence-le
 		\chg{Grouped bars show, on a shared logarithmic scale, the number of \gls{sv} calls supported by the gold standard (dark teal) or unsupported (light teal); the unsupported-to-supported ratio is given below each group. Only calls with at least three supporting reads (Sniffles2 default) are included.}
 		\textbf{(d,e)}~\gls{sv} validation against platform-matched long-read bulk sequencing for PromethION (d) and MinION (e), capturing true long-read \glspl{sv} that may not be represented in the multi-platform reference.
 		\chg{Grouped bars show \gls{sv} calls supported by the platform-matched long-read bulk data (dark teal) or unsupported (light teal), as in (b,c).}
-		\textbf{(f)}~Distribution of \gls{sv} types for PromethION and MinION datasets across bulk samples, unfiltered \gls{wga}, and \gls{wga} with ChimeraLM filtering. Unfiltered \gls{wga} exhibits an excess of \gls{inv} events, which is substantially reduced following ChimeraLM filtering. Other \gls{sv} classes, including \gls{tra}, \gls{del}, \gls{dup}, and \gls{ins}, are also shown.
+		\textbf{(f)}~Distribution of \gls{sv} types for PromethION and MinION datasets across bulk samples, unfiltered \gls{wga}, and \gls{wga} with ChimeraLM filtering\chg{, for calls with at least three supporting reads}. Unfiltered \gls{wga} exhibits an excess of \gls{inv} events, which is substantially reduced following ChimeraLM filtering. Other \gls{sv} classes, including \gls{tra}, \gls{del}, \gls{dup}, and \gls{ins}, are also shown.
 	}\label{fig:figure3}
 \end{figure}
 
@@ -313,15 +313,16 @@ This analysis provides a platform-specific estimate of recall and reduces bias i
 
 Amplification artifacts can profoundly distort the apparent spectrum of \glspl{sv}, complicating biological interpretation.
 To quantify these effects, we compared \gls{sv}‑type compositions across bulk, unfiltered \gls{wga}, and ChimeraLM‑filtered datasets generated on both \gls{ont} PromethION and MinION platforms (Fig.~\ref{fig:figure3}f).
-Bulk datasets displayed \gls{sv} profiles dominated by deletions and insertions, whereas \gls{wga} datasets exhibited a striking inflation of inversions, reaching 83.0\% on PromethION and 88.3\% on MinION.
+Bulk datasets displayed \gls{sv} profiles dominated by deletions and insertions\chg{ (81.9\% and 90.8\% combined on PromethION and MinION, with inversions at 1.1\% on both)}, whereas \gls{wga} datasets exhibited a striking inflation of inversions, reaching \chg{93.8\% on PromethION and 57.2\% on MinION among calls with at least three supporting reads}.
 This inversion‑heavy signature mirrors previous observations from single‑cell long‑read sequencing using PacBio and droplet‑based \gls{mda}~\cite{hardLongreadWholegenomeAnalysis2023a}, suggesting that many of these events arise from amplification‑induced chimeras rather than genuine genomic rearrangements.
 
 To directly assess which \gls{sv} types are preferentially associated with amplification artifacts, we examined \gls{sv} calls supported exclusively by reads classified as \gls{wga}‑derived chimeras.
 These artifact‑supported events were overwhelmingly enriched for inversions, comprising 88.4\% on PromethION and 92.4\% on MinION (Extended Data Fig.~\ref{fig:sv_artifact_distribution}).
 Smaller fractions of deletions, duplications, and insertions were also present, indicating that \gls{wga} artifacts inflate not only inversion calls but generate false positives across multiple \gls{sv} categories.
 
-Applying ChimeraLM substantially reduced these biases.
-The inversion fraction decreased from 83.0\% to 60.7\% on PromethION and from 88.3\% to 46.2\% on MinION, while the relative abundance of deletions and insertions increased toward bulk‑like levels (Fig.~\ref{fig:figure3}f).
+Applying ChimeraLM \chg{largely removed} these biases.
+\chg{The inversion fraction decreased from 93.8\% to 11.9\% on PromethION and from 57.2\% to 4.8\% on MinION, while deletions and insertions rose from 5.3\% to 86.9\% and from 25.8\% to 89.3\% of calls, close to the bulk values of 81.9\% and 90.8\% (Fig.~\ref{fig:figure3}f); on MinION the excess of translocation-type (breakend) calls was likewise reduced from 14.8\% to 5.4\% (bulk 7.9\%).
+The residual inversion fraction remains above the bulk level (1.1\%), and the remaining inversions are almost entirely unsupported by bulk sequencing (Extended Data Fig.~\ref{fig:residual_sv}).}
 By selectively removing artifact‑supported events, ChimeraLM suppresses the dominant inversion inflation and reduces spurious calls across \gls{sv} types, shifting \gls{sv}‑type distributions toward bulk profiles and improving the accuracy and interpretability of single‑cell \gls{sv} analyses~\cite{hardLongreadWholegenomeAnalysis2023a}.
 
 \begin{figure}[H]
@@ -381,7 +382,7 @@ Second, regarding computational resources, while \gls{cpu} inference is feasible
 Finally, future work should extend validation to diverse cell types, sequencing platforms (e.g., PacBio HiFi), and alternative \gls{wga} protocols, including \gls{malbac}~\cite{zong2012genome}, \gls{lianti}~\cite{chen2017singlecell}, \gls{pta}~\cite{gonzalez-pena2021accurate}, and \gls{dmda}~\cite{dippenaar2024droplet}.
 While the sequence-based approach suggests broad applicability, systematic validation across amplification chemistries is needed to assess generalization limits and optimize performance for specific protocols.
 \chg{Validation in primary tissue and tumour samples remains an open task: evaluating a read-level artifact filter requires single-cell long-read \gls{wga} data together with matched bulk long-read sequencing of the same sample, and the few such datasets from human tissue published to date are available only under controlled access (for example, through the European Genome-phenome Archive).
-Because tissue and tumour cells are more heterogeneous than a monoclonal cell line, whereas the artifact profile is determined primarily by the amplification chemistry rather than by the cell of origin, we expect ChimeraLM's performance on such samples to track its cross-cell-line and cross-chemistry behaviour, but this expectation should be tested as suitable data become accessible.}
+	Because tissue and tumour cells are more heterogeneous than a monoclonal cell line, whereas the artifact profile is determined primarily by the amplification chemistry rather than by the cell of origin, we expect ChimeraLM's performance on such samples to track its cross-cell-line and cross-chemistry behaviour, but this expectation should be tested as suitable data become accessible.}
 
 \chg{ChimeraLM acts on reads, not on calls, and is therefore complementary to, rather than a replacement for, caller-level filtering.
 	Our characterisation of the calls that remain unsupported after filtering (Extended Data Fig.~\ref{fig:residual_sv}) suggests two practical steps for users who require higher specificity: inversion calls that lack orthogonal support should be treated with suspicion, because essentially no bulk-supported inversion survived in our \gls{wga} call sets while residual inversions accounted for 17--24\% of unsupported calls; and a moderate read-support threshold (for example, at least five supporting reads) removes more than half of the residual unsupported calls on deeply sequenced samples at a cost of about one fifth of supported calls, whereas stricter thresholds increasingly discard supported calls as well, and on shallow data remove both classes at similar rates.
@@ -574,7 +575,7 @@ Benchmarking was performed using Truvari v4.2.2~\cite{english2022truvari} with d
 \glspl{sv} were considered supported if they matched reference variants within the defined breakpoint tolerance.
 Validation rates were calculated as the proportion of called \glspl{sv} supported by the reference.
 This dual benchmarking strategy quantifies both improvements in detecting high-confidence multi-platform \glspl{sv} and the retention of platform-specific true variants.
-\chg{For the comparisons in Fig.~\ref{fig:figure3}b--e, calls with fewer than three supporting reads (Sniffles2 \texttt{SUPPORT} $<$ 3) were removed from the \gls{wga} and \gls{wga} + ChimeraLM call sets before benchmarking, matching the Sniffles2 default minimum read support (\texttt{--minsupport 3}); counts of supported and unsupported calls are the Truvari TP and FP counts, respectively.}
+\chg{For Fig.~\ref{fig:figure3}b--f, calls with fewer than three supporting reads (Sniffles2 \texttt{SUPPORT} $<$ 3) were removed from the bulk, \gls{wga} and \gls{wga} + ChimeraLM call sets, matching the Sniffles2 default minimum read support (\texttt{--minsupport 3}); counts of supported and unsupported calls in Fig.~\ref{fig:figure3}b--e are the Truvari TP and FP counts, respectively.}
 
 \subsection*{Benchmarking against existing methods}
 ChimeraLM was compared to existing computational methods for detecting amplification-induced chimeric artifacts: SACRA~\cite{kiguchi2021longread} (GitHub commit~9a2607e),  3rd-ChimeraMiner~\cite{lu2023exploration} (GitHub commit~04b5233), and CADECT v1.2~\cite{agyabeng2025evaluating}.
@@ -691,7 +692,7 @@ Computations were performed on a \gls{hpc} server with 64-core Intel Xeon Gold 6
 		\includegraphics[width=0.9\textwidth]{final_figures/artifacts_suppoorted_sv}
 	\end{center}
 	\caption{{\bf Composition of artifact-supported \glspl{sv} for PromethION (a) and MinION (b).}
-		Donut charts summarize the distribution of \gls{sv} types including \glsfirst{tra}, \glsfirst{del}, \glsfirst{inv}, \glsfirst{dup}, and \glsfirst{ins} among events supported exclusively by chimera artifacts, representing artificial \glspl{sv} preferentially removed by ChimeraLM.}\label{fig:sv_artifact_distribution}
+		Donut charts summarize the distribution of \gls{sv} types including \glsfirst{tra}, \glsfirst{del}, \glsfirst{inv}, \glsfirst{dup}, and \glsfirst{ins} among events supported exclusively by chimera artifacts, representing artificial \glspl{sv} preferentially removed by ChimeraLM\chg{ (all Sniffles2 calls, without a minimum read-support filter)}.}\label{fig:sv_artifact_distribution}
 \end{figure}
 
 \clearpage
