@@ -205,6 +205,11 @@ To construct a balanced training dataset, we retained all 293,180 genuine chimer
 We further added 178,748 chimeric reads sampled from the bulk datasets to the genuine-event set, expanding the diversity of bulk-supported chimeric alignment structures used for training.
 The final labeled dataset comprised 765,108 reads and was split into training (70\%), validation (20\%), and test (10\%) sets using stratified sampling (Extended Data Fig.~\ref{fig:data_construction}a).
 
+\chg{Because bulk sequencing is itself subject to false negatives, we quantified how much the three bulk datasets disagree before relying on them jointly as a reference (Extended Data Fig.~\ref{fig:bulk_concordance}).
+Among 32,907 high-confidence \glspl{sv} (Sniffles2, at least three supporting reads) called in the union of the three bulk datasets, 60.9\% were detected on at least two platforms and 13.1\% on all three; the fraction of calls private to a single platform was 17.4\% for MinION (2.4$\times$), 19.2\% for PacBio (38$\times$) and 26.6\% for PromethION (21$\times$) (Extended Data Fig.~\ref{fig:bulk_concordance}a).
+Down-sampling the PromethION data showed that the platform-private fraction grows with depth, from 5.1\% at 2.4$\times$ to 26.6\% at 21$\times$ (Extended Data Fig.~\ref{fig:bulk_concordance}b), indicating that deeper sequencing recovers events missed by the other two datasets rather than the reverse.
+No single bulk dataset is therefore complete, which motivated labelling a \gls{wga} read as genuine if its alignment structure matched a chimeric read in \emph{any} of the three bulk datasets (combined depth ${\sim}$61$\times$), and labelling it as an artifact only when it matched none of them.}
+
 To model these labeled reads, ChimeraLM needs to process long, variable-length DNA sequences at single-nucleotide resolution (Fig.~\ref{fig:figure1}c).
 We therefore built ChimeraLM on HyenaDNA~\cite{nguyen2023hyenadna}, a genomic foundation model pre-trained on diverse DNA sequences.
 Each read is tokenized at nucleotide resolution and encoded by Hyena operators~\cite{Poli2023HyenaHT}, which capture long-range sequence context without splitting the input.
@@ -235,13 +240,13 @@ ChimeraLM achieved an F1 score of 0.81, with 0.95 recall and 0.70 precision (Fig
 The high recall indicates that most \gls{wga}-induced artifacts are correctly identified for removal, which is important for limiting downstream false-positive \gls{sv} calls, while the precision confirms that most reads flagged as artifacts are true amplification-induced chimeras rather than genuine genomic events.
 
 \chg{Because ChimeraLM processes at most 32,768 bp per read, we asked how often this limit is reached and whether classification accuracy depends on read length (Extended Data Fig.~\ref{fig:read_length}).
-Chimeric reads in \gls{wga} data were predominantly short (median 2,100 bp on PromethION and 1,469 bp on MinION), and only 1,211 of 12,963,576 PromethION chimeric reads (0.009\%) and 6 of 1,666,427 MinION chimeric reads exceeded 32,768 bp; in all but two of these reads, at least one chimeric junction lay within the first 32,768 bp (Extended Data Fig.~\ref{fig:read_length}a).
-Classification accuracy nevertheless varied with read length.
-On \gls{wga}-derived test reads, precision rose from 0.69 for reads $\leq$2 kb to $\geq$0.99 for reads $>$8 kb, whereas recall declined from 0.98 ($\leq$2 kb) to 0.76 (8--16 kb) and 0.31 (16--32 kb; $n = 80$) (Extended Data Fig.~\ref{fig:read_length}c).
-Long chimeric reads are therefore classified conservatively: errors favour retaining a read over removing it, and because reads longer than 16 kb constitute only 0.26\% of PromethION chimeric reads, this length dependence has little effect on aggregate performance.
-This behaviour likely reflects the composition of the training data, in which chimeric reads sampled from bulk sequencing (median 14.4 kb in the test split) are far longer than \gls{wga}-derived reads (median 1.5--2.1 kb), so that read length itself carries label information.
-Accordingly, the chimeric reads removed by ChimeraLM were shorter than those retained (PromethION: median 2,067 versus 3,087 bp, N50 3,836 versus 7,989 bp; MinION: median 1,458 versus 2,031 bp, N50 2,220 versus 5,560 bp; Extended Data Fig.~\ref{fig:read_length}d), even though among \gls{wga}-derived test reads bulk-supported chimeras were slightly shorter than artifacts (median 1,459 versus 2,086 bp).
-Filtering thus shifts the chimeric-read length distribution modestly upwards and under-removes rare long artifacts, whereas the length distribution of non-chimeric reads, which make up the majority of a \gls{wga} library and are not evaluated by ChimeraLM, is unchanged.}
+	Chimeric reads in \gls{wga} data were predominantly short (median 2,100 bp on PromethION and 1,469 bp on MinION), and only 1,211 of 12,963,576 PromethION chimeric reads (0.009\%) and 6 of 1,666,427 MinION chimeric reads exceeded 32,768 bp; in all but two of these reads, at least one chimeric junction lay within the first 32,768 bp (Extended Data Fig.~\ref{fig:read_length}a).
+	Classification accuracy nevertheless varied with read length.
+	On \gls{wga}-derived test reads, precision rose from 0.69 for reads $\leq$2 kb to $\geq$0.99 for reads $>$8 kb, whereas recall declined from 0.98 ($\leq$2 kb) to 0.76 (8--16 kb) and 0.31 (16--32 kb; $n = 80$) (Extended Data Fig.~\ref{fig:read_length}c).
+	Long chimeric reads are therefore classified conservatively: errors favour retaining a read over removing it, and because reads longer than 16 kb constitute only 0.26\% of PromethION chimeric reads, this length dependence has little effect on aggregate performance.
+	This behaviour likely reflects the composition of the training data, in which chimeric reads sampled from bulk sequencing (median 14.4 kb in the test split) are far longer than \gls{wga}-derived reads (median 1.5--2.1 kb), so that read length itself carries label information.
+	Accordingly, the chimeric reads removed by ChimeraLM were shorter than those retained (PromethION: median 2,067 versus 3,087 bp, N50 3,836 versus 7,989 bp; MinION: median 1,458 versus 2,031 bp, N50 2,220 versus 5,560 bp; Extended Data Fig.~\ref{fig:read_length}d), even though among \gls{wga}-derived test reads bulk-supported chimeras were slightly shorter than artifacts (median 1,459 versus 2,086 bp).
+	Filtering thus shifts the chimeric-read length distribution modestly upwards and under-removes rare long artifacts, whereas the length distribution of non-chimeric reads, which make up the majority of a \gls{wga} library and are not evaluated by ChimeraLM, is unchanged.}
 
 We next examined whether applying ChimeraLM filtering would restore chimeric read rates in full PC3 \gls{wga} datasets toward the levels observed in bulk sequencing across both PromethION and MinION platforms (Fig.~\ref{fig:figure2}b).
 Bulk sequencing established low baseline chimeric read rates of 2.3\% (PromethION) and 2.5\% (MinION).
@@ -281,16 +286,16 @@ We first constructed a high-confidence gold-standard \gls{sv} set from bulk PC3 
 Events supported by at least two callers within a dataset were retained, and only \glspl{sv} observed in at least two of the four datasets were designated as gold-standard events.
 
 \chg{Call sets were restricted to \glspl{sv} with at least three supporting reads, the Sniffles2 default (\hyperref[sec:methods]{Methods}).
-Relative to this stringent gold standard, unfiltered \gls{wga} produced a large excess of unsupported \glspl{sv}.
-On PromethION, \gls{wga} yielded 268,937 \gls{sv} calls, of which only 5,147 (1.9\%) overlapped gold-standard events, an unsupported-to-supported ratio of 51:1.
-After ChimeraLM filtering, total calls decreased to 8,822 (a 96.7\% reduction); unsupported calls fell from 263,790 to 4,332 (98.4\% removed) while 4,490 gold-standard events were retained (87.2\% retention), so that supported calls outnumbered unsupported calls (ratio 0.96:1) and the validation rate rose from 1.9\% to 50.9\% (26.6-fold) (Fig.~\ref{fig:figure3}b).
-On MinION, total calls decreased from 8,917 to 2,056 (76.9\% reduction); unsupported calls fell from 6,977 to 606 (91.3\% removed) while gold-standard-supported events decreased from 1,940 to 1,450 (74.7\% retention), raising the validation rate from 21.8\% to 70.5\% (3.2-fold; ratio 3.6:1 to 0.42:1) (Fig.~\ref{fig:figure3}c).
-The smaller fold change on MinION reflects the lower artifact burden of its call set at this read-support threshold (21.8\% of calls already validated before filtering, versus 1.9\% on PromethION).}
+	Relative to this stringent gold standard, unfiltered \gls{wga} produced a large excess of unsupported \glspl{sv}.
+	On PromethION, \gls{wga} yielded 268,937 \gls{sv} calls, of which only 5,147 (1.9\%) overlapped gold-standard events, an unsupported-to-supported ratio of 51:1.
+	After ChimeraLM filtering, total calls decreased to 8,822 (a 96.7\% reduction); unsupported calls fell from 263,790 to 4,332 (98.4\% removed) while 4,490 gold-standard events were retained (87.2\% retention), so that supported calls outnumbered unsupported calls (ratio 0.96:1) and the validation rate rose from 1.9\% to 50.9\% (26.6-fold) (Fig.~\ref{fig:figure3}b).
+	On MinION, total calls decreased from 8,917 to 2,056 (76.9\% reduction); unsupported calls fell from 6,977 to 606 (91.3\% removed) while gold-standard-supported events decreased from 1,940 to 1,450 (74.7\% retention), raising the validation rate from 21.8\% to 70.5\% (3.2-fold; ratio 3.6:1 to 0.42:1) (Fig.~\ref{fig:figure3}c).
+	The smaller fold change on MinION reflects the lower artifact burden of its call set at this read-support threshold (21.8\% of calls already validated before filtering, versus 1.9\% on PromethION).}
 
 Because the gold standard is intentionally stringent and may exclude true \glspl{sv} detectable only in long-read data, we next performed platform-matched validation using long-read bulk sequencing from the same platform (Fig.~\ref{fig:figure3}d,e).
 This analysis provides a platform-specific estimate of recall and reduces bias introduced by the strict gold-standard definition.
 \chg{ChimeraLM increased validation rates from 2.6\% to 68.6\% on PromethION (26.3-fold) and from 21.1\% to 68.7\% on MinION (3.3-fold), removing 98.9\% and 90.9\% of bulk-unsupported calls while retaining 86.2\% (6,048 of 7,019) and 75.2\% (1,413 of 1,880) of bulk-supported events, respectively (Fig.~\ref{fig:figure3}d,e).
-Together, these results show that ChimeraLM removes the vast majority of unsupported \gls{sv} calls while preserving most bulk-supported variants across platforms, leaving call sets in which supported \glspl{sv} outnumber unsupported ones.}
+	Together, these results show that ChimeraLM removes the vast majority of unsupported \gls{sv} calls while preserving most bulk-supported variants across platforms, leaving call sets in which supported \glspl{sv} outnumber unsupported ones.}
 
 \subsection*{ChimeraLM mitigates WGA-induced SV type biases}
 
@@ -360,6 +365,7 @@ By improving the signal-to-noise ratio and clarifying \gls{sv}-type spectra that
 Several limitations warrant consideration.
 First, the current model processes reads independently; integrating contextual features such as coverage or phasing information may further enhance accuracy.
 Second, regarding computational resources, while \gls{cpu} inference is feasible, \gls{gpu} acceleration is recommended for processing large-scale datasets.
+\chg{Third, the training labels inherit the incompleteness of bulk sequencing: a genuine chimeric read whose structure is absent from all three bulk datasets is labelled as an artifact (Extended Data Fig.~\ref{fig:bulk_concordance}), and the model may consequently remove reads of that kind; this error reduces sensitivity for rare genuine events rather than creating false positives, and its magnitude is bounded by the observed retention of bulk-supported \glspl{sv} (75--87\%).}
 Finally, future work should extend validation to diverse cell types, sequencing platforms (e.g., PacBio HiFi), and alternative \gls{wga} protocols, including \gls{malbac}~\cite{zong2012genome}, \gls{lianti}~\cite{chen2017singlecell}, \gls{pta}~\cite{gonzalez-pena2021accurate}, and \gls{dmda}~\cite{dippenaar2024droplet}.
 While the sequence-based approach suggests broad applicability, systematic validation across amplification chemistries is needed to assess generalization limits and optimize performance for specific protocols.
 
@@ -405,6 +411,11 @@ A \gls{wga} read was labeled as biological if every segment matched at least one
 Reads lacking any matching pattern across all bulk datasets were labeled as artificial chimeras, presumed to arise from the amplification process.
 Additional chimeric reads were randomly sampled from the bulk datasets and labeled as biological, as these reads originate from genuine genomic rearrangements such as true \glspl{sv}.
 The final labeled dataset combined the annotated \gls{wga} PromethION P2 reads with the subsampled bulk chimeric reads and was subsequently partitioned into training, validation, and test sets as described below.
+
+\paragraph{\chg{Cross-platform concordance of bulk SV calls}}
+\chg{To estimate how incomplete each bulk reference is, \glspl{sv} were called with Sniffles2 v2.5 on the bulk PromethION, MinION and PacBio datasets, retained if supported by at least three reads, and merged across platforms with OctopuSV v0.2.3 (\texttt{--union --mode sample}).
+For the depth titration, the bulk PromethION BAM (20.8$\times$) was down-sampled with \texttt{samtools view -s} to 15$\times$, 10$\times$, 5$\times$ and 2.37$\times$ (the depth of the bulk MinION dataset); Sniffles2 was re-run on each down-sampled BAM with identical parameters and the resulting calls were merged with the full MinION and PacBio call sets.
+For each depth we report the number of PromethION calls and the fraction supported by at least one other platform.}
 
 \paragraph{Dataset partitioning and cross-platform validation}
 The combined labeled dataset, derived from \gls{wga} PromethION P2 and bulk sequencing data, was divided into training (70\%), validation (20\%), and test (10\%) sets using stratified random sampling.
@@ -521,8 +532,8 @@ Metrics (precision, recall, and F1 score) were computed as described in the trai
 
 \paragraph{\chg{Read-length analysis}}
 \chg{For every chimeric read (primary alignment with an \gls{sa} tag) in the \gls{wga} PromethION and MinION BAM files, we recorded the full read length (including hard-clipped bases), the number of alignment segments, and the read-coordinate position of every chimeric junction, defined as the boundary between consecutive alignment segments ordered along the read (primary alignment from its CIGAR string; supplementary alignments from the \gls{sa} tag).
-A read was considered fully truncated if all of its junctions lay beyond position 32,768.
-Reads were grouped into length bins ($\leq$2 kb, 2--8 kb, 8--16 kb, 16--32 kb, $>$32 kb) and, for each bin, we computed the fraction of reads classified as artifacts and, for \gls{wga}-derived reads of the held-out test set, precision, recall and F1 using the ChimeraLM predictions generated for the full \gls{wga} datasets.}
+	A read was considered fully truncated if all of its junctions lay beyond position 32,768.
+	Reads were grouped into length bins ($\leq$2 kb, 2--8 kb, 8--16 kb, 16--32 kb, $>$32 kb) and, for each bin, we computed the fraction of reads classified as artifacts and, for \gls{wga}-derived reads of the held-out test set, precision, recall and F1 using the ChimeraLM predictions generated for the full \gls{wga} datasets.}
 
 \paragraph{SV calling}
 \glspl{sv} were called using multiple tools to ensure comprehensive detection.
@@ -616,10 +627,21 @@ Computations were performed on a \gls{hpc} server with 64-core Intel Xeon Gold 6
 	\end{center}
 	\caption{{\bf \chg{Read-length distribution of chimeric reads and length dependence of ChimeraLM classification.}}
 		\chg{\textbf{(a)}~Length distribution of chimeric reads (primary alignments carrying an \gls{sa} tag) in the \gls{wga} PromethION ($n = 12{,}963{,}576$; median 2,100 bp, N50 4,053 bp, maximum 126,974 bp) and \gls{wga} MinION ($n = 1{,}666{,}427$; median 1,469 bp, N50 2,333 bp, maximum 42,118 bp) datasets. The dashed line marks the 32,768-bp model input limit, exceeded by 1,211 (0.009\%) and 6 reads, respectively; for all but two of these reads at least one chimeric junction lies within the first 32,768 bp.
-		\textbf{(b)}~Fraction of chimeric reads classified as \gls{wga}-induced artifacts by read-length bin; numbers above bars give the number of reads per bin.
-		\textbf{(c)}~Precision, recall and F1 of ChimeraLM on \gls{wga}-derived held-out test reads ($n = 58{,}636$; the 17,876 test reads sampled from bulk data are not shown because they are not part of the \gls{wga} dataset) stratified by read length. Bins with fewer than 10 reads are omitted.
-		\textbf{(d)}~Length distributions of chimeric reads retained (classified as genuine) and removed (classified as artifact) by ChimeraLM on both platforms (PromethION retained: median 3,087 bp, N50 7,989 bp; removed: median 2,067 bp, N50 3,836 bp; MinION retained: median 2,031 bp, N50 5,560 bp; removed: median 1,458 bp, N50 2,220 bp).}
+			\textbf{(b)}~Fraction of chimeric reads classified as \gls{wga}-induced artifacts by read-length bin; numbers above bars give the number of reads per bin.
+			\textbf{(c)}~Precision, recall and F1 of ChimeraLM on \gls{wga}-derived held-out test reads ($n = 58{,}636$; the 17,876 test reads sampled from bulk data are not shown because they are not part of the \gls{wga} dataset) stratified by read length. Bins with fewer than 10 reads are omitted.
+			\textbf{(d)}~Length distributions of chimeric reads retained (classified as genuine) and removed (classified as artifact) by ChimeraLM on both platforms (PromethION retained: median 3,087 bp, N50 7,989 bp; removed: median 2,067 bp, N50 3,836 bp; MinION retained: median 2,031 bp, N50 5,560 bp; removed: median 1,458 bp, N50 2,220 bp).}
 	}\label{fig:read_length}
+\end{figure}
+
+\begin{figure}[!ht]
+	\begin{center}
+		\begin{minipage}[t]{0.5\textwidth}\vspace{0pt}{\bfseries\large a}\par\includegraphics[width=\linewidth]{final_figures/sf_bulk_concordance_a}\end{minipage}%
+		\begin{minipage}[t]{0.5\textwidth}\vspace{0pt}{\bfseries\large b}\par\includegraphics[width=\linewidth]{final_figures/sf_bulk_concordance_b}\end{minipage}
+	\end{center}
+	\caption{{\bf \chg{Concordance of structural variant calls among the three bulk PC3 long-read datasets.}}
+		\chg{\textbf{(a)}~UpSet plot of high-confidence \glspl{sv} (Sniffles2, $\geq$3 supporting reads; merged with OctopuSV) from bulk PromethION P2 (20.8$\times$; 27,110 calls), bulk MinION Mk1c (2.4$\times$; 5,467) and bulk PacBio Sequel~II (38$\times$; 24,655). Of the 32,907 union calls, 20,026 (60.9\%) are detected on at least two platforms and 4,299 (13.1\%) on all three; platform-private calls make up 26.6\%, 17.4\% and 19.2\% of the PromethION, MinION and PacBio call sets, respectively.
+		\textbf{(b)}~Depth titration of the bulk PromethION data (down-sampled to 2.37$\times$, 5$\times$, 10$\times$, 15$\times$ and full 21$\times$): number of PromethION \gls{sv} calls (grey) and the fraction supported by at least one of the other two platforms (teal). The platform-private fraction rises with depth (5.1\% to 26.6\%), showing that deeper sequencing recovers variants absent from the shallower reference sets.}
+	}\label{fig:bulk_concordance}
 \end{figure}
 
 \begin{figure}[!ht]
