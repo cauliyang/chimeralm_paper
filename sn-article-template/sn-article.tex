@@ -160,11 +160,11 @@ This problem is particularly consequential for \gls{wga}-based long-read sequenc
 
 Distinguishing genuine genomic rearrangements from \gls{wga}-induced chimera artifacts remains a major computational challenge.
 \chg{Existing computational approaches detect amplification chimeras with handcrafted rules applied to alignments.
-SACRA~\cite{kiguchi2021longread}, developed for \gls{pb} reads of \gls{mda}-amplified phage metagenomes, aligns reads against one another, locates positions at which many reads stop aligning while others align through, and splits reads at these candidate junctions.
-3rd-ChimeraMiner~\cite{lu2023exploration}, also developed on \gls{pb} \gls{mda} data, identifies reads with multiple reference alignments and classifies them into chimera categories defined by the orientation and genomic distance of adjacent segments.
-CADECT~\cite{agyabeng2025evaluating}, designed for \gls{ont} \gls{mda} data, cuts each read into sliding windows, aligns the windows against each other and flags reads whose windows align to one another as concatemers.
-Each of these methods therefore targets one structural signature of chimera formation (a junction detectable by read-versus-read alignment, a discordant reference alignment pattern, or an internal repeat), with thresholds tuned to a single platform, and none of them uses the nucleotide content around the junction.
-Because \gls{wga} chimeras are heterogeneous, comprising intra- and inter-molecular joins, inverted and direct configurations, and junctions with or without microhomology~\cite{lasken2007mechanism,lu2023chimera}, signature-specific heuristics are sensitive to platform- and protocol-specific variation and leave the chimera classes they were not designed for untouched; moreover, by construction they cannot capture sequence-level patterns or long-range dependencies within reads.}
+	SACRA~\cite{kiguchi2021longread}, developed for \gls{pb} reads of \gls{mda}-amplified phage metagenomes, aligns reads against one another, locates positions at which many reads stop aligning while others align through, and splits reads at these candidate junctions.
+	3rd-ChimeraMiner~\cite{lu2023exploration}, also developed on \gls{pb} \gls{mda} data, identifies reads with multiple reference alignments and classifies them into chimera categories defined by the orientation and genomic distance of adjacent segments.
+	CADECT~\cite{agyabeng2025evaluating}, designed for \gls{ont} \gls{mda} data, cuts each read into sliding windows, aligns the windows against each other and flags reads whose windows align to one another as concatemers.
+	Each of these methods therefore targets one structural signature of chimera formation (a junction detectable by read-versus-read alignment, a discordant reference alignment pattern, or an internal repeat), with thresholds tuned to a single platform, and none of them uses the nucleotide content around the junction.
+	Because \gls{wga} chimeras are heterogeneous, comprising intra- and inter-molecular joins, inverted and direct configurations, and junctions with or without microhomology~\cite{lasken2007mechanism,lu2023chimera}, signature-specific heuristics are sensitive to platform- and protocol-specific variation and leave the chimera classes they were not designed for untouched; moreover, by construction they cannot capture sequence-level patterns or long-range dependencies within reads.}
 As a result, low-input long-read sequencing remains difficult to deploy in settings where high precision is essential, including somatic mosaicism profiling~\cite{haComprehensiveBenchmarkingGuidelines2023} and validation of CRISPR off-target effects~\cite{hoijerAmplificationfreeLongreadSequencing2020}.
 
 To address this challenge, we present ChimeraLM, an interpretable \gls{glm} for identifying and filtering \gls{wga}-induced artifacts at the single-read level.
@@ -209,9 +209,9 @@ We further added 178,748 chimeric reads sampled from the bulk datasets to the ge
 The final labeled dataset comprised 765,108 reads and was split into training (70\%), validation (20\%), and test (10\%) sets using stratified sampling (Extended Data Fig.~\ref{fig:data_construction}a).
 
 \chg{Because bulk sequencing is itself subject to false negatives, we quantified how much the three bulk datasets disagree before relying on them jointly as a reference (Extended Data Fig.~\ref{fig:bulk_concordance}).
-Among 32,907 high-confidence \glspl{sv} (Sniffles2, at least three supporting reads) called in the union of the three bulk datasets, 60.9\% were detected on at least two platforms and 13.1\% on all three; the fraction of calls private to a single platform was 17.4\% for MinION (2.4$\times$), 19.2\% for PacBio (38$\times$) and 26.6\% for PromethION (21$\times$) (Extended Data Fig.~\ref{fig:bulk_concordance}a).
-Down-sampling the PromethION data showed that the platform-private fraction grows with depth, from 5.1\% at 2.4$\times$ to 26.6\% at 21$\times$ (Extended Data Fig.~\ref{fig:bulk_concordance}b), indicating that deeper sequencing recovers events missed by the other two datasets rather than the reverse.
-No single bulk dataset is therefore complete, which motivated labelling a \gls{wga} read as genuine if its alignment structure matched a chimeric read in \emph{any} of the three bulk datasets (combined depth ${\sim}$61$\times$), and labelling it as an artifact only when it matched none of them.}
+	Among 32,907 high-confidence \glspl{sv} (Sniffles2, at least three supporting reads) called in the union of the three bulk datasets, 60.9\% were detected on at least two platforms and 13.1\% on all three; the fraction of calls private to a single platform was 17.4\% for MinION (2.4$\times$), 19.2\% for PacBio (38$\times$) and 26.6\% for PromethION (21$\times$) (Extended Data Fig.~\ref{fig:bulk_concordance}a).
+	Down-sampling the PromethION data showed that the platform-private fraction grows with depth, from 5.1\% at 2.4$\times$ to 26.6\% at 21$\times$ (Extended Data Fig.~\ref{fig:bulk_concordance}b), indicating that deeper sequencing recovers events missed by the other two datasets rather than the reverse.
+	No single bulk dataset is therefore complete, which motivated labelling a \gls{wga} read as genuine if its alignment structure matched a chimeric read in \emph{any} of the three bulk datasets (combined depth ${\sim}$61$\times$), and labelling it as an artifact only when it matched none of them.}
 
 To model these labeled reads, ChimeraLM needs to process long, variable-length DNA sequences at single-nucleotide resolution (Fig.~\ref{fig:figure1}c).
 We therefore built ChimeraLM on HyenaDNA~\cite{nguyen2023hyenadna}, a genomic foundation model pre-trained on diverse DNA sequences.
@@ -288,8 +288,8 @@ We first constructed a high-confidence gold-standard \gls{sv} set from bulk PC3 
 \glspl{sv} were called separately within each dataset using multiple \gls{sv} callers.
 Events supported by at least two callers within a dataset were retained, and only \glspl{sv} observed in at least two of the four datasets were designated as gold-standard events.
 \chg{The two-of-four rule reflects the composition of the four datasets (Extended Data Fig.~\ref{fig:gold_standard}): of the 123,115 \glspl{sv} in their union, 17,153 were detected in at least two datasets, of which 73.8\% were shared only by the two long-read datasets, 20.1\% had both long- and short-read support and 6.1\% were shared only by the two short-read datasets.
-Because only two datasets are long-read, requiring three of four would demand short-read confirmation and retain just 3,029 events (17.7\% of the two-of-four set; 1,606 or 9.4\% for four of four), systematically excluding insertions and other variants that short reads detect poorly~\cite{Sedlazeck2018}.
-We therefore use the two-of-four set as the gold standard and the platform-matched long-read bulk call sets as a complementary, less stringent reference (Fig.~\ref{fig:figure3}d,e).}
+	Because only two datasets are long-read, requiring three of four would demand short-read confirmation and retain just 3,029 events (17.7\% of the two-of-four set; 1,606 or 9.4\% for four of four), systematically excluding insertions and other variants that short reads detect poorly~\cite{Sedlazeck2018}.
+	We therefore use the two-of-four set as the gold standard and the platform-matched long-read bulk call sets as a complementary, less stringent reference (Fig.~\ref{fig:figure3}d,e).}
 
 \chg{Call sets were restricted to \glspl{sv} with at least three supporting reads, the Sniffles2 default (\hyperref[sec:methods]{Methods}).
 	Relative to this stringent gold standard, unfiltered \gls{wga} produced a large excess of unsupported \glspl{sv}.
@@ -304,10 +304,10 @@ This analysis provides a platform-specific estimate of recall and reduces bias i
 	Together, these results show that ChimeraLM removes the vast majority of unsupported \gls{sv} calls while preserving most bulk-supported variants across platforms, leaving call sets in which supported \glspl{sv} outnumber unsupported ones.}
 
 \chg{We next characterised the unsupported calls that remain after ChimeraLM filtering (4,332 on PromethION and 606 on MinION relative to the gold standard) and compared them with the supported calls in the same call sets (Extended Data Fig.~\ref{fig:residual_sv}).
-Residual unsupported calls were not dominated by a single class: on PromethION they comprised 39.5\% deletions, 34.9\% insertions, 24.0\% inversions and 1.7\% duplications, were small (median 189 bp; 70.2\% $<$500 bp) and weakly supported (median 4 reads; 65.3\% with $\leq$5 reads), whereas supported calls had a median of 10 supporting reads.
-Inversions were the one diagnostic feature: 1,039 residual unsupported calls were inversions, compared with a single inversion among the 4,490 supported calls (MinION: 100 versus 0).
-In contrast, the residual deletions and insertions resembled supported calls in size, consistent with a mixture of low-support artifacts and genuine variants that are absent from the stringent gold standard (see Extended Data Fig.~\ref{fig:bulk_concordance}).
-Raising the minimum read support further reduces residual calls at a cost in sensitivity: on PromethION, requiring at least five supporting reads removed 56.3\% of residual unsupported calls but also 20.1\% of supported calls (unsupported-to-supported ratio 0.96:1 to 0.53:1), and requiring ten reads removed 80.3\% versus 48.6\%; on the shallower MinION data stricter thresholds removed both classes at similar rates.}
+	Residual unsupported calls were not dominated by a single class: on PromethION they comprised 39.5\% deletions, 34.9\% insertions, 24.0\% inversions and 1.7\% duplications, were small (median 189 bp; 70.2\% $<$500 bp) and weakly supported (median 4 reads; 65.3\% with $\leq$5 reads), whereas supported calls had a median of 10 supporting reads.
+	Inversions were the one diagnostic feature: 1,039 residual unsupported calls were inversions, compared with a single inversion among the 4,490 supported calls (MinION: 100 versus 0).
+	In contrast, the residual deletions and insertions resembled supported calls in size, consistent with a mixture of low-support artifacts and genuine variants that are absent from the stringent gold standard (see Extended Data Fig.~\ref{fig:bulk_concordance}).
+	Raising the minimum read support further reduces residual calls at a cost in sensitivity: on PromethION, requiring at least five supporting reads removed 56.3\% of residual unsupported calls but also 20.1\% of supported calls (unsupported-to-supported ratio 0.96:1 to 0.53:1), and requiring ten reads removed 80.3\% versus 48.6\%; on the shallower MinION data stricter thresholds removed both classes at similar rates.}
 
 \subsection*{ChimeraLM mitigates WGA-induced SV type biases}
 
@@ -380,10 +380,12 @@ Second, regarding computational resources, while \gls{cpu} inference is feasible
 \chg{Third, the training labels inherit the incompleteness of bulk sequencing: a genuine chimeric read whose structure is absent from all three bulk datasets is labelled as an artifact (Extended Data Fig.~\ref{fig:bulk_concordance}), and the model may consequently remove reads of that kind; this error reduces sensitivity for rare genuine events rather than creating false positives, and its magnitude is bounded by the observed retention of bulk-supported \glspl{sv} (75--87\%).}
 Finally, future work should extend validation to diverse cell types, sequencing platforms (e.g., PacBio HiFi), and alternative \gls{wga} protocols, including \gls{malbac}~\cite{zong2012genome}, \gls{lianti}~\cite{chen2017singlecell}, \gls{pta}~\cite{gonzalez-pena2021accurate}, and \gls{dmda}~\cite{dippenaar2024droplet}.
 While the sequence-based approach suggests broad applicability, systematic validation across amplification chemistries is needed to assess generalization limits and optimize performance for specific protocols.
+\chg{Validation in primary tissue and tumour samples remains an open task: evaluating a read-level artifact filter requires single-cell long-read \gls{wga} data together with matched bulk long-read sequencing of the same sample, and the few such datasets from human tissue published to date are available only under controlled access (for example, through the European Genome-phenome Archive).
+Because tissue and tumour cells are more heterogeneous than a monoclonal cell line, whereas the artifact profile is determined primarily by the amplification chemistry rather than by the cell of origin, we expect ChimeraLM's performance on such samples to track its cross-cell-line and cross-chemistry behaviour, but this expectation should be tested as suitable data become accessible.}
 
 \chg{ChimeraLM acts on reads, not on calls, and is therefore complementary to, rather than a replacement for, caller-level filtering.
-Our characterisation of the calls that remain unsupported after filtering (Extended Data Fig.~\ref{fig:residual_sv}) suggests two practical steps for users who require higher specificity: inversion calls that lack orthogonal support should be treated with suspicion, because essentially no bulk-supported inversion survived in our \gls{wga} call sets while residual inversions accounted for 17--24\% of unsupported calls; and a moderate read-support threshold (for example, at least five supporting reads) removes more than half of the residual unsupported calls on deeply sequenced samples at a cost of about one fifth of supported calls, whereas stricter thresholds increasingly discard supported calls as well, and on shallow data remove both classes at similar rates.
-Conversely, callers that aggregate evidence across cells or that incorporate coverage and phasing information may recover genuine events that single-cell read-level filtering alone cannot confirm.}
+	Our characterisation of the calls that remain unsupported after filtering (Extended Data Fig.~\ref{fig:residual_sv}) suggests two practical steps for users who require higher specificity: inversion calls that lack orthogonal support should be treated with suspicion, because essentially no bulk-supported inversion survived in our \gls{wga} call sets while residual inversions accounted for 17--24\% of unsupported calls; and a moderate read-support threshold (for example, at least five supporting reads) removes more than half of the residual unsupported calls on deeply sequenced samples at a cost of about one fifth of supported calls, whereas stricter thresholds increasingly discard supported calls as well, and on shallow data remove both classes at similar rates.
+	Conversely, callers that aggregate evidence across cells or that incorporate coverage and phasing information may recover genuine events that single-cell read-level filtering alone cannot confirm.}
 
 More broadly, ChimeraLM illustrates the potential of \glspl{glm} for data quality control.
 As long-context architectures continue to advance~\cite{nguyen2023hyenadna}, extending the model's context window to handle megabase-scale inputs could enable artifact detection in more complex genomic structures.
@@ -430,8 +432,8 @@ The final labeled dataset combined the annotated \gls{wga} PromethION P2 reads w
 
 \paragraph{\chg{Cross-platform concordance of bulk SV calls}}
 \chg{To estimate how incomplete each bulk reference is, \glspl{sv} were called with Sniffles2 v2.5 on the bulk PromethION, MinION and PacBio datasets, retained if supported by at least three reads, and merged across platforms with OctopuSV v0.2.3 (\texttt{--union --mode sample}).
-For the depth titration, the bulk PromethION BAM (20.8$\times$) was down-sampled with \texttt{samtools view -s} to 15$\times$, 10$\times$, 5$\times$ and 2.37$\times$ (the depth of the bulk MinION dataset); Sniffles2 was re-run on each down-sampled BAM with identical parameters and the resulting calls were merged with the full MinION and PacBio call sets.
-For each depth we report the number of PromethION calls and the fraction supported by at least one other platform.}
+	For the depth titration, the bulk PromethION BAM (20.8$\times$) was down-sampled with \texttt{samtools view -s} to 15$\times$, 10$\times$, 5$\times$ and 2.37$\times$ (the depth of the bulk MinION dataset); Sniffles2 was re-run on each down-sampled BAM with identical parameters and the resulting calls were merged with the full MinION and PacBio call sets.
+	For each depth we report the number of PromethION calls and the fraction supported by at least one other platform.}
 
 \paragraph{Dataset partitioning and cross-platform validation}
 The combined labeled dataset, derived from \gls{wga} PromethION P2 and bulk sequencing data, was divided into training (70\%), validation (20\%), and test (10\%) sets using stratified random sampling.
@@ -595,7 +597,7 @@ Figures were generated using Python with Matplotlib~\cite{Hunter2007} and Seabor
 \subsection*{Computing resources}
 Computations were performed on a \gls{hpc} server with 64-core Intel Xeon Gold 6338 CPU, 256 GB RAM, and two NVIDIA A100 \glspl{gpu} (80 GB memory each).
 \chg{Inference cost scales approximately linearly with input length: on one A100 (bf16, batch size 12) the released model classifies 1,512 reads\,s$^{-1}$ at 2,048 bp, 402 reads\,s$^{-1}$ at 8,192 bp and 96 reads\,s$^{-1}$ at the 32,768-bp limit, with peak \gls{gpu} memory of 0.4, 1.4 and 5.6 GB, respectively.
-For comparison, a HyenaDNA-medium backbone evaluated at its full 160,000-bp context processes 8 reads\,s$^{-1}$ and requires 31 GB at the same batch size.}
+	For comparison, a HyenaDNA-medium backbone evaluated at its full 160,000-bp context processes 8 reads\,s$^{-1}$ and requires 31 GB at the same batch size.}
 
 \backmatter
 
@@ -655,12 +657,11 @@ For comparison, a HyenaDNA-medium backbone evaluated at its full 160,000-bp cont
 
 \begin{figure}[!ht]
 	\begin{center}
-		\begin{minipage}[t]{0.5\textwidth}\vspace{0pt}{\bfseries\large a}\par\includegraphics[width=\linewidth]{final_figures/sf_bulk_concordance_a}\end{minipage}%
-		\begin{minipage}[t]{0.5\textwidth}\vspace{0pt}{\bfseries\large b}\par\includegraphics[width=\linewidth]{final_figures/sf_bulk_concordance_b}\end{minipage}
+		\includegraphics[width=\linewidth]{final_figures/sf_bulk_concordance}
 	\end{center}
 	\caption{{\bf \chg{Concordance of structural variant calls among the three bulk PC3 long-read datasets.}}
 		\chg{\textbf{(a)}~UpSet plot of high-confidence \glspl{sv} (Sniffles2, $\geq$3 supporting reads; merged with OctopuSV) from bulk PromethION P2 (20.8$\times$; 27,110 calls), bulk MinION Mk1c (2.4$\times$; 5,467) and bulk PacBio Sequel~II (38$\times$; 24,655). Of the 32,907 union calls, 20,026 (60.9\%) are detected on at least two platforms and 4,299 (13.1\%) on all three; platform-private calls make up 26.6\%, 17.4\% and 19.2\% of the PromethION, MinION and PacBio call sets, respectively.
-		\textbf{(b)}~Depth titration of the bulk PromethION data (down-sampled to 2.37$\times$, 5$\times$, 10$\times$, 15$\times$ and full 21$\times$): number of PromethION \gls{sv} calls (grey) and the fraction supported by at least one of the other two platforms (teal). The platform-private fraction rises with depth (5.1\% to 26.6\%), showing that deeper sequencing recovers variants absent from the shallower reference sets.}
+			\textbf{(b)}~Depth titration of the bulk PromethION data (down-sampled to 2.37$\times$, 5$\times$, 10$\times$, 15$\times$ and full 21$\times$): number of PromethION \gls{sv} calls (grey) and the fraction supported by at least one of the other two platforms (teal). The platform-private fraction rises with depth (5.1\% to 26.6\%), showing that deeper sequencing recovers variants absent from the shallower reference sets.}
 	}\label{fig:bulk_concordance}
 \end{figure}
 
@@ -679,9 +680,9 @@ For comparison, a HyenaDNA-medium backbone evaluated at its full 160,000-bp cont
 	\end{center}
 	\caption{{\bf \chg{Features of structural variant calls that remain unsupported after ChimeraLM filtering.}}
 		\chg{\gls{sv} calls from the \gls{wga} + ChimeraLM call sets (Sniffles2, $\geq$3 supporting reads) benchmarked against the gold standard (Fig.~\ref{fig:figure3}b,c) were split into unsupported (light teal; Truvari false positives) and supported (dark teal; Truvari true positives) calls.
-		\textbf{(a--c)}~PromethION ($n = 4{,}332$ unsupported, $4{,}490$ supported): distribution of \gls{sv} type (a), \gls{sv} size (b) and Sniffles2 read support (c).
-		\textbf{(d--f)}~The same for MinION ($n = 606$ unsupported, $1{,}450$ supported).
-		Numbers above bars give the percentage of calls in each class.}
+			\textbf{(a--c)}~PromethION ($n = 4{,}332$ unsupported, $4{,}490$ supported): distribution of \gls{sv} type (a), \gls{sv} size (b) and Sniffles2 read support (c).
+			\textbf{(d--f)}~The same for MinION ($n = 606$ unsupported, $1{,}450$ supported).
+			Numbers above bars give the percentage of calls in each class.}
 	}\label{fig:residual_sv}
 \end{figure}
 

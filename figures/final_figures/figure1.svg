@@ -7,7 +7,7 @@
    viewBox="0 0 297 210"
    version="1.1"
    id="svg1"
-   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   inkscape:version="1.4.4 (dcaf3e7d9e, 2026-05-05)"
    sodipodi:docname="figure1.svg"
    xml:space="preserve"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -25,15 +25,15 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="2.4067634"
-     inkscape:cx="1740.304"
-     inkscape:cy="358.3651"
-     inkscape:window-width="2466"
-     inkscape:window-height="1339"
+     inkscape:zoom="0.60169085"
+     inkscape:cx="989.71091"
+     inkscape:cy="666.45521"
+     inkscape:window-width="2392"
+     inkscape:window-height="1300"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="g1-9"
      showgrid="true"
      showguides="true"><inkscape:grid
        id="grid1"
@@ -44341,7 +44341,7 @@
        y="-50.771576"
        rx="10.951456"
        transform="matrix(0.26513166,0,0,0.22665333,306.48739,-1.9257492)"
-       inkscape:export-filename="figure1.pdf"
+       inkscape:export-filename="figure1.png"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" /><rect
        style="font-variation-settings:normal;display:inline;vector-effect:none;fill:#f5f6f7;fill-opacity:1;stroke:none;stroke-width:2.51757;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:fill markers stroke;stop-color:#000000"
@@ -45124,7 +45124,7 @@
                    id="tspan4-0-7-9-0-2-4-8"
                    style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:5.33334px;font-family:Arial;-inkscape-font-specification:Arial;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.27098;stroke-dasharray:none"
                    x="-1835.5084"
-                   y="62.660496">Artifical read</tspan></text></g></g></g><rect
+                   y="62.660496">Artificial read</tspan></text></g></g></g><rect
            style="font-variation-settings:normal;fill:none;fill-opacity:1;stroke:#b3b3b3;stroke-width:0.319382;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:3.4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
            id="rect1-5-9-1"
            width="56.675888"
@@ -59253,7 +59253,7 @@
            id="tspan228-9"
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.175px;font-family:Arial;-inkscape-font-specification:'Arial Bold';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.250955"
            x="350.70886"
-           y="204.07095">Artifcial</tspan></text><image
+           y="204.07095">Artificial</tspan></text><image
          width="5.3650551"
          height="5.3650551"
          preserveAspectRatio="none"
@@ -59279,7 +59279,7 @@
            id="tspan221-4"
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.175px;font-family:Arial;-inkscape-font-specification:'Arial Bold';writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.250955"
            x="348.63684"
-           y="185.22697">Bioltogical</tspan></text><image
+           y="185.22697">Biological</tspan></text><image
          width="6.2570772"
          height="6.2570772"
          preserveAspectRatio="none"
