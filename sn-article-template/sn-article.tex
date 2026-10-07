@@ -135,7 +135,7 @@
 	To capture long-range dependencies in variable-length reads, the model integrates Hyena operators with attention pooling.
 	Evaluated on matched \gls{wga} and bulk nanopore datasets, ChimeraLM eliminated ${\sim}$90\% of chimeric reads from \gls{wga} data, restoring chimeric read proportion to near-bulk levels, whereas existing approaches achieved at most an 8\% reduction.
 	\chg{Benchmarked against a multi-platform gold-standard \gls{sv} set, ChimeraLM removed 91--98\% of unsupported \gls{sv} calls from \gls{wga} datasets while retaining 75--87\% of gold-standard \glspl{sv}; against platform-matched bulk long-read call sets, it removed 91--99\% of unsupported calls while retaining 75--86\% of bulk-supported \glspl{sv}.}
-	ChimeraLM further \chg{shifted \gls{sv} type distributions toward bulk profiles by substantially reducing} the characteristic inversion bias observed in unprocessed \gls{wga} data.
+	ChimeraLM further \chg{restored \gls{sv} type distributions to near-bulk profiles, reducing the inversion fraction of \gls{wga} call sets from 94\% and 57\% to 12\% and 5\% on the two platforms, thereby largely removing} the characteristic inversion bias observed in unprocessed \gls{wga} data.
 	Attention-based interpretation indicates that ChimeraLM concentrates classification evidence at chimeric junctions, demonstrating its ability to learn biologically interpretable features.
 	ChimeraLM provides a general approach for suppressing amplification-induced artifacts, enabling more reliable single-cell \gls{sv} analysis across long-read platforms.}
 \keywords{Whole Genome Amplification, Single Cell, Genomic Language Model, Structural Variation}
@@ -322,7 +322,7 @@ Smaller fractions of deletions, duplications, and insertions were also present, 
 
 Applying ChimeraLM \chg{largely removed} these biases.
 \chg{The inversion fraction decreased from 93.8\% to 11.9\% on PromethION and from 57.2\% to 4.8\% on MinION, while deletions and insertions rose from 5.3\% to 86.9\% and from 25.8\% to 89.3\% of calls, close to the bulk values of 81.9\% and 90.8\% (Fig.~\ref{fig:figure3}f); on MinION the excess of translocation-type (breakend) calls was likewise reduced from 14.8\% to 5.4\% (bulk 7.9\%).
-The residual inversion fraction remains above the bulk level (1.1\%), and the remaining inversions are almost entirely unsupported by bulk sequencing (Extended Data Fig.~\ref{fig:residual_sv}).}
+	The residual inversion fraction remains above the bulk level (1.1\%), and the remaining inversions are almost entirely unsupported by bulk sequencing (Extended Data Fig.~\ref{fig:residual_sv}).}
 By selectively removing artifact‑supported events, ChimeraLM suppresses the dominant inversion inflation and reduces spurious calls across \gls{sv} types, shifting \gls{sv}‑type distributions toward bulk profiles and improving the accuracy and interpretability of single‑cell \gls{sv} analyses~\cite{hardLongreadWholegenomeAnalysis2023a}.
 
 \begin{figure}[H]
