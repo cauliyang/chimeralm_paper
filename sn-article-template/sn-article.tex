@@ -207,11 +207,11 @@ The remaining 293,180 reads (2.3\%) had matching structures in at least one bulk
 To construct a balanced training dataset, we retained all 293,180 genuine chimeric reads and randomly subsampled an equal number of \gls{wga}-induced artifacts.
 We further added 178,748 chimeric reads sampled from the bulk datasets to the genuine-event set, expanding the diversity of bulk-supported chimeric alignment structures used for training.
 The final labeled dataset comprised 765,108 reads and was split into training (70\%), validation (20\%), and test (10\%) sets using stratified sampling (Extended Data Fig.~\ref{fig:data_construction}a).
-
-\chg{Because bulk sequencing is itself subject to false negatives, we quantified how much the three bulk datasets disagree before relying on them jointly as a reference (Extended Data Fig.~\ref{fig:bulk_concordance}).
-	Among 32,907 high-confidence \glspl{sv} (Sniffles2, at least three supporting reads) called in the union of the three bulk datasets, 60.9\% were detected on at least two platforms and 13.1\% on all three; the fraction of calls private to a single platform was 17.4\% for MinION (2.4$\times$), 19.2\% for PacBio (38$\times$) and 26.6\% for PromethION (21$\times$) (Extended Data Fig.~\ref{fig:bulk_concordance}a).
-	Down-sampling the PromethION data showed that the platform-private fraction grows with depth, from 5.1\% at 2.4$\times$ to 26.6\% at 21$\times$ (Extended Data Fig.~\ref{fig:bulk_concordance}b), indicating that deeper sequencing recovers events missed by the other two datasets rather than the reverse.
-	No single bulk dataset is therefore complete, which motivated labelling a \gls{wga} read as genuine if its alignment structure matched a chimeric read in \emph{any} of the three bulk datasets (combined depth ${\sim}$61$\times$), and labelling it as an artifact only when it matched none of them.}
+%
+% \chg{Because bulk sequencing is itself subject to false negatives, we quantified how much the three bulk datasets disagree before relying on them jointly as a reference (Extended Data Fig.~\ref{fig:bulk_concordance}).
+% 	Among 32,907 high-confidence \glspl{sv} (Sniffles2, at least three supporting reads) called in the union of the three bulk datasets, 60.9\% were detected on at least two platforms and 13.1\% on all three; the fraction of calls private to a single platform was 17.4\% for MinION (2.4$\times$), 19.2\% for PacBio (38$\times$) and 26.6\% for PromethION (21$\times$) (Extended Data Fig.~\ref{fig:bulk_concordance}a).
+% 	Down-sampling the PromethION data showed that the platform-private fraction grows with depth, from 5.1\% at 2.4$\times$ to 26.6\% at 21$\times$ (Extended Data Fig.~\ref{fig:bulk_concordance}b), indicating that deeper sequencing recovers events missed by the other two datasets rather than the reverse.
+% 	No single bulk dataset is therefore complete, which motivated labelling a \gls{wga} read as genuine if its alignment structure matched a chimeric read in \emph{any} of the three bulk datasets (combined depth ${\sim}$61$\times$), and labelling it as an artifact only when it matched none of them.}
 
 To model these labeled reads, ChimeraLM needs to process long, variable-length DNA sequences at single-nucleotide resolution (Fig.~\ref{fig:figure1}c).
 We therefore built ChimeraLM on HyenaDNA~\cite{nguyen2023hyenadna}, a genomic foundation model pre-trained on diverse DNA sequences.
@@ -646,15 +646,6 @@ Computations were performed on a \gls{hpc} server with 64-core Intel Xeon Gold 6
 	}\label{fig:data_construction}
 \end{figure}
 
-\begin{figure}[!ht]
-	\begin{center}
-		\includegraphics[width=\linewidth]{final_figures/sf_bulk_concordance}
-	\end{center}
-	\caption{{\bf \chg{Concordance of structural variant calls among the three bulk PC3 long-read datasets.}}
-		\chg{\textbf{(a)}~UpSet plot of high-confidence \glspl{sv} (Sniffles2, $\geq$3 supporting reads; merged with OctopuSV) from bulk PromethION P2 (20.8$\times$; 27,110 calls), bulk MinION Mk1c (2.4$\times$; 5,467) and bulk PacBio Sequel~II (38$\times$; 24,655). Of the 32,907 union calls, 20,026 (60.9\%) are detected on at least two platforms and 4,299 (13.1\%) on all three; platform-private calls make up 26.6\%, 17.4\% and 19.2\% of the PromethION, MinION and PacBio call sets, respectively.
-			\textbf{(b)}~Depth titration of the bulk PromethION data (down-sampled to 2.37$\times$, 5$\times$, 10$\times$, 15$\times$ and full 21$\times$): number of PromethION \gls{sv} calls (grey) and the fraction supported by at least one of the other two platforms (teal). The platform-private fraction rises with depth (5.1\% to 26.6\%), showing that deeper sequencing recovers variants absent from the shallower reference sets.}
-	}\label{fig:bulk_concordance}
-\end{figure}
 
 \begin{figure}[!ht]
 	\begin{center}
@@ -689,6 +680,17 @@ Computations were performed on a \gls{hpc} server with 64-core Intel Xeon Gold 6
 			Numbers above bars give the percentage of calls in each class.}
 	}\label{fig:residual_sv}
 \end{figure}
+
+\begin{figure}[!ht]
+	\begin{center}
+		\includegraphics[width=\linewidth]{final_figures/sf_bulk_concordance}
+	\end{center}
+	\caption{{\bf \chg{Concordance of structural variant calls among the three bulk PC3 long-read datasets.}}
+		\chg{\textbf{(a)}~UpSet plot of high-confidence \glspl{sv} (Sniffles2, $\geq$3 supporting reads; merged with OctopuSV) from bulk PromethION P2 (20.8$\times$; 27,110 calls), bulk MinION Mk1c (2.4$\times$; 5,467) and bulk PacBio Sequel~II (38$\times$; 24,655). Of the 32,907 union calls, 20,026 (60.9\%) are detected on at least two platforms and 4,299 (13.1\%) on all three; platform-private calls make up 26.6\%, 17.4\% and 19.2\% of the PromethION, MinION and PacBio call sets, respectively.
+			\textbf{(b)}~Depth titration of the bulk PromethION data (down-sampled to 2.37$\times$, 5$\times$, 10$\times$, 15$\times$ and full 21$\times$): number of PromethION \gls{sv} calls (grey) and the fraction supported by at least one of the other two platforms (teal). The platform-private fraction rises with depth (5.1\% to 26.6\%), showing that deeper sequencing recovers variants absent from the shallower reference sets.}
+	}\label{fig:bulk_concordance}
+\end{figure}
+
 
 \begin{figure}[!ht]
 	\begin{center}
