@@ -723,14 +723,16 @@ Computations were performed on a \gls{hpc} server with 64-core Intel Xeon Gold 6
 % 		(b) MinION Mk1c platform chimeric alignment analysis. Bar chart showing the distribution of chimeric reads based on the number of chimeric alignments per read (x-axis: 2, 3, 4+ alignments) and total read count (y-axis, log scale). Bars are colored by ChimeraLM's binary classification: biological (dark teal) and artificial (coral). Analysis includes only reads identified as chimeric (minimum 2 alignments per read).}\label{fig:sf2}
 % \end{figure}
 
-\bmhead{Acknowledgements}
 
-We thank Tingyou Wang for guidance on figure preparation.
-This project was supported in part by NIH grants R35GM142441 and R01CA259388 awarded to RY.
+
 
 \section*{Declarations}
 
-\bmhead{Author Contributions}
+\bmhead{Acknowledgements}
+
+We thank Tingyou Wang for guidance on figure preparation.
+
+\bmhead{Author contributions}
 
 YL, QG and RY designed the study.
 YL and QG performed the analysis.
@@ -740,7 +742,15 @@ YL built the command-line tool and documentation.
 YL, QG and RY wrote the manuscript.
 RY supervised this work.
 
-\bmhead{Data Availability}
+\bmhead{Conflict of interest}
+
+The authors declare no competing interests.
+
+\bmhead{Funding}
+
+This project was supported in part by NIH grants R35GM142441 and R01CA259388 awarded to RY, and Prostate Cancer Foundation Young Investigator Award to RY.
+
+\bmhead{Data availability}
 
 The raw sequencing data generated in this study have been deposited in the NCBI Sequence Read Archive (SRA) under BioProject accession PRJNA1354861.
 The dataset includes Oxford Nanopore long-read whole-genome sequencing of PC3 prostate cancer cells and MDA-amplified single-cell derivatives.
@@ -749,16 +759,12 @@ PC3 bulk (MinION Mk1C), SRR35904028; PC3 bulk (PromethION P2), SRR35904029;
 PC3 10-cell WGA (MinION Mk1C), SRR35904026; PC3 10-cell WGA (PromethION P2), SRR35904027.
 We can access the data at the following link: \url{https://dataview.ncbi.nlm.nih.gov/object/PRJNA1354861?reviewer=viej6cv6mgbli3n7a9a5k1bsb3}
 
-\bmhead{Code Availability}
+\bmhead{Code availability}
 
 ChimeraLM, implemented in Python, is open source and available on GitHub (\url{https://github.com/ylab-hi/ChimeraLM}) under the Apache License, Version 2.0.
 The package can be installed via PyPI (\url{https://pypi.org/project/chimeralm}) using pip, with wheel distributions provided for Windows, Linux, and macOS to ensure easy cross-platform installation.
 An interactive demo is available on Hugging Face (\url{https://huggingface.co/spaces/yangliz5/ChimeraLM}), allowing users to test ChimeraLM's functionality without local installation\chg{; the demo runs on free-tier hardware and is put to sleep after 48 hours without visitors, so it may take one to two minutes to restart when first opened}.
 For large-scale analyses, we recommend using ChimeraLM on systems with \gls{gpu} acceleration. Detailed system requirements and optimization guidelines are available in the repository's documentation (\url{https://ylab-hi.github.io/ChimeraLM/}).
-
-\bmhead{Conflict of interest}
-
-The authors declare no competing interests.
 
 % Some journals require declarations to be submitted in a standardised format. Please check the Instructions for Authors of the journal to which you are submitting to see if you need to complete this section. If yes, your manuscript must contain the following sections under the heading `Declarations':
 
