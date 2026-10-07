@@ -301,7 +301,7 @@ This analysis provides a platform-specific estimate of recall and reduces bias i
 \chg{ChimeraLM increased validation rates from 2.6\% to 68.6\% on PromethION (26.3-fold) and from 21.1\% to 68.7\% on MinION (3.3-fold), removing 98.9\% and 90.9\% of bulk-unsupported calls while retaining 86.2\% (6,048 of 7,019) and 75.2\% (1,413 of 1,880) of bulk-supported events, respectively (Fig.~\ref{fig:figure3}d,e).
 	Together, these results show that ChimeraLM removes the vast majority of unsupported \gls{sv} calls while preserving most bulk-supported variants across platforms, leaving call sets in which supported \glspl{sv} outnumber unsupported ones.}
 
-\chg{We next characterised the unsupported calls that remain after ChimeraLM filtering (4,332 on PromethION and 606 on MinION relative to the gold standard) and compared them with the supported calls in the same call sets (Extended Data Fig.~\ref{fig:residual_sv}).
+\chg{We next characterised the unsupported calls that remain after ChimeraLM filtering relative to the gold standard and compared them with the supported calls in the same call sets (Extended Data Fig.~\ref{fig:residual_sv}).
 	Residual unsupported calls were not dominated by a single class: on PromethION they comprised 39.5\% deletions, 34.9\% insertions, 24.0\% inversions and 1.7\% duplications, were small (median 189 bp; 70.2\% $<$500 bp) and weakly supported (median 4 reads; 65.3\% with $\leq$5 reads), whereas supported calls had a median of 10 supporting reads.
 	Inversions were the one diagnostic feature: 1,039 residual unsupported calls were inversions, compared with a single inversion among the 4,490 supported calls (MinION: 100 versus 0).
 	In contrast, the residual deletions and insertions resembled supported calls in size, consistent with a mixture of low-support artifacts and genuine variants that are absent from the stringent gold standard (see Extended Data Fig.~\ref{fig:bulk_concordance}).
@@ -319,8 +319,8 @@ These artifact‑supported events were overwhelmingly enriched for inversions, c
 Smaller fractions of deletions, duplications, and insertions were also present, indicating that \gls{wga} artifacts inflate not only inversion calls but generate false positives across multiple \gls{sv} categories.
 
 Applying ChimeraLM \chg{largely removed} these biases.
-\chg{The inversion fraction decreased from 93.8\% to 11.9\% on PromethION and from 57.2\% to 4.8\% on MinION, while deletions and insertions rose from 5.3\% to 86.9\% and from 25.8\% to 89.3\% of calls, close to the bulk values of 81.9\% and 90.8\% (Fig.~\ref{fig:figure3}f); on MinION the excess of translocation-type (breakend) calls was likewise reduced from 14.8\% to 5.4\% (bulk 7.9\%).
-	The residual inversion fraction remains above the bulk level (1.1\%), and the remaining inversions are almost entirely unsupported by bulk sequencing (Extended Data Fig.~\ref{fig:residual_sv}).}
+\chg{The inversion fraction decreased to 11.9\% on PromethION and 4.8\% on MinION, while deletions and insertions rose to 86.9\% and 89.3\% of calls, close to bulk (Fig.~\ref{fig:figure3}f); on MinION the excess of translocation-type (breakend) calls was likewise reduced from 14.8\% to 5.4\% (bulk 7.9\%).
+	The residual inversion fraction remains above the bulk level, and the remaining inversions are almost entirely unsupported by bulk sequencing (Extended Data Fig.~\ref{fig:residual_sv}).}
 By selectively removing artifact‑supported events, ChimeraLM suppresses the dominant inversion inflation and reduces spurious calls across \gls{sv} types, shifting \gls{sv}‑type distributions toward bulk profiles and improving the accuracy and interpretability of single‑cell \gls{sv} analyses~\cite{hardLongreadWholegenomeAnalysis2023a}.
 
 \begin{figure}[H]
