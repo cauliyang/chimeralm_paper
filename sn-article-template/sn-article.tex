@@ -228,7 +228,7 @@ The pooled representation is then passed through residual \gls{mlp} blocks, and 
 		\textbf{(a)}~Classification performance on held-out test data. ChimeraLM achieves recall of 0.95, precision of 0.70, and F1 score of 0.81.
 		\textbf{(b)}~Chimeric read reduction across sequencing platforms. Stacked bars show proportions of chimeric (dark teal) and non-chimeric (light teal) reads in bulk, \gls{wga}, and ChimeraLM-filtered samples. ChimeraLM reduces chimeric read frequencies from 46.0\% to 4.9\% (PromethION) and from 23.0\% to 1.5\% (MinION), approaching bulk levels (2.3\% and 2.5\%, respectively).
 		\textbf{(c,d)}~Benchmarking against existing methods on PromethION (c) and MinION (d).
-		The gray bar indicates the total number of chimeric read on unfiltered \gls{wga} data.
+		The gray bar indicates the total number of chimeric reads on unfiltered \gls{wga} data.
 		The blue bar represents the total number of chimeric reads remaining after filtering by each method.
 		ChimeraLM achieves approximately 90\% reduction in chimeric reads on both platforms, while 3rd-ChimeraMiner shows no detectable reduction and CADECT shows 8.3\%  and 4.6\% reduction on PromethION and MinION, respectively.
 		SACRA failed to complete due to memory exhaustion ($>500$ GB RAM required).
@@ -376,7 +376,7 @@ By improving the signal-to-noise ratio and clarifying \gls{sv}-type spectra that
 Several limitations warrant consideration.
 First, the current model processes reads independently; integrating contextual features such as coverage or phasing information may further enhance accuracy.
 Second, regarding computational resources, while \gls{cpu} inference is feasible, \gls{gpu} acceleration is recommended for processing large-scale datasets.
-\chg{Third, the training labels inherit the incompleteness of bulk sequencing: a genuine chimeric read whose structure is absent from all three bulk datasets is labelled as an artifact (Extended Data Fig.~\ref{fig:bulk_concordance}), and the model may consequently remove reads of that kind; this error reduces sensitivity for rare genuine events rather than creating false positives, and its magnitude is bounded by the observed retention of bulk-supported \glspl{sv} (75--87\%).}
+\chg{Third, the training labels inherit the incompleteness of bulk sequencing: a genuine chimeric read whose structure is absent from all three bulk datasets is labelled as an artifact (Extended Data Fig.~\ref{fig:bulk_concordance}), and the model may therefore remove some genuine reads, reducing sensitivity for rare true events. This effect is reflected in the observed retention of bulk-supported \glspl{sv} (75--87\%).}
 \chg{We have shown that artifact removal transfers without retraining to an independent cell line, laboratory, flow-cell chemistry (R9.4.1 and R10.4) and amplification method (\gls{malbac}); when a matched bulk dataset is available, fine-tuning the classifier on bulk-supported reads of the sample under study is nevertheless a straightforward way to adapt it to sample-specific rearrangements.}
 Future work should extend validation to further cell types, sequencing platforms (e.g., PacBio HiFi), and alternative \gls{wga} protocols, including \gls{lianti}~\cite{chen2017singlecell}, \gls{pta}~\cite{gonzalez-pena2021accurate}, and \gls{dmda}~\cite{dippenaar2024droplet}.
 While the sequence-based approach suggests broad applicability, systematic validation across amplification chemistries is needed to assess generalization limits and optimize performance for specific protocols.
@@ -419,7 +419,7 @@ This definition counts each chimeric read once using its primary alignment while
 \paragraph{Data generation and sources}
 To construct the training dataset, we generated \gls{wga} and bulk sequencing data from PC3 cells.
 The \gls{wga} sample was amplified and sequenced on the PromethION P2 platform (\gls{ont}), while three independent bulk datasets were produced from non-amplified genomic DNA: bulk PromethION P2, bulk MinION Mk1c (\gls{ont}), and bulk \gls{pb}.
-These bulk datasets represent authentic biological sequences free from amplification-induced artifacts.
+Because these bulk libraries were not amplified, they are not expected to contain WGA-induced amplification artifacts.
 In contrast, \gls{wga} sequencing includes both genuine genomic reads and artificial chimeras introduced during the amplification process.
 
 \paragraph{Ground truth annotation and class definition}
@@ -427,7 +427,7 @@ Ground truth labels were established by systematically comparing chimeric reads 
 For each \gls{wga} chimeric read, all alignment segments---defined by their genomic start and end coordinates---were compared to the corresponding segments of bulk chimeric reads.
 A \gls{wga} read was labeled as biological if every segment matched at least one bulk chimeric read within a 1~kb positional tolerance, indicating that the structural configuration is also present in non-amplified DNA.
 Reads lacking any matching pattern across all bulk datasets were labeled as artificial chimeras, presumed to arise from the amplification process.
-Additional chimeric reads were randomly sampled from the bulk datasets and labeled as biological, as these reads originate from genuine genomic rearrangements such as true \glspl{sv}.
+Additional chimeric reads were randomly sampled from the bulk datasets and included in the biological class, providing examples of chimeric alignment structures observed in non-amplified DNA.
 The final labeled dataset combined the annotated \gls{wga} PromethION P2 reads with the subsampled bulk chimeric reads and was subsequently partitioned into training, validation, and test sets as described below.
 
 \paragraph{\chg{Cross-platform concordance of bulk SV calls}}
