@@ -583,9 +583,9 @@ This dual benchmarking strategy quantifies both improvements in detecting high-c
 
 \subsection*{Benchmarking against existing methods}
 ChimeraLM was compared to existing computational methods for detecting amplification-induced chimeric artifacts: SACRA~\cite{kiguchi2021longread} (GitHub commit~9a2607e),  3rd-ChimeraMiner~\cite{lu2023exploration} (GitHub commit~04b5233), and CADECT v1.2~\cite{agyabeng2025evaluating}.
-Both tools were applied to \gls{wga} data from PromethION P2 and MinION Mk1c platforms using default parameters as recommended in their documentation.
+The tools were applied to \gls{wga} data from PromethION P2 and MinION Mk1c platforms using default parameters as recommended in their documentation.
 Performance was evaluated by measuring the percentage reduction in chimeric reads relative to unprocessed \gls{wga} data.
-Chimeric reads were identified using \gls{wga} tag-based alignment criteria (reads with \gls{sa} tags indicating split alignments), and reduction rates were calculated as the proportion of chimeric reads removed by each method.
+Chimeric reads were identified using \gls{sa} tag-based alignment criteria (reads with \gls{sa} tags indicating split alignments), and reduction rates were calculated as the proportion of chimeric reads removed by each method.
 
 \subsection*{Attention weight analysis}
 To investigate ChimeraLM's interpretability, we analyzed attention weights from the pooling mechanism for representative chimeric reads.
