@@ -272,7 +272,7 @@ This cross-platform generalization indicates that ChimeraLM captures sequence-le
 	\caption{{\bf ChimeraLM improves structural variant detection accuracy.}
 		\textbf{(a)}~Construction of a high-confidence \gls{sv} reference dataset from bulk PC3 sequencing. Four bulk datasets were integrated: \gls{ont} MinION Mk1C, \gls{ont} PromethION P2, the CCLE Illumina \gls{wgs} dataset, and the PRJNA361315 Illumina \gls{wgs} dataset. \glspl{sv} were called independently within each dataset using multiple callers, and events supported by $\geq$2 callers per dataset were retained. \glspl{sv} were then compared across datasets, and events observed in $\geq$2 of the four bulk datasets were designated as gold-standard \glspl{sv}.
 		\textbf{(b,c)}~\gls{sv} validation against the gold-standard reference for PromethION (b) and MinION (c).
-		\chg{Grouped bars show, on a shared logarithmic scale, the number of \gls{sv} calls supported by the gold standard (dark teal) or unsupported (light teal); the unsupported-to-supported ratio is given below each group. Only calls with at least three supporting reads (Sniffles2 default) are included.}
+		\chg{Grouped bars show, on a shared logarithmic scale, the number of \gls{sv} calls supported by the gold standard (dark teal) or unsupported (light teal); the unsupported-to-supported ratio is given below each group. Only calls with at least three supporting reads are included.}
 		\textbf{(d,e)}~\gls{sv} validation against platform-matched long-read bulk sequencing for PromethION (d) and MinION (e), capturing true long-read \glspl{sv} that may not be represented in the multi-platform reference.
 		\chg{Grouped bars show \gls{sv} calls supported by the platform-matched long-read bulk data (dark teal) or unsupported (light teal), as in (b,c).}
 		\textbf{(f)}~Distribution of \gls{sv} types for PromethION and MinION datasets across bulk samples, unfiltered \gls{wga}, and \gls{wga} with ChimeraLM filtering\chg{, for calls with at least three supporting reads}. Unfiltered \gls{wga} exhibits an excess of \gls{inv} events, which is substantially reduced following ChimeraLM filtering. Other \gls{sv} classes, including \gls{tra}, \gls{del}, \gls{dup}, and \gls{ins}, are also shown.
@@ -289,7 +289,7 @@ We first constructed a high-confidence gold-standard \gls{sv} set from bulk PC3 
 Events supported by at least two callers within a dataset were retained, and only \glspl{sv} observed in at least two of the four datasets were designated as gold-standard events.
 \chg{Of the 17,153 events in this two-of-four set, 73.8\% are shared only by the two long-read datasets (Extended Data Fig.~\ref{fig:gold_standard}); because only two datasets are long-read, a three-of-four rule would require short-read confirmation, keep just 3,029 events (17.7\%) and exclude variant classes that short reads detect poorly~\cite{Sedlazeck2018}, so the two-of-four set is complemented by the platform-matched long-read references below (Fig.~\ref{fig:figure3}d,e).}
 
-\chg{Call sets were restricted to \glspl{sv} with at least three supporting reads, the Sniffles2 default (\hyperref[sec:methods]{Methods}).
+\chg{Call sets were restricted to \glspl{sv} with at least three supporting reads (SUPPORT $\geq$ 3; \hyperref[sec:methods]{Methods}).}
 	Relative to this stringent gold standard, unfiltered \gls{wga} produced a large excess of unsupported \glspl{sv}.
 	On PromethION, \gls{wga} yielded 268,937 \gls{sv} calls, of which only 5,147 (1.9\%) overlapped gold-standard events, an unsupported-to-supported ratio of 51:1.
 	After ChimeraLM filtering, total calls decreased to 8,822 (a 96.7\% reduction); unsupported calls fell from 263,790 to 4,332 (98.4\% removed) while 4,490 gold-standard events were retained (87.2\% retention), so that supported calls outnumbered unsupported calls (ratio 0.96:1) and the validation rate rose from 1.9\% to 50.9\% (26.6-fold) (Fig.~\ref{fig:figure3}b).
@@ -558,7 +558,7 @@ Metrics (precision, recall, and F1 score) were computed as described in the trai
 \glspl{sv} were called using multiple tools to ensure comprehensive detection.
 For long-read data (\gls{ont} PromethION P2 and MinION Mk1c), we used Sniffles v2.5~\cite{Sedlazeck2018, Smolka2024}, DeBreak v1.2~\cite{chen2023deciphering}, SVIM v2.0.0~\cite{heller2019svim}, and cuteSV v2.1.1~\cite{jiang2020longreadbased}.
 For short-read data of the PC3 cell line, we used both the CCLE Illumina \gls{wgs} dataset and the PRJNA361315 Illumina \gls{wgs} dataset, processed with Manta v1.6.0~\cite{chen2016manta}, DELLY v1.5.0~\cite{rausch2012delly}, and SvABA v1.1.0~\cite{wala2018svaba}.
-All tools were executed with default recommended parameters.
+Unless otherwise specified, all tools were executed with default recommended parameters.
 
 \paragraph{Gold standard SV dataset construction}
 To evaluate the impact of ChimeraLM on \gls{sv} detection accuracy, we generated a high-confidence gold-standard \gls{sv} set from bulk PC3 sequencing data.
@@ -574,7 +574,7 @@ Benchmarking was performed using Truvari v4.2.2~\cite{english2022truvari} with d
 \glspl{sv} were considered supported if they matched reference variants within the defined breakpoint tolerance.
 Validation rates were calculated as the proportion of called \glspl{sv} supported by the reference.
 This dual benchmarking strategy quantifies both improvements in detecting high-confidence multi-platform \glspl{sv} and the retention of platform-specific true variants.
-\chg{For Fig.~\ref{fig:figure3}b--f, calls with fewer than three supporting reads (Sniffles2 \texttt{SUPPORT} $<$ 3) were removed from the bulk, \gls{wga} and \gls{wga} + ChimeraLM call sets, matching the Sniffles2 default minimum read support (\texttt{--minsupport 3}); counts of supported and unsupported calls in Fig.~\ref{fig:figure3}b--e are the Truvari TP and FP counts, respectively.}
+\chg{For Fig.~\ref{fig:figure3}b--f, calls with fewer than three supporting reads (Sniffles2 \texttt{SUPPORT} $<$ 3) were removed from the bulk, \gls{wga}, and \gls{wga} + ChimeraLM call sets; counts of supported and unsupported calls in Fig.~\ref{fig:figure3}b--e are the Truvari TP and FP counts, respectively.}
 
 \subsection*{\chg{External validation on HCC78}}
 \chg{Raw ONT reads of the HCC78 single-cell \gls{wga} and bulk libraries of Ni et al.~\cite{ni2023benchmarking} were obtained from NCBI SRA (BioProject PRJNA875576; runs SRR21397273, \gls{mda} single cell, R10.4; SRR21397268, \gls{malbac} single cell, R9.4.1; SRR21397275 and SRR21397274, bulk, R10.4 and R9.4.1) and processed exactly as the PC3 data.
