@@ -25,7 +25,7 @@
 %%Note: the following reference styles support Namedate and Numbered referencing. By default the style follows the most common style. To switch between the options you can add or remove �Numbered� in the optional parenthesis.
 %%The option is available for: sn-basic.bst, sn-chicago.bst%
 
-\documentclass[pdflatex,sn-nature,lineno]{sn-jnl}% Style for submissions to Nature Portfolio journals
+\documentclass[pdflatex,lineno]{sn-jnl}% no sn-* reference option: the NAR style is loaded below
 %\documentclass[pdflatex,sn-basic]{sn-jnl}% Basic Springer Nature Reference Style/Chemistry Reference Style
 %\documentclass[pdflatex,sn-mathphys-num]{sn-jnl}% Math and Physical Sciences Numbered Reference Style
 %\documentclass[pdflatex,sn-mathphys-ay]{sn-jnl}% Math and Physical Sciences Author Year Reference Style
@@ -59,6 +59,23 @@
 \usepackage{geometry}
 \usepackage{textcomp} % using \textquotesingle
 
+% Journal reference style (Nucleic Acids Research): full titles, all authors,
+% citation-order numbering (nar.bst, CTAN). The class's sn-* options are not
+% used because they hard-wire their own \bibliographystyle.
+\usepackage[numbers,sort&compress]{natbib}
+\gdef\NumBib{YES}
+\bibliographystyle{nar}
+\setlength{\bibsep}{1em}
+\makeatletter
+\def\bibfont{\reset@font\fontfamily{\rmdefault}\normalsize\selectfont}
+\makeatother
+
+% Cross-references to the separately compiled Supplementary Data
+% (supplementary.tex -> supplementary.aux). Build supplementary.tex first;
+% \ref{fig:...}/\ref{tab:...} then resolve to S1, S2, ... automatically.
+\usepackage{xr}
+\externaldocument[][nocite]{supplementary}% nocite: do not import the supplement's \bibcite entries
+
 % Revision R1: revised text is marked in red so reviewers can locate changes.
 % Set \revisedtextfalse to print the clean version; change revcolor to adjust the shade.
 \definecolor{revcolor}{RGB}{200,0,0}
@@ -66,7 +83,7 @@
 \revisedtexttrue
 \newcommand{\chg}[1]{\ifrevisedtext\textcolor{revcolor}{#1}\else#1\fi}
 
-\graphicspath{{../figures}}
+\graphicspath{{../figures}{figures}}% repo layout and flat submission-zip layout
 
 \usepackage[acronym, automake, style=index, shortcuts]{glossaries-extra}
 \setabbreviationstyle[acronym]{long-short}
@@ -145,7 +162,7 @@
 % It resets the counters so the Main section treats acronyms as new.
 \glsresetall
 
-\section*{Main}\label{sec:main}
+\section*{Introduction}\label{sec:intro}
 
 Single-cell and low-input genomics have transformed our ability to resolve biological heterogeneity, enabling the discovery of rare cell states and the reconstruction of clonal evolution in cancer and development~\cite{kalef2024single,navin2011tumour,sun2024mapping}.
 However, the limited DNA input (on the order of picograms per cell) makes comprehensive genome-wide profiling technically challenging~\cite{gawad2016single,chen2017singlecell}.
@@ -173,222 +190,7 @@ Building on advances in DNA foundation models~\cite{nguyen2023hyenadna,dalla2025
 On \gls{ont} \gls{wga} datasets, ChimeraLM reduces chimeric reads by ${\sim}90\%$ \chg{while preserving 75--87\% of gold-standard \glspl{sv} and 75--86\% of platform-matched bulk-supported \glspl{sv}, improving \gls{sv} validation rates by 3.2- to 26.6-fold} and mitigating \gls{wga}-induced biases in \gls{sv} type distributions.
 Together, ChimeraLM provides an effective and interpretable filter for \gls{wga} long-read data, enabling robust \gls{sv} discovery in single-cell and low-input genomics.
 
-\section*{Results}\label{sec:results}
-
-\begin{figure}[p]
-	\begin{center}
-		\includegraphics[width=\textwidth]{final_figures/figure1}
-	\end{center}
-	\caption{{\bf ChimeraLM workflow and architecture for detecting \gls{wga} artifacts.}
-		\textbf{(a)}~Single-cell genomic workflow and ChimeraLM integration. Single cells are isolated, followed by DNA extraction and \gls{wga}. During amplification, \gls{wga}-induced chimeric artifacts (red) are generated alongside genuine chimeric reads (green). After base calling and mapping, ChimeraLM classifies reads with chimeric alignments as genuine events or \gls{wga}-induced artifacts, enabling downstream \gls{sv} detection on filtered data.
-		\textbf{(b)}~Bulk-supported label generation. Chimeric reads from \gls{wga} data are compared against bulk sequencing from the same cell line. Reads with bulk-supported alignment structures are labeled as genuine events (green); reads with no bulk match are labeled as \gls{wga}-induced artifacts (red).
-		\textbf{(c)}~ChimeraLM architecture. Input DNA sequences (batch size $B$, sequence length $L$) are tokenized at single-nucleotide resolution and encoded into hidden states $\mathbf{H} \in \mathbb{R}^{L \times 256}$ through DNA encoder (HyenaDNA~\cite{nguyen2023hyenadna}). Hyena operators capture long-range dependencies. Attention pooling aggregates position-specific features, and \gls{mlp} layers with residual connections process pooled representations for binary classification of genuine events and \gls{wga}-induced artifacts.
-		\textbf{(d)}~Attention pooling mechanism. Attention weights $\boldsymbol{\alpha} \in \mathbb{R}^{L \times 1}$ are computed through linear layers with GELU activation and softmax normalization, assigning importance scores to each position. The weighted sum produces a fixed-dimensional representation $\mathbf{h}_{\text{pooled}} \in \mathbb{R}^{256}$.
-		Created with BioRender.com.}
-	\label{fig:figure1}
-\end{figure}
-
-\subsection*{Overview of ChimeraLM workflow and model architecture}
-ChimeraLM operates as a post‑alignment filtering module within the single‑cell long‑read sequencing pipeline (Fig.~\ref{fig:figure1}a).
-After base calling and alignment to the reference genome, the resulting read set typically contains a mixture of true chimeric reads that arise from authentic genomic rearrangements and artificial chimeras introduced during \gls{wga}.
-ChimeraLM evaluates all reads with chimeric alignments before variant calling.
-For each read, the model determines whether the observed chimera reflects a genuine genomic event or a \gls{wga}‑induced artifact.
-This binary classification enables selective removal of artificial chimeric reads while preserving true rearrangements, which improves the accuracy and sensitivity of downstream \gls{sv} analyses.
-
-To construct a robust supervised training set, we generated \gls{wga} long-read sequencing data from the human prostate cancer cell line PC3 using the \gls{ont} PromethION platform.
-For ground-truth calibration, we acquired three matched bulk long-read datasets from unamplified genomic DNA across diverse technologies: \gls{ont} PromethION, \gls{ont} MinION, and \gls{pb} Sequel II.
-Leveraging these references, we established a bulk-supported labeling framework by cross-referencing each \gls{wga} chimeric read against the chimeric alignment structures identified in the unamplified bulk data (\hyperref[sec:methods]{Methods}; Fig.~\ref{fig:figure1}b; Extended Data Fig.~\ref{fig:data_construction}a).
-Under this classification scheme, \gls{wga} reads with alignment architectures corroborated by bulk evidence were labeled as genuine genomic events, while those lacking bulk support were classified as \gls{wga}-induced artifacts.
-To evaluate the model's ability to generalize across sequencing hardware, we generated an independent \gls{wga} dataset on the MinION platform, which was reserved exclusively for testing (Extended Data Fig.~\ref{fig:data_construction}a).
-
-This labeling procedure classified 12,963,576 chimeric reads from the \gls{wga} PromethION dataset into two groups (genuine events and \gls{wga}-induced artifacts) based on bulk support (Extended Data Fig.~\ref{fig:data_construction}b).
-Among these, 12,670,396 reads (97.7\%) showed no matching alignment structures in any bulk dataset and were labeled as \gls{wga}-induced artifacts.
-The remaining 293,180 reads (2.3\%) had matching structures in at least one bulk dataset, indicating they represent genuine genomic events rather than amplification artifacts, and were labeled as genuine chimeric reads.
-To construct a balanced training dataset, we retained all 293,180 genuine chimeric reads and randomly subsampled an equal number of \gls{wga}-induced artifacts.
-We further added 178,748 chimeric reads sampled from the bulk datasets to the genuine-event set, expanding the diversity of bulk-supported chimeric alignment structures used for training.
-The final labeled dataset comprised 765,108 reads and was split into training (70\%), validation (20\%), and test (10\%) sets using stratified sampling (Extended Data Fig.~\ref{fig:data_construction}a).
-
-To model these labeled reads, ChimeraLM needs to process long, variable-length DNA sequences at single-nucleotide resolution (Fig.~\ref{fig:figure1}c).
-We therefore built ChimeraLM on HyenaDNA~\cite{nguyen2023hyenadna}, a genomic foundation model pre-trained on diverse DNA sequences.
-Each read is tokenized at nucleotide resolution and encoded by Hyena operators~\cite{Poli2023HyenaHT}, which capture long-range sequence context without splitting the input.
-The encoder produces a sequence of hidden states across the full read.
-To obtain a fixed-length representation for classification, ChimeraLM uses an attention-pooling module that learns position-specific weights and computes a weighted sum over the hidden states (Fig.~\ref{fig:figure1}d).
-The pooled representation is then passed through residual \gls{mlp} blocks, and a final softmax outputs the probability that a read reflects a genuine event versus a \gls{wga}-induced artifact.
-
-\begin{figure}[!ht]
-	\begin{center}
-		\includegraphics[width=0.95\textwidth]{final_figures/figure2}
-	\end{center}
-	\caption{{\bf ChimeraLM accurately identifies and removes \gls{wga}-induced chimeric artifacts.}
-		\textbf{(a)}~Classification performance on held-out test data. ChimeraLM achieves recall of 0.95, precision of 0.70, and F1 score of 0.81.
-		\textbf{(b)}~Chimeric read reduction across sequencing platforms. Stacked bars show proportions of chimeric (dark teal) and non-chimeric (light teal) reads in bulk, \gls{wga}, and ChimeraLM-filtered samples. ChimeraLM reduces chimeric read frequencies from 46.0\% to 4.9\% (PromethION) and from 23.0\% to 1.5\% (MinION), approaching bulk levels (2.3\% and 2.5\%, respectively).
-		\textbf{(c,d)}~Benchmarking against existing methods on PromethION (c) and MinION (d).
-		The gray bar indicates the total number of chimeric reads on unfiltered \gls{wga} data.
-		The blue bar represents the total number of chimeric reads remaining after filtering by each method.
-		ChimeraLM achieves approximately 90\% reduction in chimeric reads on both platforms, while 3rd-ChimeraMiner shows no detectable reduction and CADECT shows 8.3\%  and 4.6\% reduction on PromethION and MinION, respectively.
-		SACRA failed to complete due to memory exhaustion ($>500$ GB RAM required).
-	}\label{fig:figure2}
-\end{figure}
-
-\subsection*{ChimeraLM achieves high accuracy and reduces artifacts to near-bulk levels across platforms}
-
-We first benchmarked ChimeraLM using the held-out test split ($10\%$) derived from the bulk-supported labeled dataset (Extended Data Fig.~\ref{fig:data_construction}a).
-This test set consists of chimeric reads labeled as genuine events or \gls{wga}-induced artifacts based on whether their chimeric alignment structures are supported by matched bulk sequencing.
-ChimeraLM achieved an F1 score of 0.81, with 0.95 recall and 0.70 precision (Fig.~\ref{fig:figure2}a).
-The high recall indicates that most \gls{wga}-induced artifacts are correctly identified for removal, which is important for limiting downstream false-positive \gls{sv} calls, while the precision confirms that most reads flagged as artifacts are true amplification-induced chimeras rather than genuine genomic events.
-
-\chg{Because ChimeraLM processes at most 32,768 bp per read, we examined how often this limit is reached and whether accuracy depends on read length (Extended Data Fig.~\ref{fig:read_length}).
-	Chimeric reads in \gls{wga} data are short (median 2,100 bp on PromethION, 1,469 bp on MinION); only 0.009\% exceeded 32,768 bp, and all but two of these retained at least one junction within the window (Extended Data Fig.~\ref{fig:read_length}a).
-	Accuracy nevertheless varied with length: on \gls{wga}-derived test reads, precision rose from 0.69 ($\leq$2 kb) to $\geq$0.99 ($>$8 kb) while recall fell from 0.98 to 0.31 (16--32 kb), so rare long reads ($>$16 kb, 0.26\% of chimeric reads) are classified conservatively (Extended Data Fig.~\ref{fig:read_length}c).
-	This likely reflects the bulk-sampled genuine reads in the training set, which are far longer (median 14.4 kb) than \gls{wga} reads, so that length carries label information; consistently, removed chimeric reads were shorter than retained ones (median 2,067 versus 3,087 bp on PromethION; Extended Data Fig.~\ref{fig:read_length}d), whereas non-chimeric reads, the majority of a \gls{wga} library, are not evaluated and remain unchanged.}
-
-We next examined whether applying ChimeraLM filtering would restore chimeric read rates in full PC3 \gls{wga} datasets toward the levels observed in bulk sequencing across both PromethION and MinION platforms (Fig.~\ref{fig:figure2}b).
-Bulk sequencing established low baseline chimeric read rates of 2.3\% (PromethION) and 2.5\% (MinION).
-In contrast, \gls{wga} increased the chimeric read fraction to 46.0\% and 23.0\%, respectively.
-After ChimeraLM filtering, chimeric content dropped to 4.9\% on PromethION and 1.5\% on MinION, corresponding to 10- to 15-fold reductions, while retaining 15.8 million and 5.6 million reads.
-These post-filtering rates approach the corresponding bulk baselines, indicating effective removal of \gls{wga}-induced artifacts while preserving genuine signal.
-
-We compared ChimeraLM against SACRA~\cite{kiguchi2021longread}, 3rd-ChimeraMiner~\cite{lu2023exploration}, and CADECT~\cite{agyabeng2025evaluating}, existing tools for detecting amplification-induced chimeras (Fig.~\ref{fig:figure2}c,d).
-ChimeraLM reduced chimeric reads by ${\sim}90$\% on both platforms, outperforming CADECT (8.3\% and 4.6\% reduction on PromethION and MinION, respectively), while 3rd-ChimeraMiner showed no detectable reduction.
-SACRA could not be evaluated due to out-of-memory errors even with 500 GB RAM.
-
-The MinION results further provide an independent test of model generalization, as this MinION \gls{wga} dataset was not used during training.
-ChimeraLM was trained exclusively on PromethION \gls{wga} data, yet achieved comparable chimeric read reduction on MinION.
-This cross-platform generalization indicates that ChimeraLM captures sequence-level features intrinsic to \gls{wga}-induced artifacts rather than platform-specific signatures, supporting its potential applicability to additional long-read and potentially short-read sequencing technologies.
-
-\chg{To test generalization beyond the training cell line and laboratory, we applied the unchanged model to public single-cell \gls{wga} data of the lung adenocarcinoma line HCC78 generated by another group~\cite{ni2023benchmarking}: one \gls{mda} cell (R10.4 flow cell), one \gls{malbac} cell (R9.4.1) and two unamplified bulk libraries used as reference (\hyperref[sec:methods]{Methods}; Extended Data Fig.~\ref{fig:hcc78}).
-	ChimeraLM removed 81.7\% of chimeric reads from the \gls{mda} library, lowering its chimeric fraction from 66.6\% to 26.8\% (HCC78 bulk: 21.0\% and 7.9\%), and 87.3\% from the \gls{malbac} library (6.8\% to 0.9\%), with recall of 0.82 and 0.87 for bulk-unsupported reads.
-	Artifact removal thus transfers across cell line, laboratory, flow-cell chemistry and amplification method without retraining.}
-
-\begin{figure}[H]
-	\begin{center}
-		\includegraphics[width=0.95\textwidth]{final_figures/figure3}
-	\end{center}
-	\caption{{\bf ChimeraLM improves structural variant detection accuracy.}
-		\textbf{(a)}~Construction of a high-confidence \gls{sv} reference dataset from bulk PC3 sequencing. Four bulk datasets were integrated: \gls{ont} MinION Mk1C, \gls{ont} PromethION P2, the CCLE Illumina \gls{wgs} dataset, and the PRJNA361315 Illumina \gls{wgs} dataset. \glspl{sv} were called independently within each dataset using multiple callers, and events supported by $\geq$2 callers per dataset were retained. \glspl{sv} were then compared across datasets, and events observed in $\geq$2 of the four bulk datasets were designated as gold-standard \glspl{sv}.
-		\textbf{(b,c)}~\gls{sv} validation against the gold-standard reference for PromethION (b) and MinION (c).
-		\chg{Grouped bars show, on a shared logarithmic scale, the number of \gls{sv} calls supported by the gold standard (dark teal) or unsupported (light teal); the unsupported-to-supported ratio is given below each group. Only calls with at least three supporting reads are included.}
-		\textbf{(d,e)}~\gls{sv} validation against platform-matched long-read bulk sequencing for PromethION (d) and MinION (e), capturing true long-read \glspl{sv} that may not be represented in the multi-platform reference.
-		\chg{Grouped bars show \gls{sv} calls supported by the platform-matched long-read bulk data (dark teal) or unsupported (light teal), as in (b,c).}
-		\textbf{(f)}~Distribution of \gls{sv} types for PromethION and MinION datasets across bulk samples, unfiltered \gls{wga}, and \gls{wga} with ChimeraLM filtering\chg{, for calls with at least three supporting reads}. Unfiltered \gls{wga} exhibits an excess of \gls{inv} events, which is substantially reduced following ChimeraLM filtering. Other \gls{sv} classes, including \gls{tra}, \gls{del}, \gls{dup}, and \gls{ins}, are also shown.
-	}\label{fig:figure3}
-\end{figure}
-
-\subsection*{ChimeraLM reduces unsupported structural variant calls}
-Accurate \gls{sv} detection from single cells is essential for characterizing genomic diversity and disease mechanisms. However, \gls{wga}‑induced chimeric artifacts can be misinterpreted as genuine \gls{sv}s, potentially leading to incorrect biological inferences.
-To assess the impact of ChimeraLM on \gls{sv} calling, we compared \gls{sv} callsets generated from unfiltered \gls{wga} reads with those obtained after applying ChimeraLM filtering (\gls{wga} + ChimeraLM).
-Both callsets were evaluated against two complementary bulk‑derived references: (i) a stringent gold‑standard \gls{sv} set derived from bulk PC3 DNA through cross‑dataset consensus, and (ii) platform‑matched long‑read bulk \gls{sv} callsets used as platform‑specific references.
-
-We first constructed a high-confidence gold-standard \gls{sv} set from bulk PC3 DNA by integrating four independent sequencing datasets: \gls{ont} PromethION, \gls{ont} MinION, and two Illumina short-read \gls{wgs} datasets from the Cancer Cell Line Encyclopedia (CCLE Illumina \gls{wgs}~\cite{barretina2012cancer}) and from a previously published study (PRJNA361315 Illumina \gls{wgs}~\cite{seim2017wholegenome}) (Fig.~\ref{fig:figure3}a; Extended Data Table~\ref{tab:seq_stats}).
-\glspl{sv} were called separately within each dataset using multiple \gls{sv} callers.
-Events supported by at least two callers within a dataset were retained, and only \glspl{sv} observed in at least two of the four datasets were designated as gold-standard events.
-\chg{Of the 17,153 events in this two-of-four set, 73.8\% are shared only by the two long-read datasets (Extended Data Fig.~\ref{fig:gold_standard}); because only two datasets are long-read, a three-of-four rule would require short-read confirmation, keep just 3,029 events (17.7\%) and exclude variant classes that short reads detect poorly~\cite{Sedlazeck2018}, so the two-of-four set is complemented by the platform-matched long-read references below (Fig.~\ref{fig:figure3}d,e).}
-
-\chg{Call sets were restricted to \glspl{sv} with at least three supporting reads (SUPPORT $\geq$ 3; \hyperref[sec:methods]{Methods}).
-	Relative to this stringent gold standard, unfiltered \gls{wga} produced a large excess of unsupported \glspl{sv}.
-	On PromethION, \gls{wga} yielded 268,937 \gls{sv} calls, of which only 5,147 (1.9\%) overlapped gold-standard events, an unsupported-to-supported ratio of 51:1.
-	After ChimeraLM filtering, total calls decreased to 8,822 (a 96.7\% reduction); unsupported calls fell from 263,790 to 4,332 (98.4\% removed) while 4,490 gold-standard events were retained (87.2\% retention), so that supported calls outnumbered unsupported calls (ratio 0.96:1) and the validation rate rose from 1.9\% to 50.9\% (26.6-fold) (Fig.~\ref{fig:figure3}b).
-	On MinION, total calls decreased from 8,917 to 2,056 (76.9\% reduction); unsupported calls fell from 6,977 to 606 (91.3\% removed) while gold-standard-supported events decreased from 1,940 to 1,450 (74.7\% retention), raising the validation rate from 21.8\% to 70.5\% (3.2-fold; ratio 3.6:1 to 0.42:1) (Fig.~\ref{fig:figure3}c).
-	The smaller fold change on MinION reflects the lower artifact burden of its call set at this read-support threshold (21.8\% of calls already validated before filtering, versus 1.9\% on PromethION).}
-
-Because the gold standard is intentionally stringent and may exclude true \glspl{sv} detectable only in long-read data, we next performed platform-matched validation using long-read bulk sequencing from the same platform (Fig.~\ref{fig:figure3}d,e).
-This analysis provides a platform-specific estimate of recall and reduces bias introduced by the strict gold-standard definition.
-\chg{ChimeraLM increased validation rates from 2.6\% to 68.6\% on PromethION (26.3-fold) and from 21.1\% to 68.7\% on MinION (3.3-fold), removing 98.9\% and 90.9\% of bulk-unsupported calls while retaining 86.2\% (6,048 of 7,019) and 75.2\% (1,413 of 1,880) of bulk-supported events, respectively (Fig.~\ref{fig:figure3}d,e).
-	Together, these results show that ChimeraLM removes the vast majority of unsupported \gls{sv} calls while preserving most bulk-supported variants across platforms, leaving call sets in which supported \glspl{sv} outnumber unsupported ones.}
-
-\chg{We next characterised the unsupported calls that remain after ChimeraLM filtering relative to the gold standard and compared them with the supported calls in the same call sets (Extended Data Fig.~\ref{fig:residual_sv}).
-	Residual unsupported calls were not dominated by a single class: on PromethION they comprised 39.5\% deletions, 34.9\% insertions, 24.0\% inversions and 1.7\% duplications, were small (median 189 bp; 70.2\% $<$500 bp) and weakly supported (median 4 reads; 65.3\% with $\leq$5 reads), whereas supported calls had a median of 10 supporting reads.
-	Inversions were the one diagnostic feature: 1,039 residual unsupported calls were inversions, compared with a single inversion among the 4,490 supported calls (MinION: 100 versus 0).
-	In contrast, the residual deletions and insertions resembled supported calls in size, consistent with a mixture of low-support artifacts and genuine variants that are absent from the stringent gold standard (see Extended Data Fig.~\ref{fig:bulk_concordance}).
-	Raising the minimum read support further reduces residual calls at a cost in sensitivity: on PromethION, requiring at least five supporting reads removed 56.3\% of residual unsupported calls but also 20.1\% of supported calls (unsupported-to-supported ratio 0.96:1 to 0.53:1), and requiring ten reads removed 80.3\% versus 48.6\%; on the shallower MinION data stricter thresholds removed both classes at similar rates.}
-
-\subsection*{ChimeraLM mitigates WGA-induced SV type biases}
-
-Amplification artifacts can profoundly distort the apparent spectrum of \glspl{sv}, complicating biological interpretation.
-To quantify these effects, we compared \gls{sv}‑type compositions across bulk, unfiltered \gls{wga}, and ChimeraLM‑filtered datasets generated on both \gls{ont} PromethION and MinION platforms (Fig.~\ref{fig:figure3}f).
-Bulk datasets displayed \gls{sv} profiles dominated by deletions and insertions\chg{ (81.9\% and 90.8\% combined on PromethION and MinION, with inversions at 1.1\% on both)}, whereas \gls{wga} datasets exhibited a striking inflation of inversions, reaching \chg{93.8\% on PromethION and 57.2\% on MinION among calls with at least three supporting reads}.
-This inversion‑heavy signature mirrors previous observations from single‑cell long‑read sequencing using PacBio and droplet‑based \gls{mda}~\cite{hardLongreadWholegenomeAnalysis2023a}, suggesting that many of these events arise from amplification‑induced chimeras rather than genuine genomic rearrangements.
-
-To directly assess which \gls{sv} types are preferentially associated with amplification artifacts, we examined \gls{sv} calls supported exclusively by reads classified as \gls{wga}‑derived chimeras.
-These artifact‑supported events were overwhelmingly enriched for inversions, comprising 88.4\% on PromethION and 92.4\% on MinION (Extended Data Fig.~\ref{fig:sv_artifact_distribution}).
-Smaller fractions of deletions, duplications, and insertions were also present, indicating that \gls{wga} artifacts inflate not only inversion calls but generate false positives across multiple \gls{sv} categories.
-
-Applying ChimeraLM \chg{largely removed} these biases.
-\chg{The inversion fraction decreased to 11.9\% on PromethION and 4.8\% on MinION, while deletions and insertions rose to 86.9\% and 89.3\% of calls, close to bulk (Fig.~\ref{fig:figure3}f); on MinION the excess of translocation-type (breakend) calls was likewise reduced from 14.8\% to 5.4\% (bulk 7.9\%).
-	The residual inversion fraction remains above the bulk level, and the remaining inversions are almost entirely unsupported by bulk sequencing (Extended Data Fig.~\ref{fig:residual_sv}).}
-By selectively removing artifact‑supported events, ChimeraLM suppresses the dominant inversion inflation and reduces spurious calls across \gls{sv} types, shifting \gls{sv}‑type distributions toward bulk profiles and improving the accuracy and interpretability of single‑cell \gls{sv} analyses~\cite{hardLongreadWholegenomeAnalysis2023a}.
-
-\begin{figure}[H]
-	\begin{center}
-		\includegraphics[width=\textwidth]{final_figures/figure4}
-	\end{center}
-	\caption{{\bf ChimeraLM attention weights are enriched at chimeric junction regions.}
-		\textbf{(a,b)}~Attention weight profiles for two representative chimeric reads exhibiting distinct junction configurations.
-		Upper panels show per-position attention weights (blue) with the mean attention across the read indicated by a dashed line.
-		Red vertical lines mark inferred chimeric junction positions, and pink shading denotes the junction-centered region ($\pm$50~bp).
-		Lower panels display read-level alignments, highlighting orientation transitions at the junctions (green, forward orientation; red, reverse-complemented orientation).
-		\textbf{(c,d)}~Quantitative comparison of attention weights between junction and non-junction regions.
-		Junction-centered windows show significantly elevated attention weights relative to non-junction regions ($P = 5.3 \times 10^{-14}$ and $P = 6.8 \times 10^{-15}$; Wilcoxon rank-sum test).
-		\textbf{(e,f)}~Schematic illustration of \gls{wga}-induced chimera formation.
-		During amplification, DNA fragments originating from distant genomic loci can be amplified in either orientation, joining them into a single molecule with discordant orientations, producing inversion-like alignment signatures.
-		The two examples illustrate forward-to-reverse and reverse-to-forward orientation transitions.
-	}\label{fig:figure4}
-\end{figure}
-
-\subsection*{Attention visualization reveals interpretable classification features}
-
-We examined whether ChimeraLM’s attention weights provide an interpretable signal by focusing on mechanistically relevant regions of chimeric reads, particularly the junctions during \gls{wga} (Fig.~\ref{fig:figure4}).
-We inspected two representative chimeric reads exhibiting distinct junction configurations (Fig.~\ref{fig:figure4}a,b).
-In both cases, attention remained relatively flat across most positions but formed sharp, concentrated peaks at the inferred junction regions.
-These peaks aligned with the read-level breakpoint separating two genomic loci and coincided with an orientation transition between adjacent alignment segments.
-
-To quantify this effect, we compared attention weights within junction-centered windows ($\pm$50~bp) against weights from non-junction regions (Fig.~\ref{fig:figure4}c,d).
-Junction windows showed significantly higher attention weights (Wilcoxon rank-sum test, $P = 5.3 \times 10^{-14}$ and $P = 6.8 \times 10^{-15}$), indicating that ChimeraLM preferentially emphasizes sequence context proximal to chimeric junctions.
-
-This attention enrichment is consistent with the expected structure of \gls{wga}-induced chimeras (Fig.~\ref{fig:figure4}e,f): DNA fragments from distant loci can be amplified in either orientation and subsequently joined, generating junctions with discordant orientations.
-Together, these results suggest that ChimeraLM’s attention peaks provide a mechanistically interpretable signal that concentrates classification evidence to junction-proximal sequence positions within individual reads.
-
-\section*{Discussion}\label{sec:discussion}
-
-\gls{wga} enables genomic analysis from single cells and other low-input samples, but it also introduces chimeric artifacts that compromise \gls{sv} detection.
-ChimeraLM addresses this challenge by classifying chimeric reads as genuine events or \gls{wga}-induced artifacts directly from read information, and removing artifacts before variant calling, rather than attempting to correct artifact-driven calls post hoc.
-Across \gls{ont} platforms, ChimeraLM improved data quality at the read and variant levels:
-it reduced chimeric reads by \(\sim\)90\% \chg{while retaining 75--87\% of gold-standard \glspl{sv} and 75--86\% of platform-matched bulk-supported \glspl{sv}, and it increased the fraction of supported \gls{sv} calls by 3.2- to 26.6-fold}.
-Notably, performance generalized from PromethION (used for training) to MinION without platform-specific retraining, suggesting that ChimeraLM captures properties shared by \gls{wga}-induced artifacts rather than instrument-specific signatures.
-
-In comparison, existing methods showed limited effectiveness on our \gls{ont} \gls{wga} datasets.
-Two tools originally developed and primarily evaluated on PacBio data (SACRA and 3rd-ChimeraMiner)~\cite{kiguchi2021longread,lu2023exploration} either failed to complete under our evaluation setting (SACRA, $>500$ GB RAM) or showed no detectable reduction (3rd-ChimeraMiner), highlighting poor cross-platform generalization.
-CADECT~\cite{agyabeng2025evaluating}, which was designed for \gls{ont} data, achieved only 8.3\% and 4.6\% reduction on PromethION and MinION, respectively.
-CADECT detects concatemers via sliding-window self-alignment, an effective strategy for repeat-like structures with internal sequence similarity, but it is not designed to capture the broader diversity of \gls{wga}-induced chimeras.
-Together, these comparisons suggest that rule-based or subtype-specific heuristics do not comprehensively address amplification-induced chimeras and motivate learning-based models that can extract discriminative sequence signatures without imposing predefined structural assumptions.
-
-ChimeraLM also illustrates the value of deep learning for quality-control problems where conventional alignment- and coverage-derived criteria provide limited resolution.~\cite{lu2023exploration,kiguchi2021longread,li2024deepchopper, agyabeng2025evaluating}.
-By learning directly from sequence, ChimeraLM discovers subtle compositional and structural features that separate genuine events from amplification artifacts.
-The model also offers interpretability through attention visualization: attention weights concentrate at junction regions where template switching joins discordant loci, validating the biological relevance of the learned features.
-These methodological advances have direct implications for single-cell genomics, where high false-positive rates in \gls{wga} data have constrained robust characterization of chromosomal instability, clonal evolution, and \gls{sv} burden~\cite{kosugi2019comprehensive,mahmoud2019structural,hardLongreadWholegenomeAnalysis2023a}.
-By improving the signal-to-noise ratio and clarifying \gls{sv}-type spectra that are otherwise distorted by amplification artifacts, ChimeraLM enables more confident identification of genuine \glspl{sv}, supporting studies of cancer evolution, developmental biology, and somatic mosaicism where single-cell resolution is essential~\cite{hoijerAmplificationfreeLongreadSequencing2020, haComprehensiveBenchmarkingGuidelines2023}.
-
-Several limitations warrant consideration.
-First, the current model processes reads independently; integrating contextual features such as coverage or phasing information may further enhance accuracy.
-Second, regarding computational resources, while \gls{cpu} inference is feasible, \gls{gpu} acceleration is recommended for processing large-scale datasets.
-\chg{Third, the training labels inherit the incompleteness of bulk sequencing: a genuine chimeric read whose structure is absent from all three bulk datasets is labelled as an artifact (Extended Data Fig.~\ref{fig:bulk_concordance}), and the model may therefore remove some genuine reads, reducing sensitivity for rare true events. This effect is reflected in the observed retention of bulk-supported \glspl{sv} (75--87\%).}
-\chg{We have shown that artifact removal transfers without retraining to an independent cell line, laboratory, flow-cell chemistry (R9.4.1 and R10.4) and amplification method (\gls{malbac}); when a matched bulk dataset is available, fine-tuning the classifier on bulk-supported reads of the sample under study is nevertheless a straightforward way to adapt it to sample-specific rearrangements.}
-Future work should extend validation to further cell types, sequencing platforms (e.g., PacBio HiFi), and alternative \gls{wga} protocols, including \gls{lianti}~\cite{chen2017singlecell}, \gls{pta}~\cite{gonzalez-pena2021accurate}, and \gls{dmda}~\cite{dippenaar2024droplet}.
-While the sequence-based approach suggests broad applicability, systematic validation across amplification chemistries is needed to assess generalization limits and optimize performance for specific protocols.
-\chg{Validation in primary tissue and tumour samples remains an open task: evaluating a read-level artifact filter requires single-cell long-read \gls{wga} data together with matched bulk long-read sequencing of the same sample, and the few such datasets from human tissue published to date are limited.
-	Because tissue and tumour cells are more heterogeneous than a monoclonal cell line, whereas the artifact profile is determined primarily by the amplification chemistry rather than by the cell of origin, we expect ChimeraLM's performance on such samples to track its cross-cell-line and cross-chemistry behaviour, but this expectation should be tested as suitable data become accessible.}
-
-\chg{ChimeraLM acts on reads, not on calls, and is therefore complementary to, rather than a replacement for, caller-level filtering.
-	Our characterisation of the calls that remain unsupported after filtering (Extended Data Fig.~\ref{fig:residual_sv}) suggests two practical steps for users who require higher specificity: inversion calls that lack orthogonal support should be treated with suspicion, because essentially no bulk-supported inversion survived in our \gls{wga} call sets while residual inversions accounted for 17--24\% of unsupported calls; and a moderate read-support threshold (for example, at least five supporting reads) removes more than half of the residual unsupported calls on deeply sequenced samples at a cost of about one fifth of supported calls, whereas stricter thresholds increasingly discard supported calls as well, and on shallow data remove both classes at similar rates.
-	Conversely, callers that aggregate evidence across cells or that incorporate coverage and phasing information may recover genuine events that single-cell read-level filtering alone cannot confirm.}
-
-More broadly, ChimeraLM illustrates the potential of \glspl{glm} for data quality control.
-As long-context architectures continue to advance~\cite{nguyen2023hyenadna}, extending the model's context window to handle megabase-scale inputs could enable artifact detection in more complex genomic structures.
-This framework could extend to other amplification-dependent technologies, such as cell-free DNA analysis, ancient DNA studies, and low-biomass metagenomics.
-Furthermore, attention-based interpretability opens opportunities for studying template-switching dynamics, potentially guiding the development of improved amplification protocols.
-In summary, ChimeraLM provides a practical and interpretable framework for enhancing long-read single-cell genomic fidelity, ensuring that downstream biological insights are derived from genuine \glspl{sv} rather than technical artifacts.
-
-\section*{Methods}\label{sec:methods}
+\section*{Materials and Methods}\label{sec:methods}
 
 \subsection*{Cell culture, single-clone preparation, and nanopore sequencing}
 
@@ -445,8 +247,8 @@ ChimeraLM employs the pre-trained HyenaDNA model~\cite{nguyen2023hyenadna} as it
 This model was pre-trained on large-scale genomic data and provides robust sequence representations.
 DNA sequences are tokenized at single-nucleotide resolution, with each base (A, C, G, T, N) mapped to a unique integer token (7, 8, 9, 10, 11, respectively).
 Special tokens include [CLS]=0, [PAD]=4, and others for sequence processing.
-Input sequences are truncated at 32,768 bp or padded to enable batch processing\chg{; reads longer than 32,768 bp are not discarded but are classified from their first 32,768 bp (Extended Data Fig.~\ref{fig:read_length})}.
-\chg{The 32,768-bp limit is the context length of the pre-trained HyenaDNA-small backbone; it exceeds the length of all but 0.009\% of chimeric reads in our data (Extended Data Fig.~\ref{fig:read_length}a), and HyenaDNA backbones pre-trained with 160-kb to 1-Mb contexts can be substituted without changes to the architecture should read lengths increase.}
+Input sequences are truncated at 32,768 bp or padded to enable batch processing\chg{; reads longer than 32,768 bp are not discarded but are classified from their first 32,768 bp (Supplementary Figure~\ref{fig:read_length})}.
+\chg{The 32,768-bp limit is the context length of the pre-trained HyenaDNA-small backbone; it exceeds the length of all but 0.009\% of chimeric reads in our data (Supplementary Figure~\ref{fig:read_length}a), and HyenaDNA backbones pre-trained with 160-kb to 1-Mb contexts can be substituted without changes to the architecture should read lengths increase.}
 
 For a tokenized input sequence $\mathbf{x} \in \mathbb{Z}^{L}$, the HyenaDNA generates contextualized hidden representations:
 \[
@@ -561,7 +363,7 @@ All \gls{sv} comparisons and breakpoint corrections were performed using OctopuS
 Four bulk datasets were integrated: \gls{ont} MinION Mk1c, \gls{ont} PromethION P2, the CCLE Illumina \gls{wgs} dataset, and the PRJNA361315 Illumina \gls{wgs} dataset.
 \glspl{sv} were called independently within each dataset, and events supported by at least two \gls{sv} callers were retained.
 The remaining calls were then compared across datasets, and \glspl{sv} observed in at least two of the four datasets were designated as gold-standard events for benchmarking.
-\chg{The sensitivity of the gold standard to this threshold was assessed by merging the four caller-consensus call sets with OctopuSV (\texttt{--union --mode sample}) and counting events supported by at least one, two, three or four datasets (Extended Data Fig.~\ref{fig:gold_standard}).}
+\chg{The sensitivity of the gold standard to this threshold was assessed by merging the four caller-consensus call sets with OctopuSV (\texttt{--union --mode sample}) and counting events supported by at least one, two, three or four datasets (Supplementary Figure~\ref{fig:gold_standard}).}
 
 \paragraph{SV benchmarking analysis}
 To assess the impact of ChimeraLM on \gls{sv} calling accuracy, we compared \gls{sv} calls from unfiltered \gls{wga} data and ChimeraLM-filtered \gls{wga} data against two references: (1) the stringent multi-platform gold standard dataset, and (2) platform-matched long-read bulk sequencing data.
@@ -599,151 +401,222 @@ Computations were performed on a \gls{hpc} server with 64-core Intel Xeon Gold 6
 \chg{Inference cost scales approximately linearly with input length: on one A100 (bf16, batch size 12) the released model classifies 1,512 reads\,s$^{-1}$ at 2,048 bp, 402 reads\,s$^{-1}$ at 8,192 bp and 96 reads\,s$^{-1}$ at the 32,768-bp limit, with peak \gls{gpu} memory of 0.4, 1.4 and 5.6 GB, respectively.
 	For comparison, a HyenaDNA-medium backbone evaluated at its full 160,000-bp context processes 8 reads\,s$^{-1}$ and requires 31 GB at the same batch size.}
 
+\section*{Results}\label{sec:results}
+
+\begin{figure}[p]
+	\begin{center}
+		\includegraphics[width=\textwidth]{final_figures/figure1}
+	\end{center}
+	\caption{{\bf ChimeraLM workflow and architecture for detecting \gls{wga} artifacts.}
+		\textbf{(a)}~Single-cell genomic workflow and ChimeraLM integration. Single cells are isolated, followed by DNA extraction and \gls{wga}. During amplification, \gls{wga}-induced chimeric artifacts (red) are generated alongside genuine chimeric reads (green). After base calling and mapping, ChimeraLM classifies reads with chimeric alignments as genuine events or \gls{wga}-induced artifacts, enabling downstream \gls{sv} detection on filtered data.
+		\textbf{(b)}~Bulk-supported label generation. Chimeric reads from \gls{wga} data are compared against bulk sequencing from the same cell line. Reads with bulk-supported alignment structures are labeled as genuine events (green); reads with no bulk match are labeled as \gls{wga}-induced artifacts (red).
+		\textbf{(c)}~ChimeraLM architecture. Input DNA sequences (batch size $B$, sequence length $L$) are tokenized at single-nucleotide resolution and encoded into hidden states $\mathbf{H} \in \mathbb{R}^{L \times 256}$ through DNA encoder (HyenaDNA~\cite{nguyen2023hyenadna}). Hyena operators capture long-range dependencies. Attention pooling aggregates position-specific features, and \gls{mlp} layers with residual connections process pooled representations for binary classification of genuine events and \gls{wga}-induced artifacts.
+		\textbf{(d)}~Attention pooling mechanism. Attention weights $\boldsymbol{\alpha} \in \mathbb{R}^{L \times 1}$ are computed through linear layers with GELU activation and softmax normalization, assigning importance scores to each position. The weighted sum produces a fixed-dimensional representation $\mathbf{h}_{\text{pooled}} \in \mathbb{R}^{256}$.
+		Created with BioRender.com.}
+	\label{fig:figure1}
+\end{figure}
+
+\subsection*{Overview of ChimeraLM workflow and model architecture}
+ChimeraLM operates as a post‑alignment filtering module within the single‑cell long‑read sequencing pipeline (Fig.~\ref{fig:figure1}a).
+After base calling and alignment to the reference genome, the resulting read set typically contains a mixture of true chimeric reads that arise from authentic genomic rearrangements and artificial chimeras introduced during \gls{wga}.
+ChimeraLM evaluates all reads with chimeric alignments before variant calling.
+For each read, the model determines whether the observed chimera reflects a genuine genomic event or a \gls{wga}‑induced artifact.
+This binary classification enables selective removal of artificial chimeric reads while preserving true rearrangements, which improves the accuracy and sensitivity of downstream \gls{sv} analyses.
+
+To construct a robust supervised training set, we generated \gls{wga} long-read sequencing data from the human prostate cancer cell line PC3 using the \gls{ont} PromethION platform.
+For ground-truth calibration, we acquired three matched bulk long-read datasets from unamplified genomic DNA across diverse technologies: \gls{ont} PromethION, \gls{ont} MinION, and \gls{pb} Sequel II.
+Leveraging these references, we established a bulk-supported labeling framework by cross-referencing each \gls{wga} chimeric read against the chimeric alignment structures identified in the unamplified bulk data (\hyperref[sec:methods]{Materials and Methods}; Fig.~\ref{fig:figure1}b; Supplementary Figure~\ref{fig:data_construction}a).
+Under this classification scheme, \gls{wga} reads with alignment architectures corroborated by bulk evidence were labeled as genuine genomic events, while those lacking bulk support were classified as \gls{wga}-induced artifacts.
+To evaluate the model's ability to generalize across sequencing hardware, we generated an independent \gls{wga} dataset on the MinION platform, which was reserved exclusively for testing (Supplementary Figure~\ref{fig:data_construction}a).
+
+This labeling procedure classified 12,963,576 chimeric reads from the \gls{wga} PromethION dataset into two groups (genuine events and \gls{wga}-induced artifacts) based on bulk support (Supplementary Figure~\ref{fig:data_construction}b).
+Among these, 12,670,396 reads (97.7\%) showed no matching alignment structures in any bulk dataset and were labeled as \gls{wga}-induced artifacts.
+The remaining 293,180 reads (2.3\%) had matching structures in at least one bulk dataset, indicating they represent genuine genomic events rather than amplification artifacts, and were labeled as genuine chimeric reads.
+To construct a balanced training dataset, we retained all 293,180 genuine chimeric reads and randomly subsampled an equal number of \gls{wga}-induced artifacts.
+We further added 178,748 chimeric reads sampled from the bulk datasets to the genuine-event set, expanding the diversity of bulk-supported chimeric alignment structures used for training.
+The final labeled dataset comprised 765,108 reads and was split into training (70\%), validation (20\%), and test (10\%) sets using stratified sampling (Supplementary Figure~\ref{fig:data_construction}a).
+
+To model these labeled reads, ChimeraLM needs to process long, variable-length DNA sequences at single-nucleotide resolution (Fig.~\ref{fig:figure1}c).
+We therefore built ChimeraLM on HyenaDNA~\cite{nguyen2023hyenadna}, a genomic foundation model pre-trained on diverse DNA sequences.
+Each read is tokenized at nucleotide resolution and encoded by Hyena operators~\cite{Poli2023HyenaHT}, which capture long-range sequence context without splitting the input.
+The encoder produces a sequence of hidden states across the full read.
+To obtain a fixed-length representation for classification, ChimeraLM uses an attention-pooling module that learns position-specific weights and computes a weighted sum over the hidden states (Fig.~\ref{fig:figure1}d).
+The pooled representation is then passed through residual \gls{mlp} blocks, and a final softmax outputs the probability that a read reflects a genuine event versus a \gls{wga}-induced artifact.
+
+\begin{figure}[!ht]
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{final_figures/figure2}
+	\end{center}
+	\caption{{\bf ChimeraLM accurately identifies and removes \gls{wga}-induced chimeric artifacts.}
+		\textbf{(a)}~Classification performance on held-out test data. ChimeraLM achieves recall of 0.95, precision of 0.70, and F1 score of 0.81.
+		\textbf{(b)}~Chimeric read reduction across sequencing platforms. Stacked bars show proportions of chimeric (dark teal) and non-chimeric (light teal) reads in bulk, \gls{wga}, and ChimeraLM-filtered samples. ChimeraLM reduces chimeric read frequencies from 46.0\% to 4.9\% (PromethION) and from 23.0\% to 1.5\% (MinION), approaching bulk levels (2.3\% and 2.5\%, respectively).
+		\textbf{(c,d)}~Benchmarking against existing methods on PromethION (c) and MinION (d).
+		The gray bar indicates the total number of chimeric reads on unfiltered \gls{wga} data.
+		The blue bar represents the total number of chimeric reads remaining after filtering by each method.
+		ChimeraLM achieves approximately 90\% reduction in chimeric reads on both platforms, while 3rd-ChimeraMiner shows no detectable reduction and CADECT shows 8.3\%  and 4.6\% reduction on PromethION and MinION, respectively.
+		SACRA failed to complete due to memory exhaustion ($>500$ GB RAM required).
+	}\label{fig:figure2}
+\end{figure}
+
+\subsection*{ChimeraLM achieves high accuracy and reduces artifacts to near-bulk levels across platforms}
+
+We first benchmarked ChimeraLM using the held-out test split ($10\%$) derived from the bulk-supported labeled dataset (Supplementary Figure~\ref{fig:data_construction}a).
+This test set consists of chimeric reads labeled as genuine events or \gls{wga}-induced artifacts based on whether their chimeric alignment structures are supported by matched bulk sequencing.
+ChimeraLM achieved an F1 score of 0.81, with 0.95 recall and 0.70 precision (Fig.~\ref{fig:figure2}a).
+The high recall indicates that most \gls{wga}-induced artifacts are correctly identified for removal, which is important for limiting downstream false-positive \gls{sv} calls, while the precision confirms that most reads flagged as artifacts are true amplification-induced chimeras rather than genuine genomic events.
+
+\chg{Because ChimeraLM processes at most 32,768 bp per read, we examined how often this limit is reached and whether accuracy depends on read length (Supplementary Figure~\ref{fig:read_length}).
+	Chimeric reads in \gls{wga} data are short (median 2,100 bp on PromethION, 1,469 bp on MinION); only 0.009\% exceeded 32,768 bp, and all but two of these retained at least one junction within the window (Supplementary Figure~\ref{fig:read_length}a).
+	Accuracy nevertheless varied with length: on \gls{wga}-derived test reads, precision rose from 0.69 ($\leq$2 kb) to $\geq$0.99 ($>$8 kb) while recall fell from 0.98 to 0.31 (16--32 kb), so rare long reads ($>$16 kb, 0.26\% of chimeric reads) are classified conservatively (Supplementary Figure~\ref{fig:read_length}c).
+	This likely reflects the bulk-sampled genuine reads in the training set, which are far longer (median 14.4 kb) than \gls{wga} reads, so that length carries label information; consistently, removed chimeric reads were shorter than retained ones (median 2,067 versus 3,087 bp on PromethION; Supplementary Figure~\ref{fig:read_length}d), whereas non-chimeric reads, the majority of a \gls{wga} library, are not evaluated and remain unchanged.}
+
+We next examined whether applying ChimeraLM filtering would restore chimeric read rates in full PC3 \gls{wga} datasets toward the levels observed in bulk sequencing across both PromethION and MinION platforms (Fig.~\ref{fig:figure2}b).
+Bulk sequencing established low baseline chimeric read rates of 2.3\% (PromethION) and 2.5\% (MinION).
+In contrast, \gls{wga} increased the chimeric read fraction to 46.0\% and 23.0\%, respectively.
+After ChimeraLM filtering, chimeric content dropped to 4.9\% on PromethION and 1.5\% on MinION, corresponding to 10- to 15-fold reductions, while retaining 15.8 million and 5.6 million reads.
+These post-filtering rates approach the corresponding bulk baselines, indicating effective removal of \gls{wga}-induced artifacts while preserving genuine signal.
+
+We compared ChimeraLM against SACRA~\cite{kiguchi2021longread}, 3rd-ChimeraMiner~\cite{lu2023exploration}, and CADECT~\cite{agyabeng2025evaluating}, existing tools for detecting amplification-induced chimeras (Fig.~\ref{fig:figure2}c,d).
+ChimeraLM reduced chimeric reads by ${\sim}90$\% on both platforms, outperforming CADECT (8.3\% and 4.6\% reduction on PromethION and MinION, respectively), while 3rd-ChimeraMiner showed no detectable reduction.
+SACRA could not be evaluated due to out-of-memory errors even with 500 GB RAM.
+
+The MinION results further provide an independent test of model generalization, as this MinION \gls{wga} dataset was not used during training.
+ChimeraLM was trained exclusively on PromethION \gls{wga} data, yet achieved comparable chimeric read reduction on MinION.
+This cross-platform generalization indicates that ChimeraLM captures sequence-level features intrinsic to \gls{wga}-induced artifacts rather than platform-specific signatures, supporting its potential applicability to additional long-read and potentially short-read sequencing technologies.
+
+\chg{To test generalization beyond the training cell line and laboratory, we applied the unchanged model to public single-cell \gls{wga} data of the lung adenocarcinoma line HCC78 generated by another group~\cite{ni2023benchmarking}: one \gls{mda} cell (R10.4 flow cell), one \gls{malbac} cell (R9.4.1) and two unamplified bulk libraries used as reference (\hyperref[sec:methods]{Materials and Methods}; Supplementary Figure~\ref{fig:hcc78}).
+	ChimeraLM removed 81.7\% of chimeric reads from the \gls{mda} library, lowering its chimeric fraction from 66.6\% to 26.8\% (HCC78 bulk: 21.0\% and 7.9\%), and 87.3\% from the \gls{malbac} library (6.8\% to 0.9\%), with recall of 0.82 and 0.87 for bulk-unsupported reads.
+	Artifact removal thus transfers across cell line, laboratory, flow-cell chemistry and amplification method without retraining.}
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=0.95\textwidth]{final_figures/figure3}
+	\end{center}
+	\caption{{\bf ChimeraLM improves structural variant detection accuracy.}
+		\textbf{(a)}~Construction of a high-confidence \gls{sv} reference dataset from bulk PC3 sequencing. Four bulk datasets were integrated: \gls{ont} MinION Mk1C, \gls{ont} PromethION P2, the CCLE Illumina \gls{wgs} dataset, and the PRJNA361315 Illumina \gls{wgs} dataset. \glspl{sv} were called independently within each dataset using multiple callers, and events supported by $\geq$2 callers per dataset were retained. \glspl{sv} were then compared across datasets, and events observed in $\geq$2 of the four bulk datasets were designated as gold-standard \glspl{sv}.
+		\textbf{(b,c)}~\gls{sv} validation against the gold-standard reference for PromethION (b) and MinION (c).
+		\chg{Grouped bars show, on a shared logarithmic scale, the number of \gls{sv} calls supported by the gold standard (dark teal) or unsupported (light teal); the unsupported-to-supported ratio is given below each group. Only calls with at least three supporting reads are included.}
+		\textbf{(d,e)}~\gls{sv} validation against platform-matched long-read bulk sequencing for PromethION (d) and MinION (e), capturing true long-read \glspl{sv} that may not be represented in the multi-platform reference.
+		\chg{Grouped bars show \gls{sv} calls supported by the platform-matched long-read bulk data (dark teal) or unsupported (light teal), as in (b,c).}
+		\textbf{(f)}~Distribution of \gls{sv} types for PromethION and MinION datasets across bulk samples, unfiltered \gls{wga}, and \gls{wga} with ChimeraLM filtering\chg{, for calls with at least three supporting reads}. Unfiltered \gls{wga} exhibits an excess of \gls{inv} events, which is substantially reduced following ChimeraLM filtering. Other \gls{sv} classes, including \gls{tra}, \gls{del}, \gls{dup}, and \gls{ins}, are also shown.
+	}\label{fig:figure3}
+\end{figure}
+
+\subsection*{ChimeraLM reduces unsupported structural variant calls}
+Accurate \gls{sv} detection from single cells is essential for characterizing genomic diversity and disease mechanisms. However, \gls{wga}‑induced chimeric artifacts can be misinterpreted as genuine \gls{sv}s, potentially leading to incorrect biological inferences.
+To assess the impact of ChimeraLM on \gls{sv} calling, we compared \gls{sv} callsets generated from unfiltered \gls{wga} reads with those obtained after applying ChimeraLM filtering (\gls{wga} + ChimeraLM).
+Both callsets were evaluated against two complementary bulk‑derived references: (i) a stringent gold‑standard \gls{sv} set derived from bulk PC3 DNA through cross‑dataset consensus, and (ii) platform‑matched long‑read bulk \gls{sv} callsets used as platform‑specific references.
+
+We first constructed a high-confidence gold-standard \gls{sv} set from bulk PC3 DNA by integrating four independent sequencing datasets: \gls{ont} PromethION, \gls{ont} MinION, and two Illumina short-read \gls{wgs} datasets from the Cancer Cell Line Encyclopedia (CCLE Illumina \gls{wgs}~\cite{barretina2012cancer}) and from a previously published study (PRJNA361315 Illumina \gls{wgs}~\cite{seim2017wholegenome}) (Fig.~\ref{fig:figure3}a; Supplementary Table~\ref{tab:seq_stats}).
+\glspl{sv} were called separately within each dataset using multiple \gls{sv} callers.
+Events supported by at least two callers within a dataset were retained, and only \glspl{sv} observed in at least two of the four datasets were designated as gold-standard events.
+\chg{Of the 17,153 events in this two-of-four set, 73.8\% are shared only by the two long-read datasets (Supplementary Figure~\ref{fig:gold_standard}); because only two datasets are long-read, a three-of-four rule would require short-read confirmation, keep just 3,029 events (17.7\%) and exclude variant classes that short reads detect poorly~\cite{Sedlazeck2018}, so the two-of-four set is complemented by the platform-matched long-read references below (Fig.~\ref{fig:figure3}d,e).}
+
+\chg{Call sets were restricted to \glspl{sv} with at least three supporting reads (SUPPORT $\geq$ 3; \hyperref[sec:methods]{Materials and Methods}).
+	Relative to this stringent gold standard, unfiltered \gls{wga} produced a large excess of unsupported \glspl{sv}.
+	On PromethION, \gls{wga} yielded 268,937 \gls{sv} calls, of which only 5,147 (1.9\%) overlapped gold-standard events, an unsupported-to-supported ratio of 51:1.
+	After ChimeraLM filtering, total calls decreased to 8,822 (a 96.7\% reduction); unsupported calls fell from 263,790 to 4,332 (98.4\% removed) while 4,490 gold-standard events were retained (87.2\% retention), so that supported calls outnumbered unsupported calls (ratio 0.96:1) and the validation rate rose from 1.9\% to 50.9\% (26.6-fold) (Fig.~\ref{fig:figure3}b).
+	On MinION, total calls decreased from 8,917 to 2,056 (76.9\% reduction); unsupported calls fell from 6,977 to 606 (91.3\% removed) while gold-standard-supported events decreased from 1,940 to 1,450 (74.7\% retention), raising the validation rate from 21.8\% to 70.5\% (3.2-fold; ratio 3.6:1 to 0.42:1) (Fig.~\ref{fig:figure3}c).
+	The smaller fold change on MinION reflects the lower artifact burden of its call set at this read-support threshold (21.8\% of calls already validated before filtering, versus 1.9\% on PromethION).}
+
+Because the gold standard is intentionally stringent and may exclude true \glspl{sv} detectable only in long-read data, we next performed platform-matched validation using long-read bulk sequencing from the same platform (Fig.~\ref{fig:figure3}d,e).
+This analysis provides a platform-specific estimate of recall and reduces bias introduced by the strict gold-standard definition.
+\chg{ChimeraLM increased validation rates from 2.6\% to 68.6\% on PromethION (26.3-fold) and from 21.1\% to 68.7\% on MinION (3.3-fold), removing 98.9\% and 90.9\% of bulk-unsupported calls while retaining 86.2\% (6,048 of 7,019) and 75.2\% (1,413 of 1,880) of bulk-supported events, respectively (Fig.~\ref{fig:figure3}d,e).
+	Together, these results show that ChimeraLM removes the vast majority of unsupported \gls{sv} calls while preserving most bulk-supported variants across platforms, leaving call sets in which supported \glspl{sv} outnumber unsupported ones.}
+
+\chg{We next characterised the unsupported calls that remain after ChimeraLM filtering relative to the gold standard and compared them with the supported calls in the same call sets (Supplementary Figure~\ref{fig:residual_sv}).
+	Residual unsupported calls were not dominated by a single class: on PromethION they comprised 39.5\% deletions, 34.9\% insertions, 24.0\% inversions and 1.7\% duplications, were small (median 189 bp; 70.2\% $<$500 bp) and weakly supported (median 4 reads; 65.3\% with $\leq$5 reads), whereas supported calls had a median of 10 supporting reads.
+	Inversions were the one diagnostic feature: 1,039 residual unsupported calls were inversions, compared with a single inversion among the 4,490 supported calls (MinION: 100 versus 0).
+	In contrast, the residual deletions and insertions resembled supported calls in size, consistent with a mixture of low-support artifacts and genuine variants that are absent from the stringent gold standard (see Supplementary Figure~\ref{fig:bulk_concordance}).
+	Raising the minimum read support further reduces residual calls at a cost in sensitivity: on PromethION, requiring at least five supporting reads removed 56.3\% of residual unsupported calls but also 20.1\% of supported calls (unsupported-to-supported ratio 0.96:1 to 0.53:1), and requiring ten reads removed 80.3\% versus 48.6\%; on the shallower MinION data stricter thresholds removed both classes at similar rates.}
+
+\subsection*{ChimeraLM mitigates WGA-induced SV type biases}
+
+Amplification artifacts can profoundly distort the apparent spectrum of \glspl{sv}, complicating biological interpretation.
+To quantify these effects, we compared \gls{sv}‑type compositions across bulk, unfiltered \gls{wga}, and ChimeraLM‑filtered datasets generated on both \gls{ont} PromethION and MinION platforms (Fig.~\ref{fig:figure3}f).
+Bulk datasets displayed \gls{sv} profiles dominated by deletions and insertions\chg{ (81.9\% and 90.8\% combined on PromethION and MinION, with inversions at 1.1\% on both)}, whereas \gls{wga} datasets exhibited a striking inflation of inversions, reaching \chg{93.8\% on PromethION and 57.2\% on MinION among calls with at least three supporting reads}.
+This inversion‑heavy signature mirrors previous observations from single‑cell long‑read sequencing using PacBio and droplet‑based \gls{mda}~\cite{hardLongreadWholegenomeAnalysis2023a}, suggesting that many of these events arise from amplification‑induced chimeras rather than genuine genomic rearrangements.
+
+To directly assess which \gls{sv} types are preferentially associated with amplification artifacts, we examined \gls{sv} calls supported exclusively by reads classified as \gls{wga}‑derived chimeras.
+These artifact‑supported events were overwhelmingly enriched for inversions, comprising 88.4\% on PromethION and 92.4\% on MinION (Supplementary Figure~\ref{fig:sv_artifact_distribution}).
+Smaller fractions of deletions, duplications, and insertions were also present, indicating that \gls{wga} artifacts inflate not only inversion calls but generate false positives across multiple \gls{sv} categories.
+
+Applying ChimeraLM \chg{largely removed} these biases.
+\chg{The inversion fraction decreased to 11.9\% on PromethION and 4.8\% on MinION, while deletions and insertions rose to 86.9\% and 89.3\% of calls, close to bulk (Fig.~\ref{fig:figure3}f); on MinION the excess of translocation-type (breakend) calls was likewise reduced from 14.8\% to 5.4\% (bulk 7.9\%).
+	The residual inversion fraction remains above the bulk level, and the remaining inversions are almost entirely unsupported by bulk sequencing (Supplementary Figure~\ref{fig:residual_sv}).}
+By selectively removing artifact‑supported events, ChimeraLM suppresses the dominant inversion inflation and reduces spurious calls across \gls{sv} types, shifting \gls{sv}‑type distributions toward bulk profiles and improving the accuracy and interpretability of single‑cell \gls{sv} analyses~\cite{hardLongreadWholegenomeAnalysis2023a}.
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=\textwidth]{final_figures/figure4}
+	\end{center}
+	\caption{{\bf ChimeraLM attention weights are enriched at chimeric junction regions.}
+		\textbf{(a,b)}~Attention weight profiles for two representative chimeric reads exhibiting distinct junction configurations.
+		Upper panels show per-position attention weights (blue) with the mean attention across the read indicated by a dashed line.
+		Red vertical lines mark inferred chimeric junction positions, and pink shading denotes the junction-centered region ($\pm$50~bp).
+		Lower panels display read-level alignments, highlighting orientation transitions at the junctions (green, forward orientation; red, reverse-complemented orientation).
+		\textbf{(c,d)}~Quantitative comparison of attention weights between junction and non-junction regions.
+		Junction-centered windows show significantly elevated attention weights relative to non-junction regions ($P = 5.3 \times 10^{-14}$ and $P = 6.8 \times 10^{-15}$; Wilcoxon rank-sum test).
+		\textbf{(e,f)}~Schematic illustration of \gls{wga}-induced chimera formation.
+		During amplification, DNA fragments originating from distant genomic loci can be amplified in either orientation, joining them into a single molecule with discordant orientations, producing inversion-like alignment signatures.
+		The two examples illustrate forward-to-reverse and reverse-to-forward orientation transitions.
+	}\label{fig:figure4}
+\end{figure}
+
+\subsection*{Attention visualization reveals interpretable classification features}
+
+We examined whether ChimeraLM’s attention weights provide an interpretable signal by focusing on mechanistically relevant regions of chimeric reads, particularly the junctions during \gls{wga} (Fig.~\ref{fig:figure4}).
+We inspected two representative chimeric reads exhibiting distinct junction configurations (Fig.~\ref{fig:figure4}a,b).
+In both cases, attention remained relatively flat across most positions but formed sharp, concentrated peaks at the inferred junction regions.
+These peaks aligned with the read-level breakpoint separating two genomic loci and coincided with an orientation transition between adjacent alignment segments.
+
+To quantify this effect, we compared attention weights within junction-centered windows ($\pm$50~bp) against weights from non-junction regions (Fig.~\ref{fig:figure4}c,d).
+Junction windows showed significantly higher attention weights (Wilcoxon rank-sum test, $P = 5.3 \times 10^{-14}$ and $P = 6.8 \times 10^{-15}$), indicating that ChimeraLM preferentially emphasizes sequence context proximal to chimeric junctions.
+
+This attention enrichment is consistent with the expected structure of \gls{wga}-induced chimeras (Fig.~\ref{fig:figure4}e,f): DNA fragments from distant loci can be amplified in either orientation and subsequently joined, generating junctions with discordant orientations.
+Together, these results suggest that ChimeraLM’s attention peaks provide a mechanistically interpretable signal that concentrates classification evidence to junction-proximal sequence positions within individual reads.
+
+\section*{Discussion}\label{sec:discussion}
+
+\gls{wga} enables genomic analysis from single cells and other low-input samples, but it also introduces chimeric artifacts that compromise \gls{sv} detection.
+ChimeraLM addresses this challenge by classifying chimeric reads as genuine events or \gls{wga}-induced artifacts directly from read information, and removing artifacts before variant calling, rather than attempting to correct artifact-driven calls post hoc.
+Across \gls{ont} platforms, ChimeraLM improved data quality at the read and variant levels:
+it reduced chimeric reads by \(\sim\)90\% \chg{while retaining 75--87\% of gold-standard \glspl{sv} and 75--86\% of platform-matched bulk-supported \glspl{sv}, and it increased the fraction of supported \gls{sv} calls by 3.2- to 26.6-fold}.
+Notably, performance generalized from PromethION (used for training) to MinION without platform-specific retraining, suggesting that ChimeraLM captures properties shared by \gls{wga}-induced artifacts rather than instrument-specific signatures.
+
+In comparison, existing methods showed limited effectiveness on our \gls{ont} \gls{wga} datasets.
+Two tools originally developed and primarily evaluated on PacBio data (SACRA and 3rd-ChimeraMiner)~\cite{kiguchi2021longread,lu2023exploration} either failed to complete under our evaluation setting (SACRA, $>500$ GB RAM) or showed no detectable reduction (3rd-ChimeraMiner), highlighting poor cross-platform generalization.
+CADECT~\cite{agyabeng2025evaluating}, which was designed for \gls{ont} data, achieved only 8.3\% and 4.6\% reduction on PromethION and MinION, respectively.
+CADECT detects concatemers via sliding-window self-alignment, an effective strategy for repeat-like structures with internal sequence similarity, but it is not designed to capture the broader diversity of \gls{wga}-induced chimeras.
+Together, these comparisons suggest that rule-based or subtype-specific heuristics do not comprehensively address amplification-induced chimeras and motivate learning-based models that can extract discriminative sequence signatures without imposing predefined structural assumptions.
+
+ChimeraLM also illustrates the value of deep learning for quality-control problems where conventional alignment- and coverage-derived criteria provide limited resolution.~\cite{lu2023exploration,kiguchi2021longread,li2024deepchopper, agyabeng2025evaluating}.
+By learning directly from sequence, ChimeraLM discovers subtle compositional and structural features that separate genuine events from amplification artifacts.
+The model also offers interpretability through attention visualization: attention weights concentrate at junction regions where template switching joins discordant loci, validating the biological relevance of the learned features.
+These methodological advances have direct implications for single-cell genomics, where high false-positive rates in \gls{wga} data have constrained robust characterization of chromosomal instability, clonal evolution, and \gls{sv} burden~\cite{kosugi2019comprehensive,mahmoud2019structural,hardLongreadWholegenomeAnalysis2023a}.
+By improving the signal-to-noise ratio and clarifying \gls{sv}-type spectra that are otherwise distorted by amplification artifacts, ChimeraLM enables more confident identification of genuine \glspl{sv}, supporting studies of cancer evolution, developmental biology, and somatic mosaicism where single-cell resolution is essential~\cite{hoijerAmplificationfreeLongreadSequencing2020, haComprehensiveBenchmarkingGuidelines2023}.
+
+Several limitations warrant consideration.
+First, the current model processes reads independently; integrating contextual features such as coverage or phasing information may further enhance accuracy.
+Second, regarding computational resources, while \gls{cpu} inference is feasible, \gls{gpu} acceleration is recommended for processing large-scale datasets.
+\chg{Third, the training labels inherit the incompleteness of bulk sequencing: a genuine chimeric read whose structure is absent from all three bulk datasets is labelled as an artifact (Supplementary Figure~\ref{fig:bulk_concordance}), and the model may therefore remove some genuine reads, reducing sensitivity for rare true events. This effect is reflected in the observed retention of bulk-supported \glspl{sv} (75--87\%).}
+\chg{We have shown that artifact removal transfers without retraining to an independent cell line, laboratory, flow-cell chemistry (R9.4.1 and R10.4) and amplification method (\gls{malbac}); when a matched bulk dataset is available, fine-tuning the classifier on bulk-supported reads of the sample under study is nevertheless a straightforward way to adapt it to sample-specific rearrangements.}
+Future work should extend validation to further cell types, sequencing platforms (e.g., PacBio HiFi), and alternative \gls{wga} protocols, including \gls{lianti}~\cite{chen2017singlecell}, \gls{pta}~\cite{gonzalez-pena2021accurate}, and \gls{dmda}~\cite{dippenaar2024droplet}.
+While the sequence-based approach suggests broad applicability, systematic validation across amplification chemistries is needed to assess generalization limits and optimize performance for specific protocols.
+\chg{Validation in primary tissue and tumour samples remains an open task: evaluating a read-level artifact filter requires single-cell long-read \gls{wga} data together with matched bulk long-read sequencing of the same sample, and the few such datasets from human tissue published to date are limited.
+	Because tissue and tumour cells are more heterogeneous than a monoclonal cell line, whereas the artifact profile is determined primarily by the amplification chemistry rather than by the cell of origin, we expect ChimeraLM's performance on such samples to track its cross-cell-line and cross-chemistry behaviour, but this expectation should be tested as suitable data become accessible.}
+
+\chg{ChimeraLM acts on reads, not on calls, and is therefore complementary to, rather than a replacement for, caller-level filtering.
+	Our characterisation of the calls that remain unsupported after filtering (Supplementary Figure~\ref{fig:residual_sv}) suggests two practical steps for users who require higher specificity: inversion calls that lack orthogonal support should be treated with suspicion, because essentially no bulk-supported inversion survived in our \gls{wga} call sets while residual inversions accounted for 17--24\% of unsupported calls; and a moderate read-support threshold (for example, at least five supporting reads) removes more than half of the residual unsupported calls on deeply sequenced samples at a cost of about one fifth of supported calls, whereas stricter thresholds increasingly discard supported calls as well, and on shallow data remove both classes at similar rates.
+	Conversely, callers that aggregate evidence across cells or that incorporate coverage and phasing information may recover genuine events that single-cell read-level filtering alone cannot confirm.}
+
+More broadly, ChimeraLM illustrates the potential of \glspl{glm} for data quality control.
+As long-context architectures continue to advance~\cite{nguyen2023hyenadna}, extending the model's context window to handle megabase-scale inputs could enable artifact detection in more complex genomic structures.
+This framework could extend to other amplification-dependent technologies, such as cell-free DNA analysis, ancient DNA studies, and low-biomass metagenomics.
+Furthermore, attention-based interpretability opens opportunities for studying template-switching dynamics, potentially guiding the development of improved amplification protocols.
+In summary, ChimeraLM provides a practical and interpretable framework for enhancing long-read single-cell genomic fidelity, ensuring that downstream biological insights are derived from genuine \glspl{sv} rather than technical artifacts.
+
 \backmatter
-
-\bmhead{Supplementary information}
-
-\makeatletter
-\renewcommand{\theHfigure}{extended.\thefigure}
-\renewcommand{\theHtable}{extended.\thetable}
-\makeatother
-
-\renewcommand{\figurename}{Extended Data Fig.}
-\renewcommand{\tablename}{Extended Data Table}
-\setcounter{figure}{0}
-\setcounter{table}{0}
-
-\begin{table}[!ht]
-	\centering
-	\caption{Sequencing and alignment statistics of PC3}
-	\label{tab:seq_stats}
-	\small
-	\setlength{\tabcolsep}{3pt} % Reduce column spacing (default is 6pt)
-	\begin{tabular}{@{}llcccccccc@{}}
-		\toprule
-		\textbf{Sample} & \textbf{Platform} & \textbf{Reads}  & \textbf{Total} & \textbf{Total bases} & \textbf{Fraction} & \textbf{Mean}   & \textbf{Mean}    & \textbf{Average}  \\
-		                &                   & ($\times 10^6$) & \textbf{bases} & \textbf{aligned}     & \textbf{aligned}  & \textbf{length} & \textbf{quality} & \textbf{identity} \\
-		                &                   &                 & (Gb)           & (Gb)                 &                   & (bp)            & (Q)              & (\%)              \\
-		\midrule
-		\gls{wga}       & MinION            & 9.11            & 14.6           & 10.4                 & 0.7               & 1,603           & 14.3             & 97.6              \\
-		\gls{wga}       & PromethION        & 44.69           & 128.2          & 69.2                 & 0.5               & 2,869           & 14.5             & 96.1              \\
-		Bulk            & MinION            & 0.97            & 8.1            & 7.1                  & 0.9               & 8,310           & 17.2             & 97.3              \\
-		Bulk            & PromethION        & 8.00            & 69.9           & 62.4                 & 0.9               & 8,732           & 18.5             & 97.7              \\
-		\bottomrule
-	\end{tabular}
-\end{table}
-
-\begin{figure}[!ht]
-	\begin{center}
-		\includegraphics[width=0.9\textwidth]{final_figures/sf1}
-	\end{center}
-	\caption{{\bf Training dataset construction and bulk-supported labeling strategy.}
-		\textbf{(a)}~Workflow for generating labeled training data.
-		\gls{wga} PromethION data is compared against three independent bulk sequencing datasets (PromethION, MinION, and PacBio).
-		Reads with no bulk matches (Match 0) are labeled artificial; reads matching one or more bulk datasets (Match 1–3) are labeled biological, along with chimeric reads sampled directly from bulk data. The labeled dataset is split into training (70\%), validation (20\%), and test (10\%) sets. The \gls{wga} MinION dataset is reserved for independent cross-platform evaluation.
-		\textbf{(b)}~Distribution of chimeric read matches. Bar chart shows the number of \gls{wga} PromethION chimeric reads (log scale) by bulk dataset matches. Match 0 reads (${\sim}10^7$) lacking bulk validation are classified as artificial; Match 1–3 reads with bulk support are classified as biological. The substantial imbalance reflects high prevalence of \gls{wga}-induced artifacts.
-	}\label{fig:data_construction}
-\end{figure}
-
-\begin{figure}[!ht]
-	\begin{center}
-		\includegraphics[width=\textwidth]{final_figures/sf_read_length}
-	\end{center}
-	\caption{{\bf \chg{Read-length distribution of chimeric reads and length dependence of ChimeraLM classification.}}
-		\chg{\textbf{(a)}~Length distribution of chimeric reads (primary alignments carrying an \gls{sa} tag) in the \gls{wga} PromethION ($n = 12{,}963{,}576$; median 2,100 bp, N50 4,053 bp, maximum 126,974 bp) and \gls{wga} MinION ($n = 1{,}666{,}427$; median 1,469 bp, N50 2,333 bp, maximum 42,118 bp) datasets. The dashed line marks the 32,768-bp model input limit, exceeded by 1,211 (0.009\%) and 6 reads, respectively; for all but two of these reads at least one chimeric junction lies within the first 32,768 bp.
-			\textbf{(b)}~Fraction of chimeric reads classified as \gls{wga}-induced artifacts by read-length bin; numbers above bars give the number of reads per bin.
-			\textbf{(c)}~Precision, recall and F1 of ChimeraLM on \gls{wga}-derived held-out test reads ($n = 58{,}636$; the 17,876 test reads sampled from bulk data are not shown because they are not part of the \gls{wga} dataset) stratified by read length. Bins with fewer than 10 reads are omitted.
-			\textbf{(d)}~Length distributions of chimeric reads retained (classified as genuine) and removed (classified as artifact) by ChimeraLM on both platforms (PromethION retained: median 3,087 bp, N50 7,989 bp; removed: median 2,067 bp, N50 3,836 bp; MinION retained: median 2,031 bp, N50 5,560 bp; removed: median 1,458 bp, N50 2,220 bp).}
-	}\label{fig:read_length}
-\end{figure}
-
-\begin{figure}[!ht]
-	\begin{center}
-		\includegraphics[width=\textwidth]{final_figures/sf_hcc78}
-	\end{center}
-	\caption{{\bf \chg{External validation of the trained model on single-cell WGA data of an independent cell line (HCC78).}}
-		\chg{Data from Ni et al.~\cite{ni2023benchmarking} (NCBI BioProject PRJNA875576): single HCC78 cells amplified with REPLI-g Single Cell \gls{mda} (R10.4 flow cell) or \gls{malbac} (R9.4.1), and two unamplified bulk libraries (R10.4, R9.4.1). The PC3-trained ChimeraLM model was applied without retraining.
-			\textbf{(a)}~Chimeric (dark teal) and non-chimeric (light teal) mapped reads with the chimeric fraction above each bar, for the bulk libraries, the \gls{wga} libraries, and the \gls{wga} libraries after ChimeraLM filtering (\gls{mda}: 66.6\% to 26.8\%; \gls{malbac}: 6.8\% to 0.9\%).
-			\textbf{(b)}~Precision, recall and F1 for the artifact class against bulk-support labels derived from the two HCC78 bulk libraries (same matching procedure as for PC3); $n$ is the number of labelled chimeric reads and the percentage labelled artifact is given.}
-	}\label{fig:hcc78}
-\end{figure}
-
-\begin{figure}[!ht]
-	\begin{center}
-		\includegraphics[width=0.95\textwidth]{final_figures/sf_gold_standard_upset}
-	\end{center}
-	\caption{{\bf \chg{Overlap of structural variant calls among the four bulk PC3 datasets used to build the gold standard.}}
-		\chg{UpSet plot of caller-consensus \glspl{sv} ($\geq$2 callers per dataset) from bulk \gls{ont} MinION Mk1c (25,866 calls), bulk \gls{ont} PromethION P2 (105,956), CCLE Illumina \gls{wgs} (5,977) and PRJNA361315 (HiSeq~X) Illumina \gls{wgs} (7,104), merged with OctopuSV. The union contains 123,115 events; 17,153 are supported by $\geq$2 datasets (the gold standard used in Fig.~\ref{fig:figure3}), 3,029 by $\geq$3 and 1,606 by all four. Within the $\geq$2 set, 12,661 events (73.8\%) are shared only by the two long-read datasets, 3,441 (20.1\%) have both long- and short-read support and 1,051 (6.1\%) are shared only by the two short-read datasets.}
-	}\label{fig:gold_standard}
-\end{figure}
-
-\begin{figure}[!ht]
-	\begin{center}
-		\includegraphics[width=\textwidth]{final_figures/sf_residual_sv}
-	\end{center}
-	\caption{{\bf \chg{Features of structural variant calls that remain unsupported after ChimeraLM filtering.}}
-		\chg{\gls{sv} calls from the \gls{wga} + ChimeraLM call sets ($\geq$3 supporting reads) benchmarked against the gold standard (Fig.~\ref{fig:figure3}b,c) were split into unsupported (light teal; Truvari false positives) and supported (dark teal; Truvari true positives) calls.
-			\textbf{(a--c)}~PromethION ($n = 4{,}332$ unsupported, $4{,}490$ supported): distribution of \gls{sv} type (a), \gls{sv} size (b) and Sniffles2 read support (c).
-			\textbf{(d--f)}~The same for MinION ($n = 606$ unsupported, $1{,}450$ supported).
-			Numbers above bars give the percentage of calls in each class.}
-	}\label{fig:residual_sv}
-\end{figure}
-
-\begin{figure}[!ht]
-	\begin{center}
-		\includegraphics[width=\linewidth]{final_figures/sf_bulk_concordance}
-	\end{center}
-	\caption{{\bf \chg{Concordance of structural variant calls among the three bulk PC3 long-read datasets.}}
-		\chg{\textbf{(a)}~UpSet plot of high-confidence \glspl{sv} ($\geq$3 supporting reads; merged with OctopuSV) from bulk PromethION P2 (20.8$\times$; 27,110 calls), bulk MinION Mk1c (2.4$\times$; 5,467) and bulk PacBio Sequel~II (38$\times$; 24,655). Of the 32,907 union calls, 20,026 (60.9\%) are detected on at least two platforms and 4,299 (13.1\%) on all three; platform-private calls make up 26.6\%, 17.4\% and 19.2\% of the PromethION, MinION and PacBio call sets, respectively.
-			\textbf{(b)}~Depth titration of the bulk PromethION data (down-sampled to 2.37$\times$, 5$\times$, 10$\times$, 15$\times$ and full 21$\times$): number of PromethION \gls{sv} calls (grey) and the fraction supported by at least one of the other two platforms (teal). The platform-private fraction rises with depth (5.1\% to 26.6\%), showing that deeper sequencing recovers variants absent from the shallower reference sets.}
-	}\label{fig:bulk_concordance}
-\end{figure}
-
-\begin{figure}[!ht]
-	\begin{center}
-		\includegraphics[width=0.9\textwidth]{final_figures/artifacts_suppoorted_sv}
-	\end{center}
-	\caption{{\bf Composition of artifact-supported \glspl{sv} for PromethION (a) and MinION (b).}
-		Donut charts summarize the distribution of \gls{sv} types including \glsfirst{tra}, \glsfirst{del}, \glsfirst{inv}, \glsfirst{dup}, and \glsfirst{ins} among events supported exclusively by chimera artifacts, representing artificial \glspl{sv} preferentially removed by ChimeraLM\chg{ (all Sniffles2 calls, without a minimum read-support filter)}.}\label{fig:sv_artifact_distribution}
-\end{figure}
-
-\clearpage
-
-% \begin{figure}[!ht]
-% 	\begin{center}
-% 		\includegraphics[width=\textwidth]{final_figures/sf2}
-% 	\end{center}
-% 	\caption{{\bf Distribution of chimeric alignments per chimeric read stratified by ChimeraLM prediction.}
-% 		(a) PromethION P2 platform chimeric alignment analysis. Bar chart showing the distribution of chimeric reads based on the number of chimeric alignments per read (x-axis: 2, 3, 4+ alignments) and total read count (y-axis, log scale). Bars are colored by ChimeraLM's binary classification: biological (dark teal) and artificial (coral). Analysis includes only reads identified as chimeric (minimum 2 alignments per read).
-% 		(b) MinION Mk1c platform chimeric alignment analysis. Bar chart showing the distribution of chimeric reads based on the number of chimeric alignments per read (x-axis: 2, 3, 4+ alignments) and total read count (y-axis, log scale). Bars are colored by ChimeraLM's binary classification: biological (dark teal) and artificial (coral). Analysis includes only reads identified as chimeric (minimum 2 alignments per read).}\label{fig:sf2}
-% \end{figure}
-
-
-
-
-\section*{Declarations}
-
-\bmhead{Acknowledgements}
-
-We thank Tingyou Wang for guidance on figure preparation.
-
-\bmhead{Author contributions}
-
-YL, QG and RY designed the study.
-YL and QG performed the analysis.
-QG performed the experiments.
-YL and QG designed and implemented the model.
-YL built the command-line tool and documentation.
-YL, QG and RY wrote the manuscript.
-RY supervised this work.
-
-\bmhead{Conflict of interest}
-
-The authors declare no competing interests.
-
-\bmhead{Funding}
-
-This project was supported in part by NIH grants R35GM142441 and R01CA259388 awarded to RY, and Prostate Cancer Foundation Young Investigator Award to RY.
 
 \bmhead{Data availability}
 
@@ -754,61 +627,36 @@ PC3 bulk (MinION Mk1C), SRR35904028; PC3 bulk (PromethION P2), SRR35904029;
 PC3 10-cell WGA (MinION Mk1C), SRR35904026; PC3 10-cell WGA (PromethION P2), SRR35904027.
 We can access the data at the following link: \url{https://dataview.ncbi.nlm.nih.gov/object/PRJNA1354861?reviewer=viej6cv6mgbli3n7a9a5k1bsb3}
 
-\bmhead{Code availability}
-
 ChimeraLM, implemented in Python, is open source and available on GitHub (\url{https://github.com/ylab-hi/ChimeraLM}) under the Apache License, Version 2.0.
 The package can be installed via PyPI (\url{https://pypi.org/project/chimeralm}) using pip, with wheel distributions provided for Windows, Linux, and macOS to ensure easy cross-platform installation.
 An interactive demo is available on Hugging Face (\url{https://huggingface.co/spaces/yangliz5/ChimeraLM}), allowing users to test ChimeraLM's functionality without local installation\chg{; the demo runs on free-tier hardware and is put to sleep after 48 hours without visitors, so it may take one to two minutes to restart when first opened}.
 For large-scale analyses, we recommend using ChimeraLM on systems with \gls{gpu} acceleration. Detailed system requirements and optimization guidelines are available in the repository's documentation (\url{https://ylab-hi.github.io/ChimeraLM/}).
 
-% Some journals require declarations to be submitted in a standardised format. Please check the Instructions for Authors of the journal to which you are submitting to see if you need to complete this section. If yes, your manuscript must contain the following sections under the heading `Declarations':
+\bmhead{Supplementary data}
 
-% \begin{itemize}
-% 	\item Funding
-% 	\item Conflict of interest/Competing interests (check journal-specific guidelines for which heading to use)
-% 	\item Ethics approval and consent to participate
-% 	\item Consent for publication
-% 	\item Data availability
-% 	\item Materials availability
-% 	\item Code availability
-% 	\item Author contribution
-% \end{itemize}
-%
-% \noindent
-% If any of the sections are not relevant to your manuscript, please include the heading and write `Not applicable' for that section.
+Supplementary Data are available at NAR Online.
 
-\begin{appendices}
+\bmhead{Acknowledgements}
 
-	\printglossaries
+We thank Tingyou Wang for guidance on figure preparation.
 
-	% \section{Section title of first appendix}\label{secA1}
-	%
-	% An appendix contains supplementary information that is not an essential part of the text itself but which may be helpful in providing a more comprehensive understanding of the research problem or it is information that is too cumbersome to be included in the body of the paper.
-	%
-	%%=============================================%%
-	%% For submissions to Nature Portfolio Journals %%
-	%% please use the heading ``Extended Data''.   %%
-	%%=============================================%%
+\noindent\textit{Author contributions:}
+YL, QG and RY designed the study.
+YL and QG performed the analysis.
+QG performed the experiments.
+YL and QG designed and implemented the model.
+YL built the command-line tool and documentation.
+YL, QG and RY wrote the manuscript.
+RY supervised this work.
 
-	%%=============================================================%%
-	%% Sample for another appendix section			       %%
-	%%=============================================================%%
+\bmhead{Funding}
 
-	%% \section{Example of another appendix section}\label{secA2}%
-	%% Appendices may be used for helpful, supporting or essential material that would otherwise
-	%% clutter, break up or be distracting to the text. Appendices can consist of sections, figures,
-	%% tables and equations etc.
-\end{appendices}
+This project was supported in part by NIH grants R35GM142441 and R01CA259388 awarded to RY, and Prostate Cancer Foundation Young Investigator Award to RY.
 
-%%===========================================================================================%%
-%% If you are submitting to one of the Nature Portfolio journals, using the eJP submission   %%
-%% system, please include the references within the manuscript file itself. You may do this  %%
-%% by copying the reference list from your .bbl file, paste it into the main manuscript .tex %%
-%% file, and delete the associated \verb+\bibliography+ commands.                            %%
-%%===========================================================================================%%
+\bmhead{Conflict of interest statement}
+
+None declared.
 
 \bibliography{clean}% common bib file
-%% if required, the content of .bbl file can be included here once bbl is generated
-%%\input sn-article.bbl
 
 \end{document}
