@@ -83,7 +83,7 @@
 \revisedtexttrue
 \newcommand{\chg}[1]{\ifrevisedtext\textcolor{revcolor}{#1}\else#1\fi}
 
-\graphicspath{{../figures}{figures}}% repo layout and flat submission-zip layout
+\graphicspath{{../figures/final_figures/}{main_figures/}}% repo layout / submission-zip layout
 
 \usepackage[acronym, automake, style=index, shortcuts]{glossaries-extra}
 \setabbreviationstyle[acronym]{long-short}
@@ -405,7 +405,7 @@ Computations were performed on a \gls{hpc} server with 64-core Intel Xeon Gold 6
 
 \begin{figure}[p]
 	\begin{center}
-		\includegraphics[width=\textwidth]{final_figures/figure1}
+		\includegraphics[width=\textwidth]{figure1}
 	\end{center}
 	\caption{{\bf ChimeraLM workflow and architecture for detecting \gls{wga} artifacts.}
 		\textbf{(a)}~Single-cell genomic workflow and ChimeraLM integration. Single cells are isolated, followed by DNA extraction and \gls{wga}. During amplification, \gls{wga}-induced chimeric artifacts (red) are generated alongside genuine chimeric reads (green). After base calling and mapping, ChimeraLM classifies reads with chimeric alignments as genuine events or \gls{wga}-induced artifacts, enabling downstream \gls{sv} detection on filtered data.
@@ -445,7 +445,7 @@ The pooled representation is then passed through residual \gls{mlp} blocks, and 
 
 \begin{figure}[!ht]
 	\begin{center}
-		\includegraphics[width=0.95\textwidth]{final_figures/figure2}
+		\includegraphics[width=0.95\textwidth]{figure2}
 	\end{center}
 	\caption{{\bf ChimeraLM accurately identifies and removes \gls{wga}-induced chimeric artifacts.}
 		\textbf{(a)}~Classification performance on held-out test data. ChimeraLM achieves recall of 0.95, precision of 0.70, and F1 score of 0.81.
@@ -490,7 +490,7 @@ This cross-platform generalization indicates that ChimeraLM captures sequence-le
 
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[width=0.95\textwidth]{final_figures/figure3}
+		\includegraphics[width=0.95\textwidth]{figure3}
 	\end{center}
 	\caption{{\bf ChimeraLM improves structural variant detection accuracy.}
 		\textbf{(a)}~Construction of a high-confidence \gls{sv} reference dataset from bulk PC3 sequencing. Four bulk datasets were integrated: \gls{ont} MinION Mk1C, \gls{ont} PromethION P2, the CCLE Illumina \gls{wgs} dataset, and the PRJNA361315 Illumina \gls{wgs} dataset. \glspl{sv} were called independently within each dataset using multiple callers, and events supported by $\geq$2 callers per dataset were retained. \glspl{sv} were then compared across datasets, and events observed in $\geq$2 of the four bulk datasets were designated as gold-standard \glspl{sv}.
@@ -548,7 +548,7 @@ By selectively removing artifact‑supported events, ChimeraLM suppresses the do
 
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[width=\textwidth]{final_figures/figure4}
+		\includegraphics[width=\textwidth]{figure4}
 	\end{center}
 	\caption{{\bf ChimeraLM attention weights are enriched at chimeric junction regions.}
 		\textbf{(a,b)}~Attention weight profiles for two representative chimeric reads exhibiting distinct junction configurations.
