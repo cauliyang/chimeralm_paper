@@ -29,21 +29,28 @@ PANELS = {
 }
 
 
+YMIN = 100  # log-axis floor; bars are drawn from here, not from 0
+
+
 def draw(ax, platform: str, ref: str, data: dict[str, tuple[int, int]]) -> None:
     sets = list(data)
     x = range(len(sets))
     w = 0.36
+    # Bars start at YMIN with height v - YMIN. Starting at 0 on a log axis makes
+    # matplotlib emit rectangles tens of thousands of points tall that depend on
+    # the axes clip path; PDF viewers that ignore the clip (NAR R2 review) then
+    # draw the bars across the whole page.
     for i, s in enumerate(sets):
         sup, nosup = data[s]
-        b1 = ax.bar(i - w / 2, nosup, w, color=T2, edgecolor="k", linewidth=0.8, label="No support" if i == 0 else None)
-        b2 = ax.bar(i + w / 2, sup, w, color=T1, edgecolor="k", linewidth=0.8, label=f"Supported by {ref}" if i == 0 else None)
+        b1 = ax.bar(i - w / 2, nosup - YMIN, w, bottom=YMIN, color=T2, edgecolor="k", linewidth=0.8, label="No support" if i == 0 else None)
+        b2 = ax.bar(i + w / 2, sup - YMIN, w, bottom=YMIN, color=T1, edgecolor="k", linewidth=0.8, label=f"Supported by {ref}" if i == 0 else None)
         for b, v in ((b1[0], nosup), (b2[0], sup)):
             ax.text(b.get_x() + b.get_width() / 2, v * 1.15, f"{v:,}", ha="center", va="bottom", fontsize=9)
         ax.text(i, -0.17, f"unsupported : supported\n{nosup / sup:.2f} : 1", transform=ax.get_xaxis_transform(),
                 ha="center", va="top", fontsize=8, color="#444444")
     ax.set_yscale("log")
     ymax = max(v for pair in data.values() for v in pair)
-    ax.set_ylim(100, ymax * 6)
+    ax.set_ylim(YMIN, ymax * 6)
     ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{int(v):,}"))
     ax.set_xticks(list(x), sets)
     ax.set_ylabel("SV calls")
