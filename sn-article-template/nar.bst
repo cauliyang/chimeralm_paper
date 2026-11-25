@@ -265,11 +265,19 @@ FUNCTION {emphasize}
 
 INTEGERS { nameptr namesleft numnames }
 
+% Local change (ChimeraLM manuscript): NAR author checklist lists the first
+% 4 authors; longer lists are cut after the 4th name and end with "et al."
+INTEGERS { maxnames }
+
 FUNCTION {format.names}
 { 's :=
   #1 'nameptr :=
+  #4 'maxnames :=
   s num.names$ 'numnames :=
-  numnames 'namesleft :=
+  numnames maxnames >
+    { maxnames #1 + 'namesleft := } % maxnames names, then "et al."
+    { numnames 'namesleft := }
+  if$
     { namesleft #0 > }
     {
 % the original format line: makes "J. D. Smith". TDS
@@ -278,10 +286,14 @@ FUNCTION {format.names}
 %   s nameptr "{vv}{ll}{, jj}{, f.}" format.name$ 't := % TDS new formatting
 % note, no ~ so that the format is straight for NAR.
 
-   straightnames #0 =
-   { s nameptr "{vv~}{ll}{, jj}{, f.}" format.name$ 't := }% TDS; Langer
-       % added blank after vv. 01.03.2010 Wolfram Langer
-   { s nameptr "{ff{ }}{vv}{ ll}{, jj}" format.name$ 't := }% TDS
+   numnames maxnames > nameptr maxnames > and
+   { "others" 't := }
+   { straightnames #0 =
+     { s nameptr "{vv~}{ll}{, jj}{, f.}" format.name$ 't := }% TDS; Langer
+         % added blank after vv. 01.03.2010 Wolfram Langer
+     { s nameptr "{ff{ }}{vv}{ ll}{, jj}" format.name$ 't := }% TDS
+     if$
+   }
    if$
 
       nameptr #1 >
