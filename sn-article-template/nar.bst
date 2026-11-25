@@ -176,13 +176,14 @@ FUNCTION {output.bibitem}
   before.all 'output.state :=
 }
 
-% Local change (ChimeraLM manuscript): NAR typesets a https://doi.org/ link
-% at the end of every reference that has a DOI.
+% Local change (ChimeraLM manuscript): NAR typesets the DOI bare, as a
+% clickable link, at the end of every reference that has one
+% (e.g. "... 2014;32:1262-7. 10.1038/nbt.3026").
 FUNCTION {fin.entry}
 { add.period$
   doi empty$
     'skip$
-    { " \url{https://doi.org/" * doi * "}" * }
+    { " \href{https://doi.org/" * doi * "}{" * doi * "}" * }
   if$
   write$
   newline$
@@ -272,14 +273,14 @@ FUNCTION {emphasize}
 
 INTEGERS { nameptr namesleft numnames }
 
-% Local change (ChimeraLM manuscript): NAR author checklist lists the first
-% 4 authors; longer lists are cut after the 4th name and end with "et al."
+% Local change (ChimeraLM manuscript): NAR lists the first 3 authors and then
+% "et al." (as typeset in published NAR articles, per the R1 editor note).
 INTEGERS { maxnames }
 
 FUNCTION {format.names}
 { 's :=
   #1 'nameptr :=
-  #4 'maxnames :=
+  #3 'maxnames :=
   s num.names$ 'numnames :=
   numnames maxnames >
     { maxnames #1 + 'namesleft := } % maxnames names, then "et al."
