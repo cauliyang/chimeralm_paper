@@ -85,6 +85,7 @@ ENTRY
     volume
     year
     url
+    doi
   }
   {}
   { label }
@@ -175,8 +176,14 @@ FUNCTION {output.bibitem}
   before.all 'output.state :=
 }
 
+% Local change (ChimeraLM manuscript): NAR typesets a https://doi.org/ link
+% at the end of every reference that has a DOI.
 FUNCTION {fin.entry}
 { add.period$
+  doi empty$
+    'skip$
+    { " \url{https://doi.org/" * doi * "}" * }
+  if$
   write$
   newline$
 }
