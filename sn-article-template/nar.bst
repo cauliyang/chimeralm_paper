@@ -273,14 +273,14 @@ FUNCTION {emphasize}
 
 INTEGERS { nameptr namesleft numnames }
 
-% Local change (ChimeraLM manuscript): NAR lists the first 3 authors and then
-% "et al." (as typeset in published NAR articles, per the R1 editor note).
+% Local change (ChimeraLM manuscript): the NAR author checklist asks for the
+% first 4 authors; longer lists are cut after the 4th name and end with "et al."
 INTEGERS { maxnames }
 
 FUNCTION {format.names}
 { 's :=
   #1 'nameptr :=
-  #3 'maxnames :=
+  #4 'maxnames :=
   s num.names$ 'numnames :=
   numnames maxnames >
     { maxnames #1 + 'namesleft := } % maxnames names, then "et al."
